@@ -25,3 +25,24 @@ format:
 CONFIG ?= experiments/configs/rag_fewshot.yaml
 run:
 	python scripts/run_pipeline.py --config $(CONFIG)
+
+# --- Euler ---
+EULER_USER := ouyuxu
+EULER_HOST := euler.ethz.ch
+EULER_DIR  := /cluster/home/$(EULER_USER)/PFGenThesis
+
+# Sync code to Euler via rsync (fast, no git needed)
+deploy:
+	rsync -avz --exclude='.git' --exclude='__pycache__' --exclude='.venv' \
+		--exclude='*.pdf' --exclude='thesis/' --exclude='notebooks/' \
+		./ $(EULER_USER)@$(EULER_HOST):$(EULER_DIR)/
+
+# Deploy just the euler scripts
+deploy-scripts:
+	scp scripts/euler/*.sh scripts/euler/README.md \
+		$(EULER_USER)@$(EULER_HOST):/cluster/home/$(EULER_USER)/scripts/euler/
+
+# Pull logs from Euler
+logs:
+	@mkdir -p scripts/euler/logs
+	rsync -avz $(EULER_USER)@$(EULER_HOST):/cluster/scratch/$(EULER_USER)/logs/ scripts/euler/logs/

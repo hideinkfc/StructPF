@@ -1,0 +1,195 @@
+# PF Exercises extracted from:
+# Kapur, M. & Bielaczyc, K. (2012). Designing for Productive Failure.
+# Journal of the Learning Sciences, 21:1, 45-83.
+# DOI: 10.1080/10508406.2011.591717
+
+metadata:
+  source: "Kapur & Bielaczyc (2012)"
+  domain: "Mathematics"
+  topic: "Average Speed"
+  grade_level: 7
+  country: "Singapore"
+  design_principles:
+    - "Challenge but do not frustrate"
+    - "Rely on prior mathematical resources"
+    - "Admit multiple representations and solution methods (RSMs)"
+    - "Provide opportunities for explanation and elaboration"
+    - "Provide opportunities to compare/contrast failed RSMs with canonical RSMs"
+  core_mechanisms:
+    a: "Activation and differentiation of prior knowledge"
+    b: "Attention to critical conceptual features"
+    c: "Explanation and elaboration of features"
+    d: "Organization and assembly into canonical concepts"
+  two_phases:
+    phase1: "Generation and exploration (unscaffolded problem solving)"
+    phase2: "Consolidation and knowledge assembly (teacher-led)"
+
+exercises:
+  - id: "kapur2012_complex_1"
+    type: "complex_pf_problem"
+    phase: "generation"
+    topic: "average_speed"
+    format: "narrative_dialogue"
+    prior_knowledge_required:
+      - "speed = distance / time"
+      - "ratio and proportion"
+      - "LCM and HCF"
+      - "trial and error heuristic"
+    design_features:
+      - "Ratios of walking/biking speeds deliberately different so ratio method fails"
+      - "Narrative with dialogue for affective engagement"
+      - "Multiple RSMs possible but none trivially leads to solution"
+      - "Requires students to make assumptions"
+    problem: |
+      It was a bright, sunny morning and the day of the Singapore Idol auditions.
+      Hady and Jasmine were going to audition as a team. They were practicing at
+      their friend Ken's house and were planning to bike to the auditions at
+      Singapore Expo.
+
+      After getting directions, Hady and Jasmine left Ken's house and biked
+      together at Jasmine's average speed of 0.15 km/min. After biking for 25
+      minutes, Jasmine biked over a piece of glass and her tire went flat.
+
+      Key information from dialogue:
+      - Ken's house to Singapore Expo: 8.75 km total (75 km/h × 7 min)
+      - Distance already biked: 0.15 km/min × 25 min = 3.75 km
+      - Remaining distance: 5 km
+      - Jasmine's biking speed: 0.15 km/min (150 m/min)
+      - Jasmine's walking speed: ~30 m/min (450m in ~14 min)
+      - Hady's biking speed: 0.2 km/min (200 m/min)
+      - Hady's walking speed: ~50 m/min (250m in 5 min)
+
+      Plan: Jasmine rides Hady's bike ahead, leaves it, then walks.
+      Hady walks until he reaches his bike, then rides it the rest of the way.
+
+      Question: How far should Jasmine ride Hady's bike so they both arrive
+      at the audition at the same time?
+    expected_student_rsms:
+      - name: "Qualitative insight: Hady should walk more"
+        description: "Because Hady's biking speed > Jasmine's, he should do more walking"
+        leads_to_solution: false
+      - name: "Distance constraint insight"
+        description: "Jasmine's walking distance = Hady's biking distance and vice versa"
+        leads_to_solution: false
+      - name: "Diagrams"
+        description: "Accurate diagram showing distances, speeds, partition point"
+        leads_to_solution: false
+      - name: "LCM/HCF method"
+        description: "Use LCM of biking speeds to find distance factor"
+        leads_to_solution: false
+        why_fails: "LCM (600) doesn't divide remaining distance (5000) completely"
+      - name: "Ratios method"
+        description: "Divide total distance using ratio of speeds"
+        leads_to_solution: false
+        why_fails: "Walking speed ratio (5:3) ≠ biking speed ratio (4:3) — non-additive property"
+      - name: "Trial and Error A (brute force)"
+        description: "Guess partition point, compute times, increment systematically"
+        leads_to_solution: true
+      - name: "Trial and Error B (ratio-informed)"
+        description: "Start guess from ratio method result, then increment"
+        leads_to_solution: true
+      - name: "Letter-symbolic algebra (multiple variables)"
+        description: "Set up equations with x and y but more variables than equations"
+        leads_to_solution: false
+        why_fails: "System is underdetermined"
+      - name: "Letter-symbolic algebra (single variable)"
+        description: "Reduce to single variable equation"
+        leads_to_solution: false
+        why_fails: "Lack of algebraic manipulation skills at Grade 7"
+    critical_conceptual_features:
+      - "Average speed = total distance / total time (not arithmetic mean of speeds)"
+      - "Non-additivity of ratios when denominators differ"
+      - "Part-whole relationship between distance segments and total distance"
+    solution_notes: "Correct partition point found via trial and error or algebra"
+
+  - id: "kapur2012_well_structured_1"
+    type: "well_structured"
+    phase: "direct_instruction_practice"
+    topic: "average_speed"
+    problem: |
+      The average speed of a ship for the first hour of a journey is 32 km/hr.
+      Its average speed for the next 2 hours is 41 km/hr.
+      Find its average speed for the whole journey.
+    solution: |
+      Total distance = 32×1 + 41×2 = 32 + 82 = 114 km
+      Total time = 1 + 2 = 3 hours
+      Average speed = 114/3 = 38 km/hr
+
+  - id: "kapur2012_well_structured_2"
+    type: "well_structured"
+    phase: "direct_instruction_practice"
+    topic: "average_speed"
+    problem: |
+      Jack walks at an average speed of 4 km/hr for one hour.
+      He then cycles 6 km at 12 km/hr.
+      Find his average speed for the whole journey.
+    solution: |
+      Distance walked = 4×1 = 4 km
+      Time cycling = 6/12 = 0.5 hours
+      Total distance = 4 + 6 = 10 km
+      Total time = 1 + 0.5 = 1.5 hours
+      Average speed = 10/1.5 = 6.67 km/hr
+
+  - id: "kapur2012_posttest_well_structured"
+    type: "well_structured"
+    phase: "posttest"
+    topic: "average_speed"
+    problem: |
+      David travels at an average speed of 4 km/hr for 1 hour.
+      He then cycles 6 km at an average speed of 12 km/hr.
+      Calculate his average speed for the entire journey.
+    solution: |
+      Distance walked = 4×1 = 4 km
+      Time cycling = 6/12 = 0.5 hr
+      Total distance = 10 km, Total time = 1.5 hr
+      Average speed = 10/1.5 ≈ 6.67 km/hr
+
+  - id: "kapur2012_posttest_complex"
+    type: "complex_pf_problem"
+    phase: "posttest"
+    topic: "average_speed"
+    problem: |
+      Hummingbirds are small birds known for their ability to hover in mid-air
+      by rapidly flapping their wings. Each year they migrate approximately
+      9,000 km from Canada to Chile and back again.
+
+      Giant Hummingbird:
+      - Weighs 18-20 gm, measures 23 cm
+      - Flaps wings 70-80 times per minute
+      - For every 18 hours of flying, requires 6 hours of rest
+
+      Broad Tailed Hummingbird:
+      - Flaps wings 100-125 times per minute
+      - Approximately 10-11 cm long, weighs 3-4 gm
+      - For every 12 hours of flying, requires 12 hours of rest
+
+      Both birds can travel 1 km for every 550 wing flaps.
+      If they leave Canada at approximately the same time,
+      which hummingbird will get to Chile first?
+    critical_conceptual_features:
+      - "Must compute effective speed accounting for rest periods"
+      - "Average speed ≠ instantaneous speed when rest is factored in"
+      - "Need to use wing flap rate to derive travel speed, then factor in rest ratio"
+
+  - id: "kapur2012_posttest_graphical"
+    type: "representational_flexibility"
+    phase: "posttest"
+    topic: "average_speed"
+    problem: |
+      Bob drove 140 miles in 2 hours and then drove 150 miles in the next 3 hours.
+      Study the two speed-time graphs A and B carefully.
+
+      Graph A: Shows 70 mph for first 2 hours, then 50 mph for next 3 hours
+               (step function with two horizontal segments)
+      Graph B: Shows 80 mph for first 2 hours, then 30 mph for next 3 hours
+               (step function with two horizontal segments)
+
+      Which graph — A, B, or both — can represent Bob's journey?
+    solution: |
+      Graph A: Area under curve = 70×2 + 50×3 = 140 + 150 = 290 miles ✓
+      Graph B: Area under curve = 80×2 + 30×3 = 160 + 90 = 250 miles ✗
+      Answer: Only Graph A
+    critical_conceptual_features:
+      - "Distance = area under speed-time graph"
+      - "Average speed is not unique — many speed profiles can yield same average"
+      - "Must check if actual distances match given constraints"

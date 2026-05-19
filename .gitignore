@@ -28,11 +28,16 @@ data/stratl/*.json
 data/stratl/*.csv
 data/eedi/*.csv
 data/eedi/*.parquet
+data/gsm8k/*.jsonl
 data/raw/
 
 # ==== Experiment outputs ====
 experiments/results/
 experiments/logs/
+scripts/euler/logs/
+
+# ==== PDFs (papers, not tracked) ====
+thesis/otherpapers/*.pdf
 
 # ==== Notebooks ====
 notebooks/.ipynb_checkpoints/
@@ -48,3 +53,5 @@ notebooks/.ipynb_checkpoints/
 .env
 .env.local
 *.key
+id_euler
+id_euler.pub

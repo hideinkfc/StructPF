@@ -1,0 +1,207 @@
+# PF Exercises extracted from:
+# Kerrigan, J., Weber, K., & Chinn, C. (2021).
+# Effective collaboration in the productive failure process.
+# Journal of Mathematical Behavior, 63, 100892.
+# DOI: 10.1016/j.jmathb.2021.100892
+
+metadata:
+  source: "Kerrigan, Weber & Chinn (2021)"
+  domain: "Mathematics"
+  topic: "Fair Division"
+  grade_level: "undergraduate"
+  country: "USA"
+  course: "Liberal Arts Mathematics (Math 103)"
+  learning_environment: "Productive Failure Flipped Classroom (PFFC)"
+  design_features:
+    - "Tasks require elementary math operations but solutions not readily discoverable"
+    - "Real-life scenarios for affective engagement"
+    - "Calibrated to sweet-spot (Kapur & Bielaczyc, 2012)"
+    - "Admit multiple solution approaches (diagrams, prior division concepts, common sense)"
+    - "Difficulty emerges from standoff/constraint situations"
+  sequence:
+    - "15 min: Invention task (end of class 1)"
+    - "Between classes: 13-15 video tutorials"
+    - "10 min: Quiz on videos (start of class 2)"
+    - "55 min: Solve 5-6 problems facilitated by teachers/peers"
+    - "15 min: Next invention task"
+
+exercises:
+  - id: "kerrigan2021_invention_1"
+    type: "complex_pf_problem"
+    phase: "generation"
+    topic: "continuous_fair_division"
+    method_name: "Lone Divider Method"
+    prior_knowledge_required:
+      - "Divider-Chooser method (learned previously)"
+      - "Basic division"
+      - "Concept of fairness (≥ 1/n of total value)"
+    design_features:
+      - "After initial allocation, a standoff occurs (2 players want same piece)"
+      - "Standoff resolution requires unknown method (recombine + Divider-Chooser)"
+      - "Multiple incorrect but logical approaches possible"
+    problem: |
+      Suppose Andrea, Beatrice, Cleo and David are dividing a plot of land
+      worth $1,000. The land comes in four sections, call them piece 1,
+      piece 2, piece 3, and piece 4.
+
+      Andrea values piece 1 at $150, piece 2 at $300, piece 3 at $200, and piece 4 at $350.
+      Beatrice values piece 1 at $200, piece 2 at $350, piece 3 at $100, and piece 4 at $350.
+      Cleo values piece 1 at $200, piece 2 at $450, piece 3 at $200, and piece 4 at $150.
+      David values piece 1 at $250, piece 2 at $250, piece 3 at $250, and piece 4 at $250.
+
+      Describe a way for the players to fairly divide the land.
+    critical_features:
+      - "Individual fair shares = $250 each (1000/4)"
+      - "Assignment based on fair shares and available pieces"
+      - "Relationship between pieces and fair shares leading to standoff"
+      - "Fair way to resolve the standoff (recombine + Divider-Chooser)"
+      - "Fair final settlement"
+    solution: |
+      Fair share = $1000/4 = $250 per person.
+
+      Fair pieces (≥ $250) for each:
+        Andrea: pieces 2, 4
+        Beatrice: pieces 2, 4
+        Cleo: piece 2 only
+        David: pieces 1, 2, 3, 4 (all equal $250)
+
+      Step 1: Give David piece 3 (no one else wants it).
+      Step 2: Give Andrea piece 4 (she and Beatrice both find it fair).
+      Step 3: STANDOFF — Cleo and Beatrice both only find piece 2 fair.
+              Piece 1 is unclaimed.
+      Step 4: Recombine pieces 1 and 2 into a "supershare."
+              Have Cleo and Beatrice use Divider-Chooser method on the supershare.
+              Each is guaranteed ≥ half the combined value ≥ $250. ✓
+    expected_student_behaviors:
+      - "Identify fair share of $250"
+      - "Try to assign pieces greedily"
+      - "Discover the standoff (Cleo & Beatrice both need piece 2)"
+      - "Struggle with resolution — this is where productive failure occurs"
+      - "Propose splitting piece 2 or other heuristics"
+
+  - id: "kerrigan2021_invention_2"
+    type: "complex_pf_problem"
+    phase: "generation"
+    topic: "discrete_fair_distribution"
+    method_name: "Method of Sealed Bids"
+    prior_knowledge_required:
+      - "Lone Divider method (learned in previous unit)"
+      - "Basic division and arithmetic"
+      - "Concept of fairness"
+    design_features:
+      - "Items cannot be split (discrete, unlike land)"
+      - "More items (4) than people (3) — complicates allocation"
+      - "Cash settlement needed for fairness"
+      - "Students confused by fair share calculation and surplus"
+    problem: |
+      Ashley, Bill, and Cliff have been roommates through college and now are
+      getting ready to graduate and go separate ways. They have jointly owned
+      a table, dresser, chair, and couch among the 3 of them.
+
+      Ashley values the table at $150, the dresser at $150, the chair at $175, and the couch at $275.
+      Bill values the table at $250, the dresser at $200, the chair at $150, and the couch at $300.
+      Cliff values the table at $175, the dresser at $125, the chair at $125, and the couch at $250.
+
+      Describe a way for all three people to walk away with a "fair share."
+      Justify your answer using dollar amounts and explanations.
+    critical_features:
+      - "Individual fair shares (divide by NUMBER OF PEOPLE, not items)"
+      - "Fair item assignment to each player (highest bidder gets item)"
+      - "Relationship between item assignment and fair shares"
+      - "Surplus calculation and redistribution"
+      - "Fair final settlement"
+    solution: |
+      Step 1: Calculate fair shares (total value / 3 people):
+        Ashley: (150+150+175+275)/3 = $250
+        Bill: (250+200+150+300)/3 = $300
+        Cliff: (175+125+125+250)/3 = $225
+
+      Common error: dividing by 4 items instead of 3 people!
+
+      Step 2: Highest bidder gets each item:
+        Ashley: chair ($175)
+        Bill: table ($250), dresser ($200), couch ($300)
+        Cliff: no items
+
+      Step 3: Balance fair shares with cash:
+        Ashley: receives $250 - $175 = $75 in cash
+        Bill: pays $250+200+300 - $300 = $450 in cash
+        Cliff: receives entire fair share $225 in cash
+
+      Step 4: Distribute surplus:
+        Surplus = $450 - ($75 + $225) = $150
+        Each person gets $150/3 = $50 bonus
+
+      Step 5: Final allocation:
+        Ashley: chair + $125 cash
+        Bill: table, dresser, couch — pays $400 cash
+        Cliff: $275 cash
+
+  - id: "kerrigan2021_posttest_transfer"
+    type: "complex_pf_problem"
+    phase: "posttest"
+    topic: "continuous_fair_division"
+    method_name: "Lone Divider Method (dishonesty variant)"
+    requires_transfer: true
+    problem: |
+      Every fair division method has a built-in disincentive for dishonest play.
+      This exercise illustrates the disincentive for dishonest bidding in the
+      lone-divider method.
+
+      Four partners (Burly, Curly, Greedy, and Dandy) are dividing a
+      million-dollar property using the lone-divider method. Using a map,
+      Dandy divides the property into four parcels, s1, s2, s3, and s4.
+
+      Values table:
+              s1        s2        s3        s4
+      Dandy   $250,000  $250,000  $250,000  $250,000
+      Burly   $400,000  $200,000  $200,000  $200,000
+      Curly   $280,000  $320,000  $200,000  $200,000
+      Greedy  $320,000  $280,000  $280,000  $120,000
+
+      a. Describe the outcome of the fair division assuming all players make
+         honest bids.
+      b. Suppose that Burly and Curly both bid honestly, but Greedy decides to
+         cheat and bid for only s1 (figuring he will then get that parcel).
+         Under the right set of circumstances, Greedy could end up with a share
+         worth only $220,000. Describe how this could happen.
+    critical_conceptual_features:
+      - "Must understand standoff resolution deeply"
+      - "Must reason about how dishonesty can backfire"
+      - "Requires engineering a specific scenario (not just solving)"
+      - "Tests conceptual understanding, not just procedural knowledge"
+
+  - id: "kerrigan2021_inclass_application"
+    type: "well_structured"
+    phase: "in_class_practice"
+    topic: "discrete_fair_distribution"
+    method_name: "Method of Sealed Bids"
+    problem: |
+      Wendy and Xavier are siblings who have inherited a house from their
+      parents. They are not willing to share the house (growing up together
+      was enough), so one or the other will receive it when their parents'
+      estate is settled. This is the only item which they have inherited,
+      and they apply the Method of Sealed Bids to obtain a fair distribution.
+
+      Wendy considers the house worth $300,000, but Xavier considers it worth $350,000.
+
+      a. Find the value of each player's minimum fair share, in dollars.
+      b. Carry out the allocation of the items (of which there is only one),
+         and the first settlement.
+      c. Find the surplus after the first settlement is over, and how much
+         of the surplus each player receives.
+      d. Carry out the final settlement.
+    solution: |
+      a. Wendy's fair share: $300,000/2 = $150,000
+         Xavier's fair share: $350,000/2 = $175,000
+
+      b. Xavier gets the house (highest bidder).
+         Xavier pays $350,000 - $175,000 = $175,000 to the bank.
+
+      c. Wendy receives $150,000 from the bank.
+         Surplus = $175,000 - $150,000 = $25,000
+         Each receives $25,000/2 = $12,500
+
+      d. Final settlement:
+         Xavier: house, pays $175,000 - $12,500 = $162,500
+         Wendy: receives $150,000 + $12,500 = $162,500 in cash

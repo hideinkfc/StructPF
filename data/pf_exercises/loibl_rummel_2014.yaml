@@ -1,0 +1,149 @@
+# PF Exercises extracted from:
+# Loibl, K. & Rummel, N. (2014).
+# Knowing what you don't know makes failure productive.
+# Learning and Instruction, 34, 74-85.
+# DOI: 10.1016/j.learninstruc.2014.08.004
+
+metadata:
+  source: "Loibl & Rummel (2014)"
+  domain: "Mathematics"
+  topic: "Variance / Consistency (Descriptive Statistics)"
+  grade_level: 10
+  country: "Germany"
+  curriculum_note: "German secondary schools have not covered variance by grade 10"
+  key_findings:
+    - "Problem-solving prior to instruction triggers global awareness of knowledge gaps"
+    - "Comparing student solutions to canonical solution specifies the gaps"
+    - "Form of instruction (with student solutions) is MORE important than timing"
+    - "PS-Icontrast outperformed all other conditions on conceptual knowledge"
+    - "Instruction prior to PS better for procedural skills (more practice time)"
+  design_notes:
+    - "Same problem structure as Kapur (2012) and Schwartz & Martin (2004)"
+    - "Data designed so range and mean are same for all players → forces thinking beyond simple methods"
+    - "Rich dataset (Productive Failure style) vs contrasting cases (Invention style)"
+  target_concepts:
+    MAD: "Mean Absolute Deviation = Σ|xi - mean| / N"
+    SD: "Standard Deviation = √(Σ(xi - mean)² / N)"
+  functional_components:
+    - "Sum up ALL deviations (include all numbers for precision)"
+    - "Take absolute/squared deviations (prevent positive/negative canceling)"
+    - "Take deviations from a FIXED reference point (the mean, not neighbors)"
+    - "Divide by N (account for sample size)"
+
+exercises:
+  - id: "loibl2014_invention_1"
+    type: "complex_pf_problem"
+    phase: "generation"
+    topic: "variance_consistency"
+    format: "data_table_with_question"
+    prior_knowledge_required:
+      - "Mean (arithmetic average)"
+      - "Range (max - min)"
+      - "Basic arithmetic operations"
+    design_features:
+      - "Three players with SAME mean and SAME range"
+      - "Forces students beyond range and mean as measures of consistency"
+      - "Multiple features vary across players (not made salient in PF version)"
+      - "Students must invent a measure of spread/consistency"
+    problem: |
+      Three soccer players have scored the following numbers of goals in the
+      last 10 years:
+
+      [Data table with goals per year for Player A, Player B, and Player C]
+
+      Key constraint: All three players have the SAME mean and SAME range.
+      The players differ in HOW their goals are distributed around the mean.
+
+      Question: Who is the most consistent goal scorer?
+      Invent a mathematical method to determine consistency.
+    expected_student_solutions:
+      - name: "Range method"
+        description: "max - min for each player"
+        leads_to_solution: false
+        why_fails: "All three have the same range → cannot distinguish"
+      - name: "Mean comparison"
+        description: "Compare averages"
+        leads_to_solution: false
+        why_fails: "All three have the same mean → cannot distinguish"
+      - name: "Visual/qualitative"
+        description: "Look at how 'spread out' the numbers are"
+        leads_to_solution: false
+        why_fails: "Not a precise mathematical method"
+      - name: "Sum of differences from neighbors"
+        description: "Add up |year_i - year_{i-1}| for each consecutive pair"
+        leads_to_solution: false
+        why_fails: "Depends on ordering/sequencing of data"
+      - name: "Sum of deviations from mean (unsigned)"
+        description: "Σ|xi - mean| — approximates MAD"
+        leads_to_solution: true
+        note: "Close to canonical MAD; missing division by N"
+      - name: "Count deviations from mean"
+        description: "Count how many values differ from mean"
+        leads_to_solution: false
+        why_fails: "Doesn't account for magnitude of deviations"
+    critical_conceptual_features:
+      - "Consistency = low deviation from central tendency"
+      - "Need a single number to represent spread"
+      - "Must use ALL data points (not just extremes)"
+      - "Must prevent positive/negative canceling (absolute value or squaring)"
+      - "Must use fixed reference point (mean), not sequential differences"
+      - "Must account for sample size (divide by N)"
+    canonical_solution: |
+      MAD = Σ|xi - mean| / N
+      SD  = √(Σ(xi - mean)² / N)
+
+      The most consistent player has the LOWEST MAD or SD.
+
+  - id: "loibl2014_posttest_procedural_1"
+    type: "well_structured"
+    phase: "posttest"
+    topic: "variance_computation"
+    problem: |
+      Calculate the mean absolute deviation (MAD) for the following dataset:
+      [Given dataset of numbers]
+
+      Calculate the standard deviation (SD) for the following dataset:
+      [Given dataset of numbers]
+    notes: "2 items testing procedural application of formulas"
+
+  - id: "loibl2014_posttest_conceptual_1"
+    type: "conceptual"
+    phase: "posttest"
+    topic: "variance_understanding"
+    problem: |
+      Conceptual items tested:
+      1. Transfer to new context (not soccer)
+      2. Explain WHY a particular component of the formula is necessary
+      3. Compare two datasets and explain which has more spread without computing
+      4. Identify errors in a student's attempted solution and explain the flaw
+    notes: |
+      4 items testing conceptual knowledge:
+      - Principle-based reasoning
+      - Ability to connect different representations
+      - Understanding functional components of MAD/SD formulas
+      - Transfer to novel contexts
+
+  - id: "loibl2014_contrasting_cases"
+    type: "contrasting_cases"
+    phase: "instruction"
+    topic: "variance_consistency"
+    description: |
+      Used in the Invention (contrasting cases) approach:
+      Pairs of datasets that differ in ONE feature at a time while holding
+      all other features constant.
+
+      Example pair: Two players with same mean but different range
+      → Students notice that range matters
+
+      Next pair: Two players with same range but different distribution
+      → Students notice that individual deviations matter
+
+      Students must generate a solution that works for ALL pairs.
+      Applying their solution to contrasting cases provides feedback
+      about specific gaps.
+    design_principle: |
+      Contrasting cases MAKE SALIENT the relevant features one at a time.
+      Rich datasets (PF approach) do NOT make features salient.
+      Both lead to failure, but through different mechanisms:
+      - Contrasting cases: students can partially guess elements of canonical solution
+      - Rich datasets: students unlikely to generate solutions beyond intuitive ideas
