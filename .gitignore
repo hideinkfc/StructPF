@@ -1,0 +1,50 @@
+# ==== Python ====
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+.eggs/
+*.egg
+.venv/
+venv/
+env/
+
+# ==== LaTeX ====
+thesis/*.aux
+thesis/*.bbl
+thesis/*.blg
+thesis/*.log
+thesis/*.out
+thesis/*.toc
+thesis/*.fls
+thesis/*.fdb_latexmk
+thesis/*.synctex.gz
+thesis/*.pdf
+
+# ==== Data (large files, download separately) ====
+data/stratl/*.json
+data/stratl/*.csv
+data/eedi/*.csv
+data/eedi/*.parquet
+data/raw/
+
+# ==== Experiment outputs ====
+experiments/results/
+experiments/logs/
+
+# ==== Notebooks ====
+notebooks/.ipynb_checkpoints/
+
+# ==== IDE / OS ====
+.DS_Store
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ==== Environment ====
+.env
+.env.local
+*.key

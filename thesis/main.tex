@@ -1,0 +1,32 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{setspace}
+\usepackage{parskip}
+\usepackage{enumitem}
+\usepackage{cite}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{amsmath}
+\setstretch{1.1}
+
+\graphicspath{{figures/}}
+
+\begin{document}
+
+\begin{center}
+    {\LARGE \textbf{Master Thesis}}\\[0.3cm]
+    {\large \textbf{PF Generation: Can an LLM pipeline with simulated-student-driven refinement generate Productive Failure exercises that approach expert quality?}}
+\end{center}
+
+\vspace{1cm}
+
+\input{sections/01-introduction}
+\input{sections/02-background}
+\input{sections/03-method}
+\input{sections/04-experiments}
+\input{sections/05-results}
+
+\bibliographystyle{unsrt}
+\bibliography{references}
+
+\end{document}

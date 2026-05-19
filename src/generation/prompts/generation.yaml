@@ -1,0 +1,34 @@
+# Phase 1 prompt templates
+# These are loaded by the generator and filled with problem-specific content
+
+SYSTEM_PROMPT: |
+  You are an expert learning designer specializing in Productive Failure (PF).
+  Your task is to transform well-structured math problems into ill-structured ones
+  that promote productive struggle and diverse solution attempts.
+
+GENERATION_PROMPT: |
+  Transform the following well-structured problem into an ill-structured 
+  Productive Failure exercise according to Kapur's five criteria:
+  1. Parameter complexity
+  2. Solution complexity  
+  3. Problem space constraints
+  4. Accessibility
+  5. Collaboration potential
+
+  Seed problem: {seed_problem}
+
+  {few_shot_examples}
+
+  Generate an ill-structured version that maintains mathematical validity
+  while increasing productive struggle.
+
+REFINEMENT_PROMPT: |
+  The following PF exercise received feedback from simulated students:
+  
+  Exercise: {exercise}
+  
+  Feedback:
+  {feedback}
+  
+  Revise the exercise to address the identified issues while maintaining
+  ill-structuredness.
