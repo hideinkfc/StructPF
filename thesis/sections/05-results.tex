@@ -7,3 +7,15 @@
 \subsection{Human Expert Evaluation}
 
 \subsection{Ablation Analysis}
+
+\subsection{Limitations of Automated Misconception-ID Matching}
+\label{sec:mc-recall-limitation}
+
+% TODO: expand from bullet points
+\begin{itemize}
+    \item Attempted embedding-based ID matching: generator free-text label $\to$ Eedi bank (2,587 entries) $\to$ check top-3 cosine match against human-assigned ID
+    \item Result: 0\% exact-ID matches across 93 labels (11 conditions), despite mean cos = 0.82
+    \item Cause: lexically different surface forms for same error concept (e.g., ``Confuses division with multiplication'' vs.\ ``uses the same operation rather than the inverse'')
+    \item Implication: free-form misconception labeling resists automated taxonomy alignment without human annotation or structured output
+    \item Decision: dropped as a metric; report Validity, Self-label Fidelity, Diversity as primary F2 measures
+\end{itemize}

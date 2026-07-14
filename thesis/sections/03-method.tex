@@ -4,6 +4,124 @@
 
 \subsection{Phase 1: Exercise Generation}
 
+We generate full Productive Failure (PF) exercises with a single generator (prompt, model, and output schema held fixed) that varies only in what it is told about student misconceptions. This isolates the effect of misconception knowledge from confounds such as prompt wording or narrative style. We compare three conditions:
+
+\begin{itemize}
+    \item \textbf{V1 — Blind.} No misconception information is provided; the generator relies only on the PF task definition and grade/topic.
+    \item \textbf{V2 — Eedi-grounded.} The generator is given a set of real, human-annotated misconceptions from the Eedi diagnostic-questions dataset~\cite{wang2021eedi} for the target topic.
+    \item \textbf{V3 — LLM-inferred.} A two-step process: the model first infers plausible misconceptions for the topic itself, then generates the exercise conditioned on its own inferred list.
+\end{itemize}
+
+\begin{figure}[h]
+\centering
+\begin{tikzpicture}[
+    node distance=1.1cm and 1.3cm,
+    box/.style={draw, rounded corners, align=center, minimum width=3.1cm, minimum height=1.0cm},
+    every path/.style={-{Latex[length=2mm]}}
+]
+    \node[box] (input) {Grade + topic\\(7th grade, ratios \& proportional relationships)};
+    \node[box, below left=of input] (v1) {V1 — Blind\\no misconceptions};
+    \node[box, below=of input] (v2) {V2 — Eedi-grounded\\real misconceptions};
+    \node[box, below right=of input] (v3) {V3 — LLM-inferred\\self-generated misconceptions};
+    \node[box, below=of v1] (e1) {PF exercise};
+    \node[box, below=of v2] (e2) {PF exercise};
+    \node[box, below=of v3] (e3) {PF exercise};
+
+    \draw (input) -- (v1);
+    \draw (input) -- (v2);
+    \draw (input) -- (v3);
+    \draw (v1) -- (e1);
+    \draw (v2) -- (e2);
+    \draw (v3) -- (e3);
+\end{tikzpicture}
+\caption{The three generation conditions share the same generator and output format; only the misconception input differs.}
+\label{fig:generation-conditions}
+\end{figure}
+
+\paragraph{Hypotheses.} (a) V2 and V3 outperform V1 on Sweet Spot Calibration (SSC) and Activation of Prior Knowledge (APK), since misconception awareness should help the generator ``rig'' the data trap and target the right prior knowledge. (b) V2 and V3 perform similarly, if LLMs already encode enough pedagogical content knowledge to infer reasonable misconceptions without external data. (c) V1, V2, and V3 perform similarly on Affective Engagement (AE) and Multiple Representations and Solutions (MR), since narrative craft and format variety should be largely orthogonal to misconception knowledge.
+
+\paragraph{Fixed output format.} All three conditions produce the same five-part structure, derived from common patterns across hand-designed PF exercises in the literature~\cite{kapur2012,loibl2014,rahimi2025}: (1) \textit{Topic}, (2) \textit{Narrative} — a real-world scenario with named characters and stakes, (3) \textit{Data \& Constraints} — the numbers and conditions embedded in the narrative, (4) \textit{Task} — an open-ended prompt (e.g. ``design'', ``invent'') that admits multiple solution approaches and never hints at the correct method, and (5) \textit{Consolidation Note} — a teacher-facing (non-student-facing) explanation of the critical conceptual feature the exercise is designed to surface. Keeping this schema identical across V1/V2/V3 ensures that any score differences we observe are attributable to the misconception-grounding manipulation rather than to structural or formatting differences.
+
+\subsection{PF Exercise Evaluation}
+
+\paragraph{LLM-as-judge did not discriminate quality.} Our first evaluation attempt scored a small set of exercises with an LLM judge (Llama-3.3-70B-Instruct) on the five-dimension PF rubric of Rahimi et al.~\cite{rahimi2025} (Activation of Prior Knowledge, Sweet Spot Calibration, Affective Engagement, Multiple Representations and Solutions, Open-Endedness; each scored 1--3, total 5--15). The judge showed a strong ceiling effect: 8 of 9 test exercises received the maximum score of 15/15, giving near-zero discrimination between a genuinely open-ended PF exercise and an ordinary word problem phrased with a verb like ``design''. Likely causes include the absence of a calibration baseline, no explicit reasoning step before scoring, and the conflation of surface-level structural completeness with pedagogical quality. Chain-of-thought scoring, following G-Eval~\cite{liu2023geval}, and reference-anchored scoring~\cite{zheng2023judging} are documented mitigations for this failure mode, but given the severity of the ceiling effect we opted to move to expert/human rubric scoring for this evaluation instead of further tuning the automatic judge.
+
+\paragraph{Fixed evaluation pool.} We generated a fixed pool of 21 exercises (7 design variations $\times$ 3 conditions) for a single topic and grade level (7th grade, ratios \& proportional relationships), using DeepSeek-V4-Flash as the generator. Each candidate exercise is automatically checked before being accepted into the pool (minimum narrative/task length, and no leakage of teacher-facing content such as the consolidation note into the student-facing text) and is regenerated on failure; exact duplicates are also rejected and regenerated. Seven design variations (e.g. scaling a recipe, comparing two ratios with an equal total but different part counts, allocating a fixed whole-number resource fairly) were chosen to sample structurally distinct PF setups rather than to support a large-sample statistical comparison. At this stage, the goal is a diagnostic first pass: identifying systematic, structural weaknesses (e.g.\ a dimension scoring at floor across nearly all exercises) that would be visible even at small $n$, rather than establishing statistically significant condition differences, which would require a substantially larger sample and, ideally, multiple independent raters.
+
+\paragraph{Blind scoring interface.} Each of the 21 exercises is scored by a human rater on all five rubric dimensions through a purpose-built interface that presents exercises one at a time, in randomized order, with the generation condition hidden to preserve blind scoring. The rater selects a score (1--3) per dimension; scores are saved immediately and the next exercise is shown automatically, with an undo option to revise the previous rating.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.75\textwidth]{human_evaluation_total_scores_round1_deepseek.png}
+    \caption{Total PF quality score (5--15) by generation condition, first diagnostic evaluation pass (7 exercises per condition).}
+    \label{fig:pf-total-scores}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\textwidth]{human_evaluation_dimensions_round1_deepseek.png}
+    \caption{Per-dimension PF quality scores by generation condition, first diagnostic evaluation pass.}
+    \label{fig:pf-dimension-scores}
+\end{figure}
+
 \subsection{Phase 2: Simulated Student Evaluation}
 
+The first diagnostic evaluation pass (Figures~\ref{fig:pf-total-scores}--\ref{fig:pf-dimension-scores}) shows that Multiple Representations and Solutions scores at or near the floor across all three generation conditions, and that Open-Endedness is similarly weak: generated exercises are largely single-path, text-only tasks rather than tasks that admit genuinely different solution methods. Since prompt-level interventions alone showed limited effect in the MCQ distractor-generation experiments (Phase 1a), we do not expect further prompt tuning of the generator to resolve this on its own.
+
+We therefore treat student simulation not as a pre-test of already-finished exercises, but as a \emph{feedback-driven refinement loop}: a simulated attempt at an exercise is used to surface where the exercise is too rigid, then that feedback is fed back into a second generation pass. This framing is supported by prior work showing that (a) explicit pedagogical intent labels increase the number of representations and solution methods (RSMs) elicited from students, with Puech et al.~\cite{puech2025} reporting a mean RSM count of 2.6 under an intent-labeled condition versus 1.0 without intent labeling, and (b) LLM-simulated student profiles correlate with real student response patterns closely enough to be diagnostically useful, with Lu \& Wang~\cite{lu2024} reporting $r = 0.72$ between simulated and real student performance on multiple-choice items.
+
+We are currently designing this component along two lines: (1) the \emph{student prompt}, so that the simulated learner behaves like a plausible student attempting the exercise for the first time rather than an idealized solver, drawing on the simulated-student literature~\cite{lu2024}; and (2) the \emph{feedback prompt}, which turns a simulated attempt into structured, actionable feedback for the generator (e.g.\ which representations were missing, whether the failure was productive or simply confusing) rather than a numeric pass/fail signal. As a further calibration check, we plan to compare the distribution of error types produced by simulated students against the real error-type distribution in the Eedi dataset~\cite{wang2021eedi}, to assess whether simulated failures are qualitatively similar to real student errors.
+
 \subsection{Phase 3: Iterative Refinement}
+
+\begin{figure}[h]
+\centering
+\begin{tikzpicture}[
+    node distance=0.9cm and 1.6cm,
+    box/.style={draw, rounded corners, align=center, minimum width=3.4cm, minimum height=1.0cm},
+    every path/.style={-{Latex[length=2mm]}}
+]
+    \node[box] (gen1) {First-shot generation};
+    \node[box, below=of gen1] (sim) {Simulate diverse\\learner attempts};
+    \node[box, below=of sim] (identify) {Identify rigid methods /\\missing RSMs};
+    \node[box, below=of identify] (feedback) {Structured feedback};
+    \node[box, below=of feedback] (gen2) {Second-shot refinement};
+    \node[box, below=of gen2] (eval) {Human evaluation};
+
+    \draw (gen1) -- (sim);
+    \draw (sim) -- (identify);
+    \draw (identify) -- (feedback);
+    \draw (feedback) -- (gen2);
+    \draw (gen2) -- (eval);
+    \draw (gen2.east) to[out=0, in=0, looseness=1.6] (sim.east);
+\end{tikzpicture}
+\caption{Planned refinement loop: simulated-student feedback drives a second generation pass, which is fed back into simulation before final human evaluation.}
+\label{fig:refinement-loop}
+\end{figure}
+
+The planned loop (Figure~\ref{fig:refinement-loop}) is: generate an exercise, simulate several diverse learner attempts, identify where the exercise fails to elicit distinct solution methods or produces unproductive rather than productive failure, turn this into structured feedback, and regenerate the exercise conditioned on that feedback — repeating before a final human evaluation. Simulation acts only as a feedback source for the generator; final judgment of exercise quality continues to rely on the human rubric-based evaluation described above. This phase, and the re-evaluation of refined exercises against the round-1 diagnostic scores, is in progress.
+
+\subsection{Evaluation Metrics}
+
+Two families, five metrics total:
+
+\paragraph{Family 1 — Reference-based (computed, no LLM).}
+\begin{itemize}
+    \item \textbf{PM} — fraction exact-matching a human distractor after LaTeX normalization
+    \item \textbf{Text sim.} — ROUGE-L F1 to best human distractor (character-level; note limitation)
+    \item \textbf{Embed sim.} — cosine similarity to closest human distractor (normalized text, Arctic-embed-l-v2.0)
+\end{itemize}
+
+\paragraph{Family 2 — Misconception-grounded (LLM judge + computed, our contribution).}
+\begin{itemize}
+    \item \textbf{Validity} — teacher-primed judge: \textit{``wrong but on-pathway?''}~Error-first reasoning (list common student errors, then judge each distractor). Binary per distractor, 3-call self-consistency, majority vote.
+    \item \textbf{Diversity} — teacher judge: \textit{``how many distinct error types?''}~Trichotomous (1/2/3 types), normalized to 0.0/0.5/1.0. 3-call self-consistency, median. Captures pedagogical distinctness, not surface-form similarity.
+\end{itemize}
+
+\paragraph{Dropped metrics (for reference).}
+% TODO: expand each into full justification paragraphs
+\begin{itemize}
+    \item \textbf{Misconception Recall} — embedding generator's free-text label against Eedi bank (2,587 entries) to find exact ID match. Result: 0\% matches across 93 labels (11 conditions), despite mean cos = 0.82. Cause: free-form labels (``Confuses division with multiplication'') and Eedi entries (``uses the same operation rather than the inverse'') describe identical concepts in different vocabulary. Pedagogical entity linking is an open problem outside our scope. Noted qualitatively in~\S\ref{sec:mc-recall-limitation}.
+    \item \textbf{Self-label Fidelity} — word-overlap heuristic between generator's self-label and judge's independent classification of the same distractor. Result: 0\% agreement on sampled data. Cause: generator uses verbose pedagogical phrasing, judge uses terse operational labels (e.g., ``Confuses inverse operations'' vs.\ ``Multiplication instead division''), zero significant-word overlap despite describing the same error. Embedding-based matching would improve this but was not pursued.
+    \item \textbf{Cosine-based Diversity} — replaced with LLM-judge conceptual diversity because embedding cosine clusters all distractors for one question together (topic-level grouping), inflating similarity scores even for mathematically distinct errors (e.g., $13{:}05$, $12{:}55$, $13{:}25$ gave $\cos=0.97$, Div~$=0.03$, but are pedagogically distinct off-by-$N$ errors).
+\end{itemize}
