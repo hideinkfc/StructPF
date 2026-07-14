@@ -1,0 +1,31 @@
+\begin{center}
+    {\Large \textbf{Original Thesis Proposal}}
+\end{center}
+\vspace{0.4cm}
+\section*{Background}
+Productive Failure (PF) is a well-established learning design in which students attempt challenging, ill-structured problems before receiving instruction, generating diverse representations and solution methods (RSMs) that prepare them for deeper learning \cite{kapur2008,sinha2021}. However, designing effective PF exercises remains labor-intensive, requiring careful calibration of ill-structuredness across multiple dimensions \cite{kapur2009}. Recent work has explored using large language models (LLMs) to automatically generate educational content, particularly multiple-choice questions and distractors \cite{alhazmi2024}. While these approaches achieve reasonable mathematical validity, they consistently struggle to anticipate real student misconceptions, revealing a gap between generating correct content \cite{puech2025} and generating pedagogically effective content \cite{feng2024,parikh2025}. Yet all of these efforts target closed-ended question formats. The generation of open-ended, ill-structured exercises designed to elicit productive struggle remains entirely unexplored, and no automated method exists for generating or evaluating PF exercises specifically.
+\section*{Purpose of this Paper}
+
+We propose an LLM-based pipeline that automatically generates PF exercises
+and evaluates their quality through simulated student interactions.
+The pipeline operates in three phases:
+
+\begin{description}
+    \setlength{\itemsep}{0.5em}
+
+    \item[\textbf{(1) Exercise generation}] where an LLM transforms well-structured problems into ill-structured ones guided by Kapur's  five criteria of ill-structuredness \cite{kapur2009}, including parameter complexity, solution complexity, problem space constraints accessibility, and collaboration potential, using retrieval-augmented few-shot examples \cite{puech2025}.
+    \item[\textbf{(2) Simulated student evaluation}] where student profiles defined by Knowledge Components (KCs) from the Knowledge-Learning-Instruction framework \cite{lu2024} attempt the generated exercises at varying ability levels, yielding measures of RSM diversity and productive failure rates. To ensure the diversity signal reflects genuine response variation rather than superficial rewording, we induce diversity through three complementary mechanisms: (i) KC-based persona variation \cite{lu2024}, (ii) grounding in real student response distributions from large-scale math question banks \cite{wang2021eedi}, and (iii) stochastic sampling across runs.
+    \item[\textbf{(3) Iterative refinement}] where simulated student signals feed back into the generation process to improve exercise quality \cite{madaan2023selfrefine}.
+\end{description}
+\section*{Data, Evaluation and Baselines}
+
+\paragraph{Data.} Our pipeline is grounded in the StratL dataset of 15 expert-authored PF exercises \cite{puech2025} and large-scale student response data from the Eedi platform \cite{wang2021eedi}, comprising over 15 million responses with misconception labels.
+
+\paragraph{Evaluation.} We evaluate the final exercises produced by each system on a held-out set of seed problems along two tiers:
+\begin{description}
+    \setlength{\itemsep}{0.3em}
+    \item[\textbf{(i) Automatic metrics}] including mathematical validity via a symbolic solver, an independent LLM-as-judge \cite{zheng2023judging} on Kapur's five criteria using a different model and rubric than the in-loop judge of Phase~3 to detect optimization leakage, an embedding-based diversity score over a held-out sentence encoder \cite{tevet2021diversity}, and a memorization check via n-gram overlap against the retrieval pool \cite{carlini2023memorization}.
+    \item[\textbf{(ii) Human expert evaluation}] by learning scientists and teachers using Likert ratings and pairwise preference comparisons.
+\end{description}
+
+\paragraph{Baselines.} No prior work automatically generates Productive Failure exercises: StratL \cite{puech2025} steers an LLM during tutoring but assumes exercises already exist, and distractor generation methods \cite{feng2024} target closed-ended MCQs. We therefore compare generation strategies on a common seed-to-PF interface, with baselines being zero-shot prompting, few-shot prompting over the StratL exercises, and retrieval-augmented few-shot following \cite{feng2024}. We additionally include two ablations, one without iterative refinement (Phase 3 disabled, so the first generation is taken as final) and one without KC-based personas (simulated students reduced to a single generic profile), to isolate the contribution of the refinement loop and of persona-driven diversity. Expert-authored StratL exercises serve as the upper bound.
