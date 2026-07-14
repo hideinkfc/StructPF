@@ -1,0 +1,317 @@
+# Phase 1a — MCQ Distractor Generation prompts
+# Rich prompt variants designed from the literature:
+#  - Feng et al. 2024: RAG + error rationales
+#  - Parikh et al. 2025 (LookAlike): distractors mirror real student errors
+#  - Alhazmi et al. 2024: survey of distractor generation methods
+#  - Puech et al. 2025 (StratL): pedagogical steering with intent labels
+#  - Kapur 2009: PF criteria → traps = anticipated misconceptions
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# SYSTEM PROMPT VARIANTS (varying depth of pedagogical framing)
+# ═══════════════════════════════════════════════════════════════════════════════
+
+SYSTEM_BASIC: |
+  You are a helpful assistant that generates wrong answers for multiple-choice math questions.
+
+  Respond ONLY with valid JSON matching the requested schema.
+
+SYSTEM_EXPERT: |
+  You are a mathematics education expert specializing in diagnosing student misconceptions. Your task is to generate plausible wrong answers (distractors) for multiple-choice math questions. Each distractor should reflect a real error that a student might make, based on common mathematical misconceptions.
+
+  Respond ONLY with valid JSON matching the requested schema.
+
+SYSTEM_PEDAGOGICAL: |
+  You are a mathematics education researcher with 15 years of classroom experience diagnosing student errors. You have deep knowledge of the following error categories:
+
+  1. PROCEDURAL errors — mistakes in executing a correct procedure (e.g., misapplying BIDMAS, arithmetic slips, sign errors)
+  2. CONCEPTUAL errors — misunderstanding the underlying math concept (e.g., confusing mean with median, thinking multiplication always makes numbers bigger)
+  3. FACTUAL errors — incorrect recall of facts (e.g., wrong formula, wrong times table fact)
+  4. STRATEGIC errors — applying a valid strategy to the wrong problem type (e.g., using addition where multiplication is needed)
+
+  For each distractor you generate, you must:
+  - Classify it into one of the four error categories above
+  - Explain the step-by-step reasoning path a student would take to arrive at this wrong answer
+  - Ensure the distractor is diagnostically useful (a teacher could use it to identify the student's specific misunderstanding)
+
+  Respond ONLY with valid JSON matching the requested schema.
+
+SYSTEM_LOOKALIKE: |
+  You are simulating the thought process of a real middle-school student.
+  Your job is NOT to be correct — it is to make the same kinds of mistakes that real students make every day in math class.
+
+  Think about what WRONG answers feel intuitively correct to someone who:
+  - Recently learned the topic but hasn't practiced enough
+  - Mixes up similar-looking operations (e.g., × vs +, ÷ vs −)
+  - Remembers the right formula but plugs numbers in the wrong order
+  - Gets the right answer but for a slightly different question
+  - Follows a "shortcut" that works 80% of the time but fails here
+
+  Your distractors should feel authentic — a teacher should look at your wrong answers and say "Yes, I've seen students make exactly that mistake."
+
+  Respond ONLY with valid JSON matching the requested schema.
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# OUTPUT FORMAT (appended to all user prompts)
+# ═══════════════════════════════════════════════════════════════════════════════
+
+OUTPUT_FORMAT: |
+  CRITICAL — the "text" field must be the bare MATHEMATICAL ANSWER only, with NO LaTeX delimiters (`\(` `\)` `$`). NOT a description, NOT a sentence.
+
+  CORRECT format (bare answer):
+    - Numbers: "6", "12.5", "-3"
+    - Expressions: "x=4", "2/3", "+9"
+    - Multi-char operators: "×", "÷" (use × for \times, ÷ for \div)
+    - Fractions: "(5)/(13)" (use parenthesised slash format)
+    - Short text: "Only step 1", "Does not simplify", "Both steps correct"
+
+  WRONG format (do NOT do this):
+    - ✗ "\( x=4 \)" → instead output "x=4"
+    - ✗ "\( \frac{2}{3} \)" → instead output "(2)/(3)"
+    - ✗ "add 9 to both sides" → instead output "+9"
+    - ✗ "multiply by 9" → instead output "×9"
+    - ✗ "the answer is 6 because..." → instead output "6"
+    - ✗ "d equals negative one" → instead output "d=-1"
+
+  The "target_misconception" and "error_rationale" are separate fields for analysis — do NOT put them in the "text" field.
+
+# --- Direct instruction (baseline) ---
+USER_DIRECT: |
+  Generate {n_distractors} plausible wrong distractors for the following math question.
+
+  Question: {question_text}
+  Correct answer: {correct_answer}
+
+  For each distractor, provide:
+  - "text": The wrong answer a student would select
+  - "target_misconception": The name of the misconception this distractor targets (be specific — e.g., "Confuses addition with multiplication", "Forgets order of operations")
+  - "error_rationale": A brief 1-sentence explanation of why a student would pick this answer
+
+  The distractors must be plausible — they should look like answers a real student might produce.
+
+# --- Chain-of-Thought (think before generating) ---
+USER_COT: |
+  I want you to generate {n_distractors} plausible wrong distractors for the following math question. But first, THINK systematically before you write any distractors:
+
+  STEP 1: Identify the core mathematical concept being tested.
+  STEP 2: List 5-8 common errors students make on this type of problem. Be specific — not just "order of operations error" but "adds 2+4=6 then multiplies 3×6=18 because they process left-to-right without respecting operator precedence."
+  STEP 3: For each error, compute what WRONG answer that error would produce.
+  STEP 4: Select the {n_distractors} most PLAUSIBLE wrong answers from your list — answers that would genuinely fool a student who knows some math but not enough.
+
+  Question: {question_text}
+  Correct answer: {correct_answer}
+
+  Then output the distractors with:
+  - "text": The wrong answer
+  - "target_misconception": The precise error
+  - "error_rationale": The step-by-step wrong reasoning path
+  - "error_category": One of "procedural", "conceptual", "factual", "strategic"
+
+# --- Self-critique (generate → review → revise) ---
+USER_SELF_CRITIQUE: |
+  You will generate distractors for a math question, then CRITIQUE your own work, then output the final version.
+
+  PHASE 1 — Generate:
+  Draft {n_distractors} distractors for this question.
+  Question: {question_text}
+  Correct answer: {correct_answer}
+
+  PHASE 2 — Self-Critique:
+  Review your distractors against these quality checks:
+  1. Would a real student actually pick this? (plausibility check)
+  2. Does this diagnostic a specific misconception? (diagnostic value check)
+  3. Is this too easy to eliminate? (discrimination check — a distractor that's "obviously wrong" is useless)
+  4. Are the distractors diverse or do they all stem from the same error? (diversity check)
+
+  PHASE 3 — Revise:
+  Output the FINAL distractors, replacing any that failed the checks above.
+
+  For each final distractor, provide:
+  - "text": The wrong answer
+  - "target_misconception": The misconception
+  - "error_rationale": Why a student picks this
+  - "quality_notes": Any quality concerns addressed
+
+# --- Counterfactual (put yourself in student's shoes) ---
+USER_COUNTERFACTUAL: |
+  Imagine you are {n_distractors} different middle-school students, each with a DIFFERENT math misunderstanding. You all just saw this question on a test:
+
+  Question: {question_text}
+
+  The correct answer is {correct_answer}, but NONE of you know that. Each of you has a different partial understanding or misconception that leads you to a different wrong answer.
+
+  For each student persona, describe:
+  - What they BELIEVE about the math (their misconception)
+  - What answer they WRITE DOWN
+  - WHY that answer feels right to them (their wrong reasoning)
+
+  Output as distractors with:
+  - "text": The wrong answer
+  - "target_misconception": The student's misconception name
+  - "error_rationale": Why this answer feels correct to this student
+  - "student_persona": A 1-sentence description of this student (e.g., "Always does multiplication first, no matter what")
+
+# --- Difficulty-calibrated ---
+USER_DIFFICULTY_CALIBRATED: |
+  Generate exactly {n_distractors} wrong distractors for this question, spanning different difficulty levels:
+
+  Question: {question_text}
+  Correct answer: {correct_answer}
+
+  - 1 distractor should be a BASIC error (easy to catch, common among struggling students)
+  - 1 distractor should be an INTERMEDIATE error (plausible to students with partial understanding)
+  - 1 distractor should be a SOPHISTICATED error (would fool even a strong student who makes a subtle slip)
+
+  For each distractor, provide:
+  - "text": The wrong answer
+  - "difficulty": "basic" / "intermediate" / "sophisticated"
+  - "target_misconception": The misconception
+  - "error_rationale": Why a student picks this
+
+# --- Negative examples (show what NOT to do) ---
+USER_NEGATIVE_EXAMPLES: |
+  BAD distractor examples (DO NOT do this):
+  ✗ "17" — random wrong answer with no pedagogical value
+  ✗ "0" — too obvious, every student knows it's wrong
+  ✗ All distractors that are just arithmetic errors (no conceptual diagnostic value)
+
+  GOOD distractor examples (DO this):
+  ✓ "6" for 3×2 — student confuses the result of one sub-operation with the final answer
+  ✓ "9" for 3×2+4−5 — student evaluates left-to-right without operator precedence
+
+  Now generate {n_distractors} GOOD distractors for:
+  Question: {question_text}
+  Correct answer: {correct_answer}
+
+  For each distractor, provide:
+  - "text": The wrong answer
+  - "target_misconception": The misconception
+  - "error_rationale": Why a student picks this
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# FEW-SHOT FORMAT VARIANTS
+# ═══════════════════════════════════════════════════════════════════════════════
+
+# --- Minimal few-shot (Q → A only) ---
+FEWSHOT_MINIMAL: |
+  Example questions and their distractors:
+
+  {few_shot_examples}
+
+  Now generate {n_distractors} distractors for:
+  Question: {question_text}
+  Correct answer: {correct_answer}
+
+  Output with "text", "target_misconception", "error_rationale".
+
+# --- Rationale few-shot (show the reasoning) ---
+FEWSHOT_RATIONALE: |
+  Here are examples showing HOW misconceptions lead to specific wrong answers.
+  Study the error analysis pattern carefully.
+
+  {few_shot_examples}
+
+  Now follow the same pattern — first identify what errors students would make, then generate the distractors.
+
+  Question: {question_text}
+  Correct answer: {correct_answer}
+
+  For each of {n_distractors} distractors, output:
+  - "text": The wrong answer
+  - "target_misconception": The misconception name
+  - "error_rationale": Complete reasoning path (2-3 sentences)
+  - "error_category": "procedural" | "conceptual" | "factual" | "strategic"
+
+# --- Contrastive few-shot (good AND bad examples) ---
+FEWSHOT_CONTRASTIVE: |
+  Study these examples carefully. Some are HIGH-QUALITY distractors (diagnostic, plausible, grounded in real misconceptions). Others are LOW-QUALITY (obvious, random, no pedagogical value).
+
+  {few_shot_examples}
+
+  Now generate {n_distractors} HIGH-QUALITY distractors for:
+  Question: {question_text}
+  Correct answer: {correct_answer}
+
+  For each distractor:
+  - "text": The wrong answer
+  - "target_misconception": The misconception
+  - "error_rationale": Why a student picks this
+  - "why_high_quality": 1 sentence explaining why this is a good distractor
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# MISCONCEPTION CONDITIONING DEPTH VARIANTS
+# ═══════════════════════════════════════════════════════════════════════════════
+
+# --- Depth 1: Names only (baseline) ---
+MC_CONDITIONED_NAMES: |
+  Generate {n_distractors} plausible wrong distractors for:
+
+  Question: {question_text}
+  Correct answer: {correct_answer}
+
+  Target these known student misconceptions:
+  {candidate_misconceptions}
+
+  Each distractor should be designed so that a student holding that misconception would select it.
+  Output: "text", "target_misconception", "error_rationale".
+
+# --- Depth 2: Full taxonomy + descriptions ---
+MC_CONDITIONED_TAXONOMY: |
+  Generate {n_distractors} distractors grounded in documented student misconceptions.
+
+  Question: {question_text}
+  Correct answer: {correct_answer}
+
+  Below is a taxonomy of REAL misconceptions documented in large-scale student assessments. For each misconception, a real student would produce a specific wrong answer. Your task is to compute what that wrong answer WOULD BE for this question.
+
+  {candidate_misconceptions}
+
+  For each distractor, provide:
+  - "target_misconception": The misconception from the taxonomy
+  - "text": The specific wrong answer that misconception produces for THIS question
+  - "error_rationale": The step-by-step wrong reasoning that leads from the misconception to this wrong answer
+
+  IMPORTANT: The wrong answer MUST be causally linked to the misconception. Do NOT assign misconceptions to arbitrary wrong numbers.
+
+# --- Depth 3: Student persona profiles ---
+MC_CONDITIONED_PERSONAS: |
+  Below are profiles of real student archetypes, each defined by a specific misconception that has been observed in classroom data.
+
+  {candidate_misconceptions}
+
+  For EACH student profile, imagine this student attempting this question:
+  Question: {question_text}
+  (Correct answer: {correct_answer})
+
+  Simulate what that specific student would answer, given their misconception.
+  Generate one distractor per student profile (up to {n_distractors}):
+
+  - "student_persona": The student profile name
+  - "text": The answer this student would write
+  - "target_misconception": Their misconception
+  - "error_rationale": Their step-by-step wrong reasoning in their own voice
+  - "why_this_student": Why this student in particular would make this error
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# SELF-REFINE (post-generation improvement, Madaan et al. 2023)
+# ═══════════════════════════════════════════════════════════════════════════════
+
+SELF_REFINE_FEEDBACK: |
+  You previously generated these distractors:
+
+  {previous_distractors}
+
+  Review them critically. A high-quality distractor must:
+  1. Be a WRONG answer a real student would actually compute (not random)
+  2. Be causally linked to a specific misconception (the error → the answer)
+  3. Be plausible (competing with the correct answer, not obviously wrong)
+  4. Be diverse (different misconceptions, not just variations of the same error)
+
+  Identify any distractors that FAIL these criteria and explain why they fail.
+  Then, REPLACE any failed distractors with better ones.
+
+  Output the FINAL revised set with:
+  - "text": The wrong answer
+  - "target_misconception": The misconception
+  - "error_rationale": Why a student picks this
+  - "was_revised": true/false
+  - "revision_reason": If revised, what was wrong and why the new one is better
