@@ -40,13 +40,53 @@ We generate full Productive Failure (PF) exercises with a single generator (prom
 
 \paragraph{Hypotheses.} (a) V2 and V3 outperform V1 on Sweet Spot Calibration (SSC) and Activation of Prior Knowledge (APK), since misconception awareness should help the generator ``rig'' the data trap and target the right prior knowledge. (b) V2 and V3 perform similarly, if LLMs already encode enough pedagogical content knowledge to infer reasonable misconceptions without external data. (c) V1, V2, and V3 perform similarly on Affective Engagement (AE) and Multiple Representations and Solutions (MR), since narrative craft and format variety should be largely orthogonal to misconception knowledge.
 
-\paragraph{Fixed output format.} All three conditions produce the same five-part structure, derived from common patterns across hand-designed PF exercises in the literature~\cite{kapur2012,loibl2014,rahimi2025}: (1) \textit{Topic}, (2) \textit{Narrative} — a real-world scenario with named characters and stakes, (3) \textit{Data \& Constraints} — the numbers and conditions embedded in the narrative, (4) \textit{Task} — an open-ended prompt (e.g. ``design'', ``invent'') that admits multiple solution approaches and never hints at the correct method, and (5) \textit{Consolidation Note} — a teacher-facing (non-student-facing) explanation of the critical conceptual feature the exercise is designed to surface. Keeping this schema identical across V1/V2/V3 ensures that any score differences we observe are attributable to the misconception-grounding manipulation rather than to structural or formatting differences.
+\paragraph{Fixed output format.} All three conditions produce the same five-part structure, derived from common patterns across hand-designed PF exercises in the literature~\cite{kapur2012,loibl2014,rahimi2025} (Table~\ref{tab:output-schema}). Keeping this schema identical across V1/V2/V3 ensures that any score differences we observe are attributable to the misconception-grounding manipulation rather than to structural or formatting differences.
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{@{}ll@{}}
+\toprule
+\textbf{Component} & \textbf{Role} \\
+\midrule
+Topic & Grade level and mathematical topic tag. \\
+Narrative & Real-world scenario with named characters and stakes. \\
+Data \& Constraints & Numbers and conditions embedded in the narrative. \\
+Task & Open-ended prompt (``design'', ``invent'') admitting multiple \\
+ & solution approaches; never hints at the correct method. \\
+Consolidation Note & Teacher-facing explanation of the critical conceptual \\
+ & feature the exercise is designed to surface (hidden from students). \\
+\bottomrule
+\end{tabular}
+\caption{Fixed five-part output schema shared by all three generation conditions.}
+\label{tab:output-schema}
+\end{table}
 
 \subsection{PF Exercise Evaluation}
 
 \paragraph{LLM-as-judge did not discriminate quality.} Our first evaluation attempt scored a small set of exercises with an LLM judge (Llama-3.3-70B-Instruct) on the five-dimension PF rubric of Rahimi et al.~\cite{rahimi2025} (Activation of Prior Knowledge, Sweet Spot Calibration, Affective Engagement, Multiple Representations and Solutions, Open-Endedness; each scored 1--3, total 5--15). The judge showed a strong ceiling effect: 8 of 9 test exercises received the maximum score of 15/15, giving near-zero discrimination between a genuinely open-ended PF exercise and an ordinary word problem phrased with a verb like ``design''. Likely causes include the absence of a calibration baseline, no explicit reasoning step before scoring, and the conflation of surface-level structural completeness with pedagogical quality. Chain-of-thought scoring, following G-Eval~\cite{liu2023geval}, and reference-anchored scoring~\cite{zheng2023judging} are documented mitigations for this failure mode, but given the severity of the ceiling effect we opted to move to expert/human rubric scoring for this evaluation instead of further tuning the automatic judge.
 
-\paragraph{Fixed evaluation pool.} We generated a fixed pool of 21 exercises (7 design variations $\times$ 3 conditions) for a single topic and grade level (7th grade, ratios \& proportional relationships), using DeepSeek-V4-Flash as the generator. Each candidate exercise is automatically checked before being accepted into the pool (minimum narrative/task length, and no leakage of teacher-facing content such as the consolidation note into the student-facing text) and is regenerated on failure; exact duplicates are also rejected and regenerated. Seven design variations (e.g. scaling a recipe, comparing two ratios with an equal total but different part counts, allocating a fixed whole-number resource fairly) were chosen to sample structurally distinct PF setups rather than to support a large-sample statistical comparison. At this stage, the goal is a diagnostic first pass: identifying systematic, structural weaknesses (e.g.\ a dimension scoring at floor across nearly all exercises) that would be visible even at small $n$, rather than establishing statistically significant condition differences, which would require a substantially larger sample and, ideally, multiple independent raters.
+\paragraph{Fixed evaluation pool.} We generated a fixed pool of 21 exercises (7 design briefs $\times$ 3 conditions) for a single topic and grade level (7th grade, ratios \& proportional relationships), using DeepSeek-V4-Flash as the generator. Each candidate exercise is automatically checked before being accepted into the pool (minimum narrative/task length, and no leakage of teacher-facing content such as the consolidation note into the student-facing text) and is regenerated on failure; exact duplicates are also rejected and regenerated. The seven design briefs (Table~\ref{tab:design-briefs}) were chosen to sample structurally distinct PF setups rather than to support a large-sample statistical comparison. At this stage, the goal is a diagnostic first pass: identifying systematic, structural weaknesses (e.g.\ a dimension scoring at floor across nearly all exercises) that would be visible even at small $n$, rather than establishing statistically significant condition differences, which would require a substantially larger sample and, ideally, multiple independent raters.
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{@{}cl@{}}
+\toprule
+\textbf{\#} & \textbf{Design brief} \\
+\midrule
+1 & Combine two groups with different sizes and unit rates; require a weighted rate. \\
+2 & Scale a recipe or mixture when one ingredient amount is known. \\
+3 & Contrast a constant additive difference with a constant multiplicative ratio. \\
+4 & Distinguish a part-to-part ratio from a part-to-whole fraction in a fair-sharing situation. \\
+5 & Compare two proportions with equal totals but different part counts. \\
+6 & Infer or apply a scale factor in a map, drawing, or enlargement. \\
+7 & Allocate a fixed whole-number resource proportionally when rounding creates a conflict. \\
+\bottomrule
+\end{tabular}
+\caption{The seven design briefs used to generate the fixed 21-exercise evaluation pool, each instantiated under all three generation conditions (V1/V2/V3).}
+\label{tab:design-briefs}
+\end{table}
 
 \paragraph{Blind scoring interface.} Each of the 21 exercises is scored by a human rater on all five rubric dimensions through a purpose-built interface that presents exercises one at a time, in randomized order, with the generation condition hidden to preserve blind scoring. The rater selects a score (1--3) per dimension; scores are saved immediately and the next exercise is shown automatically, with an undo option to revise the previous rating.
 
@@ -66,7 +106,24 @@ We generate full Productive Failure (PF) exercises with a single generator (prom
 
 \subsection{Phase 2: Simulated Student Evaluation}
 
-The first diagnostic evaluation pass (Figures~\ref{fig:pf-total-scores}--\ref{fig:pf-dimension-scores}) shows that Multiple Representations and Solutions scores at or near the floor across all three generation conditions, and that Open-Endedness is similarly weak: generated exercises are largely single-path, text-only tasks rather than tasks that admit genuinely different solution methods. Since prompt-level interventions alone showed limited effect in the MCQ distractor-generation experiments (Phase 1a), we do not expect further prompt tuning of the generator to resolve this on its own.
+The first diagnostic evaluation pass (Figures~\ref{fig:pf-total-scores}--\ref{fig:pf-dimension-scores}) shows that Multiple Representations and Solutions scores at or near the floor across all three generation conditions, and that Open-Endedness is similarly weak: generated exercises are largely single-path, text-only tasks rather than tasks that admit genuinely different solution methods. Since prompt-level interventions alone showed limited effect in the MCQ distractor-generation experiments (Phase 1a), we do not expect further prompt tuning of the generator to resolve this on its own. Table~\ref{tab:first-shot-problems} summarizes the concrete evidence, drawn from both the PF and MCQ generation pipelines, that motivates moving from prompt tuning to a feedback-driven loop.
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{@{}p{4.3cm}p{4.3cm}p{4.3cm}@{}}
+\toprule
+\textbf{Evidence} & \textbf{Problem} & \textbf{Why a second pass is needed} \\
+\midrule
+Round-1 DeepSeek pool & Multiple Representations and Solutions scored 1/3 in every condition. & Exercises remained mostly prose-based and procedural. \\
+Round-1 DeepSeek pool & Open-Endedness was weak, especially in V2. & ``Design'' / ``explain'' verbs alone did not produce genuinely multiple pathways. \\
+First Qwen pool & 21 records contained only four unique visible exercises. & The first-shot prompt did not create enough variation. \\
+MCQ distractor experiments (Phase 1a) & Adding instructions, reasoning steps, or a student persona did not guarantee authentic errors or sufficient diversity. & Prompting alone has a limited ceiling; the generator needs concrete response-based feedback. \\
+\bottomrule
+\end{tabular}
+\caption{Evidence motivating a feedback-driven refinement loop instead of further one-shot prompt tuning.}
+\label{tab:first-shot-problems}
+\end{table}
 
 We therefore treat student simulation not as a pre-test of already-finished exercises, but as a \emph{feedback-driven refinement loop}: a simulated attempt at an exercise is used to surface where the exercise is too rigid, then that feedback is fed back into a second generation pass. This framing is supported by prior work showing that (a) explicit pedagogical intent labels increase the number of representations and solution methods (RSMs) elicited from students, with Puech et al.~\cite{puech2025} reporting a mean RSM count of 2.6 under an intent-labeled condition versus 1.0 without intent labeling, and (b) LLM-simulated student profiles correlate with real student response patterns closely enough to be diagnostically useful, with Lu \& Wang~\cite{lu2024} reporting $r = 0.72$ between simulated and real student performance on multiple-choice items.
 
@@ -103,7 +160,29 @@ The planned loop (Figure~\ref{fig:refinement-loop}) is: generate an exercise, si
 
 \subsection{Evaluation Metrics}
 
-Two families, five metrics total:
+Two families, five metrics total. Family 1 metrics are computed directly against a bank of human-written distractors and require no LLM call; Family 2 metrics use an LLM judge to assess pedagogical properties that a purely reference-based comparison cannot capture (Figure~\ref{fig:metric-pipeline}).
+
+\begin{figure}[h]
+\centering
+\begin{tikzpicture}[
+    node distance=1.0cm and 1.6cm,
+    box/.style={draw, rounded corners, align=center, minimum width=3.6cm, minimum height=1.0cm},
+    every path/.style={-{Latex[length=2mm]}}
+]
+    \node[box] (dist) {Generated distractor};
+    \node[box, below left=of dist] (f1) {Family 1 — reference-based\\(no LLM call)};
+    \node[box, below right=of dist] (f2) {Family 2 — misconception-grounded\\(LLM judge)};
+    \node[box, below=of f1, minimum width=3.6cm] (f1m) {PM, Text sim., Embed sim.\\vs.\ human distractor bank};
+    \node[box, below=of f2, minimum width=3.6cm] (f2m) {Validity, Diversity\\vs.\ error-type reasoning};
+
+    \draw (dist) -- (f1);
+    \draw (dist) -- (f2);
+    \draw (f1) -- (f1m);
+    \draw (f2) -- (f2m);
+\end{tikzpicture}
+\caption{Two evaluation families computed on the same generated distractor: reference-based (Family 1) and misconception-grounded LLM-judge (Family 2).}
+\label{fig:metric-pipeline}
+\end{figure}
 
 \paragraph{Family 1 — Reference-based (computed, no LLM).}
 \begin{itemize}
@@ -117,6 +196,28 @@ Two families, five metrics total:
     \item \textbf{Validity} — teacher-primed judge: \textit{``wrong but on-pathway?''}~Error-first reasoning (list common student errors, then judge each distractor). Binary per distractor, 3-call self-consistency, majority vote.
     \item \textbf{Diversity} — teacher judge: \textit{``how many distinct error types?''}~Trichotomous (1/2/3 types), normalized to 0.0/0.5/1.0. 3-call self-consistency, median. Captures pedagogical distinctness, not surface-form similarity.
 \end{itemize}
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{@{}clccccc@{}}
+\toprule
+\textbf{\#} & \textbf{Condition (system, instruction)} & \textbf{PM} & \textbf{Text sim.} & \textbf{Embed sim.} & \textbf{Validity} & \textbf{Diversity} \\
+\midrule
+1 & Basic, direct & 20.4 & 60.2 & 76.4 & 82.4 & 31.4 \\
+2 & Expert, direct (baseline) & 20.6 & 59.6 & 76.4 & 81.5 & 32.6 \\
+3 & Pedagogical, direct & 21.9 & 60.6 & 77.0 & 81.5 & 32.0 \\
+4 & Expert, CoT & 20.3 & 58.7 & 75.1 & 81.8 & 29.4 \\
+5 & Expert, self-critique & 20.8 & 59.3 & 76.2 & 83.0 & 34.2 \\
+6 & Lookalike, direct & 21.1 & 60.4 & 76.9 & 82.2 & 34.9 \\
+7 & Expert, MC names & 16.8 & 53.5 & 73.0 & 73.5 & 43.8 \\
+8 & Expert, MC taxonomy & 14.6 & 52.3 & 71.8 & 75.8 & 42.1 \\
+9 & Pedagogical, CoT + MC taxonomy & 16.0 & 54.8 & 73.5 & 75.9 & 37.6 \\
+\bottomrule
+\end{tabular}
+\caption{Family 1 and Family 2 metrics (\%) across all nine MCQ generation conditions ($n \approx 590$ questions per condition). Shown here to illustrate the metrics defined above; full analysis is deferred to the Results chapter.}
+\label{tab:mcq-metrics}
+\end{table}
 
 \paragraph{Dropped metrics (for reference).}
 % TODO: expand each into full justification paragraphs
