@@ -144,9 +144,14 @@ def normalize_expression(text: str | None) -> str:
     # Collapse multiple whitespace
     result = re.sub(r"\s+", " ", result)
 
+    # Convert unambiguous ASCII multiplication without changing variables such as x=0.
+    result = re.sub(r"(?<=[0-9)])\s*[xX]\s*(?=[0-9(])", " × ", result)
+    result = re.sub(r"(?<=[0-9)])\s*\*\s*(?=[0-9(])", " × ", result)
+
     # Normalize spacing around operator chars: ×9 ↔ × 9, etc.
     # (LaTeX \times→× preserves source spacing inconsistently)
     result = re.sub(r"\s*([×÷])\s*", r" \1 ", result)
+    result = re.sub(r"\s*=\s*", "=", result)
 
     # Strip
     result = result.strip()
@@ -300,10 +305,14 @@ class MCQEvaluator:
         if not generated or not human:
             return 0.0
 
-        gen_norm = [normalize_expression(t) for t in generated]
-        human_norm = [normalize_expression(t) for t in human]
+        gen_norm = [normalize_expression(t).casefold() for t in generated]
+        remaining_human = [normalize_expression(t).casefold() for t in human]
 
-        matches = sum(1 for g in gen_norm if g in human_norm)
+        matches = 0
+        for generated_answer in gen_norm:
+            if generated_answer in remaining_human:
+                matches += 1
+                remaining_human.remove(generated_answer)
         return matches / len(generated)
 
     def compute_text_similarity(

@@ -1,0 +1,289 @@
+PROPOSE_DATA_SYSTEM: |
+  Choose concrete data that make the selected Productive Failure design work.
+  This is number selection and checking, not redesign. Preserve the goal,
+  relationships, allowed actions, question, and learning opportunity. Where
+  counts or units are unspecified, instantiate one manageable concrete task.
+
+  Return exactly this JSON object:
+  {
+    "quantities": {"name": {"description": "what the data represent", "unit": "km", "role": "given"}},
+    "values": {"name": [2, 2, 2]},
+    "conditions": [{
+      "statement": "A plain-language condition this particular design needs",
+      "requirement_indices": [0],
+      "essential": true,
+      "calculation": {
+        "expressions": {"intermediate": "sum(name)"},
+        "predicate": "intermediate > 0",
+        "symbols": {}
+      },
+      "reasoning": "Why this calculation checks this condition"
+    }]
+  }
+
+  Quantity names and intermediate names use lowercase letters, digits and
+  underscores, starting with a letter. Values are finite numbers or non-empty
+  lists (nested lists are allowed); negative and zero values are allowed when
+  appropriate. State units explicitly; use "unitless" for counts or fractions.
+  Every quantity requires role "given" or "teacher_example". Decide by the
+  student's job, not by whether the numbers are useful to the calculator:
+  - "given": observations, measurements, prices, budgets, participant counts,
+    starting resources, or fixed constraints that students need to solve the
+    stated problem. Keep these even when they enable a successful calculation.
+  - "teacher_example": a chosen construction used only to check that the open
+    task is feasible, including successful and contrasting examples. If showing
+    these values supplies what students are asked to choose, construct, or invent,
+    they are teacher-only. This includes chosen dimensions, partition counts,
+    allocations, and refinement choices even when they are not derived results.
+  Read goal, situation_and_rules and student_question together. A task asking
+  students to construct a representation of supplied observations still needs
+  those observations as given. A task asking them to choose the objects themselves
+  must not receive those objects as given. Split quantities with mixed purposes;
+  do not label an entire observation table teacher_example because it is checked.
+  Keep both roles in values for checking. Compute derived results in expressions,
+  not in extra quantities. If no numerical givens are needed, all quantities may
+  be teacher_example: verify at least one feasible construction without giving
+  students the construction or inventing a fixed target the brief never required.
+
+  Identify what must hold from the whole brief. Cover every supplied numbered
+  requirement in requirement_indices. Several conditions may check one requirement.
+  Use [] for additional conditions. Conditions linked to supplied requirements
+  are essential. Include important feasibility and mathematical validity checks
+  for the successful route when computable:
+  1. Familiar-shortcut limitation check: include an exact calculator check showing
+     that the anticipated familiar shortcut ties across options, violates a stated
+     constraint, or produces a different conclusion from the target relationship.
+  2. Unambiguous target validity check: ensure the numbers determine a single clear
+     conclusion under the stated rules (when multiple target-aligned formulas are
+     plausible, check that they agree on the same winner rather than giving opposite
+     rankings).
+  Do not test a weaker property than promised: different intermediate numbers
+  do not establish a different winner; numerical examples do not prove "for any".
+  A formula must reflect the stated condition, not merely evaluate to true.
+  Do not encode a contextual or qualitative claim as an invented 0/1 flag or
+  assumed numerical constant; arithmetic on such a marker does not verify the
+  claim. Split mixed numerical and textual requirements into separate conditions,
+  sharing requirement_indices where needed.
+  reasoning explains the check, not its predicted numerical result. When
+  calculation is supplied, the calculator decides; no judgment field is needed.
+
+  Calculate only useful, feasible conditions. Use a calculation for computable
+  mathematical claims, even when the claim is written in words. Otherwise set
+  calculation to null and assess the claim in reasoning:
+  1. Quote the relevant wording from the supplied design or context and identify
+     its source. Copy short, contiguous fragments verbatim, without paraphrasing,
+     combining separate fragments, or changing punctuation inside the quotes.
+     Include conflicting wording if present. If no support exists, explicitly
+     say "No supporting wording found."
+  2. Explain what that wording establishes and what it does not. An explicit,
+     consistent task rule supports an assumption within the exercise, not a
+     real-world fact. Repeating a mathematical conclusion is not justification
+     for it. Permission to perform an operation does not establish that every
+     requested result is attainable. Assess a stated rule separately from any
+     further conclusion drawn from it. Do not invent missing assumptions or treat predicted student
+     behaviour as observed evidence.
+  3. Set judgment to "holds" for a consistent rule or adequately justified
+     conclusion, "fails" only for a specific established contradiction or error,
+     or "uncertain" for missing, ambiguous, or insufficient support.
+  These are model judgments, not independently verified proofs. Behavioural
+  predictions are not essential numerical conditions. Uncertain or uncomputed
+  claims do not block writing merely for lack of evidence; they remain visibly
+  unverified. An essential textual failure requires design correction, not
+  numerical repair. Do not mark it non-essential to get through the pipeline.
+  Any contextual numerical range you introduce is an assumption, not an
+  established standard. Explain its origin and do not change the task's rules.
+
+  CALCULATOR
+  expressions are evaluated in listed order, using values, symbols and earlier
+  intermediates. Use +, -, *, /, bounded numeric powers (**), sqrt(x), abs(x),
+  sum(list), len(list), min(list), max(list), integer list indexing, and literal
+  lists. Intermediates may also be Boolean comparisons. Predicates use ==, !=,
+  <, <=, >, >=, and/or/not, or names of Boolean intermediates. No Python programs,
+  comprehensions, imports, attributes, function definitions or arbitrary calls.
+  For symbolic identities, declare symbols as {"k": "positive"}, "nonnegative",
+  "real", or "integer"; use no symbol that duplicates a data/intermediate name.
+  A symbolic result the calculator cannot decide is unknown, not false.
+  Given quantity metadata can also be checked: unit(distance) == "km" reads
+  the declared unit of the given distance quantity, without altering its value.
+  unit() takes a given quantity name, not a quoted name or derived result.
+  Use == or != for unit strings; strings cannot be used as numbers.
+  Use this for factual unit declarations rather than leaving them model-judged.
+  Avoid calculating unnecessary statistics when an equivalent comparison fully
+  checks the actual condition; never imply that a ranking also verifies a score.
+
+  Illustrative syntax (not an expert task or experiment):
+  {"expressions": {"share": "(5*k)/(8*k)"},
+   "predicate": "share == 5/8", "symbols": {"k": "positive"}}
+
+PROPOSE_DATA_USER: |
+  TARGET: {target_concept}
+  STUDENT CONTEXT:
+  {student_context}
+  PRIOR KNOWLEDGE AND MATHEMATICAL REFERENCES:
+  {prior_context}
+  SELECTED DESIGN:
+  {design_brief}
+  ORIGINAL REQUIREMENTS (zero-based indices):
+  {requirements}
+  {feedback}
+
+REPAIR_DATA_SYSTEM: |
+  Repair only the numerical values using the exact calculation results.
+  Return exactly this JSON object: {"values": {"every_original_name": "new numeric value or list"}}.
+  Keep quantity names, units, roles, meanings, list sizes, design, conditions, formulas,
+  assumptions, and predicates unchanged. Do not remove a failed condition or
+  change the successful route to make the check pass. All original value names
+  must be present. Return actual numbers, not quoted numbers or formulas.
+
+REPAIR_DATA_USER: |
+  SELECTED DESIGN:
+  {design_brief}
+  FROZEN PROPOSAL:
+  {proposal}
+  EXACT RESULTS AND FEEDBACK:
+  {feedback}
+
+WRITE_DATA_TASK_SYSTEM: |
+  Write a student-facing Productive Failure exercise from the fixed design and
+  checked data. Decide what students need to start, not what the teacher already
+  knows. Return only this JSON object: {"status": "ready", "blocking_issues": [],
+  "title": "...", "body": "...", "question": "...", "withheld": [
+  {"kind": "discovery", "source": "exact supplied source identifier",
+  "quote": "verbatim fragment", "reason": "what students should discover"}]}.
+  Use an empty withheld list if nothing is withheld. Always return a complete
+  student task, not a blocked response. Keep unresolved concerns in internal
+  evidence; they are not permission to leave the task empty. Ready means a draft
+  was produced, not that its mathematics or educational quality is validated.
+
+  Apply this precedence rule to EVERY input, including candidate situation/rules,
+  question and quantity descriptions. A field name or checked condition does not
+  make its contents a student given.
+  KEEP the situation, raw observations, units, and rules needed to define the
+  imagined problem: measurement meaning, elapsed-time boundaries, divisibility,
+  valuation assumptions and genuinely allowed actions. Preserve the question's
+  purpose and scope, including output requirements in the goal even if absent
+  from the candidate question. Keep an answer-form criterion such as "one number" or "use
+  every observation" if supplied. Naming a concept to pose the question is not
+  the same as giving its formula.
+  Ordinary permission to use tables, diagrams, calculations, comparisons or an
+  invented representation is not a target-procedure disclosure. Do not classify
+  such generic freedom as teacher-only method steps.
+  Answer form means what students must submit, NOT properties the target method
+  should satisfy. Do not supply nonnegativity, zero for identical observations,
+  resistance to cancellation, invariance tests, or other target-method success
+  criteria merely because the draft calls them "useful", "valid" or "necessary".
+  Students must develop and justify those properties. Preserve a genuinely
+  necessary definition of the goal, not a ready-made evaluation checklist.
+  In a mixed sentence, remove only the hint clause. Retain the supplied output
+  form and use-all-observations requirement even when adjacent clauses disclose
+  properties of the target measure.
+  WITHHOLD computed properties of the observations, planned method steps, worked
+  allocations, intermediate or successful results, and criteria that give away
+  the fix for an anticipated approach's limitation. This overrides copying the
+  candidate wording. Keep the raw observations from which a property can be
+  discovered; do not announce the property. Distinguish a necessary permission
+  (a resource can be subdivided) from a menu of target-procedure steps. A
+  definition required to make the goal meaningful is not automatically a hint.
+  A menu of target-procedure actions or representation coaching is method advice,
+  not necessary task context. Do NOT include coaching sentences such as "You may
+  calculate, draw, tabulate..." or "You may choose any representation that helps
+  you reason", and do NOT turn question into a multi-step rubric ("explain how your
+  procedure resolves X, accounts for Y..."). Also WITHHOLD any clause that tells
+  students which intermediate reference value, formula, or scoring direction to use.
+  Remove any such coaching, formula-naming, or procedural checklist clauses from
+  candidate wording and record them in withheld as kind "discovery". However, NEVER
+  withhold a character's conjecture when question asks students to evaluate that
+  conjecture: if the question asks whether a character's conjecture holds, the full
+  conjecture must be stated explicitly in body (never write a vague placeholder like
+  "Mira has made a conjecture" without stating what she claims). Likewise, only
+  include a multiple-solutions clause when the task genuinely asks for an open
+  allocation or construction with multiple valid answers, never on a comparison
+  with a single numerical winner. State the physical permissions, divisibility
+  rules, and domain scope cleanly in body, and ask one direct, method-open question
+  in question without coaching menus.
+  State the comparison's scope (for example, "overall journey") without an extra
+  instruction that the method must account for every part or be checked against
+  accumulated totals. Keep the recorded waiting times and the rule defining
+  elapsed time; do not turn that rule into advice on combining the records.
+  A quantity is NOT check-only merely because a condition uses it. Counts,
+  measurements, whole-resource valuations and valuations of a supplied candidate
+  portion are raw inputs. Retain the numerical instance: students must encounter
+  its pattern by working with those inputs. "These numbers let students calculate
+  a result" is a reason to keep them, not to hide them. A check-only quantity
+  stores a calculated target, an intermediate state of the planned procedure,
+  or the outcome of a worked solution. Never turn a supplied numerical task into
+  a generic qualitative task by removing its observations or participant count.
+  If a supplied quantity stores a planned intermediate outcome, withhold its
+  values as well as its revealing label. Renaming that outcome as an observation
+  or deleting words that identify its role does not make its values raw data.
+  Explicit role "teacher_example" takes precedence over the keep-numbers rule.
+  Those quantities are separated into teacher-only evidence: they verify a
+  possible student construction, not a fixed instance students must reproduce.
+  Do not copy their values from the check evidence or candidate wording, rename
+  them as observations, or replace them with a different completed example.
+  Preserve what students must choose or construct. Role "given" marks required
+  task inputs, not a claim that the wording is free of hints; apply the existing
+  content rule to revealing descriptions without dropping the raw input.
+  Historical quantities without roles remain candidates for content-based review.
+  When no given quantities remain, pose the open construction from the supplied
+  goal and rules. An empty student-data object is not missing information when
+  choosing those values is the student's job. Do not invent a target size,
+  dimensions, partitions or budget to make the task numerical.
+  If withholding material would leave the question undefined, preserve necessary
+  givens and definitions rather than refusing to write. Do not invent data or
+  silently resolve contradictory assumptions. Produce the best faithful draft
+  from the supplied design; unresolved conflicts remain recorded internally.
+
+  Record each disclosure removed FROM CANDIDATE WORDING or supplied quantities
+  in the teacher-only withheld list, with a
+  supplied source identifier, contiguous verbatim quote and specific reason.
+  Do not catalogue teacher evidence that was never in candidate wording, including
+  separated teacher examples; their values remain recorded in the data proposal.
+  For an entire check-only quantity, use kind "quantity", the source identifier
+  "proposal.quantities.<name>.description", and quote its full description.
+  Remove that quantity's values from the student text, not the raw observations
+  that underlie them. Otherwise use kind "discovery". Do not put withheld
+  explanations in the title, body or question. Do not claim a disclosure was
+  withheld if a paraphrase or equivalent result remains in student text.
+  Before returning, check all candidate "should" and "must" clauses for method
+  advice, and check the final student text for equivalent disclosures.
+
+  Preserve all retained raw values, units, repetitions, order and associations.
+  Write numeric givens as numerals, including zero; do not convert units.
+  Do not add numerical facts, calculator permissions, or extra subquestions,
+  change the data, or replace an abstract task with an invented concrete example.
+  Make the context understandable and present the retained data clearly.
+  Write in clear, natural, human-friendly prose suited to a student at the target
+  grade. Avoid compressed noun stacks, stiff academic jargon, or tangled clauses.
+  When presenting a character's conjecture or rule, spell out what the character
+  did in simple, concrete steps (one action per clause) rather than packing the
+  whole calculation into a single noun phrase. Never use internal variable names
+  or underscore labels in student text; use natural everyday units instead.
+  Ask students to show their reasoning, not just state an answer. Do not require
+  a wrong method, failure, or a compulsory second approach. Do not disclose the
+  target formula, intermediate results, winner, teacher-facing solutions,
+  anticipated methods, or why a familiar approach may fail. Do not turn
+  model-judged student behaviour into a fact.
+  A nonblocking warning is not verification. Do not invent rules or assumptions
+  to resolve it, present an unsupported conclusion as established, or include
+  teacher-only warnings in the student task. Preserve explicit task assumptions
+  as rules of the imagined exercise, not claims about the real world. Missing
+  evidence alone is not a reason to stop writing.
+  Target concept, successful route, conditions and calculation results are
+  teacher evidence. Use the task-specific do-not-state list to recognise their
+  discoveries even when embedded in candidate wording; it is not a blanket ban
+  on ordinary prior-knowledge terms or necessary problem rules.
+
+WRITE_DATA_TASK_USER: |
+  STUDENT CONTEXT:
+  {student_context}
+  PRIOR KNOWLEDGE AND MATHEMATICAL REFERENCES:
+  {prior_context}
+  CANDIDATE WORDING (MAY CONTAIN DISCLOSURES; APPLY KEEP/WITHHOLD/BLOCK):
+  {student_draft}
+  STUDENT-DATA CANDIDATES (GIVEN OR HISTORICAL UNLABELED; TEACHER EXAMPLES EXCLUDED):
+  {proposal}
+  TEACHER-ONLY TASK-SPECIFIC DO-NOT-STATE EVIDENCE:
+  {do_not_state}
+  TEACHER-ONLY CHECK EVIDENCE:
+  {check}

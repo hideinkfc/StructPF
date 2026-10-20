@@ -55,7 +55,7 @@ SYSTEM_LOOKALIKE: |
 # ═══════════════════════════════════════════════════════════════════════════════
 
 OUTPUT_FORMAT: |
-  CRITICAL — the "text" field must be the bare MATHEMATICAL ANSWER only, with NO LaTeX delimiters (`\(` `\)` `$`). NOT a description, NOT a sentence.
+  CRITICAL — the "text" field must contain only the bare answer a student would select, with NO LaTeX delimiters (`\(` `\)` `$`) or explanation.
 
   CORRECT format (bare answer):
     - Numbers: "6", "12.5", "-3"
@@ -73,6 +73,14 @@ OUTPUT_FORMAT: |
     - ✗ "d equals negative one" → instead output "d=-1"
 
   The "target_misconception" and "error_rationale" are separate fields for analysis — do NOT put them in the "text" field.
+
+STRUCTURED_PATH_OUTPUT: |
+  STRUCTURED PATH REQUIREMENT — return exactly {n_distractors} distractors. For every distractor,
+  include both fields below and make them consistent with the stated bare answer:
+  - "faulty_step": the precise step where the student first deviates from a correct solution
+  - "reasoning_steps": an ordered list of short steps showing how that error produces the text answer
+  The final reasoning step must produce the distractor's "text" answer. Do not omit these fields,
+  do not use an empty list, and do not invent a correct path for a wrong answer.
 
 # --- Direct instruction (baseline) ---
 USER_DIRECT: |
@@ -187,6 +195,31 @@ USER_NEGATIVE_EXAMPLES: |
   - "target_misconception": The misconception
   - "error_rationale": Why a student picks this
 
+# --- Instruction overlays for strategies with their own prompt skeleton ---
+INSTRUCTION_COT_GUIDANCE: |
+  Before finalizing, reason through the concept, several specific student errors,
+  and the wrong answer each error would produce. Select the most plausible and
+  causally linked errors. Put only the final answers and concise reasoning in the
+  requested JSON fields; do not output a separate reasoning transcript.
+
+INSTRUCTION_SELF_CRITIQUE_GUIDANCE: |
+  Draft the distractors internally, then check plausibility, diagnostic value,
+  discriminability, and diversity. Revise any item that fails before returning
+  only the final distractor set.
+
+INSTRUCTION_COUNTERFACTUAL_GUIDANCE: |
+  Treat each distractor as coming from a different student with a distinct
+  misunderstanding. Make the wrong reasoning internally consistent with that
+  student's misconception and return only the final distractor set.
+
+INSTRUCTION_DIFFICULTY_GUIDANCE: |
+  Deliberately span basic, intermediate, and sophisticated errors while keeping
+  every answer wrong, plausible, and causally linked to the question.
+
+INSTRUCTION_NEGATIVE_EXAMPLES_GUIDANCE: |
+  Reject random, obvious, or purely arbitrary wrong answers. Prefer distractors
+  that represent a specific, plausible, diagnostically useful student error.
+
 # ═══════════════════════════════════════════════════════════════════════════════
 # FEW-SHOT FORMAT VARIANTS
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -205,8 +238,9 @@ FEWSHOT_MINIMAL: |
 
 # --- Rationale few-shot (show the reasoning) ---
 FEWSHOT_RATIONALE: |
-  Here are examples showing HOW misconceptions lead to specific wrong answers.
-  Study the error analysis pattern carefully.
+  Here are examples pairing questions and wrong answers with Eedi misconception
+  labels. They provide labeled answer patterns, not complete reasoning paths, so
+  infer the error rationale cautiously rather than copying an unsupported path.
 
   {few_shot_examples}
 
@@ -254,14 +288,16 @@ MC_CONDITIONED_NAMES: |
   Each distractor should be designed so that a student holding that misconception would select it.
   Output: "text", "target_misconception", "error_rationale".
 
-# --- Depth 2: Full taxonomy + descriptions ---
-MC_CONDITIONED_TAXONOMY: |
-  Generate {n_distractors} distractors grounded in documented student misconceptions.
+# --- Causal-linking prompt using retrieved misconception labels ---
+MC_CONDITIONED_CAUSAL: |
+  Generate {n_distractors} distractors grounded in the candidate student misconceptions below.
 
   Question: {question_text}
   Correct answer: {correct_answer}
 
-  Below is a taxonomy of REAL misconceptions documented in large-scale student assessments. For each misconception, a real student would produce a specific wrong answer. Your task is to compute what that wrong answer WOULD BE for this question.
+  The candidates are misconception labels retrieved from the Eedi bank. They are labels only,
+  not full descriptions or verified matches for this question. Use only candidates that can be
+  applied coherently, and compute the specific wrong answer each one would produce here.
 
   {candidate_misconceptions}
 
@@ -270,7 +306,8 @@ MC_CONDITIONED_TAXONOMY: |
   - "text": The specific wrong answer that misconception produces for THIS question
   - "error_rationale": The step-by-step wrong reasoning that leads from the misconception to this wrong answer
 
-  IMPORTANT: The wrong answer MUST be causally linked to the misconception. Do NOT assign misconceptions to arbitrary wrong numbers.
+  IMPORTANT: Each wrong answer MUST be causally linked to its misconception. Do NOT assign
+  misconceptions to arbitrary wrong answers, and do not force an irrelevant candidate.
 
 # --- Depth 3: Student persona profiles ---
 MC_CONDITIONED_PERSONAS: |

@@ -30,8 +30,13 @@ DATA_DIR = Path(__file__).resolve().parents[2] / "data" / "eedi"
 class MisconceptionBank:
     """Loads and indexes Eedi data for MCQ distractor generation."""
 
-    def __init__(self, embed_client: LLMClient | None = None):
+    def __init__(
+        self,
+        embed_client: LLMClient | None = None,
+        misconception_cache_key: str = "eedi_misconceptions",
+    ):
         self.embed_client = embed_client or LLMClient.from_role("embed")
+        self.misconception_cache_key = misconception_cache_key
         self._misconception_map: dict[int, str] = {}      # id → name
         self._questions: pd.DataFrame | None = None
         self._index: EmbeddingIndex | None = None
@@ -64,7 +69,7 @@ class MisconceptionBank:
             for id_, name in self._misconception_map.items()
         ]
         self._index = EmbeddingIndex(self.embed_client)
-        self._index.add(items, text_field="name", cache_key="eedi_misconceptions")
+        self._index.add(items, text_field="name", cache_key=self.misconception_cache_key)
         print(f"  Indexed {self._index.size} misconception embeddings")
         return self
 

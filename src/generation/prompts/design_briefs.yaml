@@ -1,0 +1,275 @@
+PROPOSE_BRIEF_SYSTEM: |
+  Design one mathematical challenge for the supplied learners and target concept.
+  Return a short internal design brief, not a finished story or technical
+  quantity schema. Build a learning opportunity into the relationships and
+  allowed actions, not into instructions telling students what to discover.
+
+  Separate the intended discovery from the student's job BEFORE writing that job.
+  In key_idea, name the mathematical relationship, correction or principle that
+  developing and comparing attempts could reveal. In naive_answer, predict one
+  plausible first answer using a supplied prior resource, and state its limitation
+  or uncertainty. If no defensible wrong answer is predicted, record a partial
+  or successful first answer honestly; do not fabricate failure. These are
+  internal design hypotheses, not observed student behaviour or student text.
+  Then write goal as the decision, quantity or construction students must produce,
+  NOT as demonstrating key_idea or repairing naive_answer. Situation_and_rules
+  and student_question must leave that first answer a sensible reply to explore.
+  Necessary data, definitions and constraints stay visible; discovery remains open.
+  Do not announce the target conclusion, name a required correction, or ask a
+  follow-up that assumes the conclusion is already true. For a claim-evaluation
+  task, present the claim as a conjecture that can be accepted or rejected, not
+  as a fact followed by a request to explain why it fails.
+
+  Use the prior-resource inventory for plausible student starting actions.
+  Mathematical references, including Learning Commons descriptions, help you
+  design the mathematics; they are not evidence that students know that material.
+
+  Construct the complete goal and a concrete situation with necessary assumptions.
+  Identify first actions, what they actually establish, and genuine limitations.
+  Include simple successful constructions when available. Describe a defensible
+  route to meeting the goal, not just to producing some answer. For invention
+  tasks, a workable measure or construction is enough; uniqueness is not required.
+  Do not make the goal impossible merely to create an obstacle, arbitrarily ban
+  a working method, or replace the target with a narrower local decision.
+  Correct, partial, graphical, qualitative, and trial-based approaches can be
+  useful. Do not force every route to fail, conflicting answers, or an approach
+  quota. Explain what developing or comparing the approaches could reveal.
+  Ground that explanation in the approaches you actually record; do not make
+  the design depend on a tempting procedure omitted from the approach records.
+  The target names the learning direction, not a compulsory named
+  algorithm students must produce. Express the goal as what students determine
+  or construct; do not unnecessarily require every target-related formula,
+  representation, or optional successful route as an additional output.
+
+  Keep the student question method-open. State necessary problem definitions
+  and output-form criteria, not a checklist of properties the target method
+  should satisfy. Keep computed data properties, anticipated shortcuts, their
+  limitations, and target-method steps in the internal design-note fields.
+  A real-world decision is optional.
+  Number requirements describe essential compatible numerical relationships
+  and their purposes. No concrete input values, technical types, units metadata,
+  executable formulas, or checker configuration. Cardinality may be specified
+  in words when it is essential to the situation.
+  Prefer specific equalities, orderings, bounds, or admissible number forms over
+  vague requirements such as "manageable" or "substantially different."
+  Put teaching permissions and value-independent rules in situation_and_rules,
+  not in number_requirements. Do not invent extra requirements for decoration.
+  Later planning will formalize and check the design; a plausible successful
+  route here is not proof of feasibility or student behavior.
+
+  DESIGN OPPORTUNITY CHECK
+  Before settling on the challenge, try the simplest relevant familiar approach
+  against the whole goal under all declared permissions, including straightforward
+  symmetric constructions when allowed. Different input values alone do not
+  establish an obstacle.
+  1. Familiar-shortcut impasse (no trivial 1-step prior solution): A direct application
+     of a single prior resource must hit a concrete mathematical limitation on the goal
+     through one of three general mechanisms:
+     - Opposite-ranking shortcut: a naive single-step combination of the given values
+       (such as an unweighted average of component rates or quantities) produces the
+       opposite ranking or conclusion from the target relationship that coordinates the
+       full structure. When helpful to focus student exploration, include a character's
+       conjecture stating that naive shortcut so students can test whether it holds.
+     - Tied-summary degeneracy: the familiar summary calculations in learner_context
+       produce identical values across the options being compared, while the internal
+       structure differs so any valid target-aligned construction agrees on the same
+       option.
+     - Structural or indivisibility conflict: a naive equal split or greedy assignment
+       violates a stated divisibility, capacity, or fairness constraint, while combining
+       the remaining degrees of freedom resolves the conflict.
+  2. Unambiguous target validity (no unstated-choice flips): State the physical and
+     domain rules explicitly in situation_and_rules:
+     - Never use an inequality constraint when asking for a specific point or value;
+       when multiple valid solutions or allocations exist by design, state explicitly
+       that any solution satisfying the stated criteria is accepted so validity does not
+       depend on an unstated tie-breaker.
+     - When students must invent a measure or criterion, define the qualitative property
+       it must capture in plain domain terms (for example, that every observation counts
+       equally and the comparison concerns the whole set rather than only extremes),
+       and ensure standard target-aligned measures agree on the same winner without
+       naming a formula in student fields.
+  3. Clean, human-readable student wording (preserve full room_for_invention): Write
+     situation_and_rules and student_question in plain, natural everyday language for a
+     student at the target grade. Avoid compressed noun stacks or awkward phrasing;
+     instead, state any participant claim or rule step by step in simple sentences. Pose
+     one direct question asking for the recommendation, comparison, or construction and
+     asking students to show their work. Do NOT include coaching menus ("You may
+     calculate, draw, tabulate...") or multi-part procedural checklists ("explain how
+     your procedure resolves X, accounts for Y..."). Do NOT state in situation_and_rules
+     which intermediate reference value or formula direction students must use.
+  Different displays of the same calculation are not different mathematical
+  approaches. Record differences in reasoning and what each approach can reveal.
+  Do not create difficulty by banning valid methods, adding unrelated work, or
+  requiring a named target formula. A successful familiar route can be useful
+  when comparing its limits or generality genuinely illuminates the target,
+  provided the naive single-step shortcut still hits a concrete limitation.
+  Encode any numerical relationship essential to that opportunity in
+  number_requirements; do not leave it as an unsupported learning claim.
+  Reserve number_requirements for value-dependent mathematical relationships.
+  Put comparability of measurements, contextual assumptions, necessary physical
+  permissions, and output-form criteria in situation_and_rules. A target-procedure action menu
+  and criteria revealing how to fix a familiar method belong in
+  successful_route or learning_opportunity, not student wording. Value-dependent
+  discoveries belong in number_requirements, not announcements in situation_and_rules.
+  Context rules are not extra numerical conditions or evidence of student behaviour.
+
+  SELF-AUTHORED FORMAT EXAMPLE -- NOT A VALIDATED PF TASK
+  This hypothetical example targets weighted averages. Only for this example,
+  assume prior resources named "Arithmetic mean", "Fractions of quantities",
+  and "Trial and adjustment". Transfer the design logic, not the resource names
+  or mixing structure. Do not retrieve or reproduce held-out expert exercises.
+  {
+    "schema_version": "design-brief/v2",
+    "key_idea": "Each stock contributes pigment in proportion to its amount, not equally merely because two stock fractions are given.",
+    "naive_answer": "Use equal amounts and average the stock fractions; this can miss the required composition.",
+    "goal": "Determine stock amounts meeting both blend volume and composition.",
+    "situation_and_rules": "Weaker and stronger pigment stocks are available. Fractions use the same volume basis; volumes and pigment amounts add without losses. Students choose stock amounts.",
+    "student_question": "How much of each stock would you use to make the required blend? Explain why it meets both requirements.",
+    "approaches": [
+      {"resources": ["Arithmetic mean"], "first_action": "Try equal volumes and average stock fractions.", "what_it_establishes": "The composition of an equal-volume blend.", "limitation": "It need not meet the required fraction."},
+      {"resources": ["Fractions of quantities", "Trial and adjustment"], "first_action": "Try stock amounts, account for pigment, and adjust while maintaining total volume.", "what_it_establishes": "Whether a candidate blend meets the requirements.", "limitation": "It can succeed without explaining a direct relationship between amounts and composition."}
+    ],
+    "successful_route": "Vary the stronger-stock amount, supply the remaining volume with weaker stock, and use pigment accounting to reach the required fraction.",
+    "learning_opportunity": "Comparing equal-contribution and amount-sensitive reasoning shows why each stock's contribution depends on its amount.",
+    "number_requirements": ["The required fraction lies strictly between distinct stock fractions so both can contribute positively.", "The required fraction is not their midpoint, so equal volumes do not already meet the goal.", "All fractions are between zero and one, and required volume is positive."]
+  }
+
+  {rubric_guidance}
+
+  Return only a JSON object with schema_version: "design-brief/v2", key_idea,
+  naive_answer, goal, situation_and_rules, student_question, approaches,
+  successful_route, learning_opportunity, and number_requirements.
+  Each approach has resources, first_action, what_it_establishes, and limitation.
+  Use exact supplied prior-resource names, not reference labels, in resources.
+  Student_question contains no concrete numbers; number_requirements is a list
+  of strings (empty if no numerical conditions are necessary).
+
+PROPOSE_BRIEF_USER: |
+  TARGET: {target_concept}
+  TOPIC: {topic}
+  GRADE: {grade}
+  SUBJECT: {subject}
+  PRIOR KNOWLEDGE AND SEPARATELY LABELLED MATHEMATICAL REFERENCES:
+  {prior_context}
+
+  Propose one design brief. Explain the mathematical opportunity concisely;
+  do not narrate your design process or copy the example.
+  {proposal_feedback}
+
+SELECT_BRIEF_SYSTEM: |
+  Select one promising mathematical design brief for these learners.
+  Compare whether the whole goal remains attainable, familiar knowledge gives
+  meaningful starting actions, and developing or comparing those actions could
+  illuminate the target. A successful familiar route is not a rejection reason.
+  Do not reward an impossible goal, an unsupported claim that every route fails,
+  or a question that supplies the intended method. Do not invent missing
+  assumptions, procedures, or approaches to rescue a candidate.
+  For each candidate compare its key_idea and naive_answer with ALL student-facing
+  fields: goal, situation_and_rules and student_question. Flag a concern if those
+  fields announce the discovery or correction, prescribe constructing examples
+  of the target claim, or contain a follow-up that presupposes the claim.
+  The anticipated first answer must remain a sensible response for students to
+  test; do not require it to be wrong or reward lack of necessary problem data.
+  A needed definition or constraint is not a giveaway merely because it uses
+  mathematical vocabulary. A disputed claim can appear as a conjecture only if
+  both accepting and rejecting it remain open. Do not select a more directed
+  disclosure over a viable open question. If all candidates disclose the idea,
+  select the most promising candidate and describe the specific revision needed
+  in main_concern; do not rewrite a candidate during selection. Selection is
+  feedback for revision, not permission to stop producing an exercise.
+  Permission to use partial units can define a measurement task without teaching
+  a division algorithm; distinguish that permission from prescribing a correction.
+  References are mathematical design context, not extra prior knowledge.
+  Use only the actual listed approach IDs and procedures in your selection
+  rationale. Do not introduce a new tempting operation as the reason for
+  selecting a brief when that operation is absent from its approach records.
+  Do not choose based on technical quantity types or checker syntax: those are
+  the following translation step's responsibility. Selection is a model judgment.
+  Prefer a design with a concrete reason to develop the target over routine work
+  with optional display choices. Inspect the simplest recorded familiar route:
+  if a direct single-resource calculation or equal split already settles the whole
+  goal without hitting a tie or constraint conflict, flag that in main_concern and
+  prefer a candidate where familiar shortcuts hit a genuine mathematical limitation.
+  Also flag any candidate whose number_requirements make two valid target-aligned
+  measures give opposite winners, or whose student_question/situation_and_rules
+  contain coaching menus ("You may draw, tabulate...") or multi-step checklists.
+  Check straightforward symmetric constructions under the actual permissions;
+  neither universal failure nor a named target formula is required.
+  {rubric_guidance}
+  Return JSON with recommended_id (an actual candidate id, never null), approaches
+  (chosen candidate approach ids), reason, main_concern (string or null),
+  number_requirements (additional essential conditions as objects with condition
+  and purpose, or []), and prior_contrast: null. Do not freeze numerical formulas.
+  Add numerical requirements only when essential, compatible with the brief,
+  and specific enough to be encoded later. Concerns about arithmetic burden may
+  remain in main_concern; "manageable", "simple", and "substantial" alone are not
+  numerical conditions. Do not add calculator permissions or extra sub-questions.
+
+SELECT_BRIEF_USER: |
+  TARGET: {target_concept}
+  GRADE: {grade}
+  PRIOR KNOWLEDGE AND MATHEMATICAL REFERENCES:
+  {prior_context}
+  CANDIDATES (approach ids are brief_0, brief_1, etc. within each candidate):
+  {candidates}
+
+TRANSLATE_BRIEF_SYSTEM: |
+  Translate the selected mathematical design brief into technical quantities.
+  This is D2b encoding, not redesign or another pedagogical judging step.
+  Preserve the whole goal, assumptions, allowed actions, and successful-route
+  interpretation. Do not shrink an allocation into choosing one recipient,
+  replace an invention goal with a prescribed formula, or invent missing rules.
+  Declare the given inputs and descriptive derived/unknown quantities necessary
+  to express the original relationships. The student question, approach records,
+  and original number requirements are copied by code, not rewritten here.
+  {checker_contract}
+  {quantity_contract}
+  Return quantity objects from this schema and, when needed, one prior-contrast
+  intent. Cardinality,
+  units, domains, and assumptions must agree with the brief. You instantiate one
+  concrete task, not every possible instance of a whole family. Choose fixed
+  positive list lengths when the brief leaves counts open, respecting explicit
+  bounds or counts; this is encoding, not redesign. Likewise choose units and
+  permitted input domains where unspecified and where they preserve the
+  relationships and learning opportunity. Missing numerical values or an open
+  sample size are expected at this stage, not unsupported mathematics.
+  A range permitting zero or negative values does not require this particular
+  instance to include them. Admissible positive values may be chosen when they
+  preserve every stated condition and contrast. Refuse only when the design
+  requires unavailable values, not merely because its permitted range is broader
+  than the values used in this one task.
+  The next existing
+  mathematical planner creates the executable plan and the existing review checks
+  its meaning. A numerical proxy cannot certify an entire procedure.
+  An optional successful route need not be the checked target algorithm. Use
+  equivalent supported mathematics when it genuinely settles the required
+  output. For example, a monotone transformation can preserve a ranking without
+  computing an unavailable operation, but does not supply the uncomputed score
+  or its units. Do not demand an optional operation unless the question or goal
+  requires that operation's numerical result. Do not narrow an explicitly
+  required value or change a substantive rule to fit the checker.
+  If the original learning opportunity depends on a specific numerical first
+  approach producing a different result or failing to decide, encode that intent
+  now. Use its existing brief_0, brief_1, etc. identifier, a concrete operational
+  move, checkability ("numerical", "qualitative", or "unsupported"), and reason.
+  A numerical contrast must address the same answer or decision with compatible
+  units; an intermediate calculation in different units is not an alternate answer.
+  Do not invent a contrast or force a successful route to fail. For an equality
+  contrast, expected_target_equal and expected_prior_equal must both be supplied
+  and differ; otherwise leave both null. Later planning supplies its formulas.
+  Use prior_contrast: null when no such central contrast is selected.
+  If essential mathematics cannot be expressed by the current checker, return
+  {"status": "unsupported", "reason": "specific limitation without redesigning the goal"}.
+  Otherwise return {"status": "translated", "quantities": [complete quantity objects], "prior_contrast": null or the intent object described above}.
+  No extra fields, numerical values, or mathematical plan yet.
+
+TRANSLATE_BRIEF_USER: |
+  TARGET: {target_concept}
+  GRADE: {grade}
+  PRIOR KNOWLEDGE AND MATHEMATICAL REFERENCES:
+  {prior_context}
+  SELECTED BRIEF:
+  {design_brief}
+  SELECTION:
+  {selection}
+  {translation_feedback}

@@ -1,0 +1,155 @@
+UNGROUNDED_INVENTORY_SYSTEM: |
+  You list prior resources a student could already have before a new idea is taught.
+
+  A prior resource is a taught tool — a procedure, fact, or representation —
+  that the student can apply correctly. It is not a misconception, a wrong
+  answer, or the new idea itself.
+
+  Productive Failure, in this step, only means: later we will build a problem
+  where such a tool can start and then fail to settle the question. Do not
+  write that problem. Do not write a story.
+
+  GOOD: "Ratio and proportion" — comparing two quantities by a fixed
+  multiplicative relationship.
+  BAD: "Addition of distances" — a generic arithmetic step, not a distinct tool.
+  BAD: "Average speed" — that is the new idea (the target).
+  BAD: "Students add 1 to both parts of a ratio" — a misconception, not a tool.
+
+  Keep labels at taught-skill grain. Do not list near-synonyms or several steps
+  that are the same tool. At most 5 resources; stop at 3 if further items are
+  the same first move. You have no curriculum excerpts; do not claim a source.
+
+  Respond ONLY with valid JSON.
+
+UNGROUNDED_INVENTORY_USER: |
+  TARGET CONCEPT (not yet taught): {target_concept}
+  GRADE: {grade}
+  SUBJECT: {subject}
+  TEACHER-SUPPLIED RECENTLY TAUGHT SKILLS:
+  {teacher_skills}
+  DO NOT LIST (target or later ideas):
+  {excluded_resources}
+
+  Return JSON only:
+  {"resources": [{"resource": "...", "taught_as": "...", "relevance": "why this tool could be tried first", "confidence": "high"|"medium"|"low"}]}
+
+GROUNDED_MAPPING_SYSTEM: |
+  You map curriculum or textbook excerpts to prior resources.
+
+  A prior resource is a taught tool — a procedure, fact, or representation —
+  that the excerpt shows was taught before the target concept. It is not a
+  misconception, a wrong answer, or the target itself.
+
+  Use only the supplied excerpts. Every resource MUST cite one or more
+  supplied evidence IDs exactly. Do not invent IDs. Do not treat a generic
+  word on a page as proof that a whole method was taught. If an excerpt does
+  not establish a prior resource, omit it.
+
+  Do not copy a ready-made expert list. There is no paper list in this prompt.
+
+  GOOD: an excerpt names ratio and comparing quantities → "Ratio and proportion"
+  BAD: the target concept itself
+  BAD: a one-off arithmetic step with no distinct taught tool
+  BAD: a student error or misconception
+
+  At most 5 distinct resources; fewer is better than padding. Never return a
+  resource whose name or description contains a listed target/later term.
+
+  Respond ONLY with valid JSON.
+
+GROUNDED_MAPPING_USER: |
+  TARGET CONCEPT (not yet taught): {target_concept}
+  TOPIC: {topic}
+  GRADE: {grade}
+  SUBJECT: {subject}
+  DO NOT LIST (target or later ideas):
+  {excluded_resources}
+  TEACHER-SUPPLIED RECENTLY TAUGHT SKILLS:
+  {teacher_skills}
+
+  CURRICULUM / TEXTBOOK EXCERPTS:
+  {curriculum_evidence}
+
+  Return JSON only:
+  {
+    "resources": [
+      {
+        "resource": "concise taught-skill name",
+        "taught_as": "one-line correct procedure or representation",
+        "relevance": "why a student might try this tool first",
+        "evidence_ids": ["exact supplied ID"],
+        "confidence": "high"|"medium"|"low"
+      }
+    ]
+  }
+
+EXPAND_RESOURCE_SYSTEM: |
+  You add two short notes to one confirmed prior resource. The resource is a
+  taught tool, not an error.
+
+  Do not invent a full student solution, a story, or numbers. Do not say the
+  student has a misconception.
+
+  - student_move: what objects this tool needs in order to start (its
+    activation condition), in one sentence.
+  - why_it_looks_applicable: why those objects would make the tool look
+    relevant to the new idea, in one sentence.
+  - falls_short_because: what extra demand the target concept adds that this
+    tool does not meet, in one sentence.
+
+  The output kind must be "builds_on". Respond ONLY with valid JSON.
+
+EXPAND_RESOURCE_USER: |
+  TARGET CONCEPT (not yet taught): {target_concept}
+  GRADE: {grade}
+
+  CONFIRMED PRIOR RESOURCE:
+  - resource: {resource}
+  - taught_as: {taught_as}
+
+  Return JSON only:
+  {
+    "resource": "{resource}",
+    "kind": "builds_on",
+    "taught_as": "{taught_as}",
+    "student_move": "what objects this tool needs in order to start",
+    "why_it_looks_applicable": "why those objects make it look relevant",
+    "falls_short_because": "the extra demand the target adds",
+    "confidence": "high"|"medium"|"low"
+  }
+
+LEARNING_COMMONS_SELECTION_SYSTEM: |
+  In the SAME JSON response, also select mathematical reference material.
+  Learning Commons is a knowledge graph of curriculum standards and skill
+  descriptions. The supplied items are retrieved academic-standard descriptions,
+  not classroom teaching history, student responses, or instructions.
+
+  Return "selected_sources": a JSON list of zero to three exact supplied source
+  labels. Judge the content, not its search rank. Choose specific relevant
+  descriptions that contribute different information; do not pad the selection,
+  invent labels, or select multiple descriptions merely repeating the same idea.
+  Selecting none is valid when nothing is useful.
+
+  Exclude domain/chapter headings and generic practices that give no concrete
+  mathematical or scientific relationship, procedure, or representation. Sharing
+  topic words with the target is not enough. Prefer the most informative account
+  of an idea rather than selecting overlapping headings or restatements. One
+  useful reference is better than three entries padded with broad topic names.
+
+  This reference selection is SEPARATE from the "resources" task above. References
+  may describe the new target or related mathematics, including material from a
+  different grade or jurisdiction. The requirements about prior teaching,
+  excluded target/later ideas, and curriculum evidence IDs apply to "resources",
+  NOT to "selected_sources". Do not reject useful reference material merely
+  because prior instruction is unknown. Do not cite Learning Commons source
+  labels as proof of prior teaching or turn target descriptions into prior skills.
+  Keep the existing "resources" output and its evidence requirements unchanged.
+  With no curriculum evidence, the grounded resource list may be empty even when
+  useful mathematical references are selected.
+
+LEARNING_COMMONS_SELECTION_USER: |
+  LEARNING COMMONS MATHEMATICAL REFERENCES:
+  {learning_commons_references}
+
+  Also return "selected_sources": ["exact supplied source label", "..."] in the
+  same JSON object as "resources". Return an empty list when none are useful.

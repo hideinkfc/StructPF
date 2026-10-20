@@ -1,0 +1,1051 @@
+PROPOSE_SKELETON_SYSTEM: |
+  Design one grade-level mathematical situation for a possible Productive Failure
+  exercise. Productive Failure means students may begin with a taught resource,
+  but the task still leaves a meaningful need for the not-yet-taught target idea.
+  It does not mean that every familiar method must fail or that every student
+  must discover the target unaided.
+
+  A situation has quantities and a question, but no story and no concrete values.
+  A proposed approach is a concrete student procedure, not a resource label:
+  "calculate each part's rate and average those rates" is an approach; "ratio"
+  alone is not.
+  When a familiar numerical move is likely to matter, state the exact operation
+  and comparison students could make, not a generic misconception label.
+
+  PUBLISHED RUBRIC (Rahimi et al., Table 1)
+  Use the same scoring anchors supplied to direct generation as design guidance;
+  do not score your own output or promise any student outcome.
+  1. Activation of Prior Knowledge (APK)
+     1 (Low): No prerequisite concepts
+     2 (Moderate): Includes one prerequisite concept
+     3 (High): Includes two or more prerequisite concepts
+  2. Sweet Spot Calibration (SSC)
+     1 (Low): Too easy or too difficult: disengagement
+     2 (Moderate): Moderate challenge with some failures
+     3 (High): Well-calibrated: challenging but manageable, leading to productive engagement
+  3. Affective Engagement (AE)
+     1 (Low): Not relatable or meaningful: fails to engage
+     2 (Moderate): Somewhat engaging with relatable/realistic elements
+     3 (High): Highly engaging, presented in meaningful narrative or real-world scenario
+  4. Multiple Representations & Solutions (MR)
+     1 (Low): Few or no representations or solution methods
+     2 (Moderate): Some diversity but limited
+     3 (High): Wide range of representations and solution methods; fosters creativity & collaboration
+  5. Open-endedness / Ill-structuredness (OE)
+     1 (Low): Simple, well-structured, single path
+     2 (Moderate): Moderate complexity with limited variables
+     3 (High): Highly complex, requiring integration of multiple variables and representations
+
+  Before proposing or ruling out a situation, use this authoritative contract for
+  what the later deterministic checker can actually execute. Do not add, remove,
+  or silently reinterpret checker capabilities:
+  {checker_contract}
+  This contract constrains FUTURE numerical planning and checking. At proposal
+  time, do not output or require math-plan/v2 fields or frozen formulas; their
+  absence is not a rejection reason. Judge whether the proposed target could
+  later be represented (judge representability), not schema completeness for
+  another stage.
+  {skeleton_contract}
+
+  Do not reveal the target formula, algorithm, or answer in the question, make a
+  derived answer a given slot, or
+  create a direct routine drill. Check whether the supplied prior knowledge already
+  includes the target procedure: if familiar resources allow students to solve the
+  situation directly, the task must still preserve an explainable learning opportunity
+  (for example, comparing competing representations, justifying why a rule works,
+  or testing boundary cases). Do not simply demand incorrect methods or obscure
+  numbers to manufacture failure. A successful familiar route may remain possible
+  if the task still supports comparison, explanation, or invention.
+  Distinguish open-ended student demand (reasoning, comparing, inventing) from
+  executable target arithmetic: do not assume students must perform the target
+  algorithm or force every familiar method to fail under artificial constraints.
+  Keep the executable core focused: the checker can settle one scalar, one
+  largest/smallest selection across all entities, or one equality decision across
+  all entities. The student-facing question can additionally ask students to
+  interpret the evidence, weigh plausible approaches, or recommend what to do
+  in the situation. The checked result must genuinely inform that challenge;
+  do not present an unconstrained recommendation as a uniquely checked answer.
+  Do not require another independent numerical answer, comparison pair, or
+  sub-question that needs a second answer rule. A different display of the same
+  calculation alone is not a meaningfully different approach. Each candidate
+  question must give the student something to decide or interpret beyond
+  verifying the checked result; "show a table or graph" is not enough. For
+  example, with purchase records, ask what the records justify about a new order
+  and what evidence supports that decision. This has an interpretable consequence
+  without naming the target method. This is an example of form, not required
+  wording or topic. Where supplied D1/prior context supports a concrete familiar
+  operation, consider a candidate where that operation gives a plausible but
+  incomplete starting conclusion and the target property is still needed to settle
+  the stated factual question. Name the operation and why it can begin the work in
+  its approach record; do not treat correct-but-insufficient knowledge as a
+  misconception, assume students will use it, or force it to fail. This is an
+  optional design opportunity, not a requirement that every topic use a prior
+  contrast. Do not turn the task into a bare yes/no check.
+  Keep the student-facing question meaningful and method-open, but scope its
+  factual claim to the mathematical property the target answer_rule can settle.
+  For finite input/output records, an unqualified "one rule" or "prediction rule"
+  is too broad: many different function families can fit the same finite points,
+  and equal-rate checking does not establish that no other rule fits. Name the
+  relevant familiar contextual quantity or property and its scope, such as whether
+  the same made-shots-per-attempt pace describes all listed records, then connect
+  that evidence to a real decision. For a spread target, ask which data set is
+  less spread out or more consistent over the observations in scope. These phrases
+  specify what claim is being judged, not how to calculate it. Do not direct
+  students to divide, compute a formula, or follow a target-method sequence.
+  Keep the exact mathematical relationship in the teacher-facing target and
+  mathematical plan/answer_rule. Do not ask whether an unspecified "constant rule"
+  fits: it does not identify which property is meant and can blur additive,
+  multiplicative, or other relationships. Never claim that no other rule could
+  explain finite observations.
+  Do not invent unsupported formulas. An equivalent bounded formulation may still
+  be valid when it uses only the checker contract above; do not blanket-ban a topic
+  merely because one native operation is unavailable. If the target cannot be
+  represented as valid expressions, disclose that boundary rather than hiding it.
+  Propose only numerical conditions essential to that learning opportunity.
+  They must be mutually compatible for the quantities you actually provide.
+  Conditions must fit the number of items or comparisons actually present: do not
+  demand both equal and unequal outcomes on a single pair of items, and do not
+  prescribe extra comparisons or scenarios not present in the situation.
+  Every proposed number condition must apply to this one instance and be
+  expressible by its declared quantities and the checker. Do not require a
+  mixture of outcomes across different generated tasks; that is a collection
+  design requirement, not a condition this plan or fill can guarantee.
+  Do not claim that every row is indispensable or that every pair must be
+  examined: a correct decision may follow from fewer rows. If a particular
+  numerical prior contrast is central, specify an enforceable, compatible
+  relationship among the actual rows and ensure some legal fill can satisfy both
+  the target and prior outcomes. For a per-unit-rate versus repeated-change
+  comparison, one possible three-row design has equal input increments, equal
+  output increments, and rates that are not all equal. For example, inputs
+  [10, 20, 30] and outputs [4, 10, 16] have equal increments (10 and 6) but
+  rates 2/5, 1/2, and 8/15. This is an arithmetic illustration, not a required
+  pattern: equal increments alone do not imply equal ratios, and this design is
+  appropriate only when the familiar operation is relevant.
+  For this particular contrast, do not require the first two rates to match and
+  a later rate to differ as a default pattern; allowing unequal rates is enough
+  for the target's not-all-equal decision.
+  Conversely, do not combine equal input increments and equal output increments
+  with a requirement that the first two rates are equal and the third differs:
+  equality of the first two rates then forces the third rate to be equal too.
+  Avoid that incompatible proposal rather than weakening or silently dropping a
+  frozen condition. Do not impose this proportionality pattern on unrelated topics.
+  If the task tests a relationship across input-output pairs, avoid making
+  repeated identical inputs with different outputs the sole reason a shared
+  rule fails. Specify distinct given input values when a nontrivial comparison
+  is needed, with explicit pairwise inequality constraints rather than a
+  qualitative promise that the fill cannot verify.
+  Numerical constraints should restrict values chosen later, not restate quantity
+  declarations or target definitions. Avoid vague claims such as "exact", "simple",
+  or "nice" unless they are made explicit and genuinely necessary; request a
+  representation condition only when it is needed and safely expressible.
+
+  Respond ONLY with valid JSON.
+
+PROPOSE_SKELETON_USER: |
+  TARGET CONCEPT (not yet taught; this is what should actually settle the question):
+  {target_concept}
+
+  TOPIC: {topic}
+  GRADE: {grade}
+  SUBJECT: {subject}
+
+  PRIOR RESOURCE CONTEXT (already taught; students may try these first):
+  {prior_context}
+
+  Propose one situation.
+
+  Return JSON only:
+  {
+    "quantities": [
+      { ...quantity object exactly as specified by the authoritative schema above... }
+    ],
+    "question": "the decision or unknown, with no numbers and no story",
+    "approaches": [
+     {
+       "id": "snake_case_id",
+       "resources": ["exact prior resource name"],
+       "procedure": "the concrete steps a student might try",
+       "why_plausible": "why the quantities invite this procedure",
+       "anticipated_limitation": "optional: what it may not settle or explain"
+     }
+    ],
+    "why_each_resource_can_activate": "one sentence per prior resource",
+    "why_none_settles_the_question": "why this is not a direct routine drill",
+    "why_the_target_is_needed": "what remains unresolved without the target",
+    "number_constraints": ["plain-language design note for later planning"]
+  }
+
+REPAIR_PROPOSAL_SYSTEM: |
+  Repair the proposed situation using only the original case, prior resources, and
+  the parser or metadata errors below. Keep the target concept and educational
+  purpose intact. Return a complete replacement proposal, not a patch.
+  Use only prior resources that are explicitly supplied; do not fabricate resource
+  links. Do not add concrete numbers to quantities or the question.
+  {checker_contract}
+  {skeleton_contract}
+  Preserve valid, unaffected quantity names and metadata, including given, derived,
+  and unknown quantities. If the parser or metadata errors explicitly identify a
+  quantity field, correct that diagnosed field (including name, value_source,
+  value_domain, or list_length) and leave other unaffected fields unchanged. Do not
+  silently rename quantities, change valid metadata, or weaken requirements.
+  Preserve original number_constraints as an exact ordered prefix and preserve every
+  original approach id; additions require a diagnosed reason and may not weaken
+  requirements.
+
+  ORIGINAL PROPOSAL AND ERRORS:
+  {proposal_feedback}
+
+  Respond ONLY with valid JSON.
+
+REPAIR_PROPOSAL_USER: |
+  Repair the proposed situation for this case.
+
+  TARGET CONCEPT:
+  {target_concept}
+  TOPIC: {topic}
+  GRADE: {grade}
+  SUBJECT: {subject}
+
+  PRIOR RESOURCE CONTEXT:
+  {prior_context}
+
+  ORIGINAL PROPOSAL AND PARSER ERRORS:
+  {proposal_feedback}
+
+  Return the same complete proposal shape:
+  {
+   "quantities": [{ ...quantity objects from the authoritative schema... }],
+   "question": "...",
+   "approaches": [
+     {
+       "id": "snake_case_id",
+       "resources": ["exact supplied prior resource name"],
+       "procedure": "...",
+       "why_plausible": "...",
+       "anticipated_limitation": "..."
+     }
+   ],
+   "why_each_resource_can_activate": "...",
+   "why_none_settles_the_question": "...",
+   "why_the_target_is_needed": "...",
+   "number_constraints": ["..."]
+  }
+  Return JSON only.
+
+REPAIR_SELECTED_SYSTEM: |
+  Repair the selected situation and its mathematical plan together.
+  This is one bounded upstream design correction, not a new selection.
+  Preserve the target concept, original selected approaches, prior resources,
+  and every original requirement. A revised question or quantity is allowed
+  only to resolve the diagnosed issue below, and the response must include the
+  complete revised skeleton and complete math-plan/v2. Do not weaken or delete
+  requirements, turn a numeric requirement into a tautology, or add hints that
+  force the target method. Revised approaches must remain genuinely distinct
+  plausible student approaches.
+  {checker_contract}
+  {skeleton_contract}
+  The revised skeleton must preserve every original quantity name (given, derived,
+  and unknown), each original value_source and value_domain, and every non-null
+  fixed list_length. Only the diagnosed repair may add a quantity; never remove or
+  relabel one. Preserve the original number_constraints as an exact ordered prefix
+  and preserve every original approach id. The checker binds only given quantities;
+  derived and unknown quantities remain descriptive skeleton declarations.
+  The math_plan must be a complete math-plan/v2 object with target, answer_rule,
+  and a constraints list; it must not contain priors or required_checks.
+  Preserve the selected prior_contrast intent. If it is numerical, include a
+  formula-bearing prior_contrast for that exact approach; do not replace or
+  silently drop it. A qualitative or unsupported contrast stays unverified.
+
+  ORIGINAL SELECTED DESIGN:
+  {original_design}
+
+  ORIGINAL MATHEMATICAL PLAN:
+  {original_math_plan}
+
+  REVIEW DIAGNOSIS AND ERRORS:
+  {repair_diagnosis}
+
+  Return JSON only with:
+  {
+    "skeleton": { ...complete slot-only skeleton using the authoritative schema... },
+    "math_plan": {
+      "schema_version": "math-plan/v2",
+      "quantities": [{ ...quantity objects... }],
+      "target": {"name": "...", "unit": "...", "expressions": {"label": "..."}},
+      "answer_rule": {"kind": "largest|smallest|equal|scalar", "labels": ["..."],
+                      "unit": "...", "require_unique": true},
+      "constraints": [{"left": "...", "operator": "==|!=|>|>=|<|<=",
+                       "right": "...", "description": "..."}],
+      "prior_contrast": null
+    }
+  Use null unless the original selection designated a numerical prior_contrast.
+  If it did, preserve that exact approach_id and formulas that implement its
+  operational move; the checker will reject a matching target decision.
+  }
+
+REPAIR_SELECTED_USER: |
+  Repair the selected design for target concept {target_concept}.
+
+  CASE:
+  {case_context}
+
+  ASSUMED PRIOR RESOURCE CONTEXT (immutable):
+  {prior_context}
+
+  ORIGINAL SELECTED DESIGN:
+  {original_design}
+
+  ORIGINAL MATHEMATICAL PLAN:
+  {original_math_plan}
+
+  DIAGNOSIS TO RESOLVE:
+  {repair_diagnosis}
+
+  Return a complete replacement skeleton and math plan. Use only the supplied
+  prior resource names in approach.resources. Return JSON only.
+
+PLAN_SKELETON_SYSTEM: |
+  Freeze the mathematical plan for an already designed situation. This is a
+  semantic contract, not a number search. Do not provide values.
+
+  Use the following authoritative checker contract. It is shared with proposal,
+  selection, review, and filling; do not maintain a divergent operation list:
+  {checker_contract}
+
+  Use only exact given quantity names as expression inputs. Derived and unknown
+  quantities are not input slots. The new math-plan/v2 contract contains the
+  executable target, answer_rule, and essential numerical constraints, plus an
+  optional single prior_contrast when selection explicitly identifies a central
+  numerical prior move as checkable. Do not include general priors or
+  required_checks in v2. Student approaches remain plain-language hypotheses.
+
+  The answer rule must describe how the question is answered:
+    - largest or smallest: compare exactly the listed labels;
+    - equal: decide whether all listed labels are equal;
+    - scalar: compute the one listed result.
+  The labels in the answer rule must match exactly the full set of labels declared
+  in target.expressions. For scalar rules, target.expressions must contain exactly
+  one formula label. You cannot repair a mismatch by dropping parts or labels of
+  the fixed selected question.
+  Generate math-plan/v2 only. Approaches stay in the selected situation as
+  plain-language hypotheses. If DESIGN CONTEXT has a numerical prior_contrast,
+  encode only that selected move as prior_contrast with its approach_id. For a
+  largest/smallest target, use exact same-label formulas and a unique target
+  answer; the checker rejects a matching prior decision, while a prior tie differs.
+  For an equal target, target and prior paths each need at least two numeric
+  expressions; their labels may differ (for example, three unit rates versus two
+  consecutive changes). Copy expected_target_equal and expected_prior_equal from
+  the selected design; these booleans must be opposite and exact arithmetic must
+  verify both. Do not reduce either path to one derived scalar or check only one
+  pair. Do not invent formulas for prose or drawings. Qualitative/unsupported
+  moves stay explicitly unverified. The checker verifies arithmetic and declared
+  outcomes, not semantic alignment between formula and prose. Do not add a
+  contrast for unrelated or merely possible approaches.
+  For a selected repeated-additive-change contrast against per-unit rates, with at
+  least three paired rows, calculate a target rate for each row and at least two
+  adjacent output changes. If the meaning depends on comparing changes over equal
+  input intervals, preserve that requirement as an exact constraint (for example,
+  input[1]-input[0] == input[2]-input[1]); do not omit it or replace it with a
+  qualitative note. The arithmetic paths can be numerically checked even though
+  the interpretation of their difference remains a student/reviewer judgment.
+  If the selected move is qualitative or unsupported, return prior_contrast as
+  null. A numerical prior_contrast supports largest/smallest or equal answer rules;
+  equality outcomes are mandatory only for the equal-rule design that selected them.
+  Treat judge number requirements as proposed conditions for the later fill.
+  Preserve every compatible numerical requirement as a constraint; do not add an
+  unresolved field to v2 or silently replace or weaken a requirement. Essential
+  constraints may use formulas needed to enforce the design, even when those
+  formulas are not student approaches (for example, target != an ordinary mean).
+  Do not invent executable formulas for drawings, explanations, or competing
+  approaches that are not the target calculation. Unknown or unsupported target
+  mathematics must remain explicit and block the plan.
+
+  Respond ONLY with valid JSON.
+
+PLAN_SKELETON_USER: |
+  TARGET CONCEPT (not yet taught):
+  {target_concept}
+
+  QUESTION:
+  {question}
+
+  QUANTITIES:
+  {quantities}
+
+  DESIGN CONTEXT (selection insights, original and judge-proposed requirements):
+  {design_context}
+
+  PROPOSED APPROACHES:
+  {approaches}
+
+  PRIOR RESOURCE CONTEXT:
+  {prior_context}
+
+  PLAN ATTEMPT FEEDBACK (keep the selected design and all requirements fixed):
+  {plan_feedback}
+
+  Return JSON only:
+  {
+    "schema_version": "math-plan/v2",
+    "target": {
+     "name": "target",
+     "unit": "common result unit or empty string",
+     "expressions": {"label": "formula using only given slots"}
+    },
+    "answer_rule": {
+     "kind": "largest|smallest|equal|scalar",
+     "labels": ["exact labels from the expressions"],
+     "unit": "common unit or empty string",
+     "require_unique": true
+    },
+    "constraints": [
+     {
+       "left": "formula using given slots",
+       "operator": "==|!=|>|>=|<|<=",
+       "right": "formula using given slots",
+       "description": "short explanation"
+     }
+    ],
+    "prior_contrast": null
+  }
+  When the selected move is numerical, replace null with an object containing
+  name, approach_id, and expressions. For largest/smallest, expressions use all
+  target labels. For equal, expressions use at least two labels for the selected
+  prior test, plus expected_target_equal and expected_prior_equal copied from
+  selection.
+
+REVIEW_PLAN_SYSTEM: |
+  Review whether a proposed Productive Failure situation has a meaningful,
+  answerable question before any numbers are generated. This is a design review,
+  not proof of student behavior and not a topic-specific mathematical solver.
+
+  Execution contract for the later fill and checker stages:
+  Apply the authoritative checker contract below exactly; it is the same contract
+  shown to proposal, selection, planning, and filling:
+  {checker_contract}
+
+  - filling supplies numeric values only for quantities with value_source="given";
+    derived and unknown quantities are descriptive declarations, not independent
+    sampled numeric slots;
+  - the restricted expression evaluator receives those given inputs and evaluates
+    the target's inline arithmetic. It does not solve equations to infer a
+    separately named derived quantity;
+  - therefore review the real target formulas and value restrictions as written.
+    Do not demand auxiliary equations for descriptive derived or unknown names when
+    the target already inlines their relationship. If an independently supplied
+    displayed value or a genuinely missing numeric restriction is needed, block
+    the plan rather than waiving that requirement.
+
+  The reviewer receives the grade and full assumed prior-resource context. Check:
+  - does the target procedure actually answer the question as written?
+    An interpretive or advisory part may admit several defensible explanations,
+    but the checked core must answer a necessary factual part of that question.
+    Do not require the checker to decide a student's recommendation; block if an
+    independent numeric demand remains unanswered by the one answer rule;
+  - does the target expression answer the question and use the selected
+    quantities correctly?
+  - are the plain-language approaches genuinely distinct and useful, including
+   successful or partial routes?
+  - does the question avoid naming or prescribing the target method?
+  - does the literal scope of the question match the property the checked
+    answer_rule can decide? For finite input/output records, an unqualified claim
+    that "one rule" or "one prediction rule" fits is broader than a same-rate
+    check because other functions can fit finite points. Use a semantic
+    counterexample test: could the checked answer_rule be satisfied while the
+    literal question is false, or could the question be true under another
+    relationship while the checked rule fails? If so, reject the scope mismatch
+    and identify a familiar contextual unit/property that would make the factual
+    claim answerable. Preserve any open recommendation as interpretation, not as
+    a uniquely checked conclusion. Naming that unit/property is not a procedure;
+    do not instruct students to compute, divide, or apply a formula.
+  - does the situation retain a non-routine learning opportunity (such as
+   comparing methods or justifying decisions) even if familiar resources overlap
+   with the target, without manufacturing failure through artificial traps?
+  - is the selection rationale consistent with its selected prior_contrast?
+    If the reason, main_concern, or a numerical requirement relies on a specific
+    prior move contrasting with the target (for example, equal additive changes
+    versus unequal rates), the selection must record that move as numerical,
+    qualitative, or unsupported. If prior_contrast is null, do not claim that
+    this design depends on or checks a particular prior-versus-target contrast.
+    Report an inconsistency rather than silently converting prose into a checked
+    path or inventing a contrast. A contrast is optional, not a universal PF
+    requirement.
+  - are all numerical requirements represented by compatible constraints?
+    A requirement about the distribution of outcomes over separately generated
+    tasks cannot be certified by this single-instance plan. Leave it unresolved
+    and block if it was selected; do not relabel it qualitative or silently waive it.
+  For a selected numerical prior_contrast in math-plan/v2, check that its
+  approach_id exists and its formulas faithfully implement the exact operational
+  move in the selection context. For equal answer rules, check that target and
+  prior paths each contain at least two meaningful comparisons and that the
+  selected opposite expected outcomes describe the intended design. The
+  deterministic checker separately verifies every listed value exactly. If
+  semantic correspondence is unclear, do not call the move checked. For
+  historical math-plan/v1, apply the same formula-to-procedure check to every
+  numerical prior path.
+
+  Account for every requirement ID in the design context:
+  - numerical: cite the zero-based indices of the plan constraints that enforce
+    value-dependent conditions and/or cite relevant quantity_fact_refs,
+    answer_rule_fact_refs, or plan_fact_refs;
+  - qualitative: explain the non-numerical design intention. It remains
+    unverified on the eventual values and must have empty constraint_indices and
+    empty quantity_fact_refs. Do not call numerical conditions qualitative to
+    bypass an omitted check;
+  - unresolved: a numerical requirement is missing, conflicts with the plan, or
+    cannot be expressed here. It must have empty constraint_indices and empty
+    quantity_fact_refs. This must block filling, not become qualitative.
+  Distinguish value-independent plan definitions and structure from restrictions
+  on sampled numbers. A plan fact reference must cite the complete relevant
+  non-empty section of the immutable MathPlan.to_dict output and explain the
+  actual guarantee: quantities is the complete declared quantity set, target is
+  the requested output definition, and answer_rule is the candidate/answer
+  contract. When making an input-count claim, filter quantities to entries with
+  value_source="given"; the section may also contain derived or unknown entries.
+  These references document declarations only; they do not prove equalities,
+  inequalities, nonzero or divisibility conditions, or
+  which named candidate wins. Do not invent tautological equations or demand an
+  unused derived symbol when the target already defines the relationship.
+  Semantic relevance remains a reviewer judgment, not a symbolic proof.
+  Declared metadata and answer-rule facts: when a requirement specifies units,
+  positive domains, or list lengths that are already fixed by given quantity definitions
+  in the metadata (for example, unit="km", unit="min", or a fixed positive list_length),
+  the reviewer recognizes those declared facts as satisfied structural metadata via
+  quantity_fact_refs rather than demanding redundant arithmetic constraints or
+  tautologies (e.g. x == x), provided the plan does not contradict them.
+  Similarly, when a requirement specifies uniqueness or tie-breaking and the frozen
+  answer_rule uses kind="largest" or "smallest" with require_unique: true, that engine
+  guarantee deterministically rejects ties at fill time; the reviewer recognizes this
+  fact via answer_rule_fact_refs: ["require_unique"] rather than demanding
+  a redundant manual arithmetic constraint.
+  Fact references:
+  - quantity_fact_refs must cite strictly GIVEN plan quantities (value_source="given")
+    and facts actually enforced (non-empty unit, role=list with fixed list_length,
+    or declared value_domain). Derived and unknown quantities cannot be cited;
+    positivity of calculated or derived values requires executable plan constraints.
+  - answer_rule_fact_refs must contain only ["require_unique"], valid only
+    when the frozen answer_rule has kind in {"largest", "smallest"} and require_unique=true.
+    This fact establishes unique accepted winners only; it does not establish which named
+    candidate wins or relationships such as a winner having fewer parts.
+  - plan_fact_refs must be a list of exact strings from
+    {"quantities", "target", "answer_rule"}. Each must resolve to its
+    corresponding non-empty immutable MathPlan.to_dict section, with no duplicates.
+    They are valid only for numerical coverage and document value-independent
+    declarations; they cannot replace constraints on generated values.
+  A numerical requirement is valid if enforced by non-empty constraint_indices,
+  valid quantity_fact_refs, valid answer_rule_fact_refs, valid plan_fact_refs,
+  or any combination thereof.
+  Preserve useful graphical approaches. Do not classify an unconstrained numerical
+  equality, inequality, count, or range condition as qualitative to bypass a
+  missing check. The selection concern is not necessarily solved by the plan;
+  flag conflicts.
+
+  Downstream student output and explanation context:
+  The reviewer receives intended_student_output, which shows the downstream writer contract
+  guaranteeing that students will be prompted to answer with justified methods, explanations,
+  or comparisons. Do not reject a plan or demand that the planner reword the fixed question
+  merely to repeat an explanation prompt that is already enforced downstream. This does not
+  excuse a question that prescribes the target method or specific calculation steps.
+
+  Status determination and reporting:
+  - Return "pass" only when the question and plan agree, every requirement is
+    honestly accounted for, and issues is an empty list [].
+  - Put nonblocking explanations, reasoning, and semantic observations into
+    question_answer_alignment, approach_formula_alignment, or requirement reason
+    fields. Do NOT put nonblocking observations into the issues list; any entry
+    in issues indicates an actual defect that blocks the plan.
+  - Return "revise" for concrete, actionable mismatches fixable within the plan
+    without changing the selected design.
+  - Return "unknown" when evidence is insufficient, essential mathematics is
+    unsupported, or contradictory requirements require an upstream design change.
+    In particular, if the selected question inherently prescribes the target method,
+    specific calculation steps (e.g. dictating deviations from the mean), or conflicts
+    with the selected design, that is an upstream design defect that the planner cannot
+    resolve: report "unknown", do NOT return "revise" demanding that the planner reword
+    a fixed question.
+  - Do not demand that all prior approaches fail or that students discover a
+    unique target method unaided; valid partial or parallel routes do not
+    constitute plan defects.
+  Do not invent a replacement formula or silently repair the plan.
+  Always include repair_diagnosis. Use route "plan" only for a concrete,
+  repairable plan/expression defect; use route "design" when the selected
+  question, quantities, assumptions, or approaches must change; otherwise use
+  route "none". Give a concrete reason for plan or design routes. An unknown
+  review without a concrete route is blocked and must not be retried.
+  For a joint design repair review, also report whether the original target,
+  approaches, and requirements were preserved and whether the diagnosis was
+  actually resolved.
+  Respond ONLY with valid JSON.
+
+REVIEW_PLAN_USER: |
+  TARGET CONCEPT: {target_concept}
+  GRADE: {grade}
+  ASSUMED PRIOR KNOWLEDGE AND PROVENANCE:
+  {prior_context}
+  QUESTION:
+  {question}
+
+  QUANTITIES:
+  {quantities}
+
+  APPROACHES:
+  {approaches}
+
+  DESIGN CONTEXT (selection insights, original and judge-proposed requirements):
+  {design_context}
+
+  FROZEN MATHEMATICAL PLAN:
+  {math_plan}
+
+  ORIGINAL SELECTED DESIGN (for initial review this equals the current design):
+  {original_design}
+
+  REPAIR DIAGNOSIS BEING VALIDATED:
+  {repair_diagnosis}
+
+  INDEXED CONSTRAINTS (use these exact 0-based indices in constraint_indices):
+  {indexed_constraints}
+
+  INTENDED STUDENT OUTPUT (downstream writer contract for student expectations):
+  {intended_student_output}
+
+  Return JSON only:
+  {
+   "status": "pass|revise|unknown",
+   "question_answer_alignment": "short reason",
+   "approach_formula_alignment": "short reason about target and plain-language approach consistency",
+   "distinct_approaches": true,
+   "constraints_covered": true,
+   "repair_diagnosis": {
+     "route": "plan|design|none",
+     "reason": "concrete reason, or why no repair is needed"
+   },
+   "target_preserved": true,
+   "approaches_preserved": true,
+   "requirements_preserved": true,
+   "repair_resolved": true,
+   "requirement_coverage": [
+     {
+       "requirement_id": "exact ID from design context",
+       "status": "numerical|qualitative|unresolved",
+       "constraint_indices": [],
+       "plan_fact_refs": ["quantities", "target", "answer_rule"],
+       "quantity_fact_refs": [
+         {
+           "quantity": "exact_given_quantity_name",
+           "fact": "unit|list_length|value_domain"
+         }
+       ],
+       "answer_rule_fact_refs": ["require_unique"],
+       "reason": "why the cited constraints/facts enforce it, or what remains unverified"
+     }
+   ],
+   "issues": []
+  }
+
+  Use an empty requirement_coverage list when the design context has no requirements.
+  Each ID must occur exactly once. Qualitative and unresolved entries use empty
+  constraint_indices, empty plan_fact_refs, empty quantity_fact_refs, and empty
+  answer_rule_fact_refs.
+  For numerical entries, cite relevant constraint_indices, quantity_fact_refs,
+  plan_fact_refs, and/or answer_rule_fact_refs. Return pass only if no
+  requirement is unresolved.
+
+FILL_SKELETON_SYSTEM: |
+  Fill values for a frozen mathematical plan. Do not change the plan.
+
+  Follow this authoritative checker contract exactly:
+  {checker_contract}
+
+  Return values only for quantities whose value_source is "given". Do not fill
+  derived or unknown quantities. Use positive integers or finite positive
+  decimals, and use the exact required list lengths.
+
+  The checker will evaluate all frozen expressions, the answer rule, and the
+  structured constraints. If a numerical prior_contrast is present, choose values
+  so its computed answer decision differs from the target decision; the checker
+  enforces this. Do not add formulas, labels, outcomes, picks, or
+  claims about which method wins. A retry may change values only.
+
+  Use the design context to preserve why these numbers are needed, including
+  the proposed approaches and each requirement's educational purpose. The frozen
+  plan remains authoritative: do not weaken, replace, or silently override its
+  constraints. Qualitative intentions should guide your values, but a numerical
+  pass does not verify them or predict student behavior.
+
+  Respond ONLY with valid JSON.
+
+FILL_SKELETON_USER: |
+  TARGET CONCEPT (not yet taught; this must stay defined and actually decide):
+  {target_concept}
+
+  GRADE: {grade}
+
+  QUANTITIES (fill only value_source=given names):
+  {quantities}
+
+  QUESTION:
+  {question}
+
+  FROZEN MATHEMATICAL PLAN:
+  {math_plan}
+
+  DESIGN CONTEXT (selection insights, original and judge-proposed requirements):
+  {design_context}
+
+  PROPOSED APPROACHES:
+  {approaches}
+
+  PRIOR RESOURCE CONTEXT:
+  {prior_context}
+
+  PREVIOUS VALUES AND CHECK FEEDBACK:
+  {fill_feedback}
+
+  Return JSON only:
+  {"values": {"<given_slot_name>": <number or [numbers]>}}
+
+WRITE_TASK_SYSTEM: |
+  Write the student-facing exploration task for a Productive Failure lesson.
+  Students will receive instruction afterward.
+
+  Make the task understandable while leaving students responsible for developing
+  and justifying their mathematical approach.
+
+  WRITING RULES
+  1. Use plain, precise language: familiar words and direct instructions appropriate
+     to the students' age. Keep necessary mathematical vocabulary. Add context only
+     when it helps students understand the situation; remove unnecessary formality
+     and repetition, not necessary information. Briefly clarify task terms whose
+     intended meaning could otherwise be unclear, without supplying a solution
+     method. Use consistent names and labels throughout.
+  2. Make the goal clear; leave the method open. Clearly state what students should
+     produce: a decision, explanation, procedure, or measure, as specified by the
+     design. Guide what to accomplish, not which mathematical steps to follow.
+     Do not provide the target formula, a worked solution, or intermediate steps
+     that effectively prescribe the method.
+  3. Ask students to show and explain their thinking, not just give an answer.
+     Use a short, direct request to show how they worked and explain why their
+     approach or decision makes sense. Invite comparison of different solution
+     approaches or representations only when useful for this design, not as a
+     compulsory extra task.
+
+  PUBLISHED RUBRIC (Rahimi et al., Table 1)
+  Direct generation receives these same scoring anchors. Use them as design
+  guidance where the fixed design supports them; do not score your output.
+  1. Activation of Prior Knowledge (APK)
+     1 (Low): No prerequisite concepts
+     2 (Moderate): Includes one prerequisite concept
+     3 (High): Includes two or more prerequisite concepts
+  2. Sweet Spot Calibration (SSC)
+     1 (Low): Too easy or too difficult: disengagement
+     2 (Moderate): Moderate challenge with some failures
+     3 (High): Well-calibrated: challenging but manageable, leading to productive engagement
+  3. Affective Engagement (AE)
+     1 (Low): Not relatable or meaningful: fails to engage
+     2 (Moderate): Somewhat engaging with relatable/realistic elements
+     3 (High): Highly engaging, presented in meaningful narrative or real-world scenario
+  4. Multiple Representations & Solutions (MR)
+     1 (Low): Few or no representations or solution methods
+     2 (Moderate): Some diversity but limited
+     3 (High): Wide range of representations and solution methods; fosters creativity & collaboration
+  5. Open-endedness / Ill-structuredness (OE)
+     1 (Low): Simple, well-structured, single path
+     2 (Moderate): Moderate complexity with limited variables
+     3 (High): Highly complex, requiring integration of multiple variables and representations
+
+  FIXED-DESIGN SAFEGUARDS
+  - Preserve the numbers, units, relationships, assumptions, scope, requested
+    outputs, and intended mathematical demand. Do not invent missing facts or
+    silently remove a genuinely required competing method or subquestion. A
+    target method appearing in the student question is not itself a required
+    student instruction; rephrase it method-open or block if its purpose cannot
+    otherwise be preserved. Keep clear who or what each condition or competing
+    claim applies to.
+  - When the fixed question includes an interpretation or recommendation, keep
+    that purpose in the student challenge, grounded in the checked mathematical
+    decision. Do not replace it with a bare yes/no calculation or add a second
+    numerical demand. If the fixed design only asks a factual check, do not
+    invent a new recommendation to chase a rubric score.
+  - Keep the student goal meaningful and method-open, while making the factual
+    question no broader than the property checked by the target answer_rule. A
+    generic "one rule" or "prediction rule" over finite input/output data is not
+    settled by a check of one specific relationship: another function family can
+    fit those same observations. Scope the decision using a familiar contextual
+    quantity or property (for example, one made-shots-per-attempt pace across the
+    listed records), then preserve the decision or interpretation. Do not prescribe
+    the computation or reveal a target-method sequence.
+  - Keep the exact target relationship in the teacher-facing target, expressions,
+    and answer_rule. In student text, precise contextual units and property names
+    may be needed to bound the claim; do not use them to tell students how to
+    calculate. Never replace missing scope with an unqualified "constant rule", and
+    never claim that no other rule could explain finite observations.
+  - Helpful representation suggestions are allowed, not required. Use an
+    appropriate data presentation, but do not precompute a representation that
+    students are meant to construct.
+  - Never require students to be wrong, use a wrong method, invent a second method,
+    or list anticipated methods. Do not reveal the selected operational prior move,
+    an anticipated equality, winner, or target procedure before students explore
+    unless the fixed question already requires that relation.
+  - Treat the target concept, design context, mathematical plan, and review as
+    teacher information. Do not include teacher-facing solutions, design notes,
+    anticipated approaches, the operational prior move, or review issues in the
+    student-facing task. Do not announce why an anticipated student approach will fail;
+    leave that discovery to students.
+  - The body and question are displayed together. Use the body for the situation,
+    data, and necessary conditions, and the question for the challenge and request
+    for reasoning. Avoid repeating the same instructions across both fields.
+
+  Use a target-relative disclosure test: do not reveal the target formula,
+  algorithm, or a compulsory sequence of target-method steps. Necessary names of
+  given quantities, units, tables, diagrams, graphs, and contextual properties
+  are allowed when they bound the factual claim rather than prescribe a solution.
+  For finite input/output records, do not leave "one rule" unqualified when the
+  checked target tests only one relationship class; another function family can fit
+  the same points. Scope the decision to a familiar contextual unit/property (for
+  example, a shared made-shots-per-attempt pace over the listed records), without
+  telling students how to compute it. For spread, "which data set is more
+  consistent using all observations" can provide scope without naming variance.
+  Do not ban ordinary words merely because they occur in the target concept; judge
+  whether wording gives away a procedure or accurately bounds the checked claim.
+
+  If essential information is missing or contradictory, report it instead of
+  silently repairing the design.
+
+  Respond ONLY with valid JSON.
+
+WRITE_TASK_USER: |
+  STUDENT CONTEXT (grade, subject, topic, and assumed prior knowledge):
+  {student_context}
+
+  TARGET CONCEPT (teacher information; do not reveal its method):
+  {target_concept}
+
+  SELECTED TASK DESIGN (question, quantities, exact numbers, and frozen plan):
+  {task_design}
+
+  FULL STRUCTURED APPROACH RECORDS (teacher context only):
+  {approaches}
+
+  INTENDED STUDENT OUTPUT:
+  {intended_student_output}
+
+  DESIGN CONTEXT (selection intention, requirements, and unresolved concerns):
+  {design_context}
+
+  Write only the student-facing task from the fixed design.
+
+  Return JSON only. Set status to "blocked" and list the blocking issue if the
+  fixed design is missing essential information or is contradictory. Otherwise
+  set status to "ready" and use an empty blocking_issues list.
+  {
+    "status": "ready|blocked",
+    "blocking_issues": ["specific issue or empty list"],
+    "title": "short task title",
+    "body": "the situation, exact data, and necessary conditions in clear prose or a table as appropriate",
+    "question": "the student challenge and a brief request to show and explain thinking"
+  }
+
+JUDGE_SKELETONS_SYSTEM: |
+  You are selecting a promising Productive Failure task structure.
+
+  Use this authoritative checker contract before selecting a candidate. It is the
+  same execution contract used later by planning, review, and filling:
+  {checker_contract}
+  This contract constrains FUTURE numerical planning and checking. Candidates at
+  selection time are not expected to contain math-plan/v2 fields or frozen formulas;
+  absence of those later-stage fields is not a rejection reason. Judge
+  representability of the proposed target, not schema completeness for another stage.
+
+  Students should be able to begin with familiar knowledge, develop meaningfully
+  different approaches, and learn something relevant to the target concept by
+  comparing those approaches. The task should not simply prescribe the intended
+  procedure.
+  Prefer a meaningful student decision or interpretation around the checkable
+  core. A display choice (table versus graph) alone is not a distinct solution
+  approach or an open-ended question. Reject a candidate whose only student
+  demand beyond yes/no is choosing a representation or justifying the answer;
+  the question must also ask what the checked result means for the situation,
+  without another independent numeric answer. Judge whether a plausible familiar approach
+  and the target approach can expose a useful difference without scripting
+  student errors or adding unsupported calculations.
+
+  Compare all candidates using three questions:
+
+  1. Can students begin? Identify concrete first actions supported by the
+     supplied prior knowledge. Do not assume unlisted prerequisites.
+  2. Are there meaningfully different approaches? Look for plausible ways of
+     examining or solving the task, not different names for the same calculation.
+     Do not invent an approach merely to reach two.
+  3. Is comparing the approaches educationally useful? Identify what their
+     comparison could reveal and how this connects to the target concept. Avoid
+     routine exercises and questions that give away the intended procedure.
+     Check whether the prior knowledge already contains the target procedure:
+     if familiar resources can directly solve the task, ensure the situation
+     still retains a non-routine, explainable learning opportunity (e.g. comparing
+     representations, evaluating efficiency, or explaining why the rule holds)
+     without manufacturing failure or demanding wrong methods.
+
+  Successful, partial, graphical, and qualitative approaches can all be valuable.
+  Do not require every familiar approach to fail or produce a different numerical
+  answer. Treat proposed student approaches as hypotheses, not observations.
+  If the selected design genuinely depends on one tempting prior move, identify
+  its exact candidate approach_id and operational calculation. Mark it numerical
+  when its arithmetic paths and comparison decision can be expressed over the
+  given slots and checked by the shared evaluator; the checker still does not
+  validate what students infer from that arithmetic. Do not call an exact
+  arithmetic comparison qualitative merely because its interpretation is
+  conceptual.
+  In particular, a repeated-additive-change contrast against per-unit rates is
+  numerical when the candidate has at least three ordered paired rows, equal
+  consecutive input steps are fixed or can be required for this design, and two
+  or more adjacent output changes can be checked against the target's per-row
+  rates. State the needed equal-input-step requirement when it is not already
+  fixed, and include the needed equal-input-step condition in number_requirements
+  so planning must encode it. The skeleton must already contain at least three
+  paired rows; do not assume selection can add rows. For an equality contrast,
+  select opposite expected equality outcomes only when that is the intended
+  design; use the evaluator's full target and prior paths. Use qualitative only
+  when the central move itself is not an exact numeric
+  comparison. Use unsupported when a central numerical move cannot be represented
+  or the candidate lacks enough comparisons and cannot supply them. These intents
+  remain explicitly unverified when not numerically encoded, not null. If no one
+  move is central, use null and do not claim in the reason or main_concern that a
+  specific prior move is contrasted, successful, insufficient, or checked. A
+  generic misconception label is not an operational move.
+  Numerical values have not been chosen: assess proposed constraints, but do not
+  claim that they have already been met. Flag missing information rather than
+  assuming it.
+  Before recommending a candidate, check whether its fixed number_constraints
+  and your proposed number_requirements can jointly admit the selected numerical
+  contrast as well as a valid target result. Do not infer equal ratios from equal
+  increments: inputs [10, 20, 30] with outputs [4, 10, 16] have equal increments
+  but unequal ratios. There is a distinct incompatibility when equal input and
+  output increments are combined with equal first-two rates and a different
+  third rate; the first two equal rates force the third equal. Reject a candidate
+  with incompatible fixed conditions rather than selecting it with
+  prior_contrast:null, relabeling its numerical intent qualitative/unsupported,
+  or weakening its constraints. If the task is valid without a central prior
+  contrast, it may still be selected with null, but its reason and main_concern
+  must not claim that a particular prior operation is contrasted or needed.
+  These checks apply only to a contrast the candidate/design actually relies on;
+  do not force prior contrasts into otherwise valid tasks.
+  Each selected numerical requirement must be enforceable for this single task.
+  Do not propose or preserve a requirement that other independently generated
+  tasks must have a different outcome; cross-task balance must be assessed
+  across the finished collection, not by this checker. Reject a candidate
+  requiring cross-task balance rather than passing it to an unrepresentable plan.
+  Do not turn "use all rows" or "no subset can settle the answer" into a
+  numerical requirement; a counterexample in two rows may legitimately settle
+  a no answer. Require only concrete restrictions on values needed for the task.
+  For a relationship across input-output pairs, repeated identical inputs
+  with differing outputs can make the decision immediate without comparing
+  rates. Prefer candidates that avoid such a shortcut when it undercuts the
+  learning opportunity, and ensure any distinct-input requirement is actually
+  expressible for this instance.
+
+  For the selected candidate, state the numerical conditions needed to support the
+  learning opportunity you identified. For each condition, give its educational
+  purpose. Preserve the candidate's existing constraints. Identify additional
+  conditions as proposals; keep only essential, mutually compatible conditions
+  and flag conflicts rather than silently changing the task. Do not impose an
+  arbitrary count cap.
+  Keep number requirements strictly essential: do not duplicate declared metadata
+  facts (units, list lengths, positive domains) or candidate number constraints as
+  new requirements. Avoid vague, non-operational numeric thresholds such as
+  "difference large enough to matter" or "numbers must be manageable". If a numeric
+  margin is essential to the learning opportunity, state a precise, defensible
+  relative bound at the design stage; otherwise, keep such pedagogical desires
+  as qualitative notes in main_concern, not mandatory numeric requirements. Never
+  relabel actual numeric conditions qualitative or retroactively alter the
+  candidate's existing design. Ensure the candidate's core decision resolves to
+  either a single scalar, a single largest/smallest comparison across all entities,
+  or an equality check across all entities, without requiring multiple independent
+  answer rules.
+  Keep conditions compatible with the actual number of items and comparisons:
+  do not demand both equal and unequal relationships on a single pair, and assess
+  whether extensive equality constraints (such as simultaneously matching ranges,
+  medians, and quartiles) introduce unnecessary complexity beyond what is needed
+  to prevent an obvious shortcut. Ensure conditions are essential to the
+  comparison and do not create universal failure pressure.
+
+  A prior move is central when the selection reason, main_concern, or a number
+  requirement depends on that move contrasting with, settling, or failing to
+  settle the target. If central, prior_contrast must be an object naming its exact
+  candidate approach_id and operational move; classify it as numerical,
+  qualitative, or unsupported. Numerical means its arithmetic paths and comparison
+  decision can be expressed over the given slots and checked by the shared
+  evaluator; the checker still does not validate what students infer from that
+  arithmetic. Do not call an exact arithmetic comparison qualitative merely
+  because its interpretation is conceptual.
+  In particular, a repeated-additive-change contrast against per-unit rates is
+  numerical when the candidate has at least three ordered paired rows, equal
+  consecutive input steps are fixed or can be required for this design, and two
+  or more adjacent output changes can be checked against the target's per-row
+  rates. State the needed equal-input-step requirement when it is not already
+  fixed. For an equality contrast, select opposite expected equality outcomes only
+  when that is the intended design; use the evaluator's full target and prior
+  paths. Use qualitative only when the central move itself is not an exact numeric
+  comparison. Use unsupported when a central numerical move cannot be represented
+  or the candidate lacks enough comparisons and cannot supply them. These intents
+  remain explicitly unverified when not numerically encoded, not null. If no one
+  move is central, use null and do not claim in the reason or main_concern that a
+  specific prior move is contrasted, successful, insufficient, or checked. A
+  generic misconception label is not an operational move.
+  For a selected numerical move that contrasts equality decisions, set
+  expected_target_equal and expected_prior_equal: true means all listed target
+  results or prior results are equal, false means they are not. Set both to null
+  unless this equality contrast is central; when central, choose opposite values
+  to state which result should be equal and which should not. Do not assume the
+  target must be false or the prior must be true.
+
+  Do not generate values or formulas. Do not require numerical disagreement or
+  failure unless the learning opportunity needs it.
+
+  Recommend the candidate with the clearest supported learning opportunity, not
+  the longest list of approaches. If none qualifies, recommend none.
+
+  Respond ONLY with valid JSON.
+
+JUDGE_SKELETONS_USER: |
+  TARGET CONCEPT: {target_concept}
+  TOPIC: {topic}
+  GRADE: {grade}
+
+  PRIOR RESOURCE CONTEXT:
+  {prior_context}
+
+  CANDIDATES:
+  {candidates}
+
+  Return JSON only:
+  {
+    "recommended_id": null,
+    "approaches": [
+      "concrete student action",
+      "meaningfully different student action"
+    ],
+    "reason": "brief comparative explanation",
+    "main_concern": "most important unresolved condition, or null",
+    "prior_contrast": null,
+    "number_requirements": [
+      {
+        "condition": "plain-language numerical condition",
+        "purpose": "educational purpose of the condition"
+      }
+    ]
+  }
+
+  Replace prior_contrast with an object only when one move is central:
+  {
+    "approach_id": "exact id from the selected candidate",
+    "operational_move": "specific operation and comparison",
+    "checkability": "numerical|qualitative|unsupported",
+    "reason": "why this move is central and what can or cannot be checked",
+    "expected_target_equal": null,
+    "expected_prior_equal": null
+  }
+
+  Set recommended_id to the selected integer candidate ID, not a quoted string,
+  or use JSON null. If recommending none, return an empty approaches list and explain the obstacle
+  in reason. Use JSON null where appropriate.

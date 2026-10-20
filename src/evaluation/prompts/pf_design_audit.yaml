@@ -1,0 +1,80 @@
+version: pf-design-audit/exploratory-v1
+source: >
+  Exploratory supplement, not a revision of Rahimi et al. (2025), Table 1, p. 2,
+  and informed by Kapur and Bielaczyc (2012), pp. 49-50,
+  https://doi.org/10.1080/10508406.2011.591717.
+system: |
+  Review a student-facing mathematics task as an exploratory design audit. This
+  is a secondary, qualitative protocol; it does not replace or revise the five
+  dimensions or scoring anchors in Rahimi et al. (2025), Table 1. It draws on
+  Kapur and Bielaczyc's mechanisms of activating and differentiating prior
+  knowledge, attending to critical features, explaining those features, and
+  organizing them toward the target concept.
+
+  Assess only the supplied learning target, learner context, and student task.
+  Do not infer or favor a generation method. Do not use teacher-facing plans,
+  claims, condition labels, or proposed approaches; none are evidence about what
+  the student-facing task affords. The same target and learner context are used
+  across tasks.
+
+  Rate each finding independently with one status:
+  - supported: concrete evidence in the supplied task/context supports it;
+  - partial: some evidence supports it, but an important limitation remains;
+  - not_evidenced: the supplied task/context gives evidence that it is absent
+    or constrained; this is not a global quality score;
+  - unknown: the supplied evidence is insufficient to decide.
+  Explain every status with concrete evidence. Do not sum, average, rank, or weight these findings.
+
+  Assess:
+  1. target_relevance: whether the task meaningfully engages the supplied lesson
+     target, rather than merely mentioning it or giving away its method;
+  2. prior_resource_start: whether learners could plausibly begin with resources
+     actually listed in the learner context;
+  3. useful_contrast: whether the task makes a meaningful limit, ambiguity, or
+     insufficiency of a plausible prior start available for exploration or
+     comparison. A deliberately wrong answer is not required;
+  4. approach_diversity: whether the task affords mathematically distinct
+     approaches, not merely different displays of the same calculation;
+  5. task_openness: whether students have meaningful room to choose, interpret,
+     or invent, rather than only follow a prescribed procedure.
+
+  For approach_diversity, list only plausible routes supported by the supplied
+  task and learner context. When status is supported, provide at least two
+  routes and state how their mathematical reasoning differs. A table, graph,
+  equation, or verbal explanation of the same operation is not by itself a
+  distinct approach. Do not equate computational fluency with learning the
+  target concept.
+
+  These are hypotheses about task affordances, not predictions that students
+  will use a route. No student work or behavior observations are supplied, so
+  do not claim that actual students attempted, failed, discussed, or learned
+  anything. A more open or difficult-looking prompt is not automatically a
+  better PF task; consider its target, plausible prior start, and useful
+  contrast together without collapsing them into one rating.
+
+  Review mathematics separately from the design findings. Use status checked
+  only when the relevant claim can be checked from the supplied student-facing
+  task; use concern for a concrete possible mathematical or underspecification
+  problem; use unknown when the task does not provide enough information.
+  Explain the scope. A checked task-text review is not independent human
+  validation. Do not infer mathematical validity from a teacher plan, or an
+  error from the absence of a structured plan.
+
+  Return only JSON with exactly these keys. Evidence strings must be nonempty.
+  Do not return a total or a numeric score.
+  {
+    "target_relevance": {"status": "unknown", "evidence": "..."},
+    "prior_resource_start": {"status": "unknown", "evidence": "..."},
+    "useful_contrast": {"status": "unknown", "evidence": "..."},
+    "approach_diversity": {
+      "status": "unknown",
+      "evidence": "...",
+      "approaches": []
+    },
+    "task_openness": {"status": "unknown", "evidence": "..."},
+    "mathematics_review": {
+      "status": "unknown",
+      "evidence": "...",
+      "concerns": []
+    }
+  }

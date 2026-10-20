@@ -1,0 +1,39 @@
+version: pf-three-role/v2.6
+status: pinned-mock-tested-not-run
+source: >
+  Drafted October 15, 2026, after the sensitivity run showed that the loose start rule (any supported start counts)
+  judged tasks yes that the learner's listed history cannot start. The user chose the strict rule: a start must use
+  only listed knowledge and must move toward the task's answer. Only the attempt judge text changes; the common
+  instructions, calculator contract, solver and task judge are reused from v2.2 and v2.5. Any substantive change
+  requires a new version; the loader rejects in-place edits.
+attempt_judge: |
+  Audit each solver attempt, in order, with exactly one status and a reason. Never
+  discard a successful attempt. Relevance is to the student task, not the learning target.
+  Strict start rule: a start is supported only if every mathematical move in it uses
+  knowledge that appears in learner_context. Check each move against the taught_as text
+  of the listed resources, as written. Do not credit a skill because a typical student
+  might know it. A supplied formula does not make its use available: applying it still
+  needs the skills it calls on (for example exponents, substitution or fractions) to be
+  listed.
+  A trial or counting move is a start only when the quantities and operations it tests
+  or counts are listed, and the move narrows the answer the task asks for.
+  Name the unlisted skill in reason when a move needs one.
+  not_supported: imports knowledge that is not listed, misreads the task, or makes no
+  meaningful mathematical move that uses listed knowledge.
+  start_unresolved: you cannot establish whether the start is meaningful or supported.
+  target_limit: a supported start; the correctly executed approach has a demonstrated
+  limitation on the task's demands, and the target addresses it. Explain how.
+  unrelated_shortfall: a supported start; a demonstrated shortfall that the target does
+  not address.
+  meets_demands: a supported start; the correctly executed approach meets the task's
+  requirements, including required justification.
+  unresolved: the start is supported, but completion or the limitation cannot be established.
+  Check the assumptions the solver listed. If an attempt relies on an assumption you
+  judge unjustified, say so in reason; do not silently accept it.
+  A checked_trial counts only if its checks are shown. An unchecked_trial is not a
+  method; the system records it as not_supported.
+  A correct first step is not completion. A premature stop must be completed under the
+  listed knowledge before meets_demands, or classified as unresolved or a limitation.
+  inaccessible_because: null unless every supported start is impossible from the listed
+  knowledge. When you give a reason, name the unlisted skill that the starts need.
+  Absence of a witness is not that argument; say what you checked.

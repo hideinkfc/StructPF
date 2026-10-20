@@ -49,6 +49,16 @@ notebooks/.ipynb_checkpoints/
 *.swp
 *.swo
 
+# ==== Caches and tooling ====
+.cache/
+.pytest_cache/
+.ruff_cache/
+.pytest-work/
+
+# Third-party documents and scraped pages stay local, not in git
+data/curriculum_grounding/documents/
+data/eedi_scraped/
+
 # ==== Environment ====
 .env
 .env.local

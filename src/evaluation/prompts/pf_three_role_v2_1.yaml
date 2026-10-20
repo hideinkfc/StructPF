@@ -1,0 +1,52 @@
+version: pf-three-role/v2.1
+base: pf_three_role_v2.yaml
+status: single-development-clarification
+reason: >
+  Initial development found repeated non-exact task quotes, calculator equality
+  written with single equals, premature stops mistaken for full completion and
+  off-target work mistakenly rejected as an inaccessible start. This one
+  clarification package keeps the definitions and references unchanged.
+solver: |
+  Keep the written work concise: at most about 300 words per approach, with
+  actual calculations or mathematical relations, not an essay. Do not
+  force four approaches or deliberately choose a failing method.
+task_judge: |
+  IMPORTANT output discipline: use action exactly "final", not another action
+  label. Alignment and invention must each be an object with verdict, quotes
+  and reason. Validity must be an object with verdict and reason, or null.
+  In quotes use only one or two SHORT verbatim substrings copied from
+  student_task, never from learning_target or learner_context. Do not modify
+  punctuation or quote a paraphrase. Explain the target connection in reason.
+  A supplied mathematical formula or conclusion may remove central invention
+  even when later peripheral choices remain. Conversely, a supplied physical
+  plan does not supply the mathematical model. Explain which is present.
+  For validity, respect all explicit dimensions, location and overlap
+  constraints: do not ignore contradictory givens to obtain a convenient answer.
+attempt_judge: |
+  IMPORTANT distinctions:
+  - Relevance of a start is to the actual student task, NOT to the intended
+    learning target. An off-target task can still be accessible.
+  - An introductory restatement, a copied formula without a supported operation,
+    or "I would look at the missing diagram" is not a demonstrated concrete
+    mathematical start. If evidence is missing rather than disproved, use
+    start_unresolved. Be explicit about the first supported operation.
+  - A correct FIRST STEP is not full meets_demands. If the solver stops, you
+    must demonstrate completion under its prerequisites to use meets_demands,
+    or demonstrate a limitation, or return unresolved. Knowing a stronger
+    solution yourself does not retroactively make the written approach complete.
+  - A generic target such as "composite area" does not automatically resolve an
+    unrelated missing skill such as extracting a height using unlisted
+    Pythagoras. For target_limit demonstrate the particular target idea's
+    resolution, not just say the learner needs more knowledge.
+  - The task may legitimately ask to establish impossibility. A correct proof
+    of impossibility then meets_demands; if the task erroneously assumes a
+    feasible construction, finding a contradiction is an unrelated_shortfall.
+calculator: |
+  Use executable Python-like expressions, not mathematical prose:
+  {"action":"calculate","checks":[{"purpose":"Check a candidate equality",
+  "values":{},"expressions":{"left":"3*2","right":"5"},
+  "predicate":"left == right"}]}.
+  Equality MUST be ==, never =. Powers use **, multiplication uses *, and
+  square roots use sqrt(...). Do not write equations as arithmetic expressions.
+  Check all important numeric claims with supported expressions before a
+  positive validity verdict, unless a direct symbolic argument suffices.

@@ -18,6 +18,7 @@ SWISSAI_BASE_URL = "https://api.swissai.svc.cscs.ch/v1"
 SWISSAI_DEFAULT_GENERATOR = "Qwen/Qwen3.5-27B"
 SWISSAI_DEFAULT_EMBED = "Snowflake/snowflake-arctic-embed-l-v2.0"
 SWISSAI_DEFAULT_JUDGE = "Qwen/Qwen3.5-27B"
+AZURE_DEFAULT_JUDGE = "gpt-4.1-mini"
 
 
 @dataclass(frozen=True)
@@ -60,6 +61,21 @@ class Settings:
 def get_settings() -> Settings:
     """Get cached application settings."""
     return Settings.from_env()
+
+
+def load_azure_judge_config() -> tuple[str, str, str]:
+    """Load the Azure GPT-4.1-mini endpoint, key, and deployment name."""
+    load_dotenv(_project_root / ".env.local", override=False)
+    base_url = os.environ.get("AZURE_OPENAI_BASE_URL", "").strip()
+    api_key = os.environ.get("AZURE_OPENAI_API_KEY", "").strip()
+    model = os.environ.get("AZURE_OPENAI_GPT41_MINI_MODEL", AZURE_DEFAULT_JUDGE).strip()
+    if not base_url:
+        raise RuntimeError("AZURE_OPENAI_BASE_URL is missing from .env.local or the environment.")
+    if not api_key or api_key == "PASTE_ROTATED_KEY_HERE":
+        raise RuntimeError("AZURE_OPENAI_API_KEY is missing or still uses the placeholder.")
+    if not model:
+        raise RuntimeError("AZURE_OPENAI_GPT41_MINI_MODEL is empty.")
+    return base_url, api_key, model
 
 
 def load_config(config_path: str | Path) -> dict:

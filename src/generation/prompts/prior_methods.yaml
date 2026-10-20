@@ -1,0 +1,348 @@
+# Prior-methods generation prompt — frozen for the prior-methods benchmark.
+# See docs/pf-generation/PRIOR_METHODS_BENCHMARK.md section 5.
+# Design: SYSTEM_PEDAGOGICAL-style framing (Phase 1a condition 03 lineage),
+# one embedded format example from an OFF-BENCHMARK concept (percentage increase)
+# so no real method leaks. No example problem for the target concept — the
+# benchmark question is whether the concept alone suffices.
+#
+# v2 -> v3 (topic-drift fix):
+# - task reframed from "methods students reach for on a problem of this topic"
+#   to "tools from earlier learning students would misapply here" (the former
+#   invites imagining a problem, whose story leaks into the descriptions).
+# - added rule 4 PRIOR VOCABULARY ONLY: general_procedure must be statable in
+#   prior-knowledge terms (operations, comparing numbers, fractions), never in
+#   new-topic object words (ingredients, mixtures); self-test included.
+# - embedded example general_procedure rephrased change-type-free.
+
+PRIOR_METHODS_SYSTEM: |
+  You are a mathematics education researcher with 15 years of classroom experience
+  anticipating student approaches. Before students learn a new concept, they reach for
+  procedures they already know — some are genuine misconceptions, some are naive but
+  reasonable strategies that fall short, and a few turn out to work.
+
+  Your task is to anticipate those approaches faithfully, not to teach. You know the
+  difference between what a textbook hopes students will do and what students actually
+  do on first attempt.
+
+  Respond ONLY with valid JSON matching the requested schema.
+
+PRIOR_METHODS_USER: |
+  Students are about to learn the following concept at grade {grade} level, in the topic
+  "{topic}". They have NOT yet been taught it.
+
+  HIDDEN CONCEPT: {concept_text}
+
+  A PRIOR METHOD is a general approach a student brings from earlier learning — a
+  transferable procedure, not one calculation and not a description of a new problem.
+
+  EXAMPLE of the expected format (for a DIFFERENT concept — "a 10% increase followed by
+  a 10% increase is not a 20% increase, because the second 10% acts on the new value"):
+
+  {
+    "method_name": "Add the percentages",
+    "general_procedure": "When several changes apply one after another, add their sizes together and apply the total once to the starting value.",
+    "student_thinking": "Changes of the same thing add up, like money."
+  }
+
+  The general_procedure must describe the approach so it applies to ANY problem of this
+  topic — no specific numbers, and no words belonging to the new topic's scenarios.
+
+  NOW YOUR TASK. Think about what a grade {grade} student has already mastered BEFORE
+  this concept: earlier operations, comparison habits, rules that worked in past topics.
+  List {n_methods} distinct PRIOR METHODS for the hidden concept above — tools from that
+  earlier learning that students would misapply or over-trust when this concept is
+  needed. Include:
+
+  1. MISCONCEPTION-BASED methods — a wrong belief produces a definite wrong approach
+  2. NAIVE STRATEGIES — reasonable-sounding approaches using prior knowledge that fall
+     short for this concept
+
+  Rules — check each before finalizing:
+  1. NOT THE CONCEPT: if a method's general_procedure does what the hidden concept
+     teaches (even partially), remove it. We need what students do BEFORE learning it.
+  2. DISTINCT PROCEDURES: if two methods would perform the same computation on the same
+     problem, they are one method — keep one.
+  3. GRADE-REACHABLE: only tools a grade {grade} student already has.
+  4. PRIOR VOCABULARY ONLY: describe each general_procedure using only mathematics the
+     student already knows (counting, the four operations, comparing numbers, fractions,
+     percentages). If the description needs the new topic's objects or scenario words to
+     make sense, you are describing a problem, not a method — rewrite it or remove it.
+     Test: the general_procedure must remain meaningful for ANY topic where the student
+     might try it.
+
+  Output format: a JSON object with one key "methods" holding the list of {n_methods}
+  method objects, each with exactly the three fields shown above.
+
+# ─────────────────────────────────────────────────────────────────────────────
+# v4 — rule/belief/failure_mode schema (instance-padding fix).
+# v3 produced positional variants of one underlying misconception ("multiply only
+# the first term", "multiply only the second term", ...), so distinct/matched was
+# ~0.28. v4 changes the unit of generation from action to broken RULE: one rule,
+# one belief, one failure mode; positional variants merge by construction.
+# kind and worked_example stay dropped (v2 decision); failure_mode is general
+# (no numbers) and is what makes a rule trap-designable rather than vague.
+
+PRIOR_METHODS_USER_V4: |
+  Students are about to learn the following concept at grade {grade} level, in the topic
+  "{topic}". They have NOT yet been taught it.
+
+  HIDDEN CONCEPT: {concept_text}
+
+  We need the BROKEN RULES students might follow — general rules that worked in the
+  cases they have seen before but fail for this concept. A broken rule is not one
+  calculation and not one position; it is a general wrong rule with a reason and a
+  consequence.
+
+  EXAMPLE of the expected format (for a DIFFERENT concept — "a 10% increase followed by
+  a 10% increase is not a 20% increase, because the second 10% acts on the new value"):
+
+  {
+    "method_name": "Add the changes",
+    "rule": "When several changes apply one after another, add their sizes together and apply the total once to the starting value.",
+    "student_belief": "Changes of the same thing add up, like money.",
+    "failure_mode": "Ignores that each change acts on the new value, so it underestimates the total change."
+  }
+
+  The rule must be stated so it holds for ANY problem where the student would try it —
+  no specific numbers, no positions, and no words belonging to the new topic's scenarios.
+
+  NOW YOUR TASK. Think about what a grade {grade} student has already mastered BEFORE
+  this concept: earlier operations, comparison habits, rules that worked in past topics.
+  List {n_methods} distinct BROKEN RULES for the hidden concept above — earlier rules
+  that students would misapply or over-trust when this concept is needed. Include both
+  misconception-driven rules and reasonable naive strategies that fall short.
+
+  Rules — check each before finalizing:
+  1. NOT THE CONCEPT: if a rule does what the hidden concept teaches (even partially),
+     remove it. We need what students do BEFORE learning it.
+  2. MERGE RULE: two methods are the SAME method if they share the same rule and
+     student_belief, even if they act on different positions, terms, or numbers.
+     "Multiply only the first term" and "multiply only the last term" are ONE method:
+     apply the operation to only part of the group. List each broken rule once.
+  3. GRADE-REACHABLE: only tools a grade {grade} student already has.
+  4. PRIOR VOCABULARY ONLY: state each rule using only mathematics the student already
+     knows. If a rule needs the new topic's objects or scenario words to make sense,
+     you are describing a problem, not a method — rewrite it or remove it.
+  5. CONCRETE FAILURE: failure_mode must say how the rule breaks in a way a teacher
+     could check — not "it is wrong" but what it leaves out or misapplies.
+
+  Output format: a JSON object with one key "methods" holding the list of {n_methods}
+  method objects, each with exactly the four fields shown above.
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# PLAUSIBILITY JUDGE (v2.1, calibrated 5/5 on smoke_plausibility.py).
+# Two-step gate: concept_overlap first and terminal, then 0-2 plausibility.
+# Judge sees NO source/model info and NO matcher verdict (blinded).
+# ─────────────────────────────────────────────────────────────────────────────
+
+JUDGE_SYSTEM: |
+  You are an independent educational rater in a research study on
+  automatically generated descriptions of student problem-solving methods.
+
+  Study setting:
+  - The target learners are middle-school mathematics students.
+  - A "prior method" is a general, transferable procedure a student reaches for BEFORE
+    being taught the target concept, using only knowledge they already have.
+  - A prior method is NOT the concept itself, not one specific calculation, and not a
+    general mood or guess — it is a definite procedure.
+  - Judge the method independently. You see no information about where it came from.
+
+  Rating task (two steps, in order):
+
+  STEP 1 — CONCEPT CHECK (overrides everything):
+  Read the hidden concept. Does the candidate's general procedure APPLY the concept's
+  insight — i.e., does it use the correct mathematical relationship the concept teaches?
+  - YES → concept_overlap = true, score = 0. (A student who already does this has nothing
+    to learn from the lesson.)
+  - NO → concept_overlap = false, go to step 2. IMPORTANT: a method that VIOLATES or
+    IGNORES the concept (the natural wrong approach the concept exists to correct) is a
+    prior method, not concept overlap. Only flag overlap when the procedure itself
+    embodies the concept's correct insight.
+
+  STEP 2 — PLAUSIBILITY (only if step 1 passed):
+  Judge the general procedure as described, on the topic given.
+  - Score 2: a definite, executable procedure a real student with only prior knowledge
+    would plausibly apply to problems of this topic.
+  - Score 1: possible but vague, not really a definite procedure, or an unusual reach
+    for such a student.
+  - Score 0: unexecutable, nonsensical, or requires knowledge the student cannot have.
+
+  Return JSON only in this format:
+  {"concept_overlap": false, "score": 2, "reason": "Brief explanation."}
+
+JUDGE_USER: |
+  Topic: {topic}
+  Hidden concept (students have NOT learned this yet): {concept_text}
+
+  Candidate prior method:
+  - Name: {method_name}
+  - General procedure: {general_procedure}
+  - Student thinking: {student_thinking}
+
+  Score this prior method.
+
+# ─────────────────────────────────────────────────────────────────────────────
+# MATCHER (v2.1). Answers ONE question: is the candidate the same underlying
+# error as a documented Eedi entry? matched_error_index = pointer or null.
+# target_concept candidates are gated upstream by the judge and never reach here.
+# ─────────────────────────────────────────────────────────────────────────────
+
+MATCHER_SYSTEM: |
+  You compare a candidate student method against documented real student errors.
+  You answer exactly one question: does the candidate describe the SAME underlying
+  error as one of the documented entries?
+
+  You are not judging quality, plausibility, or correctness. Only sameness.
+
+  Respond ONLY with valid JSON.
+
+MATCHER_USER: |
+  Topic: {topic}
+
+  CANDIDATE METHOD:
+  - General procedure: {general_procedure}
+  - Student thinking: {student_thinking}
+
+  DOCUMENTED ERRORS (each from a teacher explaining an option real students chose):
+  {ground_truth_list}
+
+  Two descriptions are the SAME error when the student performs the same wrong
+  action for the same reason. Judge by what the student DOES, not by what they
+  fail to do — many different errors share the same omission.
+
+  Return the entry number only when you would be comfortable telling a teacher
+  "this candidate IS this documented error." When in doubt, return null — an
+  unmatched candidate is a normal and expected outcome, not a failure.
+
+  Return JSON only:
+  {"matched_error_index": 0 or null, "confidence": "high"|"medium"|"low",
+    "reason": "one sentence"}
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# v5 CURRICULUM-ANCHORED prior methods (redesign after error-level drift).
+# D1 needs prior methods = taught resources students deploy correctly, not errors.
+# Step 1 inventory = curriculum recall; Step 2 transfer = forward execution.
+# Validated against expert prior_knowledge_required / expected_student_solutions.
+# ─────────────────────────────────────────────────────────────────────────────
+
+CURRICULUM_STEP1_SYSTEM: |
+  You are a curriculum expert listing the mathematical tools a student
+  has already been taught BEFORE a given concept. List only genuinely taught,
+  correctly-executable tools (operations, facts, standard procedures, heuristics
+  from earlier units). Do not list errors or misconceptions. Do not list the
+  target concept itself or anything that requires it.
+
+  Respond ONLY with valid JSON.
+
+CURRICULUM_STEP1_USER: |
+  A grade {grade} student is about to learn the following concept in the topic
+  "{topic}". They have NOT yet been taught it.
+
+  HIDDEN CONCEPT: {concept_text}
+
+  List the prior mathematical tools this student has already mastered that could
+  be brought to bear on tasks of this topic. For each tool give:
+  - "tool": the name (e.g., "Range: max - min", "speed = distance / time")
+  - "taught_as": the procedure or formula as taught, in one line
+  - "relevance": one short phrase on why a student would reach for it here
+
+  Return JSON only: {"tools": [ ... ]}. Aim for 4-8 tools.
+
+CURRICULUM_STEP2_USER: |
+  A grade {grade} student is about to learn a new concept but has NOT yet been
+  taught it. They face a task of this topic.
+
+  HIDDEN CONCEPT: {concept_text}
+  TOPIC: {topic}
+
+  One prior tool the student knows:
+  - Tool: {tool}
+  - Taught as: {taught_as}
+
+  Describe, from the student's point of view, how they would apply THIS tool to a
+  task of this topic, and what result it produces. Then state how it falls short
+  for the concept being introduced.
+
+  Return JSON only:
+  {
+    "prior_method": "{tool}",
+    "taught_as": "{taught_as}",
+    "what_student_does": "the concrete procedure the student runs",
+    "why_it_looks_applicable": "why this tool seems right for the task",
+    "falls_short_because": "the specific way it fails to meet the new demand"
+  }
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# v5 EVAL prompts. Two judges, distinct from the v3 error-level judge/matcher:
+#  (1) coverage matcher: expert-anticipated method -> is it covered by any
+#      generated prior method? This direction computes expert recall directly.
+#  (2) fitness judge: is the method's falls_short_because claim correct and
+#      useful for trap design? New v5-specific signal.
+# ─────────────────────────────────────────────────────────────────────────────
+
+V5_COVERAGE_SYSTEM: |
+  You compare one expert-anticipated prior method with a list of generated prior
+  methods. You answer exactly one question: is the expert method covered by any
+  generated method?
+
+  A prior method is a taught mathematical resource or strategy a student can
+  deploy before learning the new concept. A match means the generated method
+  names and uses the SAME resource as the expert method, even when phrased
+  differently. "Mean of a list" and "Mean comparison" match. "Range: max - min"
+  and "Range method" match.
+
+  Do not match merely because two methods share a topic, an operation, or a
+  failure mode. A component is not automatically the whole method: "find the
+  maximum" alone does not cover the expert method "range = maximum minus
+  minimum" unless the generated method explicitly uses the full range tool.
+  Judge the tool/resource, not whether its use succeeds or fails.
+
+  Respond ONLY with valid JSON.
+
+V5_COVERAGE_USER: |
+  Concept students are about to learn: {concept_text}
+
+  EXPERT-ANTICIPATED PRIOR METHOD TO COVER:
+  {expert_method}
+
+  GENERATED PRIOR METHODS:
+  {generated_methods}
+
+  Return the index of the generated method that covers the expert method, or
+  null if none does. If several cover it, return the closest one. Do not force
+  a match.
+
+  Return JSON only:
+  {"matched_generated_index": 0 or null, "confidence": "high"|"medium"|"low",
+    "reason": "one sentence"}
+
+V5_FITNESS_SYSTEM: |
+  You are a mathematics education expert checking whether a claimed "falls short"
+  statement about a prior method is correct and useful for designing a Productive
+  Failure exercise. A good PF trap breaks a prior method in a specific, predictable
+  way. You judge the claim, not the method's elegance.
+
+  Respond ONLY with valid JSON.
+
+V5_FITNESS_USER: |
+  Concept students are about to learn: {concept_text}
+  Topic: {topic}
+
+  PRIOR METHOD AND ITS CLAIMED SHORTCOMING:
+  - Tool: {prior_method}
+  - Taught as: {taught_as}
+  - What the student does: {what_student_does}
+  - Claimed shortcoming: {falls_short_because}
+
+  Judge the claimed shortcoming:
+  - "correct": the shortcoming is real and is exactly the gap the new concept fills.
+  - "wrong": the claim is mathematically incorrect, or the method actually succeeds,
+    or the shortcoming is unrelated to the concept.
+  - "vague": the shortcoming is true-sounding but too generic to design a trap from
+    (e.g., "it might not work" without saying how).
+
+  Return JSON only:
+  {"fitness": "correct"|"wrong"|"vague", "reason": "one sentence"}

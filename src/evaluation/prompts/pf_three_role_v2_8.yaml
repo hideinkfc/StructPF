@@ -1,0 +1,85 @@
+version: pf-three-role/v2.8
+status: pinned-mock-tested-not-run
+source: >
+  Drafted October 15, 2026, after moving the prior-knowledge accessibility gate into the
+  task judge. The task judge assesses alignment, invention, accessibility, and (when
+  alignment is yes) validity, using a top-level FinalTaskReply schema that requires
+  action="final". Solvers and the attempt judge run only when accessibility is yes, to
+  assess familiar_approach_limits. Both the task judge and the attempt judge share the
+  same numeracy baseline (the four operations on whole numbers and decimals, standard
+  unit conversions, and direct use or rearrangement of a formula stated in
+  learner_context, unless learner_context explicitly excludes them). Any substantive
+  change requires a new version; the loader rejects in-place edits.
+task_judge: |
+  Assess four task-level properties separately. You do not see solver attempts.
+  alignment: compare the stated target with the central work of the task.
+  yes: the central work addresses the target. partly: one stated required target
+  element is substantively addressed and another is missing; name both. no: the
+  central work concerns a different concept. unclear: the connection cannot be
+  established. Naming the target is neither necessary nor sufficient. Topic overlap
+  alone is not partly.
+  invention: identify the central mathematical construction (a measure, model,
+  representation, strategy or criterion) and whether the task supplies it.
+  yes: it is left open. partly: an important part is supplied but a consequential
+  decision remains. no: essentially routine execution remains. unclear: cannot be
+  established. A goal, data, a practical plan, an all-data constraint or a unique
+  answer is not by itself a giveaway.
+  accessibility: decide whether a learner with learner_context can make at least one
+  meaningful mathematical start toward answering the task's question.
+  Shared baseline: unless learner_context explicitly states otherwise, a learner can
+  use the four arithmetic operations on whole numbers and decimals, standard unit
+  conversions (such as minutes and hours, or metres and kilometres), basic trial or
+  table/diagram heuristics, and direct substitution or rearrangement of a formula
+  stated in learner_context (for example using speed = distance / time to find
+  distance = speed * time or time = distance / speed).
+  yes: using only learner_context and that shared baseline, the learner can carry out
+  at least one concrete mathematical step that works with the task's quantities toward
+  the requested answer, even if that familiar approach is incomplete or suboptimal.
+  no: even the first mathematical step toward the requested answer requires an
+  unlisted concept (such as exponents, derivatives, percentages, ratios, polygon area
+  decomposition/formulas, or proof over infinitely many cases when only counting is
+  listed) or a skill that learner_context explicitly says has not been learned. A
+  formula written in student_task does not supply its underlying concepts if
+  learner_context lacks or excludes them. Restating given numbers, naming or labelling
+  sides/angles without a listed way to compute the requested quantity, or counting
+  whole objects without a listed way to apply the task's condition (such as a
+  percentage reduction) is not a meaningful start; return no and name the missing
+  concept in reason.
+  unclear: learner_context has no usable prior-knowledge information, the task text is
+  incomplete, or support for a start cannot be established.
+  validity: only if alignment is yes; otherwise return null. List your interpretation
+  and every assumption you rely on, as short statements. Then classify
+  reading_dependence:
+  none: every reasonable reading of the text gives the same answer.
+  stated_choice: the text settles the choice that matters, and you name it in assumptions.
+  unstated_choice: a choice the text does not settle changes the answer. Name the
+  choice in reason, and give both answers if you can.
+  A verdict of yes is only accepted with reading_dependence none or stated_choice.
+  The system does not accept yes when the answer depends on an unstated choice.
+  Check consistency, feasibility and justification. Use calculator checks for supported
+  numerical claims. Do not grade against an imagined model answer.
+attempt_judge: |
+  Audit each solver attempt, in order, with exactly one status and a reason. Never
+  discard a successful attempt. Relevance is to the student task, not the learning target.
+  Shared baseline: unless learner_context explicitly states otherwise, the four
+  arithmetic operations on whole numbers and decimals, standard unit conversions
+  (such as minutes and hours, or metres and kilometres), and direct substitution or
+  rearrangement of a formula stated in learner_context are supported without being
+  listed word for word.
+  not_supported: imports a concept that is not listed in learner_context (and not in
+  the shared baseline), misreads the task, or makes no meaningful mathematical move
+  toward the task's question.
+  start_unresolved: you cannot establish whether the start is meaningful or supported.
+  target_limit: a supported start; the correctly executed approach has a demonstrated
+  limitation on the task's demands, and the target addresses it. Explain how.
+  unrelated_shortfall: a supported start; a demonstrated shortfall that the target does
+  not address.
+  meets_demands: a supported start; the correctly executed approach meets the task's
+  requirements, including required justification.
+  unresolved: the start is supported, but completion or the limitation cannot be established.
+  Check the assumptions the solver listed. If an attempt relies on an assumption you
+  judge unjustified, say so in reason; do not silently accept it.
+  A checked_trial counts only if its checks are shown. An unchecked_trial is not a
+  method; the system records it as not_supported.
+  A correct first step is not completion. A premature stop must be completed under the
+  listed knowledge before meets_demands, or classified as unresolved or a limitation.

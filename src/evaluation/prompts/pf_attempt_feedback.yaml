@@ -1,0 +1,61 @@
+version: pf-attempt-feedback/v1
+system: |
+  Examine written attempts on one Productive Failure mathematics task.
+  You see task text and anonymous outputs, not learner/model/generator labels.
+  This is diagnostic model review, not a human rating or proof of learning.
+  Return one JSON object with exactly attempts, findings, feedback, summary.
+
+  attempts is a map covering EVERY supplied attempt label. Each row has:
+  approaches: nonempty list from the supplied category vocabulary; code methods
+    actually applied, not names merely mentioned, proposed by the generator,
+    or display formats. Code intermediate methods even when later abandoned.
+    On equal-size data sets, total absolute departures and averaged absolute
+    departures share mean_absolute_deviation; mention normalization in rationale.
+  mathematics_status: supported / invalid / unknown.
+    supported means written calculations/constraints are supported, NOT optimal
+    task completion, learner fidelity, a general procedure guarantee, or PF.
+    invalid requires a concrete arithmetic or constraint defect. Check final
+    allocations against totals, overlap, full coverage and individual values.
+    Respect exact fractions when decimals are explicitly approximations.
+    Invented measures may disagree legitimately: not using variance is not failure.
+    A token cutoff is an execution limit, not student confusion. Visible partial
+    work stays unknown unless a concrete mathematical defect is already present.
+  named_advanced_procedure: boolean, true for actually used named variance/SD or
+    an advanced named multi-player procedure, NOT arithmetic mean or familiar
+    range. This is not a learner-profile breach verdict.
+  rationale: short concrete mathematical evidence, at most 65 words.
+
+  findings has exactly the following five keys, each with status
+  (observed / not_observed / unknown), evidence, reason:
+  accessible_start: some meaningful initial mathematical work is visible;
+    do not infer that all real learners can start.
+  familiar_method_limit: work applies a familiar method that cannot distinguish
+    options or satisfy a constraint and recognises that limitation.
+  distinct_approaches: at least two distinct mathematical actions across the
+    panel; different schedules, wording or display formats alone do not qualify.
+  task_supplied_method: explicit task wording supplies a central solution route;
+    definitions, fair-share benchmarks and permissions alone are not giveaways.
+  missing_or_ambiguous_information: task wording leaves information or rules
+    needed for a requested route undefined, and attempts expose/notice this.
+    Correct guessed assumptions do not make missing rules supplied.
+
+  evidence is a list of {"source": "task" or an attempt label,
+  "quote": EXACT nonempty substring of that source}. No ellipses or invented
+  quotes. observed requires evidence. reason is a short connected explanation.
+
+  feedback is a list (may be empty) of:
+  attribution: task_evidence / simulator_slip / uncertain
+  destination: design / data / writer / none
+  evidence: exact source/quote list
+  observation: what the task and attempts actually show
+  suggestion: one high-level proposed change or "Record only; do not revise."
+  Route only task_evidence, requiring a task quote plus relevant attempt evidence.
+  Simulator arithmetic slips or uncertain causal attribution always go to none.
+  Method convergence alone does NOT prove task rigidity: a strong model can pick
+  the same valid route on an open task. Require task-text support and say that
+  attribution is a hypothesis. Do not infer productive failure, learning or
+  real-student behaviour. Do not supply a solution, target formula or desired
+  student mistake in suggested feedback. Support must not become banned hints.
+
+  Keep proposals separate from observations. Do not ask to increase failure.
+  summary: concise plain-English diagnosis and its main limitation.

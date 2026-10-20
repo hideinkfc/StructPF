@@ -7,8 +7,8 @@ Supports both:
 Roles (via from_role):
   - "generator":   Qwen/Qwen3.5-27B (free-text & structured JSON)
   - "embed":       Snowflake/snowflake-arctic-embed-l-v2.0
-  - "judge":       meta-llama/Llama-3.3-70B-Instruct (classification)
-  - "structured":  meta-llama/Llama-3.3-70B-Instruct (cleaner JSON, less thinking overhead)
+    - "judge":       Azure GPT-4.1-mini (classification)
+    - "structured":  Azure GPT-4.1-mini (cleaner JSON, less thinking overhead)
 """
 
 import json
@@ -19,9 +19,9 @@ from typing import Literal
 
 from openai import OpenAI
 from pydantic import BaseModel, ValidationError
-from tenacity import retry, stop_after_attempt, wait_exponential, retry_if_exception_type
+from tenacity import retry, retry_if_exception_type, stop_after_attempt, wait_exponential
 
-from src.utils.config import get_settings, SWISSAI_BASE_URL
+from src.utils.config import SWISSAI_BASE_URL, get_settings
 
 logger = logging.getLogger(__name__)
 
@@ -56,7 +56,12 @@ class LLMResponse:
 class LLMClient:
     """Client for calling vLLM on Euler via the OpenAI-compatible API."""
 
-    def __init__(self, base_url: str | None = None, model: str | None = None, api_key: str | None = None):
+    def __init__(
+        self,
+        base_url: str | None = None,
+        model: str | None = None,
+        api_key: str | None = None,
+    ):
         settings = get_settings()
         self._base_url = base_url or settings.vllm_base_url
         self._model = model or settings.vllm_model
@@ -150,21 +155,29 @@ class LLMClient:
         role: Literal["generator", "embed", "judge", "structured"],
         settings = None,
     ) -> "LLMClient":
-        """Create a Swiss AI client for a specific role.
+        """Create a client for a specific role.
 
         Args:
-            role: "generator" (Qwen3.5-27B, free-text),
-                  "embed" (Arctic-embed),
-                  "judge" or "structured" (Llama-3.3-70B, reliable JSON).
+            role: "generator" (Qwen3.5-27B, free-text), "embed" (Arctic-embed),
+                  or "judge"/"structured" (Azure GPT-4.1-mini, reliable JSON).
             settings: Optional Settings instance (loaded fresh if omitted).
 
         Returns:
-            Configured LLMClient pointing at the Swiss AI platform.
+            Configured LLMClient for the selected backend.
         """
-        from src.utils.config import SWISSAI_DEFAULT_GENERATOR, SWISSAI_DEFAULT_EMBED, SWISSAI_DEFAULT_JUDGE
+        from src.utils.config import (
+            SWISSAI_DEFAULT_EMBED,
+            SWISSAI_DEFAULT_GENERATOR,
+            SWISSAI_DEFAULT_JUDGE,
+            load_azure_judge_config,
+        )
 
         if settings is None:
             settings = get_settings()
+
+        if role in {"judge", "structured"}:
+            base_url, api_key, model = load_azure_judge_config()
+            return cls(base_url=base_url, model=model, api_key=api_key)
 
         model_map = {
             "generator":  (settings.swissai_generator_model or SWISSAI_DEFAULT_GENERATOR),
@@ -197,14 +210,15 @@ class LLMClient:
         if isinstance(texts, str):
             texts = [texts]
 
-        response = self._client.embeddings.create(
-            model=model or self._model,
-            input=texts,
-        )
-
-        # Sort by index to preserve input order
-        sorted_data = sorted(response.data, key=lambda x: x.index)
-        return [d.embedding for d in sorted_data]
+        embeddings = []
+        for start in range(0, len(texts), 2048):
+            response = self._client.embeddings.create(
+                model=model or self._model,
+                input=texts[start:start + 2048],
+            )
+            sorted_data = sorted(response.data, key=lambda x: x.index)
+            embeddings.extend(d.embedding for d in sorted_data)
+        return embeddings
 
     def generate_text(
         self,
