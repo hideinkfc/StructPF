@@ -1,12 +1,12 @@
-.PHONY: thesis clean test lint run
+.PHONY: thesis clean test lint format deploy deploy-scripts logs
 
 # Build thesis PDF
 thesis:
 	cd thesis && tectonic main.tex
 
-# Clean LaTeX build artifacts
+# Remove LaTeX build artifacts (keeps main.pdf and figures)
 clean:
-	cd thesis && latexmk -C
+	cd thesis && rm -f *.aux *.log *.out *.toc *.lof *.lot *.bbl *.blg *.fls *.fdb_latexmk *.synctex.gz
 
 # Run tests
 test:
@@ -20,11 +20,6 @@ lint:
 # Format code
 format:
 	ruff format src/ scripts/ tests/
-
-# Run full pipeline (override CONFIG= to use different config)
-CONFIG ?= experiments/configs/rag_fewshot.yaml
-run:
-	python scripts/run_pipeline.py --config $(CONFIG)
 
 # --- Euler ---
 EULER_USER := ouyuxu
