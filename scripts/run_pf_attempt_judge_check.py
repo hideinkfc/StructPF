@@ -15,9 +15,9 @@ from pathlib import Path
 
 from scripts.run_pf_accessibility_sensitivity import build_chats
 from scripts.run_pf_solver_check import load_cases
-from src.evaluation import pf_three_role_v22 as v22
-from src.evaluation import pf_three_role_v25 as v25
-from src.evaluation import pf_three_role_v27 as v27
+from src.evaluation.frozen import pf_three_role_v22 as v22
+from src.evaluation.frozen import pf_three_role_v25 as v25
+from src.evaluation.frozen import pf_three_role_v27 as v27
 
 ROOT = Path(__file__).resolve().parents[1]
 SOLVER_CHECK = ROOT / "experiments/results/pf_solver_check_v25_20261015/jobs"

@@ -2,7 +2,7 @@
 
 import json
 
-from src.evaluation import pf_three_role_v29 as v29
+from src.evaluation.frozen import pf_three_role_v29 as v29
 from src.utils.llm_client import LLMResponse
 
 TASK = (

@@ -18,11 +18,11 @@ from pathlib import Path
 
 from scripts.prior_methods.common import load_client
 from scripts.run_pf_task_measures import make_chat
-from src.evaluation import pf_three_role_v22 as v22
-from src.evaluation import pf_three_role_v25 as v25
-from src.evaluation import pf_three_role_v26 as v26
-from src.evaluation import pf_three_role_v27 as v27
-from src.evaluation import pf_three_role_v28 as v28
+from src.evaluation.frozen import pf_three_role_v22 as v22
+from src.evaluation.frozen import pf_three_role_v25 as v25
+from src.evaluation.frozen import pf_three_role_v26 as v26
+from src.evaluation.frozen import pf_three_role_v27 as v27
+from src.evaluation.frozen import pf_three_role_v28 as v28
 
 ROOT = Path(__file__).resolve().parents[1]
 CONFIG = ROOT / "experiments/configs/pf_accessibility_sensitivity_20261015.json"
@@ -105,9 +105,9 @@ def manifest(cases: list[dict], status: str, config: Path, evaluator_name: str) 
     else:
         attempt_system = hashlib.sha256(v22.system("attempt_judge").encode("utf-8")).hexdigest()
     sources = [
-        ROOT / "src/evaluation/pf_three_role_v22.py",
-        ROOT / "src/evaluation/pf_three_role_v23.py",
-        ROOT / "src/evaluation/pf_three_role_v25.py",
+        ROOT / "src/evaluation/frozen/pf_three_role_v22.py",
+        ROOT / "src/evaluation/frozen/pf_three_role_v23.py",
+        ROOT / "src/evaluation/frozen/pf_three_role_v25.py",
         Path(__file__),
     ]
     if evaluator_name in {"v26", "v27", "v28"}:

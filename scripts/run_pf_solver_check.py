@@ -14,9 +14,9 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from scripts.run_pf_accessibility_sensitivity import build_chats
-from src.evaluation import pf_three_role_v22 as v22
-from src.evaluation import pf_three_role_v25 as v25
-from src.evaluation import pf_three_role_v27 as v27
+from src.evaluation.frozen import pf_three_role_v22 as v22
+from src.evaluation.frozen import pf_three_role_v25 as v25
+from src.evaluation.frozen import pf_three_role_v27 as v27
 
 ROOT = Path(__file__).resolve().parents[1]
 PACK = ROOT / "experiments/results/pf_measure_campaign_20261014/calibration_pack.json"

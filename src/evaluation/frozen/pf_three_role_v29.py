@@ -20,15 +20,15 @@ import yaml
 from openai import OpenAIError
 from pydantic import Field, ValidationError, model_validator
 
-from src.evaluation import pf_three_role_v22 as v22
-from src.evaluation import pf_three_role_v23 as v23
-from src.evaluation import pf_three_role_v25 as v25
-from src.evaluation import pf_three_role_v28 as v28
+from src.evaluation.frozen import pf_three_role_v22 as v22
+from src.evaluation.frozen import pf_three_role_v23 as v23
+from src.evaluation.frozen import pf_three_role_v25 as v25
+from src.evaluation.frozen import pf_three_role_v28 as v28
 
 logger = logging.getLogger(__name__)
 
 VERSION = "pf-three-role/v2.9"
-PROMPT_PATH = Path(__file__).parent / "prompts" / "pf_three_role_v2_9.yaml"
+PROMPT_PATH = Path(__file__).parents[1] / "prompts" / "pf_three_role_v2_9.yaml"
 FROZEN_PROMPT_SHA256 = "91fa3e79f50c74289b87a6c7c93dc88fef8805eb6a6050148ccadf1e9362323f"
 FROZEN_SOLVER_SYSTEM_SHA256 = {
     "toolkit": "4d39ac1dafe20bfa4faaa7eba59a9c215a3ae8c22b5cb589a693987dbd138ab1",

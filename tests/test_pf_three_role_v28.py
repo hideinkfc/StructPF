@@ -2,7 +2,7 @@
 
 import json
 
-from src.evaluation import pf_three_role_v28 as v28
+from src.evaluation.frozen import pf_three_role_v28 as v28
 from src.evaluation.pf_three_role import prepare_input
 from src.utils.llm_client import LLMResponse
 

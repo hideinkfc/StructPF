@@ -34,7 +34,7 @@ from src.utils.llm_client import LLMResponse
 
 logger = logging.getLogger(__name__)
 VERSION = "pf-three-role/v2.2"
-PROMPT_PATH = Path(__file__).parent / "prompts" / "pf_three_role_v2_2.yaml"
+PROMPT_PATH = Path(__file__).parents[1] / "prompts" / "pf_three_role_v2_2.yaml"
 FROZEN_PROMPT_SHA256 = "49ec603afd31f9dfd334733d8f33cc415ba79da28abbd58cce314eadcb5f0350"
 FROZEN_TOOLKIT_SHA256 = "ce54ede3e15e9509e008a9aadfe10b999df21467fea59654b53058210bab56b0"
 # Drafted from Polya's heuristics (How to Solve It, 1945): guess and test, work backwards,

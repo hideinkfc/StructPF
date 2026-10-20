@@ -26,10 +26,10 @@ import yaml
 from openai import OpenAIError
 from pydantic import Field, ValidationError, model_validator
 
-from src.evaluation import pf_three_role_v22 as v22
-from src.evaluation import pf_three_role_v23 as v23
-from src.evaluation import pf_three_role_v25 as v25
-from src.evaluation import pf_three_role_v28 as v28
+from src.evaluation.frozen import pf_three_role_v22 as v22
+from src.evaluation.frozen import pf_three_role_v23 as v23
+from src.evaluation.frozen import pf_three_role_v25 as v25
+from src.evaluation.frozen import pf_three_role_v28 as v28
 from src.evaluation.pf_task_measures import MEASURES
 from src.generation.design_calculator import calculate_condition
 

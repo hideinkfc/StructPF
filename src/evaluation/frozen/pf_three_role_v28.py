@@ -19,15 +19,15 @@ import yaml
 from openai import OpenAIError
 from pydantic import Field, ValidationError
 
-from src.evaluation import pf_three_role_v22 as v22
-from src.evaluation import pf_three_role_v25 as v25
+from src.evaluation.frozen import pf_three_role_v22 as v22
+from src.evaluation.frozen import pf_three_role_v25 as v25
 from src.evaluation.pf_task_measures import MEASURES
 from src.generation.design_calculator import calculate_condition
 
 logger = logging.getLogger(__name__)
 
 VERSION = "pf-three-role/v2.8"
-PROMPT_PATH = Path(__file__).parent / "prompts" / "pf_three_role_v2_8.yaml"
+PROMPT_PATH = Path(__file__).parents[1] / "prompts" / "pf_three_role_v2_8.yaml"
 FROZEN_PROMPT_SHA256 = "6c771460d2fbe82df65f1652e966640a1db896e5486bc8cae3a39a783acec44e"
 FROZEN_TASK_SYSTEM_SHA256 = "2913ac8cfe8f9d617ed068fc882a217662d6c8463aa1cbe83e608aef60951f21"
 FROZEN_ATTEMPT_SYSTEM_SHA256 = "b73dbb076bec2c21fb460e06804d2d45c81dbd07e2c42aaafb2e555eb629f976"

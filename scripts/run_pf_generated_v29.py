@@ -18,7 +18,7 @@ from pathlib import Path
 
 from scripts.run_pf_accessibility_sensitivity import build_chats
 from scripts.run_pf_measure_campaign import case_inputs
-from src.evaluation import pf_three_role_v29 as v29
+from src.evaluation.frozen import pf_three_role_v29 as v29
 from src.evaluation.pf_task_measures import MEASURES
 
 ROOT = Path(__file__).resolve().parents[1]

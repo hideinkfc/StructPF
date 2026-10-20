@@ -1,7 +1,7 @@
-"""Pf three-role v2.6: v2.5 solvers and task judge, with a strict start rule for the attempt judge.
+"""Pf three-role v2.7: v2.5 solvers and task judge, strict start rule with an arithmetic baseline.
 
-Only the attempt-judge text changes. Its composition follows v2.2 exactly, so the
-composition can be checked against the frozen v2.2 attempt judge.
+Only the attempt-judge text changes from v2.6. Its composition follows v2.2 exactly,
+so the composition can be checked against the frozen v2.2 attempt judge.
 """
 
 from __future__ import annotations
@@ -13,27 +13,27 @@ from pathlib import Path
 
 import yaml
 
-from src.evaluation import pf_three_role_v22 as v22
-from src.evaluation import pf_three_role_v25 as v25
+from src.evaluation.frozen import pf_three_role_v22 as v22
+from src.evaluation.frozen import pf_three_role_v25 as v25
 
 logger = logging.getLogger(__name__)
 
-VERSION = "pf-three-role/v2.6"
-PROMPT_PATH = Path(__file__).parent / "prompts" / "pf_three_role_v2_6.yaml"
-FROZEN_PROMPT_SHA256 = "1fd239be21126c9835384ba0b0b9e28c2c2cab05f88b161c6adbe1375cb2ec7d"
-FROZEN_ATTEMPT_SYSTEM_SHA256 = "e5215a04b544c01b9c439af5f6cd23d6a69027465fc81372009d9b7c77b65a24"
+VERSION = "pf-three-role/v2.7"
+PROMPT_PATH = Path(__file__).parents[1] / "prompts" / "pf_three_role_v2_7.yaml"
+FROZEN_PROMPT_SHA256 = "c6accf8b7a6f0297204fd5b96ade700dbf20250810cc7d37049f1883323695bf"
+FROZEN_ATTEMPT_SYSTEM_SHA256 = "503e10d479daaec11de0e46665254551d7e3197e3e8d2b3099454d70ea8a135c"
 
 
 def _spec() -> dict:
     spec = yaml.safe_load(PROMPT_PATH.read_bytes())
     if not isinstance(spec, dict) or spec.get("version") != VERSION:
-        raise ValueError("Unexpected three-role v2.6 prompt version")
+        raise ValueError("Unexpected three-role v2.7 prompt version")
     return spec
 
 
 def prompts() -> dict:
     if hashlib.sha256(PROMPT_PATH.read_bytes()).hexdigest() != FROZEN_PROMPT_SHA256:
-        raise ValueError("Frozen v2.6 prompt changed; use a new instrument version")
+        raise ValueError("Frozen v2.7 prompt changed; use a new instrument version")
     return _spec()
 
 
@@ -64,7 +64,7 @@ def compose_attempt_system(attempt_text: str) -> str:
 def attempt_system() -> str:
     text = compose_attempt_system(prompts()["attempt_judge"])
     if hashlib.sha256(text.encode("utf-8")).hexdigest() != FROZEN_ATTEMPT_SYSTEM_SHA256:
-        raise ValueError("Frozen v2.6 attempt system changed; use a new instrument version")
+        raise ValueError("Frozen v2.7 attempt system changed; use a new instrument version")
     return text
 
 
@@ -75,7 +75,7 @@ def attempt_system_sha256() -> str:
     ).hexdigest()
 
 
-def evaluate_v26(
+def evaluate_v27(
     task,
     target: str | None,
     context: dict,

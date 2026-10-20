@@ -2,9 +2,9 @@
 
 import json
 
-from src.evaluation import pf_three_role_v22 as v22
-from src.evaluation import pf_three_role_v25 as v25
-from src.evaluation import pf_three_role_v26 as v26
+from src.evaluation.frozen import pf_three_role_v22 as v22
+from src.evaluation.frozen import pf_three_role_v25 as v25
+from src.evaluation.frozen import pf_three_role_v26 as v26
 from src.evaluation.pf_three_role import prepare_input
 from src.utils.llm_client import LLMResponse
 

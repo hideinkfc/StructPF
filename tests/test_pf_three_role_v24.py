@@ -4,8 +4,8 @@ import json
 
 import pytest
 
-from src.evaluation import pf_three_role_v22 as v22
-from src.evaluation import pf_three_role_v24 as v24
+from src.evaluation.frozen import pf_three_role_v22 as v22
+from src.evaluation.frozen import pf_three_role_v24 as v24
 from src.evaluation.pf_three_role import prepare_input
 from src.utils.llm_client import LLMResponse
 

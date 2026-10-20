@@ -38,7 +38,7 @@ from scripts.build_progression_bridge_dataset import (
 )
 from scripts.prior_methods.common import chat_json, load_client
 from scripts.run_pf_accessibility_sensitivity import build_chats
-from src.evaluation import pf_three_role_v29 as v29
+from src.evaluation.frozen import pf_three_role_v29 as v29
 from src.evaluation.pf_task_measures import MEASURES
 
 ROOT = Path(__file__).resolve().parents[1]

@@ -25,7 +25,7 @@ from scripts import run_pf_fresh_comparison as fresh
 from scripts.learning_commons_local import graph_progression_bundle
 from scripts.run_pf_accessibility_sensitivity import build_chats
 from src.evaluation import pf_three_role as v21
-from src.evaluation import pf_three_role_v29 as v29
+from src.evaluation.frozen import pf_three_role_v29 as v29
 from src.evaluation.pf_task_measures import MEASURES
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -157,7 +157,7 @@ def main() -> None:
     for p in (
         Path(__file__),
         ROOT / "scripts/learning_commons_local.py",
-        ROOT / "src/evaluation/pf_three_role_v29.py",
+        ROOT / "src/evaluation/frozen/pf_three_role_v29.py",
     ):
         source_hashes[str(p.relative_to(ROOT))] = hashlib.sha256(p.read_bytes()).hexdigest()
 

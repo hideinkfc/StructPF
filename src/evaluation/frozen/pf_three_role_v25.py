@@ -24,14 +24,14 @@ import yaml
 from openai import OpenAIError
 from pydantic import BaseModel, ConfigDict, Field, JsonValue, ValidationError, model_validator
 
-from src.evaluation import pf_three_role_v22 as v22
-from src.evaluation import pf_three_role_v23 as v23
+from src.evaluation.frozen import pf_three_role_v22 as v22
+from src.evaluation.frozen import pf_three_role_v23 as v23
 from src.evaluation.pf_three_role import prepare_input
 from src.utils.llm_client import LLMResponse
 
 logger = logging.getLogger(__name__)
 VERSION = "pf-three-role/v2.5"
-PROMPT_PATH = Path(__file__).parent / "prompts" / "pf_three_role_v2_5.yaml"
+PROMPT_PATH = Path(__file__).parents[1] / "prompts" / "pf_three_role_v2_5.yaml"
 FROZEN_PROMPT_SHA256 = "59caddc8d48df0e09e73b4e5ba26a143d689157c9f3c7b459185f0f92714e832"
 FROZEN_SOLVER_SYSTEM_SHA256 = {
     "toolkit": "108c03e63aae02d68f38e0db142ae7e3d865528ca9853db7ca42cd550647ffbd",
