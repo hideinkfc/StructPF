@@ -1,192 +1,165 @@
-# PF Generation: Productive Failure Exercise Research
+# StructPF: Pedagogically Sound Productive Failure Task Generation with LLMs
 
-This master's thesis asks whether an LLM pipeline can generate Productive
-Failure (PF) exercises that elicit multiple meaningful student approaches,
-rather than polished stories around one procedure.
+**StructPF** is the research codebase and ETH Master's Thesis repository for generating and evaluating **Productive Failure (PF)** mathematics tasks with Large Language Models.
 
-## Current scope
+Instead of asking an LLM to write a story problem and pick its numbers in a single prompt, **StructPF** mirrors how human PF designers work across three checked stages:
 
-The implemented default generator first anticipates students' prior resources,
-selects a task design (`D2a`), checks and, when needed, repairs its numerical
-data (`D2b`), then writes the student task (`D3`). It uses the `design_brief`
-route, not the older situation-skeleton, mathematical-plan and number-fill
-route. The historical route remains in code and saved experiments; the
-diagnostic CLI does not expose a switch back to it.
+1. **Stage 1 — Prerequisite Grounding (`D1`):** Queries the Learning Commons Knowledge Graph (`buildsTowards` prerequisite standards and `supports` learning components) or official curriculum excerpts to list what students already know without leaking the target formula.
+2. **Stage 2 — Problem Design & Calculator Verification (`D2a` / `D2b`):** Proposes candidate design briefs (`D2a`) and verifies concrete numbers in a Python SymPy calculator (`D2b`, up to 2 repair rounds) so the intended solution works while familiar shortcuts fall short.
+3. **Stage 3 — Open Student Task Writing (`D3`):** Turns the verified setup and numbers into an open student-facing PF problem while withholding internal design notes and grading rubrics.
 
-D2b uses a restricted exact calculator and at most three data-model calls,
-including invalid proposal retries. Once a proposal is valid, repairs may
-change only values, not conditions or the selected design. Known numerical
-failures trigger bounded repair; textual conflicts and uncertain claims remain
-findings. After bounded selection/data/writer revisions, usable drafts are
-delivered with unresolved findings rather than blocked on quality. Mathematical
-acceptance, draft availability and educational validity are separate.
+Generated and human-designed tasks are evaluated with our **requirement-based evaluation framework (`pf-three-role/v3.0`)**, which tests five task-design measures (**Target Alignment**, **Mathematical Validity**, **Prior-Knowledge Accessibility**, **Limits of Familiar Approaches** via a target-blind **Prior-Knowledge Solver** and **Attempt Judge**, and **Room for Invention**) alongside **Gate 1 & Gate 2** progression checks.
 
-D2b is frozen for the agreed implemented scope. Its software checks and saved
-pilots are not proof of PF quality. Representation/solution diversity,
-open-endedness, mathematical validity and actual student approaches remain the
-research outcomes. The simulation/feedback component now has reproducible
-solution-blind attempt runners, operational intended-path audits and bounded
-matched revision pilots. These are computational diagnostic studies, not a
-validated generate -> simulate -> learn system. The old notebook/evaluator
-prototype interfaces remain historical and incomplete; use the experiment
-entry points below, not those stubs.
+---
 
-MCQ distractors are a separate design instrument, not the final PF outcome.
-Their basic fields are `text`, `target_misconception` and `error_rationale`;
-optional structured pathways add `faulty_step` and `reasoning_steps`.
+## 1. Quickstart Setup
 
-Read the canonical notes instead of treating historical scores as current
-validation:
+Requires **Python $\ge 3.10$**. From the repository root, run:
 
-- [PF pipeline and evidence](docs/pf-generation/PF_PIPELINE.md)
-- [MCQ generation](docs/mcq/MCQ_GENERATION_OVERVIEW.md) and
-  [MCQ evaluation](docs/mcq/MCQ_EVALUATION_OVERVIEW.md)
-- [Documentation index](docs/README.md)
+```bash
+make setup
+```
 
-## Repository structure
+This creates `.venv`, installs the package and development tools (`pytest`, `ruff`, `sympy`, `matplotlib`), and copies `.env.example` to `.env.local` if no environment file exists yet.
+
+Fill in your API credentials in `.env.local` (or `.env`):
+
+```ini
+AZURE_OPENAI_BASE_URL=https://your-resource.services.ai.azure.com/openai/v1
+AZURE_OPENAI_API_KEY=your-api-key-here
+AZURE_OPENAI_LUNA_MODEL=gpt-5.6-luna
+AZURE_OPENAI_GPT41_MODEL=gpt-4.1
+AZURE_OPENAI_GPT41_MINI_MODEL=gpt-4.1-mini
+```
+
+To see all shortcut commands at any time:
+
+```bash
+make help
+```
+
+---
+
+## 2. Everyday Commands (`make` & `structpf` CLI)
+
+You can use either `make` shortcuts or `./.venv/bin/python scripts/structpf.py` (also installed as `.venv/bin/structpf` after `make setup`).
+
+### 2.1 Browse Topics and Benchmark Cases (Offline)
+
+List all **30 Learning Commons Progression Bridge topics** (Grades 5–10), **8 Classic PF benchmark cases**, and **4 Grade 7 Multi-Theme cells**:
+
+```bash
+# List everything
+make list
+
+# Filter by grade or keyword
+make list GRADE=6
+make list SEARCH=polygon
+
+# Or call the CLI directly
+./.venv/bin/python scripts/structpf.py list --dataset lc30 --grade 8
+```
+
+### 2.2 Generate a PF Task (`StructPF` or `One-Shot`)
+
+Generate a task for any built-in case ID or for your own custom topic:
+
+```bash
+# 1. Generate a StructPF task for a built-in Learning Commons topic (Grade 6 polygon area, 6.G.A.1)
+make generate CASE=g6_polygon_area_decomposition
+
+# 2. Generate and immediately run the 5-measure v3.0 evaluator
+./.venv/bin/python scripts/structpf.py generate \
+  --case g6_polygon_area_decomposition \
+  --model luna \
+  --evaluate
+
+# 3. Compare StructPF (with Learning Commons graph) vs. Ungrounded vs. One-Shot on the same topic
+./.venv/bin/python scripts/structpf.py generate --case g8_linear_function_rate_and_initial_value --mode structpf --grounding lc
+./.venv/bin/python scripts/structpf.py generate --case g8_linear_function_rate_and_initial_value --mode structpf --grounding none
+./.venv/bin/python scripts/structpf.py generate --case g8_linear_function_rate_and_initial_value --mode oneshot
+
+# 4. Generate a task for a custom topic on the fly (with optional Common Core standard code)
+./.venv/bin/python scripts/structpf.py generate \
+  --grade 7 \
+  --standard 7.RP.A.2 \
+  --topic "proportional relationships" \
+  --target "Recognize and represent proportional relationships between quantities"
+```
+
+Each generation run prints the **Stage 1 prior skills**, **Stage 2b calculator check**, and **Stage 3 student-facing task** in the terminal and saves `result.json`, `student_task.md`, and `model_calls.jsonl` under `experiments/results/runs/<timestamp>_<case>_<mode>/`.
+
+### 2.3 Evaluate or Inspect Any Saved Task
+
+```bash
+# Full 5-measure evaluation (Task Judge + Prior-Knowledge Solver + Attempt Judge, v3.0)
+make evaluate RUN=experiments/results/runs/<your_run_folder>
+
+# Fast 4-measure Task Judge + SymPy calculator check (skips the solver)
+make evaluate RUN=experiments/results/runs/<your_run_folder> EVAL=task-only
+
+# Two-Gate Progression Check (Gate 1 K_prior validity + Gate 2 shortcut failure)
+make evaluate RUN=experiments/results/runs/<your_run_folder> EVAL=gates
+
+# 5-Dimension Surface Rubric Judge (Rahimi et al., 2025 baseline)
+make evaluate RUN=experiments/results/runs/<your_run_folder> EVAL=rubric
+
+# Inspect any saved run directory offline (no API calls)
+make inspect RUN=experiments/results/runs/<your_run_folder>
+```
+
+### 2.4 Render Figures, Build Thesis, and Run Tests
+
+```bash
+make figures               # Render all thesis figures into thesis/figures/ (or CHAPTER=3)
+make thesis                # Compile thesis/main.pdf with tectonic
+make test                  # Run the pytest test suite
+make lint                  # Run ruff linter and format check
+make format                # Auto-format code with ruff
+```
+
+---
+
+## 3. Repository Structure
 
 | Directory | Contents |
 |---|---|
-| `src/generation/` | MCQ and PF generators, design briefs, data checks, retrieval and prompts |
-| `src/evaluation/` | Answer checks, pathway metrics, PF rubrics and design audits; current three-role instrument (v3.0) |
-| `src/evaluation/frozen/` | Three-role versions v2.2 to v2.9, kept byte-identical to reproduce earlier runs; their prompts stay in `src/evaluation/prompts/` |
+| `scripts/structpf.py` | Unified CLI entry point (`list`, `generate`, `evaluate`, `inspect`, `figures`) |
+| `src/generation/` | Stage 1–3 generators, design briefs (`D2a`), SymPy calculator (`D2b`), retrieval, and YAML prompts |
+| `src/evaluation/` | Three-role requirement evaluator (`v3.0`), 5-measure parser, 5D rubric judge, and MCQ metrics |
+| `src/evaluation/frozen/` | Frozen evaluator versions `v2.2`–`v2.9`, kept byte-identical to reproduce earlier runs |
 | `src/simulation/`, `src/refinement/` | Solution-blind learner prompts and historical profile/refinement prototypes |
-| `scripts/` | Current experiment, replay, calibration and reporting entry points; superseded or unreferenced ones are in `scripts/archive/` |
-| `data/` | Local datasets, expert-task transcriptions and grounding artifacts; third-party documents and scraped Eedi pages stay local and are gitignored |
-| `experiments/` | Configurations, saved evidence and source/prompt snapshots; results are gitignored and kept on disk |
-| `notebooks/` | Historical experiments, inspection and simulation prototypes |
-| `tests/` | Software checks, not student-behavior validation |
-| `docs/`, `thesis/` | Research records (including `docs/sources/` for scraped source pages) and the LaTeX thesis |
+| `scripts/` | Benchmark runners, replay tools, figure renderers (`render_fig*.py`), and `scripts/archive/` |
+| `data/` | Learning Commons progression snapshot (`30` topics), classic PF tasks, and grounding excerpts |
+| `experiments/` | Frozen experiment configurations (`experiments/configs/`) and local run outputs (`experiments/results/`) |
+| `thesis/` | Master's thesis LaTeX sources (`sections/`), rendered figures (`figures/`), and compiled `main.pdf` |
+| `docs/` | Detailed research logs ([PF_PIPELINE.md](docs/pf-generation/PF_PIPELINE.md), [MCQ_GENERATION_OVERVIEW.md](docs/mcq/MCQ_GENERATION_OVERVIEW.md), [MCQ_EVALUATION_OVERVIEW.md](docs/mcq/MCQ_EVALUATION_OVERVIEW.md), [docs/README.md](docs/README.md)) |
+| `tests/` | Unit and regression tests for generators, calculators, evaluators, and dataset schemas |
 
-## Setup
+---
 
-Use Python >=3.10 and run commands from the repository root. Reuse an existing
-environment; for a new checkout:
+## 4. Reproducing Full Thesis Benchmarks
 
-```bash
-python3 -m venv .venv
-./.venv/bin/python -m pip install -e ".[dev]"
-test -e .env || cp .env.example .env
-```
-
-Review the template before use, fill in only the services needed, and never
-overwrite existing credentials. Python helpers load dotenv files; do not assume
-the template is a shell script.
-
-- Default PF runs use Azure: `AZURE_OPENAI_BASE_URL`,
-  `AZURE_OPENAI_API_KEY` and the relevant deployment variable, for example
-  `AZURE_OPENAI_LUNA_MODEL`. PF helpers load `.env.local` or use exported values.
-  Curriculum embeddings use `text-embedding-3-small-EU` on the same Azure endpoint.
-- Swiss AI MCQ generation uses `CSCS_SERVING_API`; optional
-  `SWISSAI_BASE_URL` and model-role overrides are read by
-  [config.py](src/utils/config.py). Some MCQ conditions also need Azure embeddings.
-- Euler/vLLM is optional, not required by the default PF route. See
-  [Euler setup](scripts/euler/README.md) for its separate GPU environment.
-- Learning Commons API context is opt-in and requires
-  `LEARNING_COMMONS_API_KEY` on a cache miss; the curated
-  [local snapshot](data/learning_commons/README.md) works offline.
-
-## Commands
-
-These inspection commands do not call models:
+In addition to single-case runs via `structpf`, the batch runners in `scripts/` reproduce each thesis study:
 
 ```bash
-./.venv/bin/python scripts/lookup_curriculum_grounding.py --list
-./.venv/bin/python scripts/run_prior_recommendations.py --list-cases
-./.venv/bin/python scripts/run_pf_diagnostic.py --help
-./.venv/bin/python -m scripts.run_basic_glm_correctness_pilot
-```
+# Chapter 3: 4-Topic x 2-Model x 30-Run One-Shot Multi-Theme Study (240 runs)
+./.venv/bin/python scripts/run_pf_rahimi_multi_theme.py --help
 
-The last command checks the saved historical ten-question basic GLM pilot; it
-does not regenerate it. Its `--run` option makes model calls and overwrites that
-pilot path, so do not use it to replace historical evidence inadvertently.
+# Chapter 6: Evaluator v3.0 Calibration & Solver Recall Benchmark (15 expert PF tasks)
+./.venv/bin/python scripts/run_pf_v30_calibration.py --help
+./.venv/bin/python scripts/run_pf_solver_recall_benchmark.py --help
 
-The following examples **make model calls** and require local inputs and service
-configuration:
+# Chapter 7: 30-Topic 3-Arm Progression Bridge Study (One-Shot vs. Ungrounded StructPF vs. LC-Grounded StructPF)
+./.venv/bin/python scripts/run_progression_bridge_study.py --help
 
-```bash
-# One-case current PF diagnostic; default route is design_brief
-./.venv/bin/python scripts/run_pf_diagnostic.py \
-  --cases kapur_average_speed_g7_singapore --model luna --max-workers 1 --proposal-k 4
-
-# Grounded/ungrounded prior-resource comparison against held-out expert lists
-./.venv/bin/python scripts/run_prior_recommendations.py --compare-expert --model gpt41mini
-
-# Small structured MCQ generation run, without the historical judge pipeline
-./.venv/bin/python scripts/run_phase1_structured_generation.py \
-  --condition 02_expert_direct --viable-only --n 2 --runs 1 --workers 1 \
-  --results-dir experiments/results/phase1_mcq/new_structured_run
-```
-
-PF diagnostics save a timestamped directory under
-`experiments/results/validation/` with per-case outputs and model-call traces.
-Use a fresh output path for new evidence. `--reuse-d1-root` reuses an earlier
-run's prior-resource output; label that condition explicitly rather than calling
-it a fresh end-to-end run.
-
-### LLM-student and intended-path research
-
-The [canonical closure and evidence](docs/pf-generation/PF_PIPELINE.md#final-scope-llm-student-path-coverage-and-feedback)
-defines the thesis boundary. The diagnostic asks whether mathematical actions
-anticipated in a saved design are actually reached in model outputs. It retains
-not-observed and unknown cases and unexpected valid approaches; it does not infer
-human classroom probabilities or treat missing paths as task defects.
-
-Offline reports over the saved artifacts (no model calls):
-
-```bash
-./.venv/bin/python scripts/report_pf_kapur_reference.py \
-  --output experiments/results/pf_kapur_reference_20261011
-./.venv/bin/python scripts/report_pf_attempt_revision.py \
-  --output experiments/results/pf_attempt_revision_20261011
-./.venv/bin/python scripts/report_pf_path_coverage_final.py \
-  --output experiments/results/pf_path_coverage_final_20261012 --phase baseline
-./.venv/bin/python scripts/report_pf_path_coverage_final.py \
-  --output experiments/results/pf_path_coverage_final_20261012 --phase final
-```
-
-The final campaign source/feedback snapshots, prospective codebooks and fresh
-attempts are kept separately. The completed component is a bounded computational
-study: path coverage is model-conditional and an added advantage of coverage
-feedback is not established. Real student/class distributions and learning remain
-outside its evidence. Its model-call runner refuses to overwrite an
-existing phase. It is a one-round research protocol, not an automatic tuning
-service. Re-running an experiment needs a newly identified output directory
-and a budget covering every stage/retry, not a silent replacement of failures.
-
-Focused software checks:
-
-```bash
-./.venv/bin/python -m pytest -q \
-  tests/test_pf_student_probe.py tests/test_pf_path_coverage.py \
-  tests/test_pf_kapur_reference.py tests/test_pf_attempt_revision.py
-```
-
-There is no single pipeline entry point. Use the stage scripts listed above.
-
-## Data and provenance
-
-- [Expert PF tasks](data/pf_exercises/README.md): paper-derived curated records
-  and the separate fifteen-record StratL import; they overlap and are not all
-  original, fully specified PF generation tasks.
-- [Curriculum grounding](data/curriculum_grounding/README.md): official-document
-  excerpts, textbook proxies, translations and held-out expert resources.
-- [Learning Commons](data/learning_commons/README.md): curated graph candidates
-  and optional remote reference context, not evidence of students' prior learning.
-- Eedi inputs are expected under `data/eedi/`; selected scraped quiz data live
-  under `data/eedi_scraped/`. See the MCQ notes for exact input files and limits.
-
-## Validation and thesis build
-
-```bash
-./.venv/bin/python -m pytest -q tests/test_basic_glm_correctness.py
-source .venv/bin/activate
-make test                  # full existing test suite
-make lint                  # existing Ruff lint/format checks
-make thesis                # requires tectonic (the thesis builds with it)
+# Offline reports over saved LLM-student / path-coverage pilots (no API calls)
+./.venv/bin/python scripts/report_pf_kapur_reference.py --output experiments/results/pf_kapur_reference_20261011
+./.venv/bin/python scripts/report_pf_attempt_revision.py --output experiments/results/pf_attempt_revision_20261011
+./.venv/bin/python scripts/report_pf_path_coverage_final.py --output experiments/results/pf_path_coverage_final_20261012 --phase final
 ```
 
 ## License
 
-No repository-wide license is declared. Dataset licenses and source
-attributions remain separate; preserve them when reusing artifacts.
+No repository-wide license is declared. Dataset licenses (such as CC BY 4.0 for the Learning Commons Knowledge Graph) and source attributions remain separate; preserve them when reusing artifacts.
+

@@ -26,6 +26,9 @@ dev = [
     "seaborn>=0.13",
 ]
 
+[project.scripts]
+structpf = "scripts.structpf:main"
+
 [build-system]
 requires = ["setuptools>=68.0"]
 build-backend = "setuptools.build_meta"
