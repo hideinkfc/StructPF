@@ -24,13 +24,14 @@ MODEL_ENVS = {
 
 
 def load_client(which: str = "gpt41mini") -> tuple[OpenAI, str]:
+    load_dotenv(ROOT / ".env", override=False)
     load_dotenv(ROOT / ".env.local", override=False)
     base_url = os.environ.get("AZURE_OPENAI_BASE_URL", "").strip()
     api_key = os.environ.get("AZURE_OPENAI_API_KEY", "").strip()
     env, default = MODEL_ENVS.get(which, MODEL_ENVS["gpt41mini"])
     model = os.environ.get(env, default).strip()
     if not base_url or not api_key:
-        raise RuntimeError("Azure config missing from .env.local")
+        raise RuntimeError("Azure config missing from .env")
     return OpenAI(base_url=base_url, api_key=api_key), model
 
 

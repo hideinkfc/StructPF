@@ -69,12 +69,13 @@ def get_settings() -> Settings:
 
 def load_azure_judge_config() -> tuple[str, str, str]:
     """Load the Azure GPT-4.1-mini endpoint, key, and deployment name."""
+    load_dotenv(_project_root / ".env", override=False)
     load_dotenv(_project_root / ".env.local", override=False)
     base_url = os.environ.get("AZURE_OPENAI_BASE_URL", "").strip()
     api_key = os.environ.get("AZURE_OPENAI_API_KEY", "").strip()
     model = os.environ.get("AZURE_OPENAI_GPT41_MINI_MODEL", AZURE_DEFAULT_JUDGE).strip()
     if not base_url:
-        raise RuntimeError("AZURE_OPENAI_BASE_URL is missing from .env.local or the environment.")
+        raise RuntimeError("AZURE_OPENAI_BASE_URL is missing from .env or the environment.")
     if not api_key or api_key == "PASTE_ROTATED_KEY_HERE":
         raise RuntimeError("AZURE_OPENAI_API_KEY is missing or still uses the placeholder.")
     if not model:

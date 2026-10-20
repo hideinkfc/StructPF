@@ -20,16 +20,25 @@ Requires **Python $\ge 3.10$**. From the repository root, run:
 make setup
 ```
 
-This creates `.venv`, installs the package and development tools (`pytest`, `ruff`, `sympy`, `matplotlib`), and copies `.env.example` to `.env.local` if no environment file exists yet.
+This creates `.venv`, installs the package and development tools (`pytest`, `ruff`, `sympy`, `matplotlib`), and copies `.env.example` to `.env` if no `.env` file exists yet.
 
-Fill in your API credentials in `.env.local` (or `.env`):
+All API keys and model names are managed in the single central `.env` file at the repository root:
 
 ```ini
+# 1. Azure OpenAI Deployments (Default for StructPF generation & evaluation)
 AZURE_OPENAI_BASE_URL=https://your-resource.services.ai.azure.com/openai/v1
 AZURE_OPENAI_API_KEY=your-api-key-here
 AZURE_OPENAI_LUNA_MODEL=gpt-5.6-luna
+AZURE_OPENAI_GPT54_MODEL=gpt-5.4
 AZURE_OPENAI_GPT41_MODEL=gpt-4.1
 AZURE_OPENAI_GPT41_MINI_MODEL=gpt-4.1-mini
+
+# 2. Learning Commons Knowledge Graph API (Optional; offline snapshot in data/learning_commons/)
+LEARNING_COMMONS_API_KEY=your-learning-commons-key-here
+
+# 3. Swiss AI Platform (Optional; used by MCQ distractor experiments)
+CSCS_SERVING_API=sk-your-api-key-here
+SWISSAI_JUDGE_MODEL=Qwen/Qwen3.5-27B
 ```
 
 To see all shortcut commands at any time:

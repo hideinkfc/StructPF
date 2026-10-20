@@ -121,7 +121,7 @@ def contextual_plausibility_prompt(
 
 
 def load_azure_config() -> tuple[str, str, dict[str, str]]:
-    load_dotenv(PROJECT_ROOT / ".env.local", override=False)
+    load_dotenv(PROJECT_ROOT / ".env", override=False)
     base_url = os.environ.get("AZURE_OPENAI_BASE_URL", "").strip()
     api_key = os.environ.get("AZURE_OPENAI_API_KEY", "").strip()
     models = {

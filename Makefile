@@ -12,7 +12,7 @@ RUN    ?=
 help:
 	@echo "StructPF — Quick Commands"
 	@echo "--------------------------------------------------------------------------------"
-	@echo "  make setup                             Create .venv, install deps, and init .env.local"
+	@echo "  make setup                             Create .venv, install deps, and init .env"
 	@echo "  make list [GRADE=7] [SEARCH=area]      List built-in topics and benchmark cases"
 	@echo "  make generate CASE=<id> [MODEL=luna]   Generate a PF task (MODE=structpf|oneshot)"
 	@echo "  make evaluate RUN=<dir> [EVAL=v30]     Evaluate a saved run (EVAL=v30|task-only|gates|rubric)"
@@ -24,11 +24,11 @@ help:
 	@echo "  make format                            Auto-format Python code with ruff"
 	@echo "--------------------------------------------------------------------------------"
 
-# Create virtual environment and .env.local template if missing
+# Create virtual environment and central .env template if missing
 setup:
 	test -d .venv || python3 -m venv .venv
 	$(PYTHON) -m pip install -e ".[dev]"
-	test -e .env.local || test -e .env || cp .env.example .env.local
+	test -e .env || cp .env.example .env
 
 # Browse available topics and cases (offline)
 list:

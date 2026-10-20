@@ -40,11 +40,11 @@ EMBED_MODEL = "text-embedding-3-small-EU"
 
 
 def _azure_embed_client() -> LLMClient:
-    load_dotenv(ROOT / ".env.local", override=False)
+    load_dotenv(ROOT / ".env", override=False)
     base_url = os.environ.get("AZURE_OPENAI_BASE_URL", "").strip()
     api_key = os.environ.get("AZURE_OPENAI_API_KEY", "").strip()
     if not base_url or not api_key:
-        raise RuntimeError("AZURE_OPENAI_BASE_URL / AZURE_OPENAI_API_KEY missing from .env.local")
+        raise RuntimeError("AZURE_OPENAI_BASE_URL / AZURE_OPENAI_API_KEY missing from .env")
     return LLMClient(base_url=base_url, model=EMBED_MODEL, api_key=api_key)
 
 

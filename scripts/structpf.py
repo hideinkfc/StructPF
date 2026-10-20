@@ -68,8 +68,7 @@ FIGURE_SCRIPTS: dict[int, list[str]] = {
 
 
 def _load_env() -> None:
-    """Load .env.local first, then fall back to .env so either file works."""
-    load_dotenv(ROOT / ".env.local", override=False)
+    """Load the central .env file from the repository root."""
     load_dotenv(ROOT / ".env", override=False)
 
 
@@ -614,7 +613,7 @@ def build_parser() -> argparse.ArgumentParser:
         "--model",
         choices=sorted(MODEL_ENVS),
         default="luna",
-        help="Model selector from .env / .env.local (default: luna).",
+        help="Model selector from .env (default: luna).",
     )
     p_gen.add_argument(
         "--proposals", type=int, default=2, help="Step 2a candidate brief count (default: 2)."

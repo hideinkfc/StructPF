@@ -480,7 +480,7 @@ def main() -> None:
     )
     args = parser.parse_args()
 
-    load_dotenv(ROOT / ".env.local", override=False)
+    load_dotenv(ROOT / ".env", override=False)
     config = load_config()
     gen_prompt = bench.load_prompt(GEN_PROMPT)
     if args.dry_run:

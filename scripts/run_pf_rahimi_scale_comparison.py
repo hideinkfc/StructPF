@@ -50,7 +50,7 @@ def write_json(path: Path, value: object) -> None:
 
 
 def client() -> OpenAI:
-    load_dotenv(ROOT / ".env.local", override=False)
+    load_dotenv(ROOT / ".env", override=False)
     return OpenAI(
         base_url=os.environ["AZURE_OPENAI_BASE_URL"].strip(),
         api_key=os.environ["AZURE_OPENAI_API_KEY"].strip(),
