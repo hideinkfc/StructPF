@@ -48,14 +48,15 @@ validation:
 | Directory | Contents |
 |---|---|
 | `src/generation/` | MCQ and PF generators, design briefs, data checks, retrieval and prompts |
-| `src/evaluation/` | Answer checks, pathway metrics, PF rubrics and design audits |
+| `src/evaluation/` | Answer checks, pathway metrics, PF rubrics and design audits; current three-role instrument (v3.0) |
+| `src/evaluation/frozen/` | Three-role versions v2.2 to v2.9, kept byte-identical to reproduce earlier runs; their prompts stay in `src/evaluation/prompts/` |
 | `src/simulation/`, `src/refinement/` | Solution-blind learner prompts and historical profile/refinement prototypes |
-| `scripts/` | Current experiment, replay, calibration and reporting entry points |
-| `data/` | Local datasets, expert-task transcriptions and grounding artifacts; some inputs are untracked |
-| `experiments/` | Configurations, saved evidence and source/prompt snapshots |
+| `scripts/` | Current experiment, replay, calibration and reporting entry points; superseded or unreferenced ones are in `scripts/archive/` |
+| `data/` | Local datasets, expert-task transcriptions and grounding artifacts; third-party documents and scraped Eedi pages stay local and are gitignored |
+| `experiments/` | Configurations, saved evidence and source/prompt snapshots; results are gitignored and kept on disk |
 | `notebooks/` | Historical experiments, inspection and simulation prototypes |
 | `tests/` | Software checks, not student-behavior validation |
-| `docs/`, `thesis/` | Research records and LaTeX thesis |
+| `docs/`, `thesis/` | Research records (including `docs/sources/` for scraped source pages) and the LaTeX thesis |
 
 ## Setup
 
@@ -161,9 +162,7 @@ Focused software checks:
   tests/test_pf_kapur_reference.py tests/test_pf_attempt_revision.py
 ```
 
-The existing `make run` target still references absent `scripts/run_pipeline.py`
-and `rag_fewshot.yaml`; it is not a working entry point. There are also no
-`run_baselines.py` or `run_evaluation.py` scripts in the current checkout.
+There is no single pipeline entry point. Use the stage scripts listed above.
 
 ## Data and provenance
 
@@ -184,7 +183,7 @@ and `rag_fewshot.yaml`; it is not a working entry point. There are also no
 source .venv/bin/activate
 make test                  # full existing test suite
 make lint                  # existing Ruff lint/format checks
-make thesis                # requires latexmk and a LaTeX installation
+make thesis                # requires tectonic (the thesis builds with it)
 ```
 
 ## License
