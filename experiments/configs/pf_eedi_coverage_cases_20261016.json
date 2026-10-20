@@ -1,0 +1,2597 @@
+{
+  "version": "pf-eedi-coverage-cases/v1",
+  "source": "data/eedi_scraped (student percentages and common-misconception explanations)",
+  "excluded": {
+    "shape_topic_picture": 10,
+    "manual_picture_only": 1,
+    "options_not_in_text": 1
+  },
+  "case_count": 68,
+  "cases": [
+    {
+      "case_id": "eedi_e900_q1",
+      "quiz_name": "Estimation 2",
+      "topic": "Rounding and estimating",
+      "subject": "Number",
+      "stem": "Which of the following is the most sensible calculation to estimate the answer to: 23 × 199",
+      "options": [
+        {
+          "letter": "A",
+          "text": "20 × 200",
+          "is_correct": true,
+          "pct_students": 86,
+          "error_explanation": null
+        },
+        {
+          "letter": "B",
+          "text": "30 × 190",
+          "is_correct": false,
+          "pct_students": 5,
+          "error_explanation": "Not quite, we want our numbers to be easy to work with in our head. 190 is a bit tricky. Also, is 30 the closest 'easy' number to 23?"
+        },
+        {
+          "letter": "C",
+          "text": "20 × 100",
+          "is_correct": false,
+          "pct_students": 7,
+          "error_explanation": "Not quite, is 100 the closest 'easy' number to 199?"
+        },
+        {
+          "letter": "D",
+          "text": "0 × 200",
+          "is_correct": false,
+          "pct_students": 2,
+          "error_explanation": "Not quite, is 0 the closest 'easy' number to 23?"
+        }
+      ],
+      "wrong_pct_total": 14
+    },
+    {
+      "case_id": "eedi_e900_q2",
+      "quiz_name": "Estimation 2",
+      "topic": "Rounding and estimating",
+      "subject": "Number",
+      "stem": "Which of the following is the most sensible calculation to estimate the answer to: 17 / 0.483",
+      "options": [
+        {
+          "letter": "A",
+          "text": "10 / 1",
+          "is_correct": false,
+          "pct_students": 3,
+          "error_explanation": "Not quite, is 10 the closest 'easy' number to 17? Also, our 'easy' numbers can still be decimals."
+        },
+        {
+          "letter": "B",
+          "text": "20 / 0.5",
+          "is_correct": false,
+          "pct_students": 11,
+          "error_explanation": "Not quite, our 'easy' numbers can still be decimals."
+        },
+        {
+          "letter": "C",
+          "text": "17 / 0.5",
+          "is_correct": false,
+          "pct_students": 8,
+          "error_explanation": "Not quite, is 10 the closest 'easy' number to 17?"
+        },
+        {
+          "letter": "D",
+          "text": "20 / 1",
+          "is_correct": true,
+          "pct_students": 78,
+          "error_explanation": null
+        }
+      ],
+      "wrong_pct_total": 22
+    },
+    {
+      "case_id": "eedi_e900_q3",
+      "quiz_name": "Estimation 2",
+      "topic": "Rounding and estimating",
+      "subject": "Number",
+      "stem": "Julie wants to estimate the answer to this calculation by rounding each number to 1 significant figure. 87.4 × 0.3727\n\nWhat number should replace 87.4 in her estimation?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "90",
+          "is_correct": true,
+          "pct_students": 52,
+          "error_explanation": null
+        },
+        {
+          "letter": "B",
+          "text": "87",
+          "is_correct": false,
+          "pct_students": 29,
+          "error_explanation": "You have rounded to the nearest integer. The question asks you to round to the nearest significant figure. To do this you will need to look at the first non-zero significant figure , 8, and decide if it rounds up or down."
+        },
+        {
+          "letter": "C",
+          "text": "88",
+          "is_correct": false,
+          "pct_students": 13,
+          "error_explanation": "I think you have tried to round to the nearest integer incorrectly. The question asks you to round to the nearest significant figure. To do this you will need to look at the first non-zero significant figure , 8, and decide if it rounds up or down."
+        },
+        {
+          "letter": "D",
+          "text": "80",
+          "is_correct": false,
+          "pct_students": 5,
+          "error_explanation": "I think you have assumed it would round down. To round to the nearest significant figure, you will need to look at the first non-zero significant figure - 8 - does this round up or down.?"
+        }
+      ],
+      "wrong_pct_total": 47
+    },
+    {
+      "case_id": "eedi_e900_q4",
+      "quiz_name": "Estimation 2",
+      "topic": "Rounding and estimating",
+      "subject": "Number",
+      "stem": "Julie wants to estimate the answer to this calculation by rounding each number to 1 significant figure. 87.4 × 0.3727\n\nWhat number should replace 0.3727 in her estimation?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "0.4",
+          "is_correct": true,
+          "pct_students": 70,
+          "error_explanation": null
+        },
+        {
+          "letter": "B",
+          "text": "0.3",
+          "is_correct": false,
+          "pct_students": 13,
+          "error_explanation": "You have accidentally truncated, rather than rounded. The 3 is the first significant figure but we need to look at the value after the 3 to decide if the number stays the same or rounds up."
+        },
+        {
+          "letter": "C",
+          "text": "0",
+          "is_correct": false,
+          "pct_students": 10,
+          "error_explanation": "The first significant figure is always the first non-zero digit from the left, which is the 3. Look at the digit after the 3 carefully to make sure you round correctly!"
+        },
+        {
+          "letter": "D",
+          "text": "0.3000",
+          "is_correct": false,
+          "pct_students": 7,
+          "error_explanation": "The value you have given has 4 significant figures. For the number 0.3727 the 3 is the first significant figure, you then need to look at the digit after the 3 to decide if it stays the same or rounds up..."
+        }
+      ],
+      "wrong_pct_total": 30
+    },
+    {
+      "case_id": "eedi_e900_q5",
+      "quiz_name": "Estimation 2",
+      "topic": "Rounding and estimating",
+      "subject": "Number",
+      "stem": "What is this number rounded to the nearest whole number? 43.5036",
+      "options": [
+        {
+          "letter": "A",
+          "text": "44",
+          "is_correct": true,
+          "pct_students": 69,
+          "error_explanation": null
+        },
+        {
+          "letter": "B",
+          "text": "40",
+          "is_correct": false,
+          "pct_students": 17,
+          "error_explanation": "I think you have rounded to the nearest 10 rather than the nearest 1 (the nearest whole number). 43.5036 is between the whole numbers 43 and 44. Which of these is it closer to (the 5 will tell you whether to round up or round down)?"
+        },
+        {
+          "letter": "C",
+          "text": "43.5",
+          "is_correct": false,
+          "pct_students": 7,
+          "error_explanation": "I think you have rounded to 1 decimal place rather than the nearest 1 (the nearest whole number). 43.5036 is between the whole numbers 43 and 44. Which of these is it closer to (the 5 will tell you whether to round up or round down)?"
+        },
+        {
+          "letter": "D",
+          "text": "43",
+          "is_correct": false,
+          "pct_students": 7,
+          "error_explanation": "43.5036 lies between two whole numbers, which of these is 43.5036 closer to (the 5 will tell you whether to round up or round down)?"
+        }
+      ],
+      "wrong_pct_total": 31
+    },
+    {
+      "case_id": "eedi_e901_q1",
+      "quiz_name": "Order fractions 3",
+      "topic": "Fractions - basics",
+      "subject": "Number",
+      "stem": "Tom and Katie are discussing fractions:\nTom says 1/7 is greater than 1/5\nKatie says 2/7 is greater than 2/5\n\nWho is correct?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Only Tom",
+          "is_correct": true,
+          "pct_students": 60,
+          "error_explanation": null
+        },
+        {
+          "letter": "B",
+          "text": "Only Katie",
+          "is_correct": false,
+          "pct_students": 14,
+          "error_explanation": "In order to compare the fraction pairs, we first need to write them as equivalent fractions with the same denominator."
+        },
+        {
+          "letter": "C",
+          "text": "Both Tom and Katie",
+          "is_correct": false,
+          "pct_students": 18,
+          "error_explanation": "In order to compare the fraction pairs, we first need to write them as equivalent fractions with the same denominator."
+        },
+        {
+          "letter": "D",
+          "text": "Neither is correct",
+          "is_correct": false,
+          "pct_students": 8,
+          "error_explanation": "In order to compare the fraction pairs, we first need to write them as equivalent fractions with the same denominator."
+        }
+      ],
+      "wrong_pct_total": 40
+    },
+    {
+      "case_id": "eedi_e901_q2",
+      "quiz_name": "Order fractions 3",
+      "topic": "Fractions - basics",
+      "subject": "Number",
+      "stem": "Tom and Katie are discussing fractions:\nTom says 3/8 is greater than 3/5\nKatie says 7/8 is greater than 7/10\n\nWho is correct?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Only Tom",
+          "is_correct": false,
+          "pct_students": 10,
+          "error_explanation": "In order to compare the fraction pairs, we first need to write them as equivalent fractions with the same denominator."
+        },
+        {
+          "letter": "B",
+          "text": "Only Katie",
+          "is_correct": true,
+          "pct_students": 66,
+          "error_explanation": null
+        },
+        {
+          "letter": "C",
+          "text": "Both Tom and Katie",
+          "is_correct": false,
+          "pct_students": 13,
+          "error_explanation": "In order to compare the fraction pairs, we first need to write them as equivalent fractions with the same denominator."
+        },
+        {
+          "letter": "D",
+          "text": "Neither is correct",
+          "is_correct": false,
+          "pct_students": 11,
+          "error_explanation": "In order to compare the fraction pairs, we first need to write them as equivalent fractions with the same denominator."
+        }
+      ],
+      "wrong_pct_total": 34
+    },
+    {
+      "case_id": "eedi_e901_q3",
+      "quiz_name": "Order fractions 3",
+      "topic": "Fractions - basics",
+      "subject": "Number",
+      "stem": "Which signs belong in the boxes to make the statement correct?\n4/5 [?] 3/4",
+      "options": [
+        {
+          "letter": "A",
+          "text": "<",
+          "is_correct": true,
+          "pct_students": 73,
+          "error_explanation": null
+        },
+        {
+          "letter": "B",
+          "text": ">",
+          "is_correct": false,
+          "pct_students": 8,
+          "error_explanation": "As all numerators are the same, we can compare these fractions by looking at the denominator of each. The bigger the denominator the smaller the fraction as this shows the whole has been split into more parts. Remember > is greater than and < is less than."
+        },
+        {
+          "letter": "C",
+          "text": "=",
+          "is_correct": false,
+          "pct_students": 10,
+          "error_explanation": "As all numerators are the same, we can compare these fractions by looking at the denominator of each. The bigger the denominator the smaller the fraction as this shows the whole has been split into more parts."
+        },
+        {
+          "letter": "D",
+          "text": "cannot tell",
+          "is_correct": false,
+          "pct_students": 10,
+          "error_explanation": "Remember > is greater than and < is less than. As all numerators are the same, we can compare these fractions by looking at the denominator of each. The bigger the denominator the smaller the fraction as this shows the whole has been split into more parts."
+        }
+      ],
+      "wrong_pct_total": 28
+    },
+    {
+      "case_id": "eedi_e901_q4",
+      "quiz_name": "Order fractions 3",
+      "topic": "Fractions - basics",
+      "subject": "Number",
+      "stem": "Which signs belong in the boxes to make the statement correct?\n3/5 [?] 9/15",
+      "options": [
+        {
+          "letter": "A",
+          "text": "<",
+          "is_correct": false,
+          "pct_students": 17,
+          "error_explanation": "In order to compare the fraction pairs, we first need to write them as equivalent fractions with the same denominator."
+        },
+        {
+          "letter": "B",
+          "text": ">",
+          "is_correct": true,
+          "pct_students": 54,
+          "error_explanation": null
+        },
+        {
+          "letter": "C",
+          "text": "=",
+          "is_correct": false,
+          "pct_students": 17,
+          "error_explanation": "In order to compare the fraction pairs, we first need to write them as equivalent fractions with the same denominator."
+        },
+        {
+          "letter": "D",
+          "text": "cannot tell",
+          "is_correct": false,
+          "pct_students": 12,
+          "error_explanation": "In order to compare the fraction pairs, we first need to write them as equivalent fractions with the same denominator."
+        }
+      ],
+      "wrong_pct_total": 46
+    },
+    {
+      "case_id": "eedi_e901_q5",
+      "quiz_name": "Order fractions 3",
+      "topic": "Fractions - basics",
+      "subject": "Number",
+      "stem": "Which signs belong in the boxes to make the statement correct?\n7/12 [?] 2/3",
+      "options": [
+        {
+          "letter": "A",
+          "text": "<",
+          "is_correct": false,
+          "pct_students": 15,
+          "error_explanation": "First, you need to find equivalent fractions with the same denominators to be able to compare them."
+        },
+        {
+          "letter": "B",
+          "text": ">",
+          "is_correct": true,
+          "pct_students": 59,
+          "error_explanation": null
+        },
+        {
+          "letter": "C",
+          "text": "=",
+          "is_correct": false,
+          "pct_students": 13,
+          "error_explanation": "I think you have just compared the numerators. First, you need to find equivalent fractions with the same denominators to be able to compare them."
+        },
+        {
+          "letter": "D",
+          "text": "cannot tell",
+          "is_correct": false,
+          "pct_students": 13,
+          "error_explanation": "First, you need to find equivalent fractions with the same denominator to be able to compare them."
+        }
+      ],
+      "wrong_pct_total": 41
+    },
+    {
+      "case_id": "eedi_e92o_q1",
+      "quiz_name": "Best buy problems (proportion)",
+      "topic": "Proportion",
+      "subject": "Number",
+      "stem": "Per 100ml, which drink is the best value for money? You can use your calculator to help you.",
+      "options": [
+        {
+          "letter": "A",
+          "text": "1 litre for £1.60",
+          "is_correct": false,
+          "pct_students": 15,
+          "error_explanation": "1 litre is 1000ml. If 1000 ml is £1.60 then 100ml will be 1.60 ÷ 10 which is 16p. There is another option that is cheaper per 100ml than this :)"
+        },
+        {
+          "letter": "B",
+          "text": "500 ml for 75p",
+          "is_correct": true,
+          "pct_students": 57,
+          "error_explanation": null
+        },
+        {
+          "letter": "C",
+          "text": "330ml for 55p",
+          "is_correct": false,
+          "pct_students": 13,
+          "error_explanation": "If 330ml is 55p, we can find the value for 100ml by dividing by 3.3. 55 ÷ 3.3 = 16.67p. This is not the lowest value per 100ml, so not the best value. Try using this method on the other options to find the best value drink."
+        },
+        {
+          "letter": "D",
+          "text": "200 ml for 35p",
+          "is_correct": false,
+          "pct_students": 14,
+          "error_explanation": "If 200ml is 35p, we can find the value for 100ml by dividing by 2. 35 ÷ 2 = 17.5p. This is not the lowest value per 100ml, so not the best value. Try using this method on the other options to find the best value drink."
+        }
+      ],
+      "wrong_pct_total": 42
+    },
+    {
+      "case_id": "eedi_e92o_q2",
+      "quiz_name": "Best buy problems (proportion)",
+      "topic": "Proportion",
+      "subject": "Number",
+      "stem": "A small 400g jar of sauce costs 60p. A big 600g jar of sauce costs 85p. Tom needs 1200g of sauce.\n\nWhich jar should he buy, and how much does he save compared to picking the other jar?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Three small jars save 5p",
+          "is_correct": false,
+          "pct_students": 13,
+          "error_explanation": "No explanation"
+        },
+        {
+          "letter": "B",
+          "text": "Three small jars save 10p",
+          "is_correct": false,
+          "pct_students": 14,
+          "error_explanation": "No explanation"
+        },
+        {
+          "letter": "C",
+          "text": "Two big jars save 5p",
+          "is_correct": false,
+          "pct_students": 22,
+          "error_explanation": "No explanation"
+        },
+        {
+          "letter": "D",
+          "text": "Two big jars save 10p",
+          "is_correct": true,
+          "pct_students": 51,
+          "error_explanation": null
+        }
+      ],
+      "wrong_pct_total": 49
+    },
+    {
+      "case_id": "eedi_e92o_q3",
+      "quiz_name": "Best buy problems (proportion)",
+      "topic": "Proportion",
+      "subject": "Number",
+      "stem": "Tom and Katie are discussing best value.\nTom says £1 for 300g is better value than 50p for 140g\nKatie says £1 for 300g is better value than £2 for 500g\n\nWho is correct?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Only Tom",
+          "is_correct": false,
+          "pct_students": 20,
+          "error_explanation": "We can compare best values by seeing how much we can get for £1 in each scenario. For Tom's statement we need to double from 50p to £1, and therefore we also double 140g and compare the values. How can we compare Katie's values as well?"
+        },
+        {
+          "letter": "B",
+          "text": "Only Katie",
+          "is_correct": false,
+          "pct_students": 20,
+          "error_explanation": "We can compare best values by seeing how much we can get for £1 in each scenario. For Katie's statement we need to halve from £2 to £1, and therefore we also halve 500g and compare the values. How can we compare Tom's values as well?"
+        },
+        {
+          "letter": "C",
+          "text": "Both Tom and Katie",
+          "is_correct": true,
+          "pct_students": 46,
+          "error_explanation": null
+        },
+        {
+          "letter": "D",
+          "text": "Neither is correct",
+          "is_correct": false,
+          "pct_students": 14,
+          "error_explanation": "Not quite! At least one of the is correct. Remember when looking at Best Buys we want more grams for the same amount of money. We can compare best values by seeing how much we can get for £1 in each scenario."
+        }
+      ],
+      "wrong_pct_total": 54
+    },
+    {
+      "case_id": "eedi_e92o_q4",
+      "quiz_name": "Best buy problems (proportion)",
+      "topic": "Proportion",
+      "subject": "Number",
+      "stem": "Per £1, which drink is the best value for money? You can use your calculator to help you.",
+      "options": [
+        {
+          "letter": "A",
+          "text": "1 litre for £3",
+          "is_correct": false,
+          "pct_students": 18,
+          "error_explanation": "If 1 litre is £3, then for £1 we calculate 1 ÷ 3, which is 0.333L. This is not the best value, can you calculate the others and see which is best value for £1?"
+        },
+        {
+          "letter": "B",
+          "text": "500 ml for £1.60",
+          "is_correct": false,
+          "pct_students": 14,
+          "error_explanation": "If 500ml is £1.60 we have to divide 500 by 1.6 to see the amount for £1. This gives us 312.5ml which is not the best value. Can you calculate the others and see which is best value for £1?"
+        },
+        {
+          "letter": "C",
+          "text": "330ml for £1.10",
+          "is_correct": false,
+          "pct_students": 15,
+          "error_explanation": "If 330ml is £1.10 we have to calculate 330 ÷ 1.1 to see the amount for £1. This gives us 300ml (or 0.3L) which is not the best value. Can you calculate the others and see which is best value for £1?"
+        },
+        {
+          "letter": "D",
+          "text": "200 ml for 55p",
+          "is_correct": true,
+          "pct_students": 53,
+          "error_explanation": null
+        }
+      ],
+      "wrong_pct_total": 47
+    },
+    {
+      "case_id": "eedi_e92o_q5",
+      "quiz_name": "Best buy problems (proportion)",
+      "topic": "Proportion",
+      "subject": "Number",
+      "stem": "A small 250g jar of sauce costs £1.50. A big 300g jar of sauce costs £2. Tom has £6 and wants as much sauce as possible.\n\nWhich jar should he buy, and how much extra sauce does he get compared to picking the other jar?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Four small jars get 200g more",
+          "is_correct": false,
+          "pct_students": 13,
+          "error_explanation": "Not quite! If Tom buys 4 small jars, he'll have 1000g of sauce. How many grams of sauce would he get if he spent his £6 on big jars? What is the difference in the sauce amounts?"
+        },
+        {
+          "letter": "B",
+          "text": "Four small jars get 100g more",
+          "is_correct": true,
+          "pct_students": 58,
+          "error_explanation": null
+        },
+        {
+          "letter": "C",
+          "text": "Three big jars get 100g more",
+          "is_correct": false,
+          "pct_students": 16,
+          "error_explanation": "If Tom buys 3 big jars, he'll have 900g of sauce. How many grams of sauce would he get if he spent his £6 on small jars? What is the difference in the sauce amounts?"
+        },
+        {
+          "letter": "D",
+          "text": "Three big jars get 50g more",
+          "is_correct": false,
+          "pct_students": 14,
+          "error_explanation": "If Tom buys 3 big jars, he'll have 900g of sauce. How many grams of sauce would he get if he spent his £6 on small jars? ? What is the difference in the sauce amounts?"
+        }
+      ],
+      "wrong_pct_total": 43
+    },
+    {
+      "case_id": "eedi_el8s_q1",
+      "quiz_name": "Bounds of error 1",
+      "topic": "Rounding and estimating",
+      "subject": "Number",
+      "stem": "A number, rounded to the nearest 10, is 50.\nWhat is the upper bound of that number?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "55",
+          "is_correct": false,
+          "pct_students": 22,
+          "error_explanation": "Close but consider decimal values, for example 54.3 would still round down to 50."
+        },
+        {
+          "letter": "B",
+          "text": "60",
+          "is_correct": true,
+          "pct_students": 65,
+          "error_explanation": null
+        },
+        {
+          "letter": "C",
+          "text": "54",
+          "is_correct": false,
+          "pct_students": 6,
+          "error_explanation": "Not quite, when we round 59 to the nearest 10 it would be 60, not 50."
+        },
+        {
+          "letter": "D",
+          "text": "50.9",
+          "is_correct": false,
+          "pct_students": 7,
+          "error_explanation": "We are rounding to the nearest 10, there are values greater than 50.9 that would round to 50."
+        }
+      ],
+      "wrong_pct_total": 35
+    },
+    {
+      "case_id": "eedi_el8s_q2",
+      "quiz_name": "Bounds of error 1",
+      "topic": "Rounding and estimating",
+      "subject": "Number",
+      "stem": "A number, rounded to the nearest 10, is 500.\nWhat is the lower bound of that number?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "495",
+          "is_correct": true,
+          "pct_students": 69,
+          "error_explanation": null
+        },
+        {
+          "letter": "B",
+          "text": "490",
+          "is_correct": false,
+          "pct_students": 11,
+          "error_explanation": "Not quite, 490 is already rounded to the nearest 10. Similarly, 491 rounds to 490, not 500. When would we start rounding up to 500?"
+        },
+        {
+          "letter": "C",
+          "text": "450",
+          "is_correct": false,
+          "pct_students": 14,
+          "error_explanation": "You've looked at rounding to the nearest 100, not 10."
+        },
+        {
+          "letter": "D",
+          "text": "499.5",
+          "is_correct": false,
+          "pct_students": 6,
+          "error_explanation": "You've looked at rounding to the nearest 1 instead of 10."
+        }
+      ],
+      "wrong_pct_total": 31
+    },
+    {
+      "case_id": "eedi_el8s_q3",
+      "quiz_name": "Bounds of error 1",
+      "topic": "Rounding and estimating",
+      "subject": "Number",
+      "stem": "A number, rounded to one decimal place, is 3.4.\nWhat is the lower bound of that number?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "3.35",
+          "is_correct": true,
+          "pct_students": 82,
+          "error_explanation": null
+        },
+        {
+          "letter": "B",
+          "text": "3.49",
+          "is_correct": false,
+          "pct_students": 4,
+          "error_explanation": "You're being asked for the lower bound here so your answer should be smaller than 3.4. Also, 3.49 would round to 3.5, not 3.4."
+        },
+        {
+          "letter": "C",
+          "text": "3",
+          "is_correct": false,
+          "pct_students": 6,
+          "error_explanation": "Your answer should have 2 decimal places. You've rounded the question instead of finding the lower bound."
+        },
+        {
+          "letter": "D",
+          "text": "3.3",
+          "is_correct": false,
+          "pct_students": 8,
+          "error_explanation": "Not quite, 3.3 is already rounded to 1 decimal place. Also, 3.31 still rounds to 3.3 and not 3.4. When do we start rounding to 3.4 instead of 3.3?"
+        }
+      ],
+      "wrong_pct_total": 18
+    },
+    {
+      "case_id": "eedi_el8s_q4",
+      "quiz_name": "Bounds of error 1",
+      "topic": "Rounding and estimating",
+      "subject": "Number",
+      "stem": "A number, rounded to two decimal places, is 0.46.\nWhat is the lower bound of that number?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "0.455",
+          "is_correct": true,
+          "pct_students": 77,
+          "error_explanation": null
+        },
+        {
+          "letter": "B",
+          "text": "0.45",
+          "is_correct": false,
+          "pct_students": 10,
+          "error_explanation": "0.451 would round to 0.45, not 0.46."
+        },
+        {
+          "letter": "C",
+          "text": "0.40",
+          "is_correct": false,
+          "pct_students": 6,
+          "error_explanation": "0.40 is already rounded to 2 decimal places."
+        },
+        {
+          "letter": "D",
+          "text": "0.450",
+          "is_correct": false,
+          "pct_students": 6,
+          "error_explanation": "0.450 would round to 0.45, not 0.46."
+        }
+      ],
+      "wrong_pct_total": 22
+    },
+    {
+      "case_id": "eedi_el8s_q5",
+      "quiz_name": "Bounds of error 1",
+      "topic": "Rounding and estimating",
+      "subject": "Number",
+      "stem": "Rounded to Nearest 10: Number = 50, Upper Bound = ?, Lower Bound = ?\nWhat number should go in the shaded box?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "54",
+          "is_correct": false,
+          "pct_students": 8,
+          "error_explanation": "Very close, but then what about 54.9999?"
+        },
+        {
+          "letter": "B",
+          "text": "55",
+          "is_correct": true,
+          "pct_students": 76,
+          "error_explanation": null
+        },
+        {
+          "letter": "C",
+          "text": "60",
+          "is_correct": false,
+          "pct_students": 7,
+          "error_explanation": "60 rounds to 60, not 50."
+        },
+        {
+          "letter": "D",
+          "text": "54.9",
+          "is_correct": false,
+          "pct_students": 9,
+          "error_explanation": "Very close, but then what about 54.9999?"
+        }
+      ],
+      "wrong_pct_total": 24
+    },
+    {
+      "case_id": "eedi_embt_q1",
+      "quiz_name": "Probability of a single event 4",
+      "topic": "Probability of a single event",
+      "subject": "Data",
+      "stem": "The table shows the probabilities that a sweet taken at random from a large bag will be yellow, or will be green, or will be blue, or will be red.\n\nYellow | Green | Blue | Red\nProbability | 0.21 | 0.14 | ? | 0.3\n\nWhat is the probability the sweet is blue?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "0.35",
+          "is_correct": false,
+          "pct_students": 7,
+          "error_explanation": "I think you might have added up the given probabilities correctly to get 0.65, but then made a calculation error when subtracting from"
+        },
+        {
+          "letter": "B",
+          "text": "0.65",
+          "is_correct": true,
+          "pct_students": 68,
+          "error_explanation": null
+        },
+        {
+          "letter": "C",
+          "text": "0.25",
+          "is_correct": false,
+          "pct_students": 14,
+          "error_explanation": "I think you might have added up the given probabilities correctly to get 0.65, but we then need to use this information to find P(green). What should all the probabilities add up to?"
+        },
+        {
+          "letter": "D",
+          "text": "0.21",
+          "is_correct": false,
+          "pct_students": 11,
+          "error_explanation": "It would only be 0.25 if yellow, green, blue and red all had an equal chance of being picked. We are given the probabilities of picking yellow, blue or red and they are not 0.25. We can instead use the fact that these probabilities add up to 1 to find our missing value"
+        }
+      ],
+      "wrong_pct_total": 32
+    },
+    {
+      "case_id": "eedi_embt_q2",
+      "quiz_name": "Probability of a single event 4",
+      "topic": "Probability of a single event",
+      "subject": "Data",
+      "stem": "The table shows the probabilities that a sweet taken at random from a large bag will be yellow, or will be green, or will be blue, or will be red.\n\nYellow | Green | Blue | Red\nProbability | 0.15 | 0.26 | 0.3 | ?\n\nWhat is the probability the sweet is red?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "0.71",
+          "is_correct": false,
+          "pct_students": 4,
+          "error_explanation": "I think you have worked out 1.5 x 400. If there are only 400 sweets in the bag there cannot be 600 yellow sweets! Think carefully about the place value of each digit in the decimal 0."
+        },
+        {
+          "letter": "B",
+          "text": "0.29",
+          "is_correct": false,
+          "pct_students": 7,
+          "error_explanation": "Not quite. The probability of choosing Yellow is 0.15. This means 15% of the sweets are yellow. If there are 400 sweets in total how many are yellow?"
+        },
+        {
+          "letter": "C",
+          "text": "0.39",
+          "is_correct": true,
+          "pct_students": 82,
+          "error_explanation": null
+        },
+        {
+          "letter": "D",
+          "text": "0.19",
+          "is_correct": false,
+          "pct_students": 7,
+          "error_explanation": "Not quite. You have worked out how many sweets there would be in the bag in total if there were 400 yellow sweets. read the question carefully."
+        }
+      ],
+      "wrong_pct_total": 18
+    },
+    {
+      "case_id": "eedi_embt_q3",
+      "quiz_name": "Probability of a single event 4",
+      "topic": "Probability of a single event",
+      "subject": "Data",
+      "stem": "Gerard plays sports each week, he either plays squash, tennis or rugby.\nThe probability that Gerard plays squash is 1/6\nThe probability that Gerard plays tennis is 3/8\n\nCalculate the probability that Gerard plays rugby.",
+      "options": [
+        {
+          "letter": "A",
+          "text": "11/24",
+          "is_correct": false,
+          "pct_students": 15,
+          "error_explanation": "Not quite. Remember that when adding fractions we need to first find a common denominator"
+        },
+        {
+          "letter": "B",
+          "text": "13/24",
+          "is_correct": false,
+          "pct_students": 20,
+          "error_explanation": "You've done the correct first step of adding the fractions together, but now we need to find our missing probability. What should all probabilities add up to?"
+        },
+        {
+          "letter": "C",
+          "text": "1/3",
+          "is_correct": false,
+          "pct_students": 14,
+          "error_explanation": "Close, but I think you made a mistake when adding your fractions. Remember we need to find a common denominator first"
+        },
+        {
+          "letter": "D",
+          "text": "5/12",
+          "is_correct": true,
+          "pct_students": 52,
+          "error_explanation": null
+        }
+      ],
+      "wrong_pct_total": 49
+    },
+    {
+      "case_id": "eedi_embt_q4",
+      "quiz_name": "Probability of a single event 4",
+      "topic": "Probability of a single event",
+      "subject": "Data",
+      "stem": "The audience of a concert is made up by men, women and children in the ratio of 2:4:7.\n\nWhat is the probability a person picked at random is a woman?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "4/13",
+          "is_correct": false,
+          "pct_students": 7,
+          "error_explanation": "There are 4 parts representing women, but how many parts are there in total?"
+        },
+        {
+          "letter": "B",
+          "text": "1/3",
+          "is_correct": false,
+          "pct_students": 8,
+          "error_explanation": "We have got to consider that not all the groups are equal so there is not a 1/3 probability of picking a woman. How many parts represent women? How many parts are there in total?"
+        },
+        {
+          "letter": "C",
+          "text": "4/9",
+          "is_correct": true,
+          "pct_students": 77,
+          "error_explanation": null
+        },
+        {
+          "letter": "D",
+          "text": "4/7",
+          "is_correct": false,
+          "pct_students": 8,
+          "error_explanation": "Not quite, we need to think about how many parts represent each category. How many parts represent women? How many parts are there in total?"
+        }
+      ],
+      "wrong_pct_total": 23
+    },
+    {
+      "case_id": "eedi_embt_q5",
+      "quiz_name": "Probability of a single event 4",
+      "topic": "Probability of a single event",
+      "subject": "Data",
+      "stem": "The table shows the probabilities that a sweet taken at random from a large bag will be yellow, or will be green, or will be blue, or will be red.\n\nYellow | Green | Blue | Red\nProbability x | 0.4 | x | 0.3\n\nWhich is the first correct statement?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "x = 0.3",
+          "is_correct": false,
+          "pct_students": 9,
+          "error_explanation": "Not quite. All probabilities add to 1, so we need to add together the probabilities we are given and then work out how much is left from"
+        },
+        {
+          "letter": "B",
+          "text": "x = 0.15",
+          "is_correct": true,
+          "pct_students": 63,
+          "error_explanation": null
+        },
+        {
+          "letter": "C",
+          "text": "x = 0.25",
+          "is_correct": false,
+          "pct_students": 13,
+          "error_explanation": "You do need to subtract both 0.4 and 0.3 from 1, but the bracket is telling us to do 0.4-0.3 first. Would this give us the correct answer?"
+        },
+        {
+          "letter": "D",
+          "text": "x = 0.35",
+          "is_correct": false,
+          "pct_students": 16,
+          "error_explanation": "Nearly. All probabilities add to 1, so we need to add together the probabilities we are given and then work out how much is left from"
+        }
+      ],
+      "wrong_pct_total": 38
+    },
+    {
+      "case_id": "eedi_emcv_q1",
+      "quiz_name": "Solve one step linear equations 2",
+      "topic": "Linear equations",
+      "subject": "Algebra",
+      "stem": "Solve the equation: 12 = 3p",
+      "options": [
+        {
+          "letter": "A",
+          "text": "p = 36",
+          "is_correct": false,
+          "pct_students": 6,
+          "error_explanation": "The student may think 𝑝/3 means subtract and does not realise you need to do the inverse."
+        },
+        {
+          "letter": "B",
+          "text": "p = 4",
+          "is_correct": true,
+          "pct_students": 66,
+          "error_explanation": null
+        },
+        {
+          "letter": "C",
+          "text": "p = 9",
+          "is_correct": false,
+          "pct_students": 23,
+          "error_explanation": "The student does not realise you need to do the inverse."
+        },
+        {
+          "letter": "D",
+          "text": "p = 15",
+          "is_correct": false,
+          "pct_students": 5,
+          "error_explanation": "The student may think 𝑝/3 means subtract."
+        }
+      ],
+      "wrong_pct_total": 34
+    },
+    {
+      "case_id": "eedi_emcv_q2",
+      "quiz_name": "Solve one step linear equations 2",
+      "topic": "Linear equations",
+      "subject": "Algebra",
+      "stem": "Solve the equation: p/3 = 12",
+      "options": [
+        {
+          "letter": "A",
+          "text": "p = 36",
+          "is_correct": false,
+          "pct_students": 32,
+          "error_explanation": "The student may believe the solution will be negative due to the negative signs."
+        },
+        {
+          "letter": "B",
+          "text": "p = 4",
+          "is_correct": true,
+          "pct_students": 46,
+          "error_explanation": null
+        },
+        {
+          "letter": "C",
+          "text": "p = 9",
+          "is_correct": false,
+          "pct_students": 10,
+          "error_explanation": "The student does not realise you need to do the inverse."
+        },
+        {
+          "letter": "D",
+          "text": "p = 15",
+          "is_correct": false,
+          "pct_students": 13,
+          "error_explanation": "The student does not realise you need to do the inverse and may believe the solution will be negative due to the negative signs."
+        }
+      ],
+      "wrong_pct_total": 55
+    },
+    {
+      "case_id": "eedi_emcv_q3",
+      "quiz_name": "Solve one step linear equations 2",
+      "topic": "Linear equations",
+      "subject": "Algebra",
+      "stem": "Solve the equation: 12 = 3/p",
+      "options": [
+        {
+          "letter": "A",
+          "text": "p = 36",
+          "is_correct": true,
+          "pct_students": 30,
+          "error_explanation": null
+        },
+        {
+          "letter": "B",
+          "text": "p = 4",
+          "is_correct": false,
+          "pct_students": 27,
+          "error_explanation": "The student may have worked out 12 × 3, and may not be secure with the unknown on the denominator."
+        },
+        {
+          "letter": "C",
+          "text": "p = 0.25",
+          "is_correct": false,
+          "pct_students": 22,
+          "error_explanation": "The student may have worked out 12/3, and may not be secure with the unknown on the denominator."
+        },
+        {
+          "letter": "D",
+          "text": "There are no solutions",
+          "is_correct": false,
+          "pct_students": 20,
+          "error_explanation": "The student may think there is no number you can divide 3 by and get 12, and may not be secure with the unknown on the denominator."
+        }
+      ],
+      "wrong_pct_total": 69
+    },
+    {
+      "case_id": "eedi_emcv_q4",
+      "quiz_name": "Solve one step linear equations 2",
+      "topic": "Linear equations",
+      "subject": "Algebra",
+      "stem": "Solve the equation: 12 = 3p",
+      "options": [
+        {
+          "letter": "A",
+          "text": "p = 36",
+          "is_correct": false,
+          "pct_students": 6,
+          "error_explanation": "The student may think 3𝑝 means add."
+        },
+        {
+          "letter": "B",
+          "text": "p = 4",
+          "is_correct": false,
+          "pct_students": 10,
+          "error_explanation": "The student does not realise you need to do the inverse."
+        },
+        {
+          "letter": "C",
+          "text": "p = 9",
+          "is_correct": true,
+          "pct_students": 78,
+          "error_explanation": null
+        },
+        {
+          "letter": "D",
+          "text": "p = 15",
+          "is_correct": false,
+          "pct_students": 6,
+          "error_explanation": "The student may think 3𝑝 means add and does not realise you need to do the inverse."
+        }
+      ],
+      "wrong_pct_total": 22
+    },
+    {
+      "case_id": "eedi_emcv_q5",
+      "quiz_name": "Solve one step linear equations 2",
+      "topic": "Linear equations",
+      "subject": "Algebra",
+      "stem": "Solve the equation: p/3 = -12",
+      "options": [
+        {
+          "letter": "A",
+          "text": "p = -36",
+          "is_correct": false,
+          "pct_students": 10,
+          "error_explanation": "The student may have worked out 12 − 3."
+        },
+        {
+          "letter": "B",
+          "text": "p = -4",
+          "is_correct": true,
+          "pct_students": 65,
+          "error_explanation": null
+        },
+        {
+          "letter": "C",
+          "text": "p = -9",
+          "is_correct": false,
+          "pct_students": 14,
+          "error_explanation": "The student may have worked out 3 −"
+        },
+        {
+          "letter": "D",
+          "text": "p = -15",
+          "is_correct": false,
+          "pct_students": 11,
+          "error_explanation": "The student may think two minuses equal a plus."
+        }
+      ],
+      "wrong_pct_total": 35
+    },
+    {
+      "case_id": "eedi_emkd_q1",
+      "quiz_name": "Written addition and subtraction of decimals",
+      "topic": "Decimals",
+      "subject": "Number",
+      "stem": "How should you line up the digits to calculate 0.7 + 0.54?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Option A - decimal points aligned",
+          "is_correct": false,
+          "pct_students": 8,
+          "error_explanation": "Be careful. Remember to line up the digits with the same place value and the decimal points can help do this too."
+        },
+        {
+          "letter": "B",
+          "text": "Option B - right-aligned",
+          "is_correct": false,
+          "pct_students": 17,
+          "error_explanation": "Not quite. 0.07 does not equal 0.7. Where else could we add a zero, without changing the value of the number, to make sure our place value lines up?"
+        },
+        {
+          "letter": "C",
+          "text": "Option C - left-aligned",
+          "is_correct": false,
+          "pct_students": 7,
+          "error_explanation": "Not quite. 5.4 does not equal 0.54. To get the digits to line up try rewriting one of the numbers rather than changing the value of one."
+        },
+        {
+          "letter": "D",
+          "text": "Option D",
+          "is_correct": true,
+          "pct_students": 69,
+          "error_explanation": null
+        }
+      ],
+      "wrong_pct_total": 32
+    },
+    {
+      "case_id": "eedi_emkd_q2",
+      "quiz_name": "Written addition and subtraction of decimals",
+      "topic": "Decimals",
+      "subject": "Number",
+      "stem": "How should you line up the digits to calculate 3 - 0.105?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Option A",
+          "is_correct": false,
+          "pct_students": 11,
+          "error_explanation": "Not quite. 0.300 does not equal 3. Where else could we add zeros, without changing the value of the number, to make sure our place value lines up?"
+        },
+        {
+          "letter": "B",
+          "text": "Option B",
+          "is_correct": false,
+          "pct_students": 9,
+          "error_explanation": "Not quite. 0.003 does not equal 3. Where else could we add zeros, without changing the value of the number, to make sure our place value lines up?"
+        },
+        {
+          "letter": "C",
+          "text": "Option C",
+          "is_correct": true,
+          "pct_students": 75,
+          "error_explanation": null
+        },
+        {
+          "letter": "D",
+          "text": "Option D",
+          "is_correct": false,
+          "pct_students": 5,
+          "error_explanation": "Good try, but the decimal points are still not lined up. Line up the decimals first before adding in zeros."
+        }
+      ],
+      "wrong_pct_total": 25
+    },
+    {
+      "case_id": "eedi_emkd_q3",
+      "quiz_name": "Written addition and subtraction of decimals",
+      "topic": "Decimals",
+      "subject": "Number",
+      "stem": "0.51 - 0.202 =",
+      "options": [
+        {
+          "letter": "A",
+          "text": "0.151",
+          "is_correct": false,
+          "pct_students": 16,
+          "error_explanation": "The student may have calculated 202 –"
+        },
+        {
+          "letter": "B",
+          "text": "0.312",
+          "is_correct": false,
+          "pct_students": 13,
+          "error_explanation": "The student has worked out biggest number subtract smallest."
+        },
+        {
+          "letter": "C",
+          "text": "0.308",
+          "is_correct": true,
+          "pct_students": 63,
+          "error_explanation": null
+        },
+        {
+          "letter": "D",
+          "text": "0.318",
+          "is_correct": false,
+          "pct_students": 9,
+          "error_explanation": "The student has not exchanged correctly."
+        }
+      ],
+      "wrong_pct_total": 38
+    },
+    {
+      "case_id": "eedi_emkd_q4",
+      "quiz_name": "Written addition and subtraction of decimals",
+      "topic": "Decimals",
+      "subject": "Number",
+      "stem": "3.215 - 1.4 =",
+      "options": [
+        {
+          "letter": "A",
+          "text": "1.815",
+          "is_correct": false,
+          "pct_students": 16,
+          "error_explanation": "The student has subtracted."
+        },
+        {
+          "letter": "B",
+          "text": "4.615",
+          "is_correct": true,
+          "pct_students": 65,
+          "error_explanation": null
+        },
+        {
+          "letter": "C",
+          "text": "4.219",
+          "is_correct": false,
+          "pct_students": 9,
+          "error_explanation": "The student has added the 4 to the thousandths column."
+        },
+        {
+          "letter": "D",
+          "text": "2.215",
+          "is_correct": false,
+          "pct_students": 10,
+          "error_explanation": "The student has subtracted the smallest numbers from the biggest."
+        }
+      ],
+      "wrong_pct_total": 35
+    },
+    {
+      "case_id": "eedi_emkd_q5",
+      "quiz_name": "Written addition and subtraction of decimals",
+      "topic": "Decimals",
+      "subject": "Number",
+      "stem": "0.15 - 0.5 =",
+      "options": [
+        {
+          "letter": "A",
+          "text": "0.35",
+          "is_correct": false,
+          "pct_students": 17,
+          "error_explanation": "I think you have done 0.15 - 0.05. We are taking away a bigger number, so we need to go back to 0, and then see how many more we need to take away."
+        },
+        {
+          "letter": "B",
+          "text": "-0.45",
+          "is_correct": false,
+          "pct_students": 13,
+          "error_explanation": "I think you have done the subtraction backwards. We are taking the bigger number away, so we will get a negative answer"
+        },
+        {
+          "letter": "C",
+          "text": "-0.35",
+          "is_correct": false,
+          "pct_students": 19,
+          "error_explanation": "Almost. If you go back 0.15 to get to 0, how many more do you need to go back so that you have taken off 0.5 in total?"
+        },
+        {
+          "letter": "D",
+          "text": "0.65",
+          "is_correct": true,
+          "pct_students": 51,
+          "error_explanation": null
+        }
+      ],
+      "wrong_pct_total": 49
+    },
+    {
+      "case_id": "eedi_emlb_q1",
+      "quiz_name": "Expand single brackets 3",
+      "topic": "Brackets - single",
+      "subject": "Algebra",
+      "stem": "What is the answer to 4c × 5d?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "20cd",
+          "is_correct": true,
+          "pct_students": 81,
+          "error_explanation": null
+        },
+        {
+          "letter": "B",
+          "text": "45cd",
+          "is_correct": false,
+          "pct_students": 5,
+          "error_explanation": "We can write letters next to each other to mean multiply, but not digits. 45 doesn't mean 4×5."
+        },
+        {
+          "letter": "C",
+          "text": "20c²d²",
+          "is_correct": false,
+          "pct_students": 10,
+          "error_explanation": "How many copies of d are being multiplied together?"
+        },
+        {
+          "letter": "D",
+          "text": "9cd",
+          "is_correct": false,
+          "pct_students": 4,
+          "error_explanation": "4c means 4×c and 5d means 5×d, so we need to work out 4×c × 5×d, there are no additions."
+        }
+      ],
+      "wrong_pct_total": 19
+    },
+    {
+      "case_id": "eedi_emlb_q2",
+      "quiz_name": "Expand single brackets 3",
+      "topic": "Brackets - single",
+      "subject": "Algebra",
+      "stem": "Expand and simplify: 4(2x + 1) - (5x - 9)",
+      "options": [
+        {
+          "letter": "A",
+          "text": "3x - 5",
+          "is_correct": false,
+          "pct_students": 26,
+          "error_explanation": "Remember we are subtracting all of (5x - 9). What sign will the 9 end up with?"
+        },
+        {
+          "letter": "B",
+          "text": "3x + 13",
+          "is_correct": true,
+          "pct_students": 42,
+          "error_explanation": null
+        },
+        {
+          "letter": "C",
+          "text": "13x - 5",
+          "is_correct": false,
+          "pct_students": 20,
+          "error_explanation": "What is the operation between the two brackets? I think you may have added."
+        },
+        {
+          "letter": "D",
+          "text": "13x + 13",
+          "is_correct": false,
+          "pct_students": 13,
+          "error_explanation": "Be careful with your negative signs, what is the sign on 5x?"
+        }
+      ],
+      "wrong_pct_total": 59
+    },
+    {
+      "case_id": "eedi_emlb_q3",
+      "quiz_name": "Expand single brackets 3",
+      "topic": "Brackets - single",
+      "subject": "Algebra",
+      "stem": "Expand and simplify: 2a - 4(3 - a)",
+      "options": [
+        {
+          "letter": "A",
+          "text": "6a - 12",
+          "is_correct": false,
+          "pct_students": 23,
+          "error_explanation": "Not quite. It looks like you didn't quite get the signs right when you expanded the bracket. Remember that we are multiplying (3 - a) by -4. So we need to multiply 3 by -4 and -a by -4."
+        },
+        {
+          "letter": "B",
+          "text": "-2a - 12",
+          "is_correct": true,
+          "pct_students": 52,
+          "error_explanation": null
+        },
+        {
+          "letter": "C",
+          "text": "6a + 12",
+          "is_correct": false,
+          "pct_students": 11,
+          "error_explanation": "If the bracket was (3a - a) you would be right but it is (3 - a). When we multiply the bracket by -4, we need to do -4 x 3 and -4 x -a."
+        },
+        {
+          "letter": "D",
+          "text": "-2a + 12",
+          "is_correct": false,
+          "pct_students": 14,
+          "error_explanation": "It looks like you forgot to multiply BOTH terms in the bracket by -4. When we multiply the bracket by -4, we need to do -4 x 3 and -4 x -a."
+        }
+      ],
+      "wrong_pct_total": 48
+    },
+    {
+      "case_id": "eedi_emlb_q4",
+      "quiz_name": "Expand single brackets 3",
+      "topic": "Brackets - single",
+      "subject": "Algebra",
+      "stem": "The area of these shapes are equal.\nBlue shape: 4 by (3x - 2), Yellow shape: 2 by (5x + 2)\nWhich of these is correct?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "12x - 8 = 10x + 4",
+          "is_correct": true,
+          "pct_students": 49,
+          "error_explanation": null
+        },
+        {
+          "letter": "B",
+          "text": "12x - 2 = 10x + 2",
+          "is_correct": false,
+          "pct_students": 17,
+          "error_explanation": "Almost! You're right that we need to multiply the length and width. But we work out 4(3x - 2), we need to remember to multiply BOTH terms inside the bracket by 4."
+        },
+        {
+          "letter": "C",
+          "text": "8 + 6x - 4 = 4 + 10x + 4",
+          "is_correct": false,
+          "pct_students": 19,
+          "error_explanation": "It looks like you calculated the perimeter by adding up all the sides. But we need to find the area - how do we calculate the area of a rectangle?"
+        },
+        {
+          "letter": "D",
+          "text": "4 + 3x - 2 = 2 + 5x + 2",
+          "is_correct": false,
+          "pct_students": 15,
+          "error_explanation": "It looks like you may have added the two sides that are given. But we need to find the area - how do we calculate the area of a rectangle?"
+        }
+      ],
+      "wrong_pct_total": 51
+    },
+    {
+      "case_id": "eedi_emlb_q5",
+      "quiz_name": "Expand single brackets 3",
+      "topic": "Brackets - single",
+      "subject": "Algebra",
+      "stem": "Rectangle: (4x + 9) by (5x + 1)\nWhich of the following statements is incorrect?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "4x + 9 = 5x + 1 so x = 8",
+          "is_correct": false,
+          "pct_students": 15,
+          "error_explanation": "The student has picked a correct statement."
+        },
+        {
+          "letter": "B",
+          "text": "Area = 5x² + x",
+          "is_correct": false,
+          "pct_students": 17,
+          "error_explanation": "The student has picked a correct statement."
+        },
+        {
+          "letter": "C",
+          "text": "Perimeter = 10x + 18",
+          "is_correct": true,
+          "pct_students": 46,
+          "error_explanation": null
+        },
+        {
+          "letter": "D",
+          "text": "x = 8",
+          "is_correct": false,
+          "pct_students": 22,
+          "error_explanation": "The student has picked a correct statement."
+        }
+      ],
+      "wrong_pct_total": 54
+    },
+    {
+      "case_id": "eedi_emn0_q1",
+      "quiz_name": "Addition and subtraction with negative numbers 1",
+      "topic": "Negative numbers",
+      "subject": "Number",
+      "stem": "What number belongs in the box?\n\n(-4) + 3 = [ ]",
+      "options": [
+        {
+          "letter": "A",
+          "text": "-1",
+          "is_correct": false,
+          "pct_students": 3,
+          "error_explanation": "I think you might have counted numbers rather than jumps. Where would you need to start on the number line so that when you did 6 jumps up you ended at 4?"
+        },
+        {
+          "letter": "B",
+          "text": "1",
+          "is_correct": false,
+          "pct_students": 6,
+          "error_explanation": "I think you have found the difference between 4 and 6. Hint: Where would you need to start on the number line so that when you did 6 jumps up you ended at 4?"
+        },
+        {
+          "letter": "C",
+          "text": "-7",
+          "is_correct": false,
+          "pct_students": 4,
+          "error_explanation": "I think you have added 4 and 6. Hint: Where would you need to start on the number line so that when you did 6 jumps up you ended at 4?"
+        },
+        {
+          "letter": "D",
+          "text": "7",
+          "is_correct": true,
+          "pct_students": 88,
+          "error_explanation": null
+        }
+      ],
+      "wrong_pct_total": 13
+    },
+    {
+      "case_id": "eedi_emn0_q3",
+      "quiz_name": "Addition and subtraction with negative numbers 1",
+      "topic": "Negative numbers",
+      "subject": "Number",
+      "stem": "What number belongs in the box?\n\n(-4) + (-3) = [ ]",
+      "options": [
+        {
+          "letter": "A",
+          "text": "-7",
+          "is_correct": true,
+          "pct_students": 77,
+          "error_explanation": null
+        },
+        {
+          "letter": "B",
+          "text": "-1",
+          "is_correct": false,
+          "pct_students": 6,
+          "error_explanation": "I think you have counted the numbers rather than the jumps. If you start at -3, how many jumps up is it to 2?"
+        },
+        {
+          "letter": "C",
+          "text": "1",
+          "is_correct": false,
+          "pct_students": 8,
+          "error_explanation": "I think you have done -3 + 2. If we start at -3, how many jumps up do we do to get to 2?"
+        },
+        {
+          "letter": "D",
+          "text": "7",
+          "is_correct": false,
+          "pct_students": 10,
+          "error_explanation": "Almost, just remember that we are starting at a negative and moving up the number line to a positive."
+        }
+      ],
+      "wrong_pct_total": 24
+    },
+    {
+      "case_id": "eedi_emn0_q4",
+      "quiz_name": "Addition and subtraction with negative numbers 1",
+      "topic": "Negative numbers",
+      "subject": "Number",
+      "stem": "What number belongs in the box?\n\n(-8) + 3 = [ ]",
+      "options": [
+        {
+          "letter": "A",
+          "text": "-5",
+          "is_correct": true,
+          "pct_students": 73,
+          "error_explanation": null
+        },
+        {
+          "letter": "B",
+          "text": "11",
+          "is_correct": false,
+          "pct_students": 13,
+          "error_explanation": "I think you might have subtracted 3. Remember you are doing 3 jumps up the number line"
+        },
+        {
+          "letter": "C",
+          "text": "-11",
+          "is_correct": false,
+          "pct_students": 9,
+          "error_explanation": "Not quite. You are starting at -8, and then moving 3 up the number line"
+        },
+        {
+          "letter": "D",
+          "text": "5",
+          "is_correct": false,
+          "pct_students": 5,
+          "error_explanation": "I think you might have counted the numbers rather than the jumps, you need to do 3 jumps up the number line"
+        }
+      ],
+      "wrong_pct_total": 27
+    },
+    {
+      "case_id": "eedi_emn0_q5",
+      "quiz_name": "Addition and subtraction with negative numbers 1",
+      "topic": "Negative numbers",
+      "subject": "Number",
+      "stem": "The value of the top brick is equal to the sum of the two bottom bricks.\n\nTop: ?, Bottom: [-2] and [4]\nWhat number should replace the star?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "-6",
+          "is_correct": false,
+          "pct_students": 11,
+          "error_explanation": "The student may have subtracted."
+        },
+        {
+          "letter": "B",
+          "text": "-4",
+          "is_correct": true,
+          "pct_students": 73,
+          "error_explanation": null
+        },
+        {
+          "letter": "C",
+          "text": "6",
+          "is_correct": false,
+          "pct_students": 7,
+          "error_explanation": "The student may have ignored the negative sign."
+        },
+        {
+          "letter": "D",
+          "text": "4",
+          "is_correct": false,
+          "pct_students": 8,
+          "error_explanation": "The student may have ignored the negative sign and subtracted."
+        }
+      ],
+      "wrong_pct_total": 26
+    },
+    {
+      "case_id": "eedi_emnt_q1",
+      "quiz_name": "Estimation 3",
+      "topic": "Rounding and estimating",
+      "subject": "Number",
+      "stem": "Erin wants to check that she has enough money to pay for 12 tickets at £2.45 each.\nWhich calculation will give an overestimate?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "12 × 2",
+          "is_correct": false,
+          "pct_students": 9,
+          "error_explanation": "The student has rounded sensibly, but this will underestimate."
+        },
+        {
+          "letter": "B",
+          "text": "10 × 2.45",
+          "is_correct": false,
+          "pct_students": 7,
+          "error_explanation": "The student has rounded sensibly, but this will underestimate."
+        },
+        {
+          "letter": "C",
+          "text": "12 × 2.5",
+          "is_correct": true,
+          "pct_students": 69,
+          "error_explanation": null
+        },
+        {
+          "letter": "D",
+          "text": "12 × 2.45",
+          "is_correct": false,
+          "pct_students": 14,
+          "error_explanation": "The student has found the exact answer, not an estimate."
+        }
+      ],
+      "wrong_pct_total": 30
+    },
+    {
+      "case_id": "eedi_emnt_q2",
+      "quiz_name": "Estimation 3",
+      "topic": "Rounding and estimating",
+      "subject": "Number",
+      "stem": "Estimate 3269 × 138",
+      "options": [
+        {
+          "letter": "A",
+          "text": "300,000",
+          "is_correct": true,
+          "pct_students": 45,
+          "error_explanation": null
+        },
+        {
+          "letter": "B",
+          "text": "420,000",
+          "is_correct": false,
+          "pct_students": 20,
+          "error_explanation": "I think you rounded 138 to the nearest ten, not 1 significant figure."
+        },
+        {
+          "letter": "C",
+          "text": "330,000",
+          "is_correct": false,
+          "pct_students": 17,
+          "error_explanation": "I think you rounded 3269 to the nearest hundred, not 1 significant figure."
+        },
+        {
+          "letter": "D",
+          "text": "451,122",
+          "is_correct": false,
+          "pct_students": 17,
+          "error_explanation": "It looks like you have worked out the exact answer, rather than estimating. Try rounding each value to 1 significant figure."
+        }
+      ],
+      "wrong_pct_total": 54
+    },
+    {
+      "case_id": "eedi_emnt_q3",
+      "quiz_name": "Estimation 3",
+      "topic": "Rounding and estimating",
+      "subject": "Number",
+      "stem": "Estimate the value of (4.12 × 18.3) / 0.226",
+      "options": [
+        {
+          "letter": "A",
+          "text": "14.4",
+          "is_correct": false,
+          "pct_students": 15,
+          "error_explanation": "The student has rounded to the nearest whole number, rather than 1 significant figure, and has divided by 5 rather than 0.2."
+        },
+        {
+          "letter": "B",
+          "text": "16",
+          "is_correct": false,
+          "pct_students": 18,
+          "error_explanation": "The student has divided by 5, instead of 0.2."
+        },
+        {
+          "letter": "C",
+          "text": "400",
+          "is_correct": true,
+          "pct_students": 38,
+          "error_explanation": null
+        },
+        {
+          "letter": "D",
+          "text": "360",
+          "is_correct": false,
+          "pct_students": 30,
+          "error_explanation": "The student has rounded to the nearest whole number, rather than 1 significant figure."
+        }
+      ],
+      "wrong_pct_total": 63
+    },
+    {
+      "case_id": "eedi_emnt_q4",
+      "quiz_name": "Estimation 3",
+      "topic": "Rounding and estimating",
+      "subject": "Number",
+      "stem": "Which of the following would be a correct first step for an estimation to (4.36 × 127) / 0.51?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "4 × 130 / 0.5",
+          "is_correct": false,
+          "pct_students": 24,
+          "error_explanation": "We can round everything to just 1 significant figure. What is 127 to 1 sf?"
+        },
+        {
+          "letter": "B",
+          "text": "4 × 100 / 0.5",
+          "is_correct": true,
+          "pct_students": 53,
+          "error_explanation": null
+        },
+        {
+          "letter": "C",
+          "text": "4 × 100 / 0.05",
+          "is_correct": false,
+          "pct_students": 8,
+          "error_explanation": "Look carefully at your denominator, is it roughly the same size as 0.51?"
+        },
+        {
+          "letter": "D",
+          "text": "4 × 100 / 1",
+          "is_correct": false,
+          "pct_students": 15,
+          "error_explanation": "Sometimes significant figures are after the decimal point, where is the first significant figure in 0.51?"
+        }
+      ],
+      "wrong_pct_total": 47
+    },
+    {
+      "case_id": "eedi_emnt_q5",
+      "quiz_name": "Estimation 3",
+      "topic": "Rounding and estimating",
+      "subject": "Number",
+      "stem": "Tom and Katie are discussing how to estimate the answer to 38.8745 + 7.9302\nTom says 40 + 7.9302 would give an overestimate.\nKatie says 38.8745 + 8 would give an overestimate.\n\nWho is correct?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Only Tom",
+          "is_correct": true,
+          "pct_students": 38,
+          "error_explanation": null
+        },
+        {
+          "letter": "B",
+          "text": "Only Katie",
+          "is_correct": false,
+          "pct_students": 15,
+          "error_explanation": "Remember, an overestimate is bigger than the real answer. Try thinking about which number we divide, and which number we divide by."
+        },
+        {
+          "letter": "C",
+          "text": "Both Tom and Katie",
+          "is_correct": false,
+          "pct_students": 26,
+          "error_explanation": "Rounding up doesn't always give an overestimate. If we divide by a larger number, does our answer get bigger or smaller?"
+        },
+        {
+          "letter": "D",
+          "text": "Neither is correct",
+          "is_correct": false,
+          "pct_students": 21,
+          "error_explanation": "Remember, an overestimate is bigger than the real answer. Try thinking about which number we divide, and which number we divide by."
+        }
+      ],
+      "wrong_pct_total": 62
+    },
+    {
+      "case_id": "eedi_emo8_q1",
+      "quiz_name": "Averages and range from a frequency table 3",
+      "topic": "Averages and range - frequency table",
+      "subject": "Data",
+      "stem": "The table shows the numbers of TVs in the households of students in a different class.\n\nTVs: 0 1 2 3 4\nFreq: 0 7 2 5 12\n\nWhat is the range for the number of TVs?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "3",
+          "is_correct": true,
+          "pct_students": 26,
+          "error_explanation": null
+        },
+        {
+          "letter": "B",
+          "text": "12",
+          "is_correct": false,
+          "pct_students": 29,
+          "error_explanation": "12 is the highest frequency but it is not the range. The range tells us the spread of the data, the difference between the minimum and maximum results."
+        },
+        {
+          "letter": "C",
+          "text": "10",
+          "is_correct": false,
+          "pct_students": 13,
+          "error_explanation": "I think you have found the difference between the highest and lowest frequencies. The range tells us the spread of the data, not the frequencies so we need the difference between the highest and lowest results."
+        },
+        {
+          "letter": "D",
+          "text": "4",
+          "is_correct": false,
+          "pct_students": 33,
+          "error_explanation": "I think you did 4 - 0 = 4 but be careful. When we work out the range, we need to look at the maximum and minimum results that actually occur."
+        }
+      ],
+      "wrong_pct_total": 75
+    },
+    {
+      "case_id": "eedi_emo8_q2",
+      "quiz_name": "Averages and range from a frequency table 3",
+      "topic": "Averages and range - frequency table",
+      "subject": "Data",
+      "stem": "The table shows the numbers of TVs in the households of students in a class.\nTom and Katie are arguing about what would happen if all the frequencies doubled.\nTom says the mean would double.\nKatie says the range would double.\n\nWho is correct?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Only Tom",
+          "is_correct": false,
+          "pct_students": 22,
+          "error_explanation": "Try working out the mean and the mode for the data in this table. Then double all the frequencies and work out the new mean and new mode. Then you will be able to see if Tom or Katie are correct. Remember to multiply the number of TVs by the frequency to work out the total number of TVs for the mean."
+        },
+        {
+          "letter": "B",
+          "text": "Only Katie",
+          "is_correct": false,
+          "pct_students": 21,
+          "error_explanation": "Try working out the mean and the mode for the data in this table. Then double all the frequencies and work out the new mean and new mode. Then you will be able to see if Tom or Katie are correct. Remember that the mode is the most common result."
+        },
+        {
+          "letter": "C",
+          "text": "Both Tom and Katie",
+          "is_correct": false,
+          "pct_students": 27,
+          "error_explanation": "Try working out the mean and the mode for the data in this table. Then double all the frequencies and work out the new mean and new mode. Then you will be able to see if Tom or Katie are correct."
+        },
+        {
+          "letter": "D",
+          "text": "Neither is correct",
+          "is_correct": true,
+          "pct_students": 30,
+          "error_explanation": null
+        }
+      ],
+      "wrong_pct_total": 70
+    },
+    {
+      "case_id": "eedi_emo8_q3",
+      "quiz_name": "Averages and range from a frequency table 3",
+      "topic": "Averages and range - frequency table",
+      "subject": "Data",
+      "stem": "What is the mean shoe size?\n\nShoe Size: 2 3 4 5 6\nFrequency: 5 8 9 5 3",
+      "options": [
+        {
+          "letter": "A",
+          "text": "3.77",
+          "is_correct": true,
+          "pct_students": 50,
+          "error_explanation": null
+        },
+        {
+          "letter": "B",
+          "text": "5.65",
+          "is_correct": false,
+          "pct_students": 22,
+          "error_explanation": "I think you have divided the total of every person's shoe size by the sum of the 'shoe size' column. Remember that to find the mean, we need to add together every person's shoe size and then divide by the total number of people we have. To picture what's happening, it might help you to list out every person's shoe size: 2,2,2,2,2,3,3,3,... and so on."
+        },
+        {
+          "letter": "C",
+          "text": "4.50",
+          "is_correct": false,
+          "pct_students": 11,
+          "error_explanation": "I think you have divided the total frequency by the sum of the 'shoe size' column. Remember that to find the mean, we need to add together every person's shoe size and then divide by the total number of people we have. To picture what's happening, it might help you to list out every person's shoe size: 2,2,2,2,2,3,3,3,... and so on."
+        },
+        {
+          "letter": "D",
+          "text": "1.50",
+          "is_correct": false,
+          "pct_students": 16,
+          "error_explanation": "I think you have worked out the total of every person's shoe sizes correctly but then divided by the number of categories of shoe size (5). Remember that to find the mean, we need to add together every person's shoe size and then divide by the total number of people we have."
+        }
+      ],
+      "wrong_pct_total": 49
+    },
+    {
+      "case_id": "eedi_emo8_q4",
+      "quiz_name": "Averages and range from a frequency table 3",
+      "topic": "Averages and range - frequency table",
+      "subject": "Data",
+      "stem": "What is the median number of siblings?\n\nSiblings: 0 1 2 3\nFrequency: 4 3 9 10",
+      "options": [
+        {
+          "letter": "A",
+          "text": "4",
+          "is_correct": false,
+          "pct_students": 12,
+          "error_explanation": "I think you have taken the number of siblings that corresponds to the median frequency (3, 4, 7, 9, 10 with 7 being the middle). But we want the number of siblings of the middle person, if we line them up in order of how many siblings they have. How many people were asked how many siblings they have? And where is the middle person in the table?"
+        },
+        {
+          "letter": "B",
+          "text": "3",
+          "is_correct": false,
+          "pct_students": 30,
+          "error_explanation": "I think you have taken the middle number from the number of siblings column (0, 1, 2, 3, 4 with 2 being the middle). But we want the number of siblings of the middle person, if we line them up in order of how many siblings they have. How many people were asked how many siblings they have? And where is the middle person in the table?"
+        },
+        {
+          "letter": "C",
+          "text": "2",
+          "is_correct": true,
+          "pct_students": 49,
+          "error_explanation": null
+        },
+        {
+          "letter": "D",
+          "text": "1",
+          "is_correct": false,
+          "pct_students": 9,
+          "error_explanation": "I think you have the right idea but remember that we want the median number of siblings, not the frequency."
+        }
+      ],
+      "wrong_pct_total": 51
+    },
+    {
+      "case_id": "eedi_emo8_q5",
+      "quiz_name": "Averages and range from a frequency table 3",
+      "topic": "Averages and range - frequency table",
+      "subject": "Data",
+      "stem": "The table below is a summary of the number of spots counted on 20 ladybirds. Calculate the mean number of spots per ladybird.\n\nSpots: 5 3 4 12 6\nFreq: ? ? ? ? ?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "0.2 (1dp)",
+          "is_correct": false,
+          "pct_students": 5,
+          "error_explanation": "The student may have done the division the wrong way around."
+        },
+        {
+          "letter": "B",
+          "text": "32.75",
+          "is_correct": false,
+          "pct_students": 15,
+          "error_explanation": "The student has divided the total sports by the number of classes."
+        },
+        {
+          "letter": "C",
+          "text": "4.5",
+          "is_correct": true,
+          "pct_students": 55,
+          "error_explanation": null
+        },
+        {
+          "letter": "D",
+          "text": "6.3",
+          "is_correct": false,
+          "pct_students": 25,
+          "error_explanation": "The student may have rounded incorrectly."
+        }
+      ],
+      "wrong_pct_total": 45
+    },
+    {
+      "case_id": "eedi_emrc_q1",
+      "quiz_name": "Solve linear inequalities 1",
+      "topic": "Inequalities",
+      "subject": "Algebra",
+      "stem": "How should you write the solution to the following inequality?\n2x < 9",
+      "options": [
+        {
+          "letter": "A",
+          "text": "x < 4.5",
+          "is_correct": true,
+          "pct_students": 68,
+          "error_explanation": null
+        },
+        {
+          "letter": "B",
+          "text": "x > 4.5",
+          "is_correct": false,
+          "pct_students": 11,
+          "error_explanation": "You have correctly divided both sides by 2, but look carefully at the inequality sign. You should keep it pointing in the same direction as in the question unless we are multiplying or dividing by a negative number."
+        },
+        {
+          "letter": "C",
+          "text": "x = 4.5",
+          "is_correct": false,
+          "pct_students": 13,
+          "error_explanation": "You have correctly divided both sides by 2, but you now have an equals sign in your answer. What should replace the equals sign?"
+        },
+        {
+          "letter": "D",
+          "text": "x < 4",
+          "is_correct": false,
+          "pct_students": 8,
+          "error_explanation": "Not quite. Remember it is ok to have decimal values in an inequalities question, unless you are asked to provide an integer (whole number) solution."
+        }
+      ],
+      "wrong_pct_total": 32
+    },
+    {
+      "case_id": "eedi_emrc_q2",
+      "quiz_name": "Solve linear inequalities 1",
+      "topic": "Inequalities",
+      "subject": "Algebra",
+      "stem": "Which number line represents the solution to 2x + 3 < 5?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "A - open circle at 1, left arrow",
+          "is_correct": false,
+          "pct_students": 12,
+          "error_explanation": "The student has added 3 rather than subtracting to give 2𝑥 ≤ 8. They have then found 𝑥 ≤ 4."
+        },
+        {
+          "letter": "B",
+          "text": "B - closed circle at 1, left",
+          "is_correct": false,
+          "pct_students": 15,
+          "error_explanation": "The student has solved the inequality as an equation, replacing the ≤ with an ="
+        },
+        {
+          "letter": "C",
+          "text": "C - open circle at 1, right",
+          "is_correct": false,
+          "pct_students": 30,
+          "error_explanation": "The student has not solved the inequality, but has instead represented 𝑥 ≤ 5"
+        },
+        {
+          "letter": "D",
+          "text": "D - closed circle at 1, right",
+          "is_correct": true,
+          "pct_students": 44,
+          "error_explanation": null
+        }
+      ],
+      "wrong_pct_total": 57
+    },
+    {
+      "case_id": "eedi_emrc_q3",
+      "quiz_name": "Solve linear inequalities 1",
+      "topic": "Inequalities",
+      "subject": "Algebra",
+      "stem": "Tom and Katie are arguing about the solution to this inequality: 15 > 4m\nTom says m could be 4\nKatie says m could be 3.75\n\nWho is correct?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Only Tom",
+          "is_correct": false,
+          "pct_students": 9,
+          "error_explanation": "The student may have read the inequality the wrong way around and is not able to interpret the equals part."
+        },
+        {
+          "letter": "B",
+          "text": "Only Katie",
+          "is_correct": true,
+          "pct_students": 64,
+          "error_explanation": null
+        },
+        {
+          "letter": "C",
+          "text": "Both Tom and Katie",
+          "is_correct": false,
+          "pct_students": 15,
+          "error_explanation": "The student may have read the inequality the wrong way around."
+        },
+        {
+          "letter": "D",
+          "text": "Neither is correct",
+          "is_correct": false,
+          "pct_students": 12,
+          "error_explanation": "The student may not be able to interpret the equals part."
+        }
+      ],
+      "wrong_pct_total": 36
+    },
+    {
+      "case_id": "eedi_emrc_q4",
+      "quiz_name": "Solve linear inequalities 1",
+      "topic": "Inequalities",
+      "subject": "Algebra",
+      "stem": "Tom and Katie are arguing about the solution to this inequality: t + 1 > 0.04\nTom says t could be 0\nKatie says t could be -0.9\n\nWho is correct?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Only Tom",
+          "is_correct": false,
+          "pct_students": 20,
+          "error_explanation": "The student may not be comfortable adding integers to negative decimals."
+        },
+        {
+          "letter": "B",
+          "text": "Only Katie",
+          "is_correct": false,
+          "pct_students": 17,
+          "error_explanation": "The student may not be comfortable with 0 as a solution."
+        },
+        {
+          "letter": "C",
+          "text": "Both Tom and Katie",
+          "is_correct": true,
+          "pct_students": 43,
+          "error_explanation": null
+        },
+        {
+          "letter": "D",
+          "text": "Neither is correct",
+          "is_correct": false,
+          "pct_students": 21,
+          "error_explanation": "The student may not be comfortable subtracting integers from decimals nor be comfortable with 0 as a solution."
+        }
+      ],
+      "wrong_pct_total": 58
+    },
+    {
+      "case_id": "eedi_emrc_q5",
+      "quiz_name": "Solve linear inequalities 1",
+      "topic": "Inequalities",
+      "subject": "Algebra",
+      "stem": "Solve the inequality: -3 > p - 1",
+      "options": [
+        {
+          "letter": "A",
+          "text": "p < -2",
+          "is_correct": false,
+          "pct_students": 13,
+          "error_explanation": "The student made an error when adding negative numbers."
+        },
+        {
+          "letter": "B",
+          "text": "p > -2",
+          "is_correct": false,
+          "pct_students": 16,
+          "error_explanation": "The student has written the inequality sign the wrong way around and made an error when adding negative numbers."
+        },
+        {
+          "letter": "C",
+          "text": "p < -4",
+          "is_correct": false,
+          "pct_students": 21,
+          "error_explanation": "The student has written the inequality sign the wrong way around."
+        },
+        {
+          "letter": "D",
+          "text": "p > -4",
+          "is_correct": true,
+          "pct_students": 50,
+          "error_explanation": null
+        }
+      ],
+      "wrong_pct_total": 50
+    },
+    {
+      "case_id": "eedi_emt1_q1",
+      "quiz_name": "Factors and multiples 4",
+      "topic": "Factors, multiples and primes",
+      "subject": "Number",
+      "stem": "Tom and Katie are arguing about this ring of 12 equally spaced dots.\nTom says you can connect dots to make a regular hexagon.\nKatie says you can connect dots to make a regular octagon.\n\nWho is correct?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Only Tom",
+          "is_correct": true,
+          "pct_students": 40,
+          "error_explanation": null
+        },
+        {
+          "letter": "B",
+          "text": "Only Katie",
+          "is_correct": false,
+          "pct_students": 17,
+          "error_explanation": "A regular shape has all sides the same length. Could you split the dots up equally into these groups?"
+        },
+        {
+          "letter": "C",
+          "text": "Both Tom and Katie",
+          "is_correct": false,
+          "pct_students": 19,
+          "error_explanation": "A regular shape has all sides the same length. Could you split the dots up equally into these groups?"
+        },
+        {
+          "letter": "D",
+          "text": "Neither is correct",
+          "is_correct": false,
+          "pct_students": 24,
+          "error_explanation": "A regular shape has all sides the same length. Could you split the dots up equally into these groups?"
+        }
+      ],
+      "wrong_pct_total": 60
+    },
+    {
+      "case_id": "eedi_emt1_q2",
+      "quiz_name": "Factors and multiples 4",
+      "topic": "Factors, multiples and primes",
+      "subject": "Number",
+      "stem": "If you can connect dots to draw a regular octagon in a ring of equally spaced dots, which other regular shape can you definitely draw?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Equilateral triangle",
+          "is_correct": false,
+          "pct_students": 14,
+          "error_explanation": "We know that the dots can be split into 8 equal parts, but that doesn't mean that it can be split into 3 equal parts as 8 does not divide equally by"
+        },
+        {
+          "letter": "B",
+          "text": "Square",
+          "is_correct": true,
+          "pct_students": 49,
+          "error_explanation": null
+        },
+        {
+          "letter": "C",
+          "text": "Pentagon",
+          "is_correct": false,
+          "pct_students": 16,
+          "error_explanation": "We know that the dots can be split into 8 equal parts, but that doesn't mean that it can be split into 5 equal parts as 8 does not divide equally by"
+        },
+        {
+          "letter": "D",
+          "text": "Hexagon",
+          "is_correct": false,
+          "pct_students": 21,
+          "error_explanation": "We know that the dots can be split into 8 equal parts, but that doesn't mean that it can be split into 6 equal parts as 8 does not divide equally by"
+        }
+      ],
+      "wrong_pct_total": 51
+    },
+    {
+      "case_id": "eedi_emt1_q3",
+      "quiz_name": "Factors and multiples 4",
+      "topic": "Factors, multiples and primes",
+      "subject": "Number",
+      "stem": "Lucy has three cards with numbers written on them.\n'I have a square number, a prime number and a multiple of 6.'\nWhich set of numbers could Lucy have?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "4, 9, 24",
+          "is_correct": false,
+          "pct_students": 14,
+          "error_explanation": "9 is not a prime number."
+        },
+        {
+          "letter": "B",
+          "text": "8, 3, 60",
+          "is_correct": false,
+          "pct_students": 19,
+          "error_explanation": "8 is not a square number."
+        },
+        {
+          "letter": "C",
+          "text": "9, 1, 12",
+          "is_correct": false,
+          "pct_students": 20,
+          "error_explanation": "1 is not a prime number."
+        },
+        {
+          "letter": "D",
+          "text": "9, 5, 54",
+          "is_correct": true,
+          "pct_students": 47,
+          "error_explanation": null
+        }
+      ],
+      "wrong_pct_total": 53
+    },
+    {
+      "case_id": "eedi_emt1_q4",
+      "quiz_name": "Factors and multiples 4",
+      "topic": "Factors, multiples and primes",
+      "subject": "Number",
+      "stem": "'Common multiples of 2, 3 and 5 are also multiples of 30'\nIs this statement...",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Always true",
+          "is_correct": true,
+          "pct_students": 53,
+          "error_explanation": null
+        },
+        {
+          "letter": "B",
+          "text": "Sometimes true",
+          "is_correct": false,
+          "pct_students": 32,
+          "error_explanation": "Find the first few common multiples of 2, 3 and 5 and then see if they are all multiples of 30. Remember multiples are the numbers in that times table."
+        },
+        {
+          "letter": "C",
+          "text": "Never true",
+          "is_correct": false,
+          "pct_students": 10,
+          "error_explanation": "Find the first few common multiples of 2, 3 and 5 and then see if they are all multiples of 30. Remember multiples are the numbers in that times table."
+        },
+        {
+          "letter": "D",
+          "text": "Impossible to say",
+          "is_correct": false,
+          "pct_students": 5,
+          "error_explanation": "Find the first few common multiples of 2, 3 and 5 and then see if they are all multiples of 30. Remember multiples are the numbers in that times table."
+        }
+      ],
+      "wrong_pct_total": 47
+    },
+    {
+      "case_id": "eedi_emt1_q5",
+      "quiz_name": "Factors and multiples 4",
+      "topic": "Factors, multiples and primes",
+      "subject": "Number",
+      "stem": "Tom and Katie are arguing about multiples.\nTom says that if n is a positive integer, 6 + n will always be a multiple of 6.\nKatie says that if n is a positive integer, 6n will always be a multiple of 6.\n\nWho is correct?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Only Tom",
+          "is_correct": false,
+          "pct_students": 10,
+          "error_explanation": "Not quite, have a think of some examples, for example, if we substitute n for 3, what will 6 + 3 be, is that a multiple of 6? Then you can also have a go with 6n :)"
+        },
+        {
+          "letter": "B",
+          "text": "Only Katie",
+          "is_correct": true,
+          "pct_students": 54,
+          "error_explanation": null
+        },
+        {
+          "letter": "C",
+          "text": "Both Tom and Katie",
+          "is_correct": false,
+          "pct_students": 20,
+          "error_explanation": "You're not quite right, try using n=3 and testing that in both of their expressions. Are both answers in the six times tables?"
+        },
+        {
+          "letter": "D",
+          "text": "Neither is correct",
+          "is_correct": false,
+          "pct_students": 16,
+          "error_explanation": "Not quite there yet, at least one of them is correct. Try substituting n=3 to make a start :)"
+        }
+      ],
+      "wrong_pct_total": 46
+    },
+    {
+      "case_id": "eedi_emtg_q1",
+      "quiz_name": "Fractions and recurring decimals 1",
+      "topic": "Fraction, Decimal, Percentage equivalence",
+      "subject": "Number",
+      "stem": "Which of these two decimals is recurring?\n0.333 and 0.3̇",
+      "options": [
+        {
+          "letter": "A",
+          "text": "0.333",
+          "is_correct": false,
+          "pct_students": 4,
+          "error_explanation": "Not quite. When it is recurring the number is repeated forever."
+        },
+        {
+          "letter": "B",
+          "text": "0.3̇",
+          "is_correct": true,
+          "pct_students": 79,
+          "error_explanation": null
+        },
+        {
+          "letter": "C",
+          "text": "Both",
+          "is_correct": false,
+          "pct_students": 15,
+          "error_explanation": "Not quite. 0.333 stops after 3 decimal places, but recurring decimals go on forever."
+        },
+        {
+          "letter": "D",
+          "text": "Neither",
+          "is_correct": false,
+          "pct_students": 2,
+          "error_explanation": "At least one of these is correct. Think about how we indicate that a number is repeated forever"
+        }
+      ],
+      "wrong_pct_total": 21
+    },
+    {
+      "case_id": "eedi_emtg_q2",
+      "quiz_name": "Fractions and recurring decimals 1",
+      "topic": "Fraction, Decimal, Percentage equivalence",
+      "subject": "Number",
+      "stem": "Which of these fractions converts to a recurring decimal?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "1/2",
+          "is_correct": false,
+          "pct_students": 4,
+          "error_explanation": "The dot doesn't represent a zero, it means recurring. That means it goes on forever. How could this be indicated?"
+        },
+        {
+          "letter": "B",
+          "text": "1/3",
+          "is_correct": false,
+          "pct_students": 3,
+          "error_explanation": "Almost, but the dot means recurring, so the number goes on forever. This one stops after 2 decimal places. What could represent it repeating forever?"
+        },
+        {
+          "letter": "C",
+          "text": "1/4",
+          "is_correct": true,
+          "pct_students": 90,
+          "error_explanation": null
+        },
+        {
+          "letter": "D",
+          "text": "1/5",
+          "is_correct": false,
+          "pct_students": 3,
+          "error_explanation": "The dot doesn't represent a zero, it means recurring. That means it goes on forever. How could this be indicated?"
+        }
+      ],
+      "wrong_pct_total": 10
+    },
+    {
+      "case_id": "eedi_emtg_q4",
+      "quiz_name": "Fractions and recurring decimals 1",
+      "topic": "Fraction, Decimal, Percentage equivalence",
+      "subject": "Number",
+      "stem": "What is 0.5̇1̇ as a fraction?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "51/99",
+          "is_correct": false,
+          "pct_students": 4,
+          "error_explanation": "Not quite. 0.5151 is a terminating decimal. The dots are telling us that this decimal is a recurring decimal (it continues forever). How could we write this?"
+        },
+        {
+          "letter": "B",
+          "text": "51/100",
+          "is_correct": false,
+          "pct_students": 4,
+          "error_explanation": "Not quite. The dots, over the 5 and the 1, are telling us that this decimal is a recurring decimal (it continues forever). 0.511 is a terminating decimal. How could we show that this decimal is continuing forever?"
+        },
+        {
+          "letter": "C",
+          "text": "17/33",
+          "is_correct": true,
+          "pct_students": 88,
+          "error_explanation": null
+        },
+        {
+          "letter": "D",
+          "text": "51/90",
+          "is_correct": false,
+          "pct_students": 4,
+          "error_explanation": "Be careful. There is a dot over both the 5 and the 1, not just the 1. How would we write this as a decimal?"
+        }
+      ],
+      "wrong_pct_total": 12
+    },
+    {
+      "case_id": "eedi_emtg_q5",
+      "quiz_name": "Fractions and recurring decimals 1",
+      "topic": "Fraction, Decimal, Percentage equivalence",
+      "subject": "Number",
+      "stem": "0.351̇ = ?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "0.3515151... = ?",
+          "is_correct": false,
+          "pct_students": 5,
+          "error_explanation": "Not quite. Have another look at the positioning of the dots, they are not over the 5 and the 1. In this notation the location of the two dots show the first and last number that should be repeated included in the repetition."
+        },
+        {
+          "letter": "B",
+          "text": "0.351351... = ?",
+          "is_correct": false,
+          "pct_students": 5,
+          "error_explanation": "Not quite. The dots, over the 3 and the 1, are telling us that this decimal is a recurring decimal (it continues forever). 0.351351 is a terminating decimal, as it stops. How could we show that this decimal is continuing forever?"
+        },
+        {
+          "letter": "C",
+          "text": "0.351351351... = ?",
+          "is_correct": true,
+          "pct_students": 64,
+          "error_explanation": null
+        },
+        {
+          "letter": "D",
+          "text": "0.3513131... = ?",
+          "is_correct": false,
+          "pct_students": 26,
+          "error_explanation": "Not quite. In this notation the location of the two dots show the first and last number that should be repeated. Any number inbetween the two dots should be included in the repetition."
+        }
+      ],
+      "wrong_pct_total": 36
+    }
+  ],
+  "sha256": "fceed7983c96300d5a75480eb79ce955b55462d8a41c030413ad1a3d1f13b46e"
+}

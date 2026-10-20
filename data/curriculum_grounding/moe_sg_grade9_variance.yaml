@@ -1,0 +1,45 @@
+# Curriculum grounding: Singapore Grade 9 — Consistency / variance (StratL consistency task)
+# Grounds: puech2025_stratl_consistency (Premier League consistency task)
+id: moe_sg_grade9_variance
+country: Singapore
+grade: 9
+school_level: "Secondary 3 (O-Level track)"
+target_concept: "Variance / standard deviation as a consistency measure"
+expert_tasks_grounded:
+  - puech2025_consistency        # StratL two-exercise file
+  - puech2025_stratl_consistency # full StratL file
+
+sources:
+  - name: "MOE Singapore — 2020 Express/N(A) Mathematics Syllabuses (O-Level & N(A)-Level)"
+    file: "documents/moe_sg_2020_secondary_maths.pdf"
+    url: "https://www.moe.gov.sg/-/media/files/secondary/syllabuses/maths/2020-express_na-maths_syllabuses.pdf"
+    access_date: "2026-08-24"
+    type: official_curriculum
+
+prior_resources_taught_before_target:
+  - resource: "Data handling: dot diagrams, histograms, stem-and-leaf"
+    taught_at: "Secondary 1-2"
+    source: "MOE Secondary syllabus"
+    section: "S1. Data handling and analysis"
+    pages: "p.20, p.29-30"
+    section_text: "analysis and interpretation of: dot diagrams, histograms, stem-and-leaf diagrams; purposes and uses of different forms"
+  - resource: "Mean and measures of central tendency"
+    taught_at: "Secondary 1-2"
+    source: "MOE Secondary syllabus"
+    section: "S1. Data handling and analysis"
+    pages: "p.20-21, p.32 (mean and standard deviation used to compare data sets appears later in the N(A) strand)"
+  - resource: "Range, quartiles, interquartile range"
+    taught_at: "Secondary 3/4"
+    source: "MOE Secondary syllabus"
+    section: "S1. Data handling and analysis"
+    pages: "p.23 (S1.11 quartiles and percentiles; S1.12 range, interquartile range and standard deviation as measures of spread)"
+
+target_concept_first_appearance:
+  concept: "Standard deviation as a measure of spread"
+  location: "Secondary 3/4, S1.12"
+  page: "p.23"
+  note: "The MOE O-Level syllabus introduces standard deviation at Sec 3/4. A Grade 9 (Sec 3) class early in the year sits exactly at the PF boundary: mean/range available, SD not yet consolidated. Kapur & Toh (2015) note students do not know variance."
+
+caveats:
+  - "MOE's 'Sec 3/4' grouping means the exact week of SD instruction is school-dependent; the paper's claim ('students not expected to know variance/SD') is the operative ground truth, the syllabus provides the structural confirmation."
+  - "Section titles quoted from the official syllabus."

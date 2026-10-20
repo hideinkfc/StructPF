@@ -1,0 +1,62 @@
+{
+  "schema_version": "pf-path-coverage-final/v1",
+  "question": "Can operational designed-path coverage serve as a useful diagnostic and improve a PF design when fed to design-level restructuring rather than rewriting finished prose?",
+  "boundary": "Final bounded computational pilot and synthesis for the thesis simulation/feedback component. Deliver a reproducible diagnostic workflow and honest educational-design findings. Not human-fidelity validation, a learned classroom distribution, learning effects, SOTA, or a new endless research campaign.",
+  "output": "experiments/results/pf_path_coverage_final_20261012",
+  "source_root": "experiments/results/pf_method_comparison_draft_first_20261011/fresh",
+  "baseline_attempt_root": "experiments/results/pf_student_diagnosis_20261011/panel",
+  "retrospective_coverage": "All nine saved pipeline briefs and eight learner-role baseline attempts per task. Explicit original actions and exact attempt evidence, reached/not_observed/unknown; distinguish algorithms from insights/representations/compound pathways and duplicate mathematical ideas. Historical mapping is retrospective, not prospective validation.",
+  "cases": [
+    {"id":"speed","family":"kapur_average_speed","number":"002"},
+    {"id":"consistency","family":"loibl_variance","number":"003"},
+    {"id":"division","family":"kerrigan_fair_division","number":"001"}
+  ],
+  "calibration": {"id":"calibration","family":"loibl_variance","number":"001"},
+  "arms": ["original","design_review","coverage_feedback"],
+  "design_instruction": "Review the shared task-only assessment and revise the underlying mathematical challenge, not just wording or adding invent verbs. Preserve target and prerequisite boundary. If a fixed task lacks a consequential unknown or mathematical decision, change structure or givens so learners can construct a meaningful object, measure or procedure. Preserve adequate designs. Maintain valid, attainable work and necessary definitions without teaching the central method. Do not require every familiar method to fail, force a named path, maximize errors, add unsupported universal guarantees or manufacture diversity through ambiguity. Candidate path descriptions are hypotheses, not student facts.",
+  "control_assessment": "Both arms receive the source-frozen task-only assessment from the earlier direct/pipeline comparison, written before the learner-panel diagnosis. Coverage arm adds path audit. This is a specific task-review baseline, not no-information regeneration.",
+  "coverage_instruction": "Use the supplied prior intended-path reachability audit only as diagnostic evidence. Paths not observed could reflect simulator competence, prompt framing or sample size, not a task defect. Feedback may warrant restructuring a missing decision space, but do not supply desired errors or methods in student text. Unexpected valid approaches should not be suppressed. Preserve the central unknown and genuine useful support. Do not target a measured path rate.",
+  "generation": {
+    "model":"luna",
+    "proposal_k":1,
+    "per_attempt_max_calls":15,
+    "calibration_attempts":2,
+    "fresh_attempts":6,
+    "max_calls":120,
+    "derivation":"One initial proposal and up to two revised proposals, each with max2 schema attempts (6); max3 selections; max3 data attempts; max3 writer attempts. Fixed D1; no translation.",
+    "sdk_retries":0,
+    "max_tokens_per_call":6000
+  },
+  "evaluation": {
+    "models":["gpt41mini","gpt41","gpt54"],
+    "profiles":[
+      {"id":"ordinary_solver","condition":"solver"},
+      {"id":"recent_prerequisites","condition":"learner"},
+      {"id":"one_prerequisite_gap","condition":"learner","omit_resources":{"kapur_average_speed":"Ratio and proportion","loibl_variance":"Arithmetic mean","kerrigan_fair_division":"Divider-Chooser method"}}
+    ],
+    "repeats":2,
+    "workers":4,
+    "temperature":0.7,
+    "max_tokens":2400,
+    "calibration_calls":12,
+    "fresh_calls":162,
+    "max_calls":174,
+    "transfer":"GPT-5.4 is another model series but same provider/lineage, not independent human evidence. Its ordinary solver and learner outputs have not been used to author feedback.",
+    "path_codebook":"Freeze every delivered design's actual intended actions before collecting new attempts; classify reached/partial/not_observed/unknown and working/unsuccessful, allow paths to overlap and retain novel methods. No intended paths in learner prompts.",
+    "task_review":"Label-hidden assistant review before learner outcomes; mathematical support,target,accessible start,disclosure,consequential choice,input clarity separate.",
+    "sampling":"Equal calls per hypothetical profile. Profile-conditional counts lead; changing assumed class weights is sensitivity only, not prediction. Original paths for original variant, revised paths for revised variants; changes in target sets prevent naive causal coverage-rate comparison.",
+    "decision":"Coverage arm must show a design-quality gain over equally resourced design-review arm on at least two of three cases without mathematical/access regressions, supported by fresh learner evidence of genuine consequential approaches, not just more names/errors or new path denominator. Otherwise no improvement established. Descriptive continuation rule, not powered inference or score."
+  },
+  "budget":{"max_requests":294,"max_completion_tokens":1137600,"rounds":1,"derivation":"120 generation requests x6000 plus174 evaluation requests x2400. Retrospective coverage and assistant reviews use no paid model calls."},
+  "stopping":"Stop after this one final structural package regardless of result. Keep reusable diagnostic tool and negative results; no additional automatic tuning or acceptance gates. Actual API errors,no usable output,and unknown mathematics remain explicit.",
+  "limits":[
+    "Three selected already inspected topic directions and one calibration, not a sealed final benchmark.",
+    "One stochastic generated candidate search per case/arm, with bounded internal revisions; gain cannot isolate individual prompt parts.",
+    "Coverage feedback derived from hypothetical LLM outputs, no real class frequency ground truth.",
+    "Different valid redesigned tasks may elicit different approaches and have different intended path sets; compare educational properties separately.",
+    "Source/coding evidence may be assistant interpretations; exact quotation is traceability, not correctness proof.",
+    "No private learner data are uploaded; no external framework/data/model training adopted.",
+    "No student participants,learning gains,realistic simulation or SOTA claim; classroom studies remain future work."
+  ],
+  "seed":20261012
+}

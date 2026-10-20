@@ -1,0 +1,240 @@
+{
+  "concept_id": "x_decimals",
+  "concept_text": "Adding or subtracting decimals requires aligning place value (decimal points), not right-aligning digits.",
+  "grade": 7,
+  "anchor": {
+    "quiz": "emkd",
+    "quiz_name": "Written addition and subtraction of decimals",
+    "topic": "Decimals",
+    "questions": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "questions_omitted": []
+  },
+  "dominant_threshold_pct": 10,
+  "dominant_errors": [
+    {
+      "question": 1,
+      "option_label": "B",
+      "option_text": "Option B - right-aligned",
+      "explanation": "Not quite. 0.07 does not equal 0.7. Where else could we add a zero, without changing the value of the number, to make sure our place value lines up?",
+      "pct_students": 17,
+      "question_stem": "How should you line up the digits to calculate 0.7 + 0.54?",
+      "matchable": true
+    },
+    {
+      "question": 2,
+      "option_label": "A",
+      "option_text": "Option A",
+      "explanation": "Not quite. 0.300 does not equal 3. Where else could we add zeros, without changing the value of the number, to make sure our place value lines up?",
+      "pct_students": 11,
+      "question_stem": "How should you line up the digits to calculate 3 - 0.105?",
+      "matchable": true
+    },
+    {
+      "question": 3,
+      "option_label": "A",
+      "option_text": "0.151",
+      "explanation": "The student may have calculated 202 –",
+      "pct_students": 16,
+      "question_stem": "0.51 - 0.202 =",
+      "matchable": true
+    },
+    {
+      "question": 3,
+      "option_label": "B",
+      "option_text": "0.312",
+      "explanation": "The student has worked out biggest number subtract smallest.",
+      "pct_students": 13,
+      "question_stem": "0.51 - 0.202 =",
+      "matchable": true
+    },
+    {
+      "question": 4,
+      "option_label": "A",
+      "option_text": "1.815",
+      "explanation": "The student has subtracted.",
+      "pct_students": 16,
+      "question_stem": "3.215 - 1.4 =",
+      "matchable": true
+    },
+    {
+      "question": 4,
+      "option_label": "D",
+      "option_text": "2.215",
+      "explanation": "The student has subtracted the smallest numbers from the biggest.",
+      "pct_students": 10,
+      "question_stem": "3.215 - 1.4 =",
+      "matchable": true
+    },
+    {
+      "question": 5,
+      "option_label": "A",
+      "option_text": "0.35",
+      "explanation": "I think you have done 0.15 - 0.05. We are taking away a bigger number, so we need to go back to 0, and then see how many more we need to take away.",
+      "pct_students": 17,
+      "question_stem": "0.15 - 0.5 =",
+      "matchable": true
+    },
+    {
+      "question": 5,
+      "option_label": "B",
+      "option_text": "-0.45",
+      "explanation": "I think you have done the subtraction backwards. We are taking the bigger number away, so we will get a negative answer",
+      "pct_students": 13,
+      "question_stem": "0.15 - 0.5 =",
+      "matchable": true
+    },
+    {
+      "question": 5,
+      "option_label": "C",
+      "option_text": "-0.35",
+      "explanation": "Almost. If you go back 0.15 to get to 0, how many more do you need to go back so that you have taken off 0.5 in total?",
+      "pct_students": 19,
+      "question_stem": "0.15 - 0.5 =",
+      "matchable": true
+    }
+  ],
+  "all_errors": [
+    {
+      "question": 1,
+      "option_label": "A",
+      "option_text": "Option A - decimal points aligned",
+      "explanation": "Be careful. Remember to line up the digits with the same place value and the decimal points can help do this too.",
+      "pct_students": 8,
+      "question_stem": "How should you line up the digits to calculate 0.7 + 0.54?",
+      "matchable": true
+    },
+    {
+      "question": 1,
+      "option_label": "B",
+      "option_text": "Option B - right-aligned",
+      "explanation": "Not quite. 0.07 does not equal 0.7. Where else could we add a zero, without changing the value of the number, to make sure our place value lines up?",
+      "pct_students": 17,
+      "question_stem": "How should you line up the digits to calculate 0.7 + 0.54?",
+      "matchable": true
+    },
+    {
+      "question": 1,
+      "option_label": "C",
+      "option_text": "Option C - left-aligned",
+      "explanation": "Not quite. 5.4 does not equal 0.54. To get the digits to line up try rewriting one of the numbers rather than changing the value of one.",
+      "pct_students": 7,
+      "question_stem": "How should you line up the digits to calculate 0.7 + 0.54?",
+      "matchable": true
+    },
+    {
+      "question": 2,
+      "option_label": "A",
+      "option_text": "Option A",
+      "explanation": "Not quite. 0.300 does not equal 3. Where else could we add zeros, without changing the value of the number, to make sure our place value lines up?",
+      "pct_students": 11,
+      "question_stem": "How should you line up the digits to calculate 3 - 0.105?",
+      "matchable": true
+    },
+    {
+      "question": 2,
+      "option_label": "B",
+      "option_text": "Option B",
+      "explanation": "Not quite. 0.003 does not equal 3. Where else could we add zeros, without changing the value of the number, to make sure our place value lines up?",
+      "pct_students": 9,
+      "question_stem": "How should you line up the digits to calculate 3 - 0.105?",
+      "matchable": true
+    },
+    {
+      "question": 2,
+      "option_label": "D",
+      "option_text": "Option D",
+      "explanation": "Good try, but the decimal points are still not lined up. Line up the decimals first before adding in zeros.",
+      "pct_students": 5,
+      "question_stem": "How should you line up the digits to calculate 3 - 0.105?",
+      "matchable": true
+    },
+    {
+      "question": 3,
+      "option_label": "A",
+      "option_text": "0.151",
+      "explanation": "The student may have calculated 202 –",
+      "pct_students": 16,
+      "question_stem": "0.51 - 0.202 =",
+      "matchable": true
+    },
+    {
+      "question": 3,
+      "option_label": "B",
+      "option_text": "0.312",
+      "explanation": "The student has worked out biggest number subtract smallest.",
+      "pct_students": 13,
+      "question_stem": "0.51 - 0.202 =",
+      "matchable": true
+    },
+    {
+      "question": 3,
+      "option_label": "D",
+      "option_text": "0.318",
+      "explanation": "The student has not exchanged correctly.",
+      "pct_students": 9,
+      "question_stem": "0.51 - 0.202 =",
+      "matchable": true
+    },
+    {
+      "question": 4,
+      "option_label": "A",
+      "option_text": "1.815",
+      "explanation": "The student has subtracted.",
+      "pct_students": 16,
+      "question_stem": "3.215 - 1.4 =",
+      "matchable": true
+    },
+    {
+      "question": 4,
+      "option_label": "C",
+      "option_text": "4.219",
+      "explanation": "The student has added the 4 to the thousandths column.",
+      "pct_students": 9,
+      "question_stem": "3.215 - 1.4 =",
+      "matchable": true
+    },
+    {
+      "question": 4,
+      "option_label": "D",
+      "option_text": "2.215",
+      "explanation": "The student has subtracted the smallest numbers from the biggest.",
+      "pct_students": 10,
+      "question_stem": "3.215 - 1.4 =",
+      "matchable": true
+    },
+    {
+      "question": 5,
+      "option_label": "A",
+      "option_text": "0.35",
+      "explanation": "I think you have done 0.15 - 0.05. We are taking away a bigger number, so we need to go back to 0, and then see how many more we need to take away.",
+      "pct_students": 17,
+      "question_stem": "0.15 - 0.5 =",
+      "matchable": true
+    },
+    {
+      "question": 5,
+      "option_label": "B",
+      "option_text": "-0.45",
+      "explanation": "I think you have done the subtraction backwards. We are taking the bigger number away, so we will get a negative answer",
+      "pct_students": 13,
+      "question_stem": "0.15 - 0.5 =",
+      "matchable": true
+    },
+    {
+      "question": 5,
+      "option_label": "C",
+      "option_text": "-0.35",
+      "explanation": "Almost. If you go back 0.15 to get to 0, how many more do you need to go back so that you have taken off 0.5 in total?",
+      "pct_students": 19,
+      "question_stem": "0.15 - 0.5 =",
+      "matchable": true
+    }
+  ],
+  "excluded": []
+}

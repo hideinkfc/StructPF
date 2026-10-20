@@ -1,0 +1,63 @@
+{
+  "schema_version": "rahimi-table1-rerating/v2",
+  "purpose": "Exploratory method-blind rerating of the frozen September 23 PF paper-setting benchmark; generation artifacts and the original v1 ratings remain unchanged.",
+  "source_run": "experiments/results/pf_paper_benchmark/20260923_luna_v1",
+  "conditions": ["V1", "V2", "V3", "PIPELINE"],
+  "expected_attempts_per_condition": 30,
+  "rubric_version": "rahimi-table1/v2",
+  "prompt_path": "src/evaluation/prompts/pf_rubric_v2.yaml",
+  "model_selector": "luna",
+  "requested_settings": {
+    "temperature": 0.0,
+    "max_tokens": 4000,
+    "response_format": {"type": "json_object"},
+    "timeout_seconds": 180,
+    "sdk_retries": 0,
+    "transport_retries": 2,
+    "retryable_http_statuses": [408, 409, 429],
+    "retryable_http_statuses_at_or_above": 500
+  },
+  "input_policy": {
+    "task_fields": ["title", "body", "question"],
+    "shared_context_fields": [
+      "grade",
+      "subject",
+      "jurisdiction",
+      "learning_target",
+      "assumed_prior_knowledge"
+    ],
+    "target_source": "The fixed target_concept from the original benchmark configuration.",
+    "prior_knowledge_source": "The fixed learner_context from the original benchmark configuration.",
+    "excluded_fields": [
+      "condition",
+      "attempt_id",
+      "generation_method",
+      "teacher_notes",
+      "teacher_plan",
+      "proposed_student_approaches",
+      "review_results",
+      "generation_trace"
+    ],
+    "rationale": "The common target and learner context support target-relative task-level ratings and are identical across conditions; only student-facing task text varies."
+  },
+  "calibration": {
+    "cases_per_condition": 2,
+    "selection_seed": 20260925,
+    "selection": "Uniform seeded sample without replacement from ready tasks within each condition; calls interleaved one per condition per round.",
+    "gate": "Check API completion and strict response-schema validity only. Do not tune the prompt or interpret score differences. Stop the full run if any calibration case has an API, runner, or schema failure."
+  },
+  "failure_policy": {
+    "non_ready": "Record blocked, invalid, failed, and other non-ready generation attempts as not eligible; do not call the judge or assign scores.",
+    "judge_failure": "Retain explicit API, runner, invalid-response, interrupted, or insufficient-evidence status; missing scores are not zero.",
+    "resume": "Reuse completed per-task ratings, never overwrite them, and do not automatically repeat an interrupted or failed call.",
+    "denominators": "Report all 30 scheduled attempts, ready tasks, non-ready statuses, attempted ratings, and valid scores by condition."
+  },
+  "interpretation": {
+    "claim": "Exploratory automated rerating under an adapted version of the same five Rahimi Table 1 dimensions.",
+    "not_claimed": [
+      "Exact reproduction of the paper's rating guidance or human-rating procedure.",
+      "Human agreement, task validity, actual student approach diversity, productive failure, or learning.",
+      "A confirmatory comparison or evidence that one generation method is generally superior."
+    ]
+  }
+}

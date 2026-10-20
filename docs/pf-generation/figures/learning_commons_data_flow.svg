@@ -1,0 +1,121 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1160" height="850" viewBox="0 0 1160 850" role="img" aria-labelledby="title description">
+  <title id="title">Follow one Learning Commons record into a proposed PF exercise</title>
+  <desc id="description">Actual API search selected US standard 7.RP.A.1 and fetched three overlapping unit-rate records. Proposed steps retain source evidence and check independent prior-teaching evidence. Without that evidence, the skill remains unconfirmed. A conditional, illustrative continuation selects single-leg rate calculation, suggests an initial move, designs a situation without numbers, checks a two-leg journey, and writes a question. The continuation is not a pipeline run or observed student behavior.</desc>
+  <defs>
+    <marker id="blue-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#3265a8"/>
+    </marker>
+    <marker id="orange-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#ad560d"/>
+    </marker>
+    <marker id="gray-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#64748b"/>
+    </marker>
+    <style>
+      text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; fill: #182b42; }
+      .heading { font-size: 31px; font-weight: 700; }
+      .sub { font-size: 17px; fill: #53657b; }
+      .label { font-size: 12px; font-weight: 700; letter-spacing: 0.8px; }
+      .box-title { font-size: 19px; font-weight: 700; }
+      .body { font-size: 17px; }
+      .small { font-size: 14px; fill: #53657b; }
+      .actual { fill: #edf5ff; stroke: #3265a8; stroke-width: 1.8; }
+      .proposed { fill: #fff7ed; stroke: #ad560d; stroke-width: 1.8; stroke-dasharray: 7 5; }
+      .context { fill: #fff; stroke: #b7c4d4; stroke-width: 1.8; }
+      .real-flow { fill: none; stroke: #3265a8; stroke-width: 2.3; marker-end: url(#blue-arrow); }
+      .new-flow { fill: none; stroke: #ad560d; stroke-width: 2.3; marker-end: url(#orange-arrow); }
+      .context-flow { fill: none; stroke: #64748b; stroke-width: 2.3; marker-end: url(#gray-arrow); }
+    </style>
+  </defs>
+
+  <rect width="1160" height="850" fill="#f7f9fc"/>
+  <text x="40" y="44" class="heading">How one fetched record becomes a task</text>
+  <text x="40" y="74" class="sub">Source evidence first. A possible student move later.</text>
+
+  <rect x="797" y="26" width="135" height="32" rx="8" class="actual"/>
+  <text x="864" y="47" class="label" text-anchor="middle" style="fill:#3265a8">FETCHED DATA</text>
+  <rect x="948" y="26" width="172" height="32" rx="8" class="proposed"/>
+  <text x="1034" y="47" class="label" text-anchor="middle" style="fill:#ad560d">PROPOSED USE</text>
+
+  <rect x="40" y="135" width="315" height="150" rx="16" class="actual"/>
+  <text x="61" y="167" class="box-title">1  Search + select</text>
+  <text x="61" y="198" class="body">total distance divided by</text>
+  <text x="61" y="223" class="body">total time</text>
+  <text x="61" y="250" class="body" style="font-weight:650">7.RP.A.1: US unit-rate standard</text>
+  <text x="61" y="273" class="small">Mathematics; Grade 7</text>
+
+  <path d="M 355 210 H 400" class="real-flow"/>
+
+  <rect x="400" y="135" width="315" height="150" rx="16" class="actual"/>
+  <text x="421" y="167" class="box-title">2  Fetch linked skills</text>
+  <text x="421" y="199" class="body">3 records about unit rates</text>
+  <text x="421" y="224" class="small">(an amount per one unit)</text>
+  <text x="421" y="253" class="body">Same tool, not 3 approaches</text>
+
+  <path d="M 715 210 H 760" class="new-flow"/>
+
+  <rect x="760" y="135" width="360" height="150" rx="16" class="proposed"/>
+  <text x="781" y="167" class="box-title">3  Keep usable evidence</text>
+  <text x="781" y="200" class="body">Keep source ID + description</text>
+  <text x="781" y="226" class="body">Keep license + attribution</text>
+  <text x="781" y="253" class="small">Still not proof of classroom teaching</text>
+
+  <path d="M 940 285 V 315 H 580 V 350" class="new-flow"/>
+
+  <rect x="40" y="370" width="315" height="100" rx="16" class="context"/>
+  <text x="61" y="401" class="box-title">Independent evidence</text>
+  <text x="61" y="429" class="body">Curriculum / teacher history</text>
+  <text x="61" y="455" class="small">Not supplied by this LC lookup</text>
+  <path d="M 355 420 H 430" class="context-flow"/>
+
+  <path d="M 580 350 L 730 420 L 580 490 L 430 420 Z" class="proposed"/>
+  <text x="580" y="412" class="box-title" text-anchor="middle">4  Taught earlier?</text>
+  <text x="580" y="438" class="body" text-anchor="middle">Independent support?</text>
+
+  <path d="M 730 420 H 805" class="new-flow"/>
+  <text x="738" y="407" class="small" style="font-size:12px;fill:#ad560d">unknown</text>
+  <rect x="805" y="370" width="315" height="105" rx="16" class="proposed"/>
+  <text x="826" y="402" class="box-title">Unconfirmed candidate</text>
+  <text x="826" y="430" class="body">LC data alone cannot prove</text>
+  <text x="826" y="455" class="body">what this class was taught.</text>
+
+  <path d="M 580 490 V 540 H 170 V 600" class="new-flow"/>
+  <text x="192" y="531" class="small" style="fill:#ad560d">With independent teaching support</text>
+  <text x="40" y="580" class="label" style="fill:#ad560d">ILLUSTRATIVE CONTINUATION - NOT A GENERATED EXERCISE</text>
+
+  <rect x="40" y="600" width="260" height="156" rx="16" class="proposed"/>
+  <text x="60" y="633" class="box-title">5-6  Choose tool + move</text>
+  <text x="60" y="667" class="body">Tool: single-leg speed</text>
+  <text x="60" y="693" class="body">Needs leg distance + time</text>
+  <text x="60" y="724" class="small">Possible move, not observed</text>
+
+  <path d="M 300 674 H 335" class="new-flow"/>
+
+  <rect x="335" y="600" width="235" height="156" rx="16" class="proposed"/>
+  <text x="355" y="633" class="box-title">7  Design situation</text>
+  <text x="355" y="667" class="body">Distances: d1, d2</text>
+  <text x="355" y="693" class="body">Durations: t1, t2</text>
+  <text x="355" y="724" class="small">Whole-journey speed?</text>
+  <text x="355" y="746" class="small" style="font-weight:650">No numbers yet</text>
+
+  <path d="M 570 674 H 605" class="new-flow"/>
+
+  <rect x="605" y="600" width="275" height="156" rx="16" class="proposed"/>
+  <text x="625" y="633" class="box-title">8  Choose + check</text>
+  <text x="625" y="661" class="body">Leg 1: 10 km in 30 min</text>
+  <text x="625" y="686" class="body">Leg 2: 10 km in 10 min</text>
+  <text x="625" y="712" class="body" style="font-weight:650">Whole journey: 30 km/h</text>
+  <text x="625" y="737" class="small">Mean: 40 km/h (wrong here)</text>
+
+  <path d="M 880 674 H 915" class="new-flow"/>
+
+  <rect x="915" y="600" width="205" height="156" rx="16" class="proposed"/>
+  <text x="935" y="633" class="box-title">9  Write question</text>
+  <text x="935" y="670" class="body">Which constant speed</text>
+  <text x="935" y="696" class="body">covers 20 km</text>
+  <text x="935" y="722" class="body">in 40 minutes?</text>
+
+  <text x="40" y="791" class="small">Top blue boxes: real API retrieval (2026-10-04). Orange: proposed use, not pipeline output or observed student behavior.</text>
+  <text x="40" y="813" class="small">The example shows data flow, not validated PF quality. The graph does not supply the mistaken averaging method.</text>
+  <text x="40" y="835" class="small" style="font-size:12px">Skill source: Achievement Network via Learning Commons, CC BY 4.0. Full row-level attribution is retained in the linked source JSON.</text>
+</svg>

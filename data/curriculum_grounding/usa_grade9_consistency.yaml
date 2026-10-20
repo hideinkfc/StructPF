@@ -1,0 +1,66 @@
+# Curriculum grounding: USA Grade 9 — Consistency (tea-growers task)
+# Grounds: StratL consistency_tea task (Newman & DeCaro 2019)
+id: usa_grade9_consistency
+country: USA (Kentucky — University of Louisville context)
+grade: 9
+school_level: "High school (9th grade)"
+target_concept: "Consistency measure / variance-like reasoning"
+expert_tasks_grounded:
+  - puech2025_stratl_consistency_tea
+
+sources:
+  - name: "Kentucky Academic Standards for Mathematics (2019)"
+    url: "https://www.education.ky.gov/curriculum/standards/kyacadstand/Documents/Kentucky_Academic_Standards_Mathematics.pdf"
+    access_date: "2026-08-24"
+    type: official_curriculum
+    status: download_blocked_403
+    note: "Official Kentucky DOE standards PDF; server returned 403 to non-browser download on 2026-08-24. The standards follow Common Core: high-school statistics domain (HS.S-ID) introduces standard deviation in Algebra I/II."
+
+  - name: "Newman, P.M. & DeCaro, M.S. (2019). Learning by exploring: How much guidance is optimal? Learning and Instruction, 62, 49-63"
+    url: "https://doi.org/10.1016/j.learninstruc.2019.05.005"
+    access_date: "2026-08-24"
+    type: author_study
+    status: no_local_fulltext
+    note: "Citation confirmed via CrossRef/OpenAlex; tea-growers task provenance is currently dataset-level (StratL CSV)."
+
+  - name: "Common Core State Standards Initiative — Statistics and Probability"
+    url:
+      - "https://www.thecorestandards.org/Math/Content/6/SP/"
+      - "https://www.thecorestandards.org/Math/Content/7/SP/"
+      - "https://www.thecorestandards.org/Math/Content/HSS/ID/"
+    local_snapshot: "documents/ccss_statistics_supplement.json"
+    access_date: "2026-08-24"
+    type: official_standards_proxy
+    key_standards:
+      - "CCSS.Math.Content.6.SP.A.2-A.3: center, spread, and measures of variation"
+      - "CCSS.Math.Content.6.SP.B.4-B.5.c: plots, mean, IQR, and mean absolute deviation"
+      - "CCSS.Math.Content.7.SP.B.3-B.4: comparing distributions using center and variability"
+      - "CCSS.Math.Content.HSS-ID.A.2: compare center and spread including standard deviation"
+    note: "Official Common Core text is used as a transparent proxy because the Kentucky PDF is blocked in this environment; Kentucky KAS is Common Core-aligned but may differ."
+
+prior_resources_taught_before_target:
+  - resource: "Arithmetic mean"
+    taught_at: "Grade 6-7 (6.SP, 7.SP in Common Core-aligned Kentucky standards)"
+    source: "Common Core State Standards Initiative — Statistics and Probability"
+    pages: "6.SP, 7.SP"
+    evidence: "Mean is named as a measure of center; use is extended to comparative inference."
+  - resource: "Range and basic data comparison"
+    taught_at: "Grade 6-7"
+    source: "Common Core State Standards Initiative — Statistics and Probability"
+    pages: "6.SP, 7.SP"
+    evidence: "The standards establish center, spread, and variability as descriptors for comparing data; range itself is not named in these selected excerpts."
+  - resource: "Basic arithmetic operations"
+    taught_at: "prior"
+    source: "Common Core State Standards Initiative — Statistics and Probability"
+    pages: "6.SP"
+    evidence: "Generic prerequisite used for the task; not a separately named statistics standard."
+
+target_concept_first_appearance:
+  concept: "Standard deviation as formal measure"
+  location: "High school statistics (HS.S-ID.2), typically Algebra I or later"
+  page: "CCSS.Math.Content.HSS-ID.A.2"
+  note: "The Common Core progression places standard deviation in the high-school data-interpretation strand after earlier center/variability work. This is a transparent proxy for Kentucky's aligned standard; it is not a claim that every Grade 9 class has the same instructional timing."
+
+caveats:
+  - "The source paper full text is not local; the task attribution remains StratL dataset provenance."
+  - "Kentucky's official KAS PDF remains inaccessible from this environment (403). Use the CCSS snapshot as an explicitly labeled proxy, not as Kentucky-specific proof."

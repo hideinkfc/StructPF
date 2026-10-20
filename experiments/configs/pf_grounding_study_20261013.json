@@ -1,0 +1,181 @@
+{
+  "schema_version": "pf-grounding-study-config/v1",
+  "seed": 20261013,
+  "model_selector": "luna",
+  "proposal_k": 1,
+  "repeats": 4,
+  "request_cap": 800,
+  "max_workers": 3,
+  "local_text_budget": 6500,
+  "lc_text_budget": 2500,
+  "retrieval_k": 3,
+  "selection_rule": "Top three unique retrieved records in search rank order; fixed before generation. No model-based selection or quality-driven replacement.",
+  "hypothesis": "With the task request and learner repertoire fixed, available mathematical reference evidence may improve mathematical validity and preservation of the intended target without disclosing the central idea. B minus A is grounding availability; C minus B is incremental Learning Commons availability. No change or worse validity/openness is a null or negative result, not a reason to tune or replace outputs.",
+  "limitations": [
+    "New PF task-family specifications, not proven untouched topics. Related MCQ topics and adjacent PF sweep topics have previously been inspected; every main case is conservatively labelled transfer.",
+    "This tests evidence availability during design, not independent prerequisite discovery: D1 is a fixed stipulated learner record in every arm.",
+    "Curriculum pages describe an entire secondary course and can contain later mathematics. References are explicitly not evidence that this learner knows those topics.",
+    "Learning Commons standards are additional mathematical references, not a Singapore curriculum replacement or learner prior knowledge.",
+    "Reference text lengths differ across arms and are part of the treatment; this is not an equal-token-content experiment.",
+    "Generation alone is not evidence of approach diversity, student behaviour, productive failure, or learning."
+  ],
+  "shared_context": {
+    "subject": "mathematics",
+    "jurisdiction": "Singapore",
+    "task_rule": "Generate a new student task for exploration before instruction on the target. Preserve the requested task family without requiring unrelated additional prerequisites. Do not give a worked example or a lesson.",
+    "provenance_rule": "Use fictional task data where needed. Do not claim invented records are observations.",
+    "learner_context": {
+      "grade": 8,
+      "age_range": "13-14",
+      "language": "English",
+      "profile_status": "Hypothetical stipulated learner specification, not observed students.",
+      "prior_boundary": "Only the case-specific recently taught resources in the fixed D1 packet are assumed. The target method has not been taught; retrieved descriptions do not expand this repertoire."
+    }
+  },
+  "cases": [
+    {
+      "id": "scientific_scale_comparison",
+      "topic": "scientific notation and comparing very large and small quantities",
+      "target_concept": "Representing and comparing quantities using a coefficient and a power of ten, including choosing a consistent scale. Learners have not been taught normalized scientific notation.",
+      "task_family": "Design a compact, unambiguous comparison record for measurements with very different magnitudes. Students choose and justify a common recording and comparison convention rather than merely convert a supplied list to a prescribed format.",
+      "grade": 8,
+      "teacher_recently_taught": [
+        "Decimal place value and comparison",
+        "Multiplication and division of decimals by powers of ten",
+        "Positive integer powers as repeated multiplication",
+        "Reading numerical measurement tables"
+      ],
+      "topic_role": "transfer_new_task_specification_not_untouched",
+      "history_note": "No identical PF expert-comparison or twenty-topic sweep case. Decimal and unit-conversion MCQ work is adjacent; no claim that the topic is untouched.",
+      "local_query": "scientific notation standard form powers of ten",
+      "lc_query": "scientific notation powers of ten comparing large and small numbers",
+      "local_retrieval_result": [
+        {"chunk_id": "moe_sg_2020_secondary_maths.pdf::p27::original", "score_rounded": 0.277},
+        {"chunk_id": "moe_sg_2020_secondary_maths.pdf::p21::original", "score_rounded": 0.275},
+        {"chunk_id": "moe_sg_2020_secondary_maths.pdf::p10::original", "score_rounded": 0.269}
+      ]
+    },
+    {
+      "id": "signed_product_ledger",
+      "topic": "multiplication of signed integers",
+      "target_concept": "A coherent rule for multiplying signed integers, including two negative factors, derived from familiar addition and subtraction rather than a supplied sign rule.",
+      "task_family": "Create and defend a consistent way of recording repeated additions and removals of gains and debts in a fictional ledger. Students must compare possible recording conventions across cases; no unrelated finance formula is needed.",
+      "grade": 8,
+      "teacher_recently_taught": [
+        "Signed numbers on a number line",
+        "Addition and subtraction of signed integers",
+        "Multiplication of nonnegative whole numbers as equal groups",
+        "Reading a table of changes and balances"
+      ],
+      "topic_role": "transfer_new_task_specification_not_untouched",
+      "history_note": "Negative numbers occur in the MCQ pathway benchmark, but this ledger PF specification is not an expert-comparison or twenty-topic sweep case.",
+      "local_query": "multiplication of negative signed integers",
+      "lc_query": "multiply positive and negative integers rational numbers sign rules",
+      "local_retrieval_result": [
+        {"chunk_id": "moe_sg_2020_secondary_maths.pdf::p31::original", "score_rounded": 0.312},
+        {"chunk_id": "moe_sg_2020_secondary_maths.pdf::p21::original", "score_rounded": 0.310},
+        {"chunk_id": "moe_sg_2020_secondary_maths.pdf::p27::original", "score_rounded": 0.292}
+      ]
+    },
+    {
+      "id": "equivalent_bundle_rules",
+      "topic": "distributive property and equivalent algebraic expressions",
+      "target_concept": "Recognizing and justifying equivalence of a grouped product and an expanded sum for a variable quantity. Learners have not been taught the algebraic distributive rule.",
+      "task_family": "Compare competing general price-recording rules for bundles containing fixed and variable items, and develop a defensible rule valid across bundle sizes. Numerical testing is accessible but students must decide what makes the comparison convincing.",
+      "grade": 8,
+      "teacher_recently_taught": [
+        "Arithmetic with parentheses and order of operations",
+        "Whole-number multiplication and addition",
+        "Substituting values into simple expressions",
+        "Letters representing a variable quantity"
+      ],
+      "topic_role": "transfer_new_task_specification_not_untouched",
+      "history_note": "Algebraic distribution occurs in the MCQ pathway benchmark. This bundle-rule task family is new to the PF expert comparison and sweep.",
+      "local_query": "distributive law expanding algebraic expressions",
+      "lc_query": "distributive property equivalent expressions expand factor linear expressions",
+      "local_retrieval_result": [
+        {"chunk_id": "moe_sg_2020_secondary_maths.pdf::p31::original", "score_rounded": 0.426},
+        {"chunk_id": "moe_sg_2020_secondary_maths.pdf::p29::original", "score_rounded": 0.425},
+        {"chunk_id": "moe_sg_2020_secondary_maths.pdf::p27::original", "score_rounded": 0.406}
+      ]
+    },
+    {
+      "id": "mixed_area_units",
+      "topic": "conversion between square centimetres and square metres",
+      "target_concept": "Area-unit conversion depends on two dimensions, rather than copying the length conversion factor. Learners have not been taught a square-unit conversion rule.",
+      "task_family": "Choose between fictional material offers expressed using different area units and package sizes, and design a fair comparison record for a rectangular project. Students decide how to represent the units and usable quantities; no surface-area optimization or percentage discount is required.",
+      "grade": 8,
+      "teacher_recently_taught": [
+        "Rectangle area from side lengths",
+        "Converting centimetres and metres for lengths",
+        "Multiplication and division of decimals",
+        "Comparing simple unit prices"
+      ],
+      "topic_role": "transfer_new_task_specification_not_untouched",
+      "history_note": "Adjacent to the previous length/area-scaling PF sweep and unit-conversion MCQ cases, but the mixed-unit offer task is a different specification.",
+      "local_query": "area square units conversion centimetres metres",
+      "lc_query": "convert square units area square centimeters square meters measurement",
+      "local_retrieval_result": [
+        {"chunk_id": "moe_sg_2020_secondary_maths.pdf::p32::original", "score_rounded": 0.304},
+        {"chunk_id": "moe_sg_2020_secondary_maths.pdf::p19::original", "score_rounded": 0.286},
+        {"chunk_id": "moe_sg_2020_secondary_maths.pdf::p22::original", "score_rounded": 0.283}
+      ]
+    },
+    {
+      "id": "polygon_corner_design",
+      "topic": "interior angle sums of convex polygons",
+      "target_concept": "Relating the number of sides of a convex polygon to its interior angle sum and using this to reason about regular corners. Learners have not been taught a polygon-angle-sum formula.",
+      "task_family": "Develop a defensible corner-checking record for proposed regular polygon tiles meeting at a point. Students choose representations and checks for possible tile combinations using angle facts they already know; no trigonometry or formal tessellation theorem is needed.",
+      "grade": 8,
+      "teacher_recently_taught": [
+        "Angles around a point sum to a full turn",
+        "Triangle interior angles sum to 180 degrees",
+        "Drawing and measuring angles",
+        "Recognizing regular polygons and equal angles"
+      ],
+      "topic_role": "transfer_new_task_specification_not_untouched",
+      "history_note": "Triangle angles occur in the MCQ pathway benchmark. No identical polygon-angle PF case in the prior expert comparison or twenty-topic sweep.",
+      "local_query": "sum of interior angles polygon triangles",
+      "lc_query": "interior angle sum convex polygons regular polygons triangles",
+      "local_retrieval_result": [
+        {"chunk_id": "moe_sg_2020_secondary_maths.pdf::p30::original", "score_rounded": 0.340},
+        {"chunk_id": "moe_sg_2020_secondary_maths.pdf::p35::original", "score_rounded": 0.323},
+        {"chunk_id": "moe_sg_2020_secondary_maths.pdf::p32::original", "score_rounded": 0.307}
+      ]
+    }
+  ],
+  "calibration_cases": [
+    {
+      "id": "calibration_fraction_quantity",
+      "topic": "fractions of a quantity",
+      "target_concept": "Comparing fractional quantities when the reference totals differ.",
+      "task_family": "Choose between fictional portions offered from differently sized batches, leaving students to choose how to compare the actual amount.",
+      "grade": 8,
+      "teacher_recently_taught": [
+        "Fractions as equal parts of a whole",
+        "Whole-number multiplication and division",
+        "Drawing fraction diagrams",
+        "Comparing whole-number quantities"
+      ],
+      "topic_role": "execution_calibration_only",
+      "history_note": "Previously inspected broad fraction topics; this attempt tests execution, schema and provenance, not quality or untouched transfer.",
+      "local_query": "fractions of quantities",
+      "lc_query": "fractions of quantities different whole reference quantities",
+      "local_retrieval_result": [
+        {"chunk_id": "moe_sg_2020_secondary_maths.pdf::p27::original", "score_rounded": 0.356},
+        {"chunk_id": "moe_sg_2020_secondary_maths.pdf::p17::original", "score_rounded": 0.330},
+        {"chunk_id": "moe_sg_2020_secondary_maths.pdf::p29::original", "score_rounded": 0.328}
+      ]
+    }
+  ],
+  "local_retrieval_provenance": {
+    "method": "scripts.retrieve_prior_knowledge.retrieve_chunks",
+    "retrieved_date_utc": "2026-10-12",
+    "phase": "Pre-generation feasibility audit; exact returned chunk IDs retained, scores rounded to three decimals in its printed trace. Excerpts are reconstructed byte-for-byte from the saved corpus by those IDs, not newly retrieved.",
+    "filters": {"grade": 8, "subject": "mathematics", "jurisdiction": "Singapore", "k": 3},
+    "api_retries": 0,
+    "query_embedding_calls": 6,
+    "corpus_embeddings": "Existing content-addressed embedding cache",
+    "no_expert_curated_resource_lists": true
+  }
+}

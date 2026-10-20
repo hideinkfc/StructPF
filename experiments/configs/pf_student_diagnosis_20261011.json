@@ -1,0 +1,61 @@
+{
+  "schema_version": "pf-student-probe/v1",
+  "question": "Which task-design findings are supported by independently generated LLM attempts across all eighteen frozen comparison exercises?",
+  "hypothesis": "Attempt evidence may expose familiar-method limits, actual approach variation or ambiguous inputs missed by text review. Convergence or errors may instead belong to the simulator, so task changes require task-text evidence and uncertainty.",
+  "output": "experiments/results/pf_student_diagnosis_20261011",
+  "task_root": "experiments/results/pf_method_comparison_draft_first_20261011/fresh",
+  "tasks": [
+    {"id":"speed_direct_001","family":"kapur_average_speed","path":"kapur_average_speed/001/direct/result.json"},
+    {"id":"speed_pipeline_001","family":"kapur_average_speed","path":"kapur_average_speed/001/pipeline/result.json"},
+    {"id":"speed_direct_002","family":"kapur_average_speed","path":"kapur_average_speed/002/direct/result.json"},
+    {"id":"speed_pipeline_002","family":"kapur_average_speed","path":"kapur_average_speed/002/pipeline/result.json"},
+    {"id":"speed_direct_003","family":"kapur_average_speed","path":"kapur_average_speed/003/direct/result.json"},
+    {"id":"speed_pipeline_003","family":"kapur_average_speed","path":"kapur_average_speed/003/pipeline/result.json"},
+    {"id":"consistency_direct_001","family":"loibl_variance","path":"loibl_variance/001/direct/result.json"},
+    {"id":"consistency_pipeline_001","family":"loibl_variance","path":"loibl_variance/001/pipeline/result.json"},
+    {"id":"consistency_direct_002","family":"loibl_variance","path":"loibl_variance/002/direct/result.json"},
+    {"id":"consistency_pipeline_002","family":"loibl_variance","path":"loibl_variance/002/pipeline/result.json"},
+    {"id":"consistency_direct_003","family":"loibl_variance","path":"loibl_variance/003/direct/result.json"},
+    {"id":"consistency_pipeline_003","family":"loibl_variance","path":"loibl_variance/003/pipeline/result.json"},
+    {"id":"division_direct_001","family":"kerrigan_fair_division","path":"kerrigan_fair_division/001/direct/result.json"},
+    {"id":"division_pipeline_001","family":"kerrigan_fair_division","path":"kerrigan_fair_division/001/pipeline/result.json"},
+    {"id":"division_direct_002","family":"kerrigan_fair_division","path":"kerrigan_fair_division/002/direct/result.json"},
+    {"id":"division_pipeline_002","family":"kerrigan_fair_division","path":"kerrigan_fair_division/002/pipeline/result.json"},
+    {"id":"division_direct_003","family":"kerrigan_fair_division","path":"kerrigan_fair_division/003/direct/result.json"},
+    {"id":"division_pipeline_003","family":"kerrigan_fair_division","path":"kerrigan_fair_division/003/pipeline/result.json"}
+  ],
+  "models": ["gpt41mini","gpt41"],
+  "profiles": [
+    {"id":"ordinary_solver","condition":"solver"},
+    {"id":"recent_prerequisites","condition":"learner"},
+    {"id":"one_prerequisite_gap","condition":"learner","omit_resources":{"kapur_average_speed":"Ratio and proportion","loibl_variance":"Arithmetic mean","kerrigan_fair_division":"Divider-Chooser method"}}
+  ],
+  "repeats": 2,
+  "seed": 20261011,
+  "workers": 4,
+  "settings": {"temperature":0.7,"max_tokens":2400,"timeout_seconds":180,"sdk_retries":0},
+  "budget": {"calibration_calls":8,"fresh_calls":216,"max_calls_total":224,"max_completion_tokens_total":537600,"rounds":1},
+  "review": {
+    "prompt": "src/evaluation/prompts/pf_attempt_feedback.yaml",
+    "model": "luna",
+    "max_tokens": 7200,
+    "calibration_panels": 4,
+    "fresh_panels": 18,
+    "max_calls": 22,
+    "max_completion_tokens_total": 158400,
+    "total_campaign_call_cap": 246,
+    "retries": 0,
+    "old_probe": "experiments/results/pf_student_probe_20261011"
+  },
+  "decision": "One baseline diagnosis only. Calibrate exact-evidence checklist and compare coding on previous48 outputs; retain disagreement and parse errors. No task or simulator prompt tuning, automatic PF revision or quality stop. All task-feedback is proposed and requires review before use.",
+  "limitations": [
+    "Eighteen inspected development tasks, not final held-out topics.",
+    "Prior knowledge profiles are hypothetical, not diagnosed human knowledge; omitted resources can still be inferred or used.",
+    "Two models share a provider/model lineage, not independent learner populations.",
+    "Two repetitions per model/profile; descriptive counts only.",
+    "Task-panel judge is another LLM, not an independent expert rating or verified causal attribution.",
+    "Preserve all token-truncated and malformed attempts; cutoffs are execution limits, not student failure.",
+    "Calibration reuses previously inspected attempts and is not human-fidelity validation.",
+    "No simulated feedback-to-task revision experiment, tutor interaction or real learner outcomes in this round."
+  ]
+}

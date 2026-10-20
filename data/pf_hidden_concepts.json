@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "source": "experiments/results/human_evaluation_pool_round1_deepseek.json (7 design briefs)",
+  "grade": "7th grade",
+  "topic": "ratios & proportional relationships",
+  "concepts": [
+    {
+      "brief_index": 1,
+      "hidden_concept": "Weighted / combined rate: you cannot average two group speeds; the bigger group pulls the result toward its own speed."
+    },
+    {
+      "brief_index": 2,
+      "hidden_concept": "Scaling preserves the ratio: multiply every ingredient by the same factor; unknown amounts follow from the known one via the ratio."
+    },
+    {
+      "brief_index": 3,
+      "hidden_concept": "Additive difference is not multiplicative ratio: a constant gap means a shrinking ratio as the numbers grow."
+    },
+    {
+      "brief_index": 4,
+      "hidden_concept": "Part-to-part versus part-to-whole: a ratio 5:3 means 5/8 of the whole, not 5/3 and not '5 out of 10'."
+    },
+    {
+      "brief_index": 5,
+      "hidden_concept": "Comparing mixtures needs a common basis: compare unit rates or fractions of the whole, not raw amounts."
+    },
+    {
+      "brief_index": 6,
+      "hidden_concept": "Scale factor applies to every dimension equally: width and height scale by the same ratio of corresponding lengths."
+    },
+    {
+      "brief_index": 7,
+      "hidden_concept": "Proportional allocation with whole numbers: exact shares may not be integers, and rounding must not break the total."
+    }
+  ]
+}

@@ -1,0 +1,276 @@
+{
+  "concept_id": "x_brackets",
+  "concept_text": "Expanding a(b + c) requires multiplying every inside term by the outside factor.",
+  "grade": 7,
+  "anchor": {
+    "quiz": "emlb",
+    "quiz_name": "Expand single brackets 3",
+    "topic": "Brackets - single",
+    "questions": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "questions_omitted": []
+  },
+  "dominant_threshold_pct": 10,
+  "dominant_errors": [
+    {
+      "question": 1,
+      "option_label": "C",
+      "option_text": "20c²d²",
+      "explanation": "How many copies of d are being multiplied together?",
+      "pct_students": 10,
+      "question_stem": "What is the answer to 4c × 5d?",
+      "matchable": true
+    },
+    {
+      "question": 2,
+      "option_label": "A",
+      "option_text": "3x - 5",
+      "explanation": "Remember we are subtracting all of (5x - 9). What sign will the 9 end up with?",
+      "pct_students": 26,
+      "question_stem": "Expand and simplify: 4(2x + 1) - (5x - 9)",
+      "matchable": true
+    },
+    {
+      "question": 2,
+      "option_label": "C",
+      "option_text": "13x - 5",
+      "explanation": "What is the operation between the two brackets? I think you may have added.",
+      "pct_students": 20,
+      "question_stem": "Expand and simplify: 4(2x + 1) - (5x - 9)",
+      "matchable": true
+    },
+    {
+      "question": 2,
+      "option_label": "D",
+      "option_text": "13x + 13",
+      "explanation": "Be careful with your negative signs, what is the sign on 5x?",
+      "pct_students": 13,
+      "question_stem": "Expand and simplify: 4(2x + 1) - (5x - 9)",
+      "matchable": true
+    },
+    {
+      "question": 3,
+      "option_label": "A",
+      "option_text": "6a - 12",
+      "explanation": "Not quite. It looks like you didn't quite get the signs right when you expanded the bracket. Remember that we are multiplying (3 - a) by -4. So we need to multiply 3 by -4 and -a by -4.",
+      "pct_students": 23,
+      "question_stem": "Expand and simplify: 2a - 4(3 - a)",
+      "matchable": true
+    },
+    {
+      "question": 3,
+      "option_label": "C",
+      "option_text": "6a + 12",
+      "explanation": "If the bracket was (3a - a) you would be right but it is (3 - a). When we multiply the bracket by -4, we need to do -4 x 3 and -4 x -a.",
+      "pct_students": 11,
+      "question_stem": "Expand and simplify: 2a - 4(3 - a)",
+      "matchable": true
+    },
+    {
+      "question": 3,
+      "option_label": "D",
+      "option_text": "-2a + 12",
+      "explanation": "It looks like you forgot to multiply BOTH terms in the bracket by -4. When we multiply the bracket by -4, we need to do -4 x 3 and -4 x -a.",
+      "pct_students": 14,
+      "question_stem": "Expand and simplify: 2a - 4(3 - a)",
+      "matchable": true
+    },
+    {
+      "question": 4,
+      "option_label": "B",
+      "option_text": "12x - 2 = 10x + 2",
+      "explanation": "Almost! You're right that we need to multiply the length and width. But we work out 4(3x - 2), we need to remember to multiply BOTH terms inside the bracket by 4.",
+      "pct_students": 17,
+      "question_stem": "The area of these shapes are equal.\nBlue shape: 4 by (3x - 2), Yellow shape: 2 by (5x + 2)\nWhich of these is correct?",
+      "matchable": true
+    },
+    {
+      "question": 4,
+      "option_label": "C",
+      "option_text": "8 + 6x - 4 = 4 + 10x + 4",
+      "explanation": "It looks like you calculated the perimeter by adding up all the sides. But we need to find the area - how do we calculate the area of a rectangle?",
+      "pct_students": 19,
+      "question_stem": "The area of these shapes are equal.\nBlue shape: 4 by (3x - 2), Yellow shape: 2 by (5x + 2)\nWhich of these is correct?",
+      "matchable": true
+    },
+    {
+      "question": 4,
+      "option_label": "D",
+      "option_text": "4 + 3x - 2 = 2 + 5x + 2",
+      "explanation": "It looks like you may have added the two sides that are given. But we need to find the area - how do we calculate the area of a rectangle?",
+      "pct_students": 15,
+      "question_stem": "The area of these shapes are equal.\nBlue shape: 4 by (3x - 2), Yellow shape: 2 by (5x + 2)\nWhich of these is correct?",
+      "matchable": true
+    },
+    {
+      "question": 5,
+      "option_label": "A",
+      "option_text": "4x + 9 = 5x + 1 so x = 8",
+      "explanation": "The student has picked a correct statement.",
+      "pct_students": 15,
+      "question_stem": "Rectangle: (4x + 9) by (5x + 1)\nWhich of the following statements is incorrect?",
+      "matchable": true
+    },
+    {
+      "question": 5,
+      "option_label": "B",
+      "option_text": "Area = 5x² + x",
+      "explanation": "The student has picked a correct statement.",
+      "pct_students": 17,
+      "question_stem": "Rectangle: (4x + 9) by (5x + 1)\nWhich of the following statements is incorrect?",
+      "matchable": true
+    },
+    {
+      "question": 5,
+      "option_label": "D",
+      "option_text": "x = 8",
+      "explanation": "The student has picked a correct statement.",
+      "pct_students": 22,
+      "question_stem": "Rectangle: (4x + 9) by (5x + 1)\nWhich of the following statements is incorrect?",
+      "matchable": true
+    }
+  ],
+  "all_errors": [
+    {
+      "question": 1,
+      "option_label": "B",
+      "option_text": "45cd",
+      "explanation": "We can write letters next to each other to mean multiply, but not digits. 45 doesn't mean 4×5.",
+      "pct_students": 5,
+      "question_stem": "What is the answer to 4c × 5d?",
+      "matchable": true
+    },
+    {
+      "question": 1,
+      "option_label": "C",
+      "option_text": "20c²d²",
+      "explanation": "How many copies of d are being multiplied together?",
+      "pct_students": 10,
+      "question_stem": "What is the answer to 4c × 5d?",
+      "matchable": true
+    },
+    {
+      "question": 1,
+      "option_label": "D",
+      "option_text": "9cd",
+      "explanation": "4c means 4×c and 5d means 5×d, so we need to work out 4×c × 5×d, there are no additions.",
+      "pct_students": 4,
+      "question_stem": "What is the answer to 4c × 5d?",
+      "matchable": true
+    },
+    {
+      "question": 2,
+      "option_label": "A",
+      "option_text": "3x - 5",
+      "explanation": "Remember we are subtracting all of (5x - 9). What sign will the 9 end up with?",
+      "pct_students": 26,
+      "question_stem": "Expand and simplify: 4(2x + 1) - (5x - 9)",
+      "matchable": true
+    },
+    {
+      "question": 2,
+      "option_label": "C",
+      "option_text": "13x - 5",
+      "explanation": "What is the operation between the two brackets? I think you may have added.",
+      "pct_students": 20,
+      "question_stem": "Expand and simplify: 4(2x + 1) - (5x - 9)",
+      "matchable": true
+    },
+    {
+      "question": 2,
+      "option_label": "D",
+      "option_text": "13x + 13",
+      "explanation": "Be careful with your negative signs, what is the sign on 5x?",
+      "pct_students": 13,
+      "question_stem": "Expand and simplify: 4(2x + 1) - (5x - 9)",
+      "matchable": true
+    },
+    {
+      "question": 3,
+      "option_label": "A",
+      "option_text": "6a - 12",
+      "explanation": "Not quite. It looks like you didn't quite get the signs right when you expanded the bracket. Remember that we are multiplying (3 - a) by -4. So we need to multiply 3 by -4 and -a by -4.",
+      "pct_students": 23,
+      "question_stem": "Expand and simplify: 2a - 4(3 - a)",
+      "matchable": true
+    },
+    {
+      "question": 3,
+      "option_label": "C",
+      "option_text": "6a + 12",
+      "explanation": "If the bracket was (3a - a) you would be right but it is (3 - a). When we multiply the bracket by -4, we need to do -4 x 3 and -4 x -a.",
+      "pct_students": 11,
+      "question_stem": "Expand and simplify: 2a - 4(3 - a)",
+      "matchable": true
+    },
+    {
+      "question": 3,
+      "option_label": "D",
+      "option_text": "-2a + 12",
+      "explanation": "It looks like you forgot to multiply BOTH terms in the bracket by -4. When we multiply the bracket by -4, we need to do -4 x 3 and -4 x -a.",
+      "pct_students": 14,
+      "question_stem": "Expand and simplify: 2a - 4(3 - a)",
+      "matchable": true
+    },
+    {
+      "question": 4,
+      "option_label": "B",
+      "option_text": "12x - 2 = 10x + 2",
+      "explanation": "Almost! You're right that we need to multiply the length and width. But we work out 4(3x - 2), we need to remember to multiply BOTH terms inside the bracket by 4.",
+      "pct_students": 17,
+      "question_stem": "The area of these shapes are equal.\nBlue shape: 4 by (3x - 2), Yellow shape: 2 by (5x + 2)\nWhich of these is correct?",
+      "matchable": true
+    },
+    {
+      "question": 4,
+      "option_label": "C",
+      "option_text": "8 + 6x - 4 = 4 + 10x + 4",
+      "explanation": "It looks like you calculated the perimeter by adding up all the sides. But we need to find the area - how do we calculate the area of a rectangle?",
+      "pct_students": 19,
+      "question_stem": "The area of these shapes are equal.\nBlue shape: 4 by (3x - 2), Yellow shape: 2 by (5x + 2)\nWhich of these is correct?",
+      "matchable": true
+    },
+    {
+      "question": 4,
+      "option_label": "D",
+      "option_text": "4 + 3x - 2 = 2 + 5x + 2",
+      "explanation": "It looks like you may have added the two sides that are given. But we need to find the area - how do we calculate the area of a rectangle?",
+      "pct_students": 15,
+      "question_stem": "The area of these shapes are equal.\nBlue shape: 4 by (3x - 2), Yellow shape: 2 by (5x + 2)\nWhich of these is correct?",
+      "matchable": true
+    },
+    {
+      "question": 5,
+      "option_label": "A",
+      "option_text": "4x + 9 = 5x + 1 so x = 8",
+      "explanation": "The student has picked a correct statement.",
+      "pct_students": 15,
+      "question_stem": "Rectangle: (4x + 9) by (5x + 1)\nWhich of the following statements is incorrect?",
+      "matchable": true
+    },
+    {
+      "question": 5,
+      "option_label": "B",
+      "option_text": "Area = 5x² + x",
+      "explanation": "The student has picked a correct statement.",
+      "pct_students": 17,
+      "question_stem": "Rectangle: (4x + 9) by (5x + 1)\nWhich of the following statements is incorrect?",
+      "matchable": true
+    },
+    {
+      "question": 5,
+      "option_label": "D",
+      "option_text": "x = 8",
+      "explanation": "The student has picked a correct statement.",
+      "pct_students": 22,
+      "question_stem": "Rectangle: (4x + 9) by (5x + 1)\nWhich of the following statements is incorrect?",
+      "matchable": true
+    }
+  ],
+  "excluded": []
+}

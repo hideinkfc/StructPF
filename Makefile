@@ -2,7 +2,7 @@
 
 # Build thesis PDF
 thesis:
-	cd thesis && latexmk -pdf main.tex
+	cd thesis && tectonic main.tex
 
 # Clean LaTeX build artifacts
 clean:

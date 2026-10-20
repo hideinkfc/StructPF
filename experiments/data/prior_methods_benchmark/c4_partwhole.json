@@ -1,0 +1,116 @@
+{
+  "concept_id": "c4_partwhole",
+  "concept_text": "Part-to-part versus part-to-whole: a ratio 5:3 means 5/8 of the whole, not 5/3 and not '5 out of 10'.",
+  "grade": 7,
+  "anchor": {
+    "quiz": "gg81",
+    "quiz_name": "Representation of ratio",
+    "topic": "Ratio",
+    "questions": [
+      4,
+      5
+    ],
+    "questions_omitted": [
+      1,
+      2,
+      3
+    ]
+  },
+  "dominant_threshold_pct": 10,
+  "dominant_errors": [
+    {
+      "question": 4,
+      "option_label": "B",
+      "option_text": "£40 and £20",
+      "explanation": null,
+      "pct_students": 10,
+      "question_stem": "Share £60 in the ratio 3:2",
+      "matchable": true
+    },
+    {
+      "question": 5,
+      "option_label": "A",
+      "option_text": "28",
+      "explanation": null,
+      "pct_students": 26,
+      "question_stem": "In a class, the ratio of boys to girls is 3:4.\nThere are 12 boys. How many students are in the class?",
+      "matchable": true
+    },
+    {
+      "question": 5,
+      "option_label": "B",
+      "option_text": "21",
+      "explanation": null,
+      "pct_students": 12,
+      "question_stem": "In a class, the ratio of boys to girls is 3:4.\nThere are 12 boys. How many students are in the class?",
+      "matchable": true
+    },
+    {
+      "question": 5,
+      "option_label": "C",
+      "option_text": "16",
+      "explanation": null,
+      "pct_students": 10,
+      "question_stem": "In a class, the ratio of boys to girls is 3:4.\nThere are 12 boys. How many students are in the class?",
+      "matchable": true
+    }
+  ],
+  "all_errors": [
+    {
+      "question": 4,
+      "option_label": "A",
+      "option_text": "£36 and £24",
+      "explanation": null,
+      "pct_students": 6,
+      "question_stem": "Share £60 in the ratio 3:2",
+      "matchable": true
+    },
+    {
+      "question": 4,
+      "option_label": "B",
+      "option_text": "£40 and £20",
+      "explanation": null,
+      "pct_students": 10,
+      "question_stem": "Share £60 in the ratio 3:2",
+      "matchable": true
+    },
+    {
+      "question": 4,
+      "option_label": "D",
+      "option_text": "£45 and £15",
+      "explanation": null,
+      "pct_students": 7,
+      "question_stem": "Share £60 in the ratio 3:2",
+      "matchable": true
+    },
+    {
+      "question": 5,
+      "option_label": "A",
+      "option_text": "28",
+      "explanation": null,
+      "pct_students": 26,
+      "question_stem": "In a class, the ratio of boys to girls is 3:4.\nThere are 12 boys. How many students are in the class?",
+      "matchable": true
+    },
+    {
+      "question": 5,
+      "option_label": "B",
+      "option_text": "21",
+      "explanation": null,
+      "pct_students": 12,
+      "question_stem": "In a class, the ratio of boys to girls is 3:4.\nThere are 12 boys. How many students are in the class?",
+      "matchable": true
+    },
+    {
+      "question": 5,
+      "option_label": "C",
+      "option_text": "16",
+      "explanation": null,
+      "pct_students": 10,
+      "question_stem": "In a class, the ratio of boys to girls is 3:4.\nThere are 12 boys. How many students are in the class?",
+      "matchable": true
+    }
+  ],
+  "excluded": [],
+  "prevalence_note": "gg81: pick rates and option texts only; explanations OCR-corrupted and excluded from matching"
+}

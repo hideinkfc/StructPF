@@ -1,0 +1,258 @@
+{
+  "concept_id": "x_onestepeq",
+  "concept_text": "Solving a one-step equation needs the inverse operation applied to both sides.",
+  "grade": 7,
+  "anchor": {
+    "quiz": "emcv",
+    "quiz_name": "Solve one step linear equations 2",
+    "topic": "Linear equations",
+    "questions": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "questions_omitted": []
+  },
+  "dominant_threshold_pct": 10,
+  "dominant_errors": [
+    {
+      "question": 1,
+      "option_label": "C",
+      "option_text": "p = 9",
+      "explanation": "The student does not realise you need to do the inverse.",
+      "pct_students": 23,
+      "question_stem": "Solve the equation: 12 = 3p",
+      "matchable": true
+    },
+    {
+      "question": 2,
+      "option_label": "A",
+      "option_text": "p = 36",
+      "explanation": "The student may believe the solution will be negative due to the negative signs.",
+      "pct_students": 32,
+      "question_stem": "Solve the equation: p/3 = 12",
+      "matchable": true
+    },
+    {
+      "question": 2,
+      "option_label": "C",
+      "option_text": "p = 9",
+      "explanation": "The student does not realise you need to do the inverse.",
+      "pct_students": 10,
+      "question_stem": "Solve the equation: p/3 = 12",
+      "matchable": true
+    },
+    {
+      "question": 2,
+      "option_label": "D",
+      "option_text": "p = 15",
+      "explanation": "The student does not realise you need to do the inverse and may believe the solution will be negative due to the negative signs.",
+      "pct_students": 13,
+      "question_stem": "Solve the equation: p/3 = 12",
+      "matchable": true
+    },
+    {
+      "question": 3,
+      "option_label": "B",
+      "option_text": "p = 4",
+      "explanation": "The student may have worked out 12 × 3, and may not be secure with the unknown on the denominator.",
+      "pct_students": 27,
+      "question_stem": "Solve the equation: 12 = 3/p",
+      "matchable": true
+    },
+    {
+      "question": 3,
+      "option_label": "C",
+      "option_text": "p = 0.25",
+      "explanation": "The student may have worked out 12/3, and may not be secure with the unknown on the denominator.",
+      "pct_students": 22,
+      "question_stem": "Solve the equation: 12 = 3/p",
+      "matchable": true
+    },
+    {
+      "question": 3,
+      "option_label": "D",
+      "option_text": "There are no solutions",
+      "explanation": "The student may think there is no number you can divide 3 by and get 12, and may not be secure with the unknown on the denominator.",
+      "pct_students": 20,
+      "question_stem": "Solve the equation: 12 = 3/p",
+      "matchable": true
+    },
+    {
+      "question": 4,
+      "option_label": "B",
+      "option_text": "p = 4",
+      "explanation": "The student does not realise you need to do the inverse.",
+      "pct_students": 10,
+      "question_stem": "Solve the equation: 12 = 3p",
+      "matchable": true
+    },
+    {
+      "question": 5,
+      "option_label": "A",
+      "option_text": "p = -36",
+      "explanation": "The student may have worked out 12 − 3.",
+      "pct_students": 10,
+      "question_stem": "Solve the equation: p/3 = -12",
+      "matchable": true
+    },
+    {
+      "question": 5,
+      "option_label": "C",
+      "option_text": "p = -9",
+      "explanation": "The student may have worked out 3 −",
+      "pct_students": 14,
+      "question_stem": "Solve the equation: p/3 = -12",
+      "matchable": true
+    },
+    {
+      "question": 5,
+      "option_label": "D",
+      "option_text": "p = -15",
+      "explanation": "The student may think two minuses equal a plus.",
+      "pct_students": 11,
+      "question_stem": "Solve the equation: p/3 = -12",
+      "matchable": true
+    }
+  ],
+  "all_errors": [
+    {
+      "question": 1,
+      "option_label": "A",
+      "option_text": "p = 36",
+      "explanation": "The student may think 𝑝/3 means subtract and does not realise you need to do the inverse.",
+      "pct_students": 6,
+      "question_stem": "Solve the equation: 12 = 3p",
+      "matchable": true
+    },
+    {
+      "question": 1,
+      "option_label": "C",
+      "option_text": "p = 9",
+      "explanation": "The student does not realise you need to do the inverse.",
+      "pct_students": 23,
+      "question_stem": "Solve the equation: 12 = 3p",
+      "matchable": true
+    },
+    {
+      "question": 1,
+      "option_label": "D",
+      "option_text": "p = 15",
+      "explanation": "The student may think 𝑝/3 means subtract.",
+      "pct_students": 5,
+      "question_stem": "Solve the equation: 12 = 3p",
+      "matchable": true
+    },
+    {
+      "question": 2,
+      "option_label": "A",
+      "option_text": "p = 36",
+      "explanation": "The student may believe the solution will be negative due to the negative signs.",
+      "pct_students": 32,
+      "question_stem": "Solve the equation: p/3 = 12",
+      "matchable": true
+    },
+    {
+      "question": 2,
+      "option_label": "C",
+      "option_text": "p = 9",
+      "explanation": "The student does not realise you need to do the inverse.",
+      "pct_students": 10,
+      "question_stem": "Solve the equation: p/3 = 12",
+      "matchable": true
+    },
+    {
+      "question": 2,
+      "option_label": "D",
+      "option_text": "p = 15",
+      "explanation": "The student does not realise you need to do the inverse and may believe the solution will be negative due to the negative signs.",
+      "pct_students": 13,
+      "question_stem": "Solve the equation: p/3 = 12",
+      "matchable": true
+    },
+    {
+      "question": 3,
+      "option_label": "B",
+      "option_text": "p = 4",
+      "explanation": "The student may have worked out 12 × 3, and may not be secure with the unknown on the denominator.",
+      "pct_students": 27,
+      "question_stem": "Solve the equation: 12 = 3/p",
+      "matchable": true
+    },
+    {
+      "question": 3,
+      "option_label": "C",
+      "option_text": "p = 0.25",
+      "explanation": "The student may have worked out 12/3, and may not be secure with the unknown on the denominator.",
+      "pct_students": 22,
+      "question_stem": "Solve the equation: 12 = 3/p",
+      "matchable": true
+    },
+    {
+      "question": 3,
+      "option_label": "D",
+      "option_text": "There are no solutions",
+      "explanation": "The student may think there is no number you can divide 3 by and get 12, and may not be secure with the unknown on the denominator.",
+      "pct_students": 20,
+      "question_stem": "Solve the equation: 12 = 3/p",
+      "matchable": true
+    },
+    {
+      "question": 4,
+      "option_label": "A",
+      "option_text": "p = 36",
+      "explanation": "The student may think 3𝑝 means add.",
+      "pct_students": 6,
+      "question_stem": "Solve the equation: 12 = 3p",
+      "matchable": true
+    },
+    {
+      "question": 4,
+      "option_label": "B",
+      "option_text": "p = 4",
+      "explanation": "The student does not realise you need to do the inverse.",
+      "pct_students": 10,
+      "question_stem": "Solve the equation: 12 = 3p",
+      "matchable": true
+    },
+    {
+      "question": 4,
+      "option_label": "D",
+      "option_text": "p = 15",
+      "explanation": "The student may think 3𝑝 means add and does not realise you need to do the inverse.",
+      "pct_students": 6,
+      "question_stem": "Solve the equation: 12 = 3p",
+      "matchable": true
+    },
+    {
+      "question": 5,
+      "option_label": "A",
+      "option_text": "p = -36",
+      "explanation": "The student may have worked out 12 − 3.",
+      "pct_students": 10,
+      "question_stem": "Solve the equation: p/3 = -12",
+      "matchable": true
+    },
+    {
+      "question": 5,
+      "option_label": "C",
+      "option_text": "p = -9",
+      "explanation": "The student may have worked out 3 −",
+      "pct_students": 14,
+      "question_stem": "Solve the equation: p/3 = -12",
+      "matchable": true
+    },
+    {
+      "question": 5,
+      "option_label": "D",
+      "option_text": "p = -15",
+      "explanation": "The student may think two minuses equal a plus.",
+      "pct_students": 11,
+      "question_stem": "Solve the equation: p/3 = -12",
+      "matchable": true
+    }
+  ],
+  "excluded": []
+}

@@ -1,0 +1,68 @@
+{
+  "schema_version": "pf-student-probe/v1",
+  "question": "Does changing only a hypothetical learning record control which mathematical resources an LLM applies, rather than just changing its terminology?",
+  "hypothesis": "Omitting an actually used prerequisite may reduce its application and explicitly teaching an advanced method may increase application. The record may instead prime terminology or produce statements about ignorance without a true knowledge boundary.",
+  "output": "experiments/results/pf_learning_record_20261011",
+  "task_root": "experiments/results/pf_method_comparison_draft_first_20261011/fresh",
+  "tasks": [
+    {"id":"consistency_direct","family":"loibl_variance","path":"loibl_variance/001/direct/result.json"},
+    {"id":"consistency_pipeline","family":"loibl_variance","path":"loibl_variance/003/pipeline/result.json"},
+    {"id":"division_direct","family":"kerrigan_fair_division","path":"kerrigan_fair_division/001/direct/result.json"},
+    {"id":"division_pipeline","family":"kerrigan_fair_division","path":"kerrigan_fair_division/001/pipeline/result.json"}
+  ],
+  "models": ["gpt41mini","gpt41"],
+  "profiles": [
+    {"id":"ordinary_solver","condition":"solver"},
+    {"id":"recent_prerequisites","condition":"learner"},
+    {"id":"one_prerequisite_gap","condition":"learner","omit_resources":{"loibl_variance":"Arithmetic mean","kerrigan_fair_division":"Divider-Chooser method"}},
+    {"id":"additional_learned_method","condition":"learner","add_resources_by_family":{
+      "loibl_variance":[{"resource":"Variance and standard deviation","taught_as":"Calculate and interpret variance and standard deviation as measures of spread."}],
+      "kerrigan_fair_division":[{"resource":"Multi-person fair-division methods","taught_as":"Use the Lone Divider and Last Diminisher procedures for continuously divisible resources."}]
+    }}
+  ],
+  "repeats": 3,
+  "seed": 20261011,
+  "workers": 4,
+  "settings": {"temperature":0.7,"max_tokens":2400,"timeout_seconds":180,"sdk_retries":0},
+  "budget": {"calibration_calls":8,"fresh_calls":96,"max_calls_total":104,"max_completion_tokens_total":249600,"rounds":1},
+  "frozen": {
+    "task": "Same student title/body/question within each task; no task changes.",
+    "learner_system": "Exact existing STUDENT_SYSTEM unchanged in all three learner arms.",
+    "difference": "Only the supplied resource record changes; advanced additions name previously taught skills but do not provide task solutions, formulas, ordered algorithm steps or requested output methods.",
+    "solver": "Existing ordinary-solver control, task text only.",
+    "generation": "Four inspected saved tasks; no PF generator changes or new tasks.",
+    "historical": "Earlier48 and216 attempt studies are references, not pooled with these fresh requests."
+  },
+  "coding": {
+    "type":"Label-hidden assistant reading of task and written response before opening condition/model keys; coarse resource use, not the poorly calibrated fine-method LLM reviewer.",
+    "fields": {
+      "prerequisite_applied":"Mean calculation for consistency; actual execution of Divider-Chooser for allocation. Named inspiration or 'does not generalize' alone is not application.",
+      "prerequisite_mentioned_only":"Prerequisite named but not applied, coded separately.",
+      "advanced_applied":"Variance/SD calculation, named or unnamed, or actual Lone Divider/Last Diminisher execution; do not count names without mathematical operations.",
+      "advanced_mentioned_only":"Named advanced method appears without execution; this includes reporting not being taught it.",
+      "advanced_named_as_recall":"Applied advanced method presented as an already known named formula/procedure, not proof of real memory.",
+      "construction_visible":"An explanation visibly derives an additional measure or procedure from earlier calculations; written evidence only, not access to cognition.",
+      "self_described_gap":"Explicit statements that a relevant method has not been learned or is beyond current knowledge; not automatically inappropriate or dishonest.",
+      "record_bound_stop":"Explicitly declines further exploration because a method is not learned/allowed. Incomplete attempts and honest uncertainty alone are not restraint.",
+      "mathematics_status":"supported / invalid / unknown for visible mathematics; separate from record adherence and task completion.",
+      "evidence":"Exact source quotations for positive behavioral flags, with uncertainty preserved for truncation."
+    },
+    "retention":"All96 requests in denominator; missing output or insufficient text stays unknown, not no-method. Applied and mention-only categories are mutually exclusive per resource class; naming a gap need not be a violation."
+  },
+  "interpretation": {
+    "deletion":"Compare actual prerequisite use in full versus omitted arms by family/task/model. If full-record use is absent, the removal test is uninformative.",
+    "addition":"Compare applied advanced methods in additional-method versus full-prerequisite arms; an increase indicates prompt responsiveness, not new learning or cognitive-state fidelity.",
+    "construction":"Inventing means, deviations or a procedure from basic arithmetic is permitted by the existing prompt. Resource use after omission cannot automatically be called a violation.",
+    "limitations":"Explicitly naming a skill can prime it. No same-length placebo/history validation, independent human ratings, real-student comparisons or learning outcomes.",
+    "decision":"One descriptive controlled round, no arbitrary fidelity pass threshold, prompt tuning, replacement failures, or automatic task refinement."
+  },
+  "limitations": [
+    "Four selected inspected tasks, not a representative or untouched sample.",
+    "Hypothetical record of direct instruction, not an assertion the learner cannot construct other ideas.",
+    "Added skill names directly prime applicable methods; this is an intended manipulation, not proof of mastery or learning.",
+    "Both simulators are GPT-4.1 variants; no independent model-family transfer.",
+    "Three independent repetitions per model/profile/task; no population or real-learner inference.",
+    "Token cutoffs retained as execution limits, not learner failure.",
+    "No teaching interaction, profile-history training, PF quality promotion or student learning study."
+  ]
+}

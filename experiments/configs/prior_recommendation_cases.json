@@ -1,0 +1,190 @@
+[
+  {
+    "id": "kapur_average_speed_g7_singapore",
+    "target_concept": "Average speed as total distance divided by total time; students have not yet learned the new concept.",
+    "topic": "average speed and rates",
+    "grade": 7,
+    "jurisdiction": "Singapore",
+    "subject": "mathematics",
+    "exercise_ids": ["kapur2012_complex_1"],
+    "expected_resources": [
+      "Speed = distance / time",
+      "Ratio and proportion",
+      "LCM and HCF",
+      "Trial and error / guess-and-check"
+    ],
+    "gold_status": "paper_verified",
+    "gold_source": "Kapur & Bielaczyc (2012), pp. 50-51; normalized in the repository YAML",
+    "evaluation_note": "These are author-reported prior resources. The comparison output is for inspection, not an automatic quality score.",
+    "run_in_comparison": true
+  },
+  {
+    "id": "loibl_variance_g10_nrw",
+    "target_concept": "Variance and standard deviation as measures of spread; students have not yet learned the new concept.",
+    "topic": "variance, consistency, and descriptive statistics",
+    "grade": 10,
+    "jurisdiction": "Germany (NRW)",
+    "subject": "mathematics",
+    "exercise_ids": ["loibl2014_invention_1"],
+    "expected_resources": [
+      "Mean (arithmetic average)",
+      "Range (max - min)",
+      "Basic arithmetic operations"
+    ],
+    "gold_status": "paper_boundary_plus_curated",
+    "gold_source": "Loibl & Rummel (2014), pp. 74-85; exact resource list is normalized in the repository YAML",
+    "evaluation_note": "The paper directly establishes that variance was not covered by Grade 10 and describes the task; the compact prior-resource list is curator-normalized.",
+    "run_in_comparison": true
+  },
+  {
+    "id": "kerrigan_fair_division_undergrad_usa",
+    "target_concept": "Multi-player fair division with a standoff that requires a new resolution method.",
+    "topic": "fair division and fair shares",
+    "grade": "undergraduate",
+    "jurisdiction": "USA",
+    "subject": "mathematics",
+    "exercise_ids": ["kerrigan2021_invention_1"],
+    "exclude_resource_terms": [
+      "Lone Divider",
+      "Moving Knife",
+      "Last Diminisher",
+      "Sealed Bids"
+    ],
+    "expected_resources": [
+      "Divider-Chooser method",
+      "Basic division",
+      "Concept of fairness (at least 1/n of total value)"
+    ],
+    "gold_status": "course_sequence_grounded",
+    "gold_source": "Kerrigan (2018) dissertation, Appendix A and Math 103 course sequence",
+    "evaluation_note": "The dissertation documents the actual course sequence; the three labels are the task file's normalized prior-resource fields.",
+    "run_in_comparison": true
+  },
+  {
+    "id": "puech_consistency_g9_singapore",
+    "target_concept": "Variance or another justified consistency measure for comparing players.",
+    "topic": "variance and consistency",
+    "grade": 9,
+    "jurisdiction": "Singapore",
+    "subject": "mathematics",
+    "exercise_ids": ["puech2025_stratl_consistency"],
+    "expected_resources": ["Mean", "Range", "Data tables and graphs"],
+    "gold_status": "curriculum_candidate_not_expert_gold",
+    "gold_source": "MOE Singapore syllabus; Puech et al. (2025) says variance/SD is unknown",
+    "evaluation_note": "No author checklist of prior resources is supplied; use only as a future curriculum-grounding case.",
+    "run_in_comparison": false
+  },
+  {
+    "id": "mazziotti_fraction_g5_nrw",
+    "target_concept": "Formal equivalence of fractions for comparing proportions.",
+    "topic": "fraction equivalence and fair comparison",
+    "grade": 5,
+    "jurisdiction": "Germany (NRW)",
+    "subject": "mathematics",
+    "exercise_ids": ["puech2025_stratl_fraction_comparison_2"],
+    "expected_resources": ["Fractions as parts of a whole", "Equal sharing", "Fraction diagrams"],
+    "gold_status": "curriculum_candidate_not_expert_gold",
+    "gold_source": "Mazziotti et al. (2016), pp. 926-929; NRW Kernlehrplan",
+    "evaluation_note": "Mazziotti establishes an initial understanding of fractions before formal equivalence; this is not a complete author checklist.",
+    "run_in_comparison": false
+  },
+  {
+    "id": "kapur_kinematics_g11_cbse",
+    "target_concept": "Newtonian kinematics applied to reaction time, friction, and braking distance.",
+    "topic": "kinematics and braking",
+    "grade": 11,
+    "jurisdiction": "India (CBSE)",
+    "subject": "physics",
+    "exercise_ids": ["puech2025_stratl_lawer"],
+    "expected_resources": ["Units and measurement", "Motion in a straight line", "Average speed and velocity"],
+    "gold_status": "curriculum_candidate_not_expert_gold",
+    "gold_source": "Kapur (2008); current CBSE Senior Secondary Physics curriculum",
+    "evaluation_note": "The current curriculum grounds the sequence; it is not a historical 2008 syllabus and should not be treated as direct student-level evidence.",
+    "run_in_comparison": false
+  },
+  {
+    "id": "newman_decaro_consistency_g9_kentucky",
+    "target_concept": "A formal consistency measure such as standard deviation for comparing data sets; students have not yet learned the new concept.",
+    "topic": "variance, consistency, and descriptive statistics",
+    "grade": 9,
+    "jurisdiction": "USA",
+    "subject": "mathematics",
+    "exercise_ids": ["puech2025_stratl_consistency_tea"],
+    "exclude_resource_terms": [
+      "variance",
+      "standard deviation",
+      "formal consistency measure"
+    ],
+    "expected_resources": [
+      "Arithmetic mean",
+      "Range",
+      "Basic arithmetic operations"
+    ],
+    "gold_status": "curriculum_proxy_not_expert_gold",
+    "gold_source": "Common Core State Standards Initiative statistics standards; Kentucky KAS PDF remains blocked",
+    "evaluation_note": "The CCSS records provide a transparent standards proxy, not Kentucky-specific proof or a complete author-reported prior-resource list.",
+    "run_in_comparison": false
+  },
+  {
+    "id": "ratio_part_whole_g7_singapore",
+    "target_concept": "Part-to-part versus part-to-whole: a ratio 5:3 means 5/8 of the whole, not 5/3 and not 5 out of 10.",
+    "topic": "ratios and proportional relationships",
+    "grade": 7,
+    "jurisdiction": "Singapore",
+    "subject": "mathematics",
+    "exclude_resource_terms": [
+      "part-to-whole fraction from a part-to-part ratio"
+    ],
+    "expected_resources": [
+      "Ratio and proportion",
+      "Fractions as parts of a whole",
+      "Unit rates"
+    ],
+    "gold_status": "curriculum_candidate_not_expert_gold",
+    "gold_source": "MOE Singapore syllabus; hidden concept from the historical Grade 7 ratio brief pool",
+    "evaluation_note": "Diagnostic generalization case. Prior-resource list is curator-normalized from the syllabus, not an author-reported checklist.",
+    "run_in_comparison": false
+  },
+  {
+    "id": "weighted_combined_rate_g7_singapore",
+    "target_concept": "Weighted combined rate: the combined rate is total numerator divided by total relevant denominator (equivalently, the denominator-weighted mean of the rates); an unweighted mean of rates is generally invalid unless the relevant denominators are equal or the rates are identical.",
+    "topic": "combined rates and weighted averages",
+    "grade": 7,
+    "jurisdiction": "Singapore",
+    "subject": "mathematics",
+    "exclude_resource_terms": [
+      "weighted average",
+      "combined rate"
+    ],
+    "expected_resources": [
+      "Ratio and proportion",
+      "Speed = distance / time",
+      "Unit rates"
+    ],
+    "gold_status": "curriculum_candidate_not_expert_gold",
+    "gold_source": "MOE Singapore syllabus; hidden concept from the historical Grade 7 ratio brief pool",
+    "evaluation_note": "Diagnostic generalization case for number-fill contrast. Target wording clarified for Sept 22 round (scientific correctness of rate weighting, not headcount assumption), not an author-reported prior-resource checklist or newly validated literature task.",
+    "run_in_comparison": false
+  },
+  {
+    "id": "additive_vs_multiplicative_g7_singapore",
+    "target_concept": "Additive difference is not multiplicative comparison: the same additive difference does not imply the same multiplicative relationship; for a fixed positive gap, the ratio of the larger quantity to the smaller quantity approaches 1 as the positive baseline grows.",
+    "topic": "additive versus multiplicative comparison",
+    "grade": 7,
+    "jurisdiction": "Singapore",
+    "subject": "mathematics",
+    "exclude_resource_terms": [
+      "multiplicative comparison",
+      "constant ratio"
+    ],
+    "expected_resources": [
+      "Ratio and proportion",
+      "Subtraction of quantities",
+      "Basic arithmetic operations"
+    ],
+    "gold_status": "curriculum_candidate_not_expert_gold",
+    "gold_source": "MOE Singapore syllabus; hidden concept from the historical Grade 7 ratio brief pool",
+    "evaluation_note": "Diagnostic generalization case for judge contrast between constant gap and constant ratio. Target wording clarified for Sept 22 round (precise asymptotic direction of ratio), not an author-reported checklist or newly validated literature task.",
+    "run_in_comparison": false
+  }
+]

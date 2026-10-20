@@ -1,0 +1,798 @@
+{
+  "purpose": "Reference questions for Tests 1-5 of the functional-diversity verification plan. Eedi's own labelled distractors provide a known answer key; profiles for the real experiment must be built from same_error_in_questions, not from the target question.",
+  "source": "data/eedi/train.csv",
+  "filters": {
+    "min_other_questions_sharing_skill": 7,
+    "all_three_distractors_labelled": true,
+    "three_distinct_misconception_ids": true,
+    "each_error_also_appears_in_another_question_of_same_skill": true,
+    "labels_phrased_as_actions_not_deficits": true,
+    "no_image_or_diagram_marker": true
+  },
+  "status": "candidates; error_rule and predicted_answer still need manual authoring",
+  "n_questions": 15,
+  "n_skills": 6,
+  "questions": [
+    {
+      "question_id": 221,
+      "subject": "Range and Interquartile Range from a List of Data",
+      "skill": "Calculate the range from a list of data",
+      "questions_sharing_skill": 11,
+      "question_text": "What is the range of this set of data?\n\\[\n5 \\mathrm{~cm}, 19 \\mathrm{~cm}, 6 \\mathrm{~cm}, 2 \\mathrm{~cm}\n\\]",
+      "correct_option": "A",
+      "correct_text": "\\( 17 \\mathrm{~cm} \\)",
+      "distractors": [
+        {
+          "option": "B",
+          "text": "\\( 19 \\mathrm{~cm} \\)",
+          "misconception_id": "1177",
+          "misconception_label": "Identifies the biggest value for the range",
+          "same_error_in_questions": [
+            "1437"
+          ],
+          "error_rule": null,
+          "predicted_answer": null,
+          "rule_verified_by_hand": false
+        },
+        {
+          "option": "C",
+          "text": "\\( 3 \\mathrm{~cm} \\)",
+          "misconception_id": "1677",
+          "misconception_label": "Thinks the range is just the first value subtracted from the last value, without ordering",
+          "same_error_in_questions": [
+            "1437"
+          ],
+          "error_rule": null,
+          "predicted_answer": null,
+          "rule_verified_by_hand": false
+        },
+        {
+          "option": "D",
+          "text": "\\( 21 \\mathrm{~cm} \\)",
+          "misconception_id": "691",
+          "misconception_label": "To find the range adds the biggest and smallest number rather than subtract",
+          "same_error_in_questions": [
+            "1437",
+            "1721",
+            "1864"
+          ],
+          "error_rule": null,
+          "predicted_answer": null,
+          "rule_verified_by_hand": false
+        }
+      ]
+    },
+    {
+      "question_id": 376,
+      "subject": "Expanding Single Brackets",
+      "skill": "Multiply a single term over a bracket where the term on the outside is a number and the inside contains a linear expression",
+      "questions_sharing_skill": 11,
+      "question_text": "Expand:\n\\[\n6(2-3 p)\n\\]",
+      "correct_option": "C",
+      "correct_text": "\\( 12-18 p \\)",
+      "distractors": [
+        {
+          "option": "A",
+          "text": "\\( 8-18 p \\)",
+          "misconception_id": "2143",
+          "misconception_label": "Adds instead of multiplying when expanding bracket",
+          "same_error_in_questions": [
+            "1727"
+          ],
+          "error_rule": null,
+          "predicted_answer": null,
+          "rule_verified_by_hand": false
+        },
+        {
+          "option": "B",
+          "text": "\\( 2-18 p \\)",
+          "misconception_id": "1911",
+          "misconception_label": "Only multiplies second term in the expansion of a bracket",
+          "same_error_in_questions": [
+            "910",
+            "1035",
+            "1048",
+            "1269",
+            "1727"
+          ],
+          "error_rule": null,
+          "predicted_answer": null,
+          "rule_verified_by_hand": false
+        },
+        {
+          "option": "D",
+          "text": "\\( 18 p-6 \\)",
+          "misconception_id": "1510",
+          "misconception_label": "Believes subtraction is commutative ",
+          "same_error_in_questions": [
+            "1727"
+          ],
+          "error_rule": null,
+          "predicted_answer": null,
+          "rule_verified_by_hand": false
+        }
+      ]
+    },
+    {
+      "question_id": 587,
+      "subject": "BIDMAS",
+      "skill": "Use the order of operations to carry out calculations involving addition, subtraction, multiplication, and/or division",
+      "questions_sharing_skill": 12,
+      "question_text": "Problem P: \\( 6 \\div 3+5= \\)\nProblem Q: \\( 6 \\div 3 \\times 5= \\)\n\nWhich calculation should you do first in each problem?",
+      "correct_option": "D",
+      "correct_text": "Problem P: \\( 6 \\div 3 \\)\nProblem Q: \\( 6 \\div 3 \\)",
+      "distractors": [
+        {
+          "option": "A",
+          "text": "Problem P: \\( 3+5 \\)\nProblem Q: \\( 3 \\times 5 \\)",
+          "misconception_id": "706",
+          "misconception_label": "Carries out operations from right to left regardless of priority order",
+          "same_error_in_questions": [
+            "899"
+          ],
+          "error_rule": null,
+          "predicted_answer": null,
+          "rule_verified_by_hand": false
+        },
+        {
+          "option": "B",
+          "text": "Problem P: \\( 3+5 \\)\nProblem Q: \\( 6 \\div 3 \\)",
+          "misconception_id": "15",
+          "misconception_label": "Confuses the order of operations, believes addition comes before division",
+          "same_error_in_questions": [
+            "695",
+            "1343",
+            "1508"
+          ],
+          "error_rule": null,
+          "predicted_answer": null,
+          "rule_verified_by_hand": false
+        },
+        {
+          "option": "C",
+          "text": "Problem P: \\( 6 \\div 3 \\)\nProblem Q: \\( 3 \\times 5 \\)",
+          "misconception_id": "2306",
+          "misconception_label": "Applies BIDMAS in strict order (does not realize addition and subtraction, and multiplication and division, are of equal priority)",
+          "same_error_in_questions": [
+            "306",
+            "1152",
+            "1866"
+          ],
+          "error_rule": null,
+          "predicted_answer": null,
+          "rule_verified_by_hand": false
+        }
+      ]
+    },
+    {
+      "question_id": 796,
+      "subject": "Square Roots, Cube Roots, etc",
+      "skill": "Calculate the square of a number",
+      "questions_sharing_skill": 14,
+      "question_text": "\\( 12^{2}= \\)",
+      "correct_option": "C",
+      "correct_text": "\\( 144 \\)",
+      "distractors": [
+        {
+          "option": "A",
+          "text": "\\( 24 \\)",
+          "misconception_id": "2316",
+          "misconception_label": "Mixes up squaring and multiplying by 2 or doubling",
+          "same_error_in_questions": [
+            "351",
+            "354",
+            "426",
+            "872",
+            "972",
+            "1456",
+            "1481",
+            "1583",
+            "1783"
+          ],
+          "error_rule": null,
+          "predicted_answer": null,
+          "rule_verified_by_hand": false
+        },
+        {
+          "option": "B",
+          "text": "\\( 122 \\)",
+          "misconception_id": "2352",
+          "misconception_label": "Writes the index as a digit on the end of a number",
+          "same_error_in_questions": [
+            "872",
+            "1604"
+          ],
+          "error_rule": null,
+          "predicted_answer": null,
+          "rule_verified_by_hand": false
+        },
+        {
+          "option": "D",
+          "text": "\\( 1212 \\)",
+          "misconception_id": "446",
+          "misconception_label": "Repeats the digits twice when squaring a number",
+          "same_error_in_questions": [
+            "872"
+          ],
+          "error_rule": null,
+          "predicted_answer": null,
+          "rule_verified_by_hand": false
+        }
+      ]
+    },
+    {
+      "question_id": 872,
+      "subject": "Square Roots, Cube Roots, etc",
+      "skill": "Calculate the square of a number",
+      "questions_sharing_skill": 14,
+      "question_text": "\\( 11^{2}= \\)",
+      "correct_option": "B",
+      "correct_text": "\\( 121 \\)",
+      "distractors": [
+        {
+          "option": "A",
+          "text": "\\( 1111 \\)",
+          "misconception_id": "446",
+          "misconception_label": "Repeats the digits twice when squaring a number",
+          "same_error_in_questions": [
+            "796"
+          ],
+          "error_rule": null,
+          "predicted_answer": null,
+          "rule_verified_by_hand": false
+        },
+        {
+          "option": "C",
+          "text": "\\( 22 \\)",
+          "misconception_id": "2316",
+          "misconception_label": "Mixes up squaring and multiplying by 2 or doubling",
+          "same_error_in_questions": [
+            "351",
+            "354",
+            "426",
+            "796",
+            "972",
+            "1456",
+            "1481",
+            "1583",
+            "1783"
+          ],
+          "error_rule": null,
+          "predicted_answer": null,
+          "rule_verified_by_hand": false
+        },
+        {
+          "option": "D",
+          "text": "\\( 112 \\)",
+          "misconception_id": "2352",
+          "misconception_label": "Writes the index as a digit on the end of a number",
+          "same_error_in_questions": [
+            "796",
+            "1604"
+          ],
+          "error_rule": null,
+          "predicted_answer": null,
+          "rule_verified_by_hand": false
+        }
+      ]
+    },
+    {
+      "question_id": 899,
+      "subject": "BIDMAS",
+      "skill": "Use the order of operations to carry out calculations involving addition, subtraction, multiplication, and/or division",
+      "questions_sharing_skill": 12,
+      "question_text": "\\[\n10-8 \\times 7+6=\n\\]\n\nWhich calculation should you do first?",
+      "correct_option": "C",
+      "correct_text": "\\( 8 \\times 7 \\)",
+      "distractors": [
+        {
+          "option": "A",
+          "text": "\\( 7+6 \\)",
+          "misconception_id": "706",
+          "misconception_label": "Carries out operations from right to left regardless of priority order",
+          "same_error_in_questions": [
+            "587"
+          ],
+          "error_rule": null,
+          "predicted_answer": null,
+          "rule_verified_by_hand": false
+        },
+        {
+          "option": "B",
+          "text": "\\( 10-8 \\)",
+          "misconception_id": "1507",
+          "misconception_label": "Carries out operations from left to right regardless of priority order",
+          "same_error_in_questions": [
+            "306",
+            "550",
+            "695",
+            "1032",
+            "1343",
+            "1465",
+            "1508",
+            "1866"
+          ],
+          "error_rule": null,
+          "predicted_answer": null,
+          "rule_verified_by_hand": false
+        },
+        {
+          "option": "D",
+          "text": "It doesn't matter: you get the same answer",
+          "misconception_id": "2532",
+          "misconception_label": "Believes order of operations does not affect the answer to a calculation",
+          "same_error_in_questions": [
+            "951"
+          ],
+          "error_rule": null,
+          "predicted_answer": null,
+          "rule_verified_by_hand": false
+        }
+      ]
+    },
+    {
+      "question_id": 910,
+      "subject": "Expanding Single Brackets",
+      "skill": "Multiply a single term over a bracket where the term on the outside is a number and the inside contains a linear expression",
+      "questions_sharing_skill": 11,
+      "question_text": "Expand:\n\\[\n3(p-1)\n\\]",
+      "correct_option": "A",
+      "correct_text": "\\( 3 p-3 \\)",
+      "distractors": [
+        {
+          "option": "B",
+          "text": "\\( 3 p-1 \\)",
+          "misconception_id": "220",
+          "misconception_label": "Only multiplies the first term in the expansion of a bracket",
+          "same_error_in_questions": [
+            "960",
+            "1048",
+            "1154",
+            "1269"
+          ],
+          "error_rule": null,
+          "predicted_answer": null,
+          "rule_verified_by_hand": false
+        },
+        {
+          "option": "C",
+          "text": "\\( p-3 \\)",
+          "misconception_id": "1911",
+          "misconception_label": "Only multiplies second term in the expansion of a bracket",
+          "same_error_in_questions": [
+            "376",
+            "1035",
+            "1048",
+            "1269",
+            "1727"
+          ],
+          "error_rule": null,
+          "predicted_answer": null,
+          "rule_verified_by_hand": false
+        },
+        {
+          "option": "D",
+          "text": "\\( 3 p-2 \\)",
+          "misconception_id": "107",
+          "misconception_label": "When expanding brackets, multiplies out the first term correctly but adds together the number outside the bracket with the second term inside the bracket.",
+          "same_error_in_questions": [
+            "960",
+            "1269"
+          ],
+          "error_rule": null,
+          "predicted_answer": null,
+          "rule_verified_by_hand": false
+        }
+      ]
+    },
+    {
+      "question_id": 1035,
+      "subject": "Expanding Single Brackets",
+      "skill": "Multiply a single term over a bracket where the term on the outside is a number and the inside contains a linear expression",
+      "questions_sharing_skill": 11,
+      "question_text": "Expand:\n\\(\n-(2-3 p)\n\\)",
+      "correct_option": "D",
+      "correct_text": "\\( -2+3 p \\)",
+      "distractors": [
+        {
+          "option": "A",
+          "text": "\\( 2-3 p \\)",
+          "misconception_id": "583",
+          "misconception_label": "Ignores negative sign when expanding bracket",
+          "same_error_in_questions": [
+            "1048"
+          ],
+          "error_rule": null,
+          "predicted_answer": null,
+          "rule_verified_by_hand": false
+        },
+        {
+          "option": "B",
+          "text": "\\( -2-3 p \\)",
+          "misconception_id": "1597",
+          "misconception_label": "Believes multiplying two negatives gives a negative answer",
+          "same_error_in_questions": [
+            "564",
+            "1373"
+          ],
+          "error_rule": null,
+          "predicted_answer": null,
+          "rule_verified_by_hand": false
+        },
+        {
+          "option": "C",
+          "text": "\\( 2+3 p \\)",
+          "misconception_id": "1911",
+          "misconception_label": "Only multiplies second term in the expansion of a bracket",
+          "same_error_in_questions": [
+            "376",
+            "910",
+            "1048",
+            "1269",
+            "1727"
+          ],
+          "error_rule": null,
+          "predicted_answer": null,
+          "rule_verified_by_hand": false
+        }
+      ]
+    },
+    {
+      "question_id": 1048,
+      "subject": "Expanding Single Brackets",
+      "skill": "Multiply a single term over a bracket where the term on the outside is a number and the inside contains a linear expression",
+      "questions_sharing_skill": 11,
+      "question_text": "Expand:\n\\[\n-(1-2 p)\n\\]",
+      "correct_option": "A",
+      "correct_text": "\\( -1+2 p \\)",
+      "distractors": [
+        {
+          "option": "B",
+          "text": "\\( -1-2 p \\)",
+          "misconception_id": "220",
+          "misconception_label": "Only multiplies the first term in the expansion of a bracket",
+          "same_error_in_questions": [
+            "910",
+            "960",
+            "1154",
+            "1269"
+          ],
+          "error_rule": null,
+          "predicted_answer": null,
+          "rule_verified_by_hand": false
+        },
+        {
+          "option": "C",
+          "text": "\\( 1+2 p \\)",
+          "misconception_id": "1911",
+          "misconception_label": "Only multiplies second term in the expansion of a bracket",
+          "same_error_in_questions": [
+            "376",
+            "910",
+            "1035",
+            "1269",
+            "1727"
+          ],
+          "error_rule": null,
+          "predicted_answer": null,
+          "rule_verified_by_hand": false
+        },
+        {
+          "option": "D",
+          "text": "\\( 1-2 p \\)",
+          "misconception_id": "583",
+          "misconception_label": "Ignores negative sign when expanding bracket",
+          "same_error_in_questions": [
+            "1035"
+          ],
+          "error_rule": null,
+          "predicted_answer": null,
+          "rule_verified_by_hand": false
+        }
+      ]
+    },
+    {
+      "question_id": 1213,
+      "subject": "Dividing Fractions",
+      "skill": "Divide proper fractions in the form: Fraction ÷ Integer",
+      "questions_sharing_skill": 8,
+      "question_text": "Calculate\n\\(\n\\frac{2}{5} \\div 3\n\\)",
+      "correct_option": "C",
+      "correct_text": "\\( \\frac{2}{15} \\)",
+      "distractors": [
+        {
+          "option": "A",
+          "text": "\\( \\frac{6}{5} \\)",
+          "misconception_id": "609",
+          "misconception_label": "when dividing a fraction by an integer, multiplies the numerator by the integer",
+          "same_error_in_questions": [
+            "1617",
+            "1842"
+          ],
+          "error_rule": null,
+          "predicted_answer": null,
+          "rule_verified_by_hand": false
+        },
+        {
+          "option": "B",
+          "text": "\\( \\frac{15}{2} \\)",
+          "misconception_id": "1152",
+          "misconception_label": "When dividing fractions, does the reciprocal of the first fraction instead of the second",
+          "same_error_in_questions": [
+            "597"
+          ],
+          "error_rule": null,
+          "predicted_answer": null,
+          "rule_verified_by_hand": false
+        },
+        {
+          "option": "D",
+          "text": "\\( \\frac{6}{15} \\)",
+          "misconception_id": "1621",
+          "misconception_label": "When dividing a fraction by an integer, multiplies both the numerator and denominator by the integer",
+          "same_error_in_questions": [
+            "1617",
+            "1842"
+          ],
+          "error_rule": null,
+          "predicted_answer": null,
+          "rule_verified_by_hand": false
+        }
+      ]
+    },
+    {
+      "question_id": 1269,
+      "subject": "Expanding Single Brackets",
+      "skill": "Multiply a single term over a bracket where the term on the outside is a number and the inside contains a linear expression",
+      "questions_sharing_skill": 11,
+      "question_text": "Expand:\n\\[\n6(p-2)\n\\]",
+      "correct_option": "B",
+      "correct_text": "\\( 6 p-12 \\)",
+      "distractors": [
+        {
+          "option": "A",
+          "text": "\\( 6 p-2 \\)",
+          "misconception_id": "220",
+          "misconception_label": "Only multiplies the first term in the expansion of a bracket",
+          "same_error_in_questions": [
+            "910",
+            "960",
+            "1048",
+            "1154"
+          ],
+          "error_rule": null,
+          "predicted_answer": null,
+          "rule_verified_by_hand": false
+        },
+        {
+          "option": "C",
+          "text": "\\( p-12 \\)",
+          "misconception_id": "1911",
+          "misconception_label": "Only multiplies second term in the expansion of a bracket",
+          "same_error_in_questions": [
+            "376",
+            "910",
+            "1035",
+            "1048",
+            "1727"
+          ],
+          "error_rule": null,
+          "predicted_answer": null,
+          "rule_verified_by_hand": false
+        },
+        {
+          "option": "D",
+          "text": "\\( 6 p-4 \\)",
+          "misconception_id": "107",
+          "misconception_label": "When expanding brackets, multiplies out the first term correctly but adds together the number outside the bracket with the second term inside the bracket.",
+          "same_error_in_questions": [
+            "910",
+            "960"
+          ],
+          "error_rule": null,
+          "predicted_answer": null,
+          "rule_verified_by_hand": false
+        }
+      ]
+    },
+    {
+      "question_id": 1437,
+      "subject": "Range and Interquartile Range from a List of Data",
+      "skill": "Calculate the range from a list of data",
+      "questions_sharing_skill": 11,
+      "question_text": "What is the range of this set of data?\n\\[\n4 \\mathrm{~cm}, \\quad 22 \\mathrm{~cm}, \\quad 5 \\mathrm{~cm}, \\quad 7 \\mathrm{~cm}\n\\]",
+      "correct_option": "A",
+      "correct_text": "\\( 18 \\mathrm{~cm} \\)",
+      "distractors": [
+        {
+          "option": "B",
+          "text": "\\( 22 \\mathrm{~cm} \\)",
+          "misconception_id": "1177",
+          "misconception_label": "Identifies the biggest value for the range",
+          "same_error_in_questions": [
+            "221"
+          ],
+          "error_rule": null,
+          "predicted_answer": null,
+          "rule_verified_by_hand": false
+        },
+        {
+          "option": "C",
+          "text": "\\( 3 \\mathrm{~cm} \\)",
+          "misconception_id": "1677",
+          "misconception_label": "Thinks the range is just the first value subtracted from the last value, without ordering",
+          "same_error_in_questions": [
+            "221"
+          ],
+          "error_rule": null,
+          "predicted_answer": null,
+          "rule_verified_by_hand": false
+        },
+        {
+          "option": "D",
+          "text": "\\( 26 \\mathrm{~cm} \\)",
+          "misconception_id": "691",
+          "misconception_label": "To find the range adds the biggest and smallest number rather than subtract",
+          "same_error_in_questions": [
+            "221",
+            "1721",
+            "1864"
+          ],
+          "error_rule": null,
+          "predicted_answer": null,
+          "rule_verified_by_hand": false
+        }
+      ]
+    },
+    {
+      "question_id": 1565,
+      "subject": "Basic Angle Facts (straight line, opposite, around a point, etc)",
+      "skill": "Find missing angles using angles on a straight line",
+      "questions_sharing_skill": 8,
+      "question_text": "Adjacent angles on a straight line sum to...",
+      "correct_option": "C",
+      "correct_text": "\\( 180^{\\circ} \\)",
+      "distractors": [
+        {
+          "option": "A",
+          "text": "\\( 90^{\\circ} \\)",
+          "misconception_id": "309",
+          "misconception_label": "Believes angles on a straight line add to 90 degrees",
+          "same_error_in_questions": [
+            "1193"
+          ],
+          "error_rule": null,
+          "predicted_answer": null,
+          "rule_verified_by_hand": false
+        },
+        {
+          "option": "B",
+          "text": "\\( 100^{\\circ} \\)",
+          "misconception_id": "2121",
+          "misconception_label": "Believes angles on a straight line add to 100 degrees",
+          "same_error_in_questions": [
+            "1193"
+          ],
+          "error_rule": null,
+          "predicted_answer": null,
+          "rule_verified_by_hand": false
+        },
+        {
+          "option": "D",
+          "text": "\\( 360^{\\circ} \\)",
+          "misconception_id": "2362",
+          "misconception_label": "Believes angles on a straight line add to 360 degrees",
+          "same_error_in_questions": [
+            "1193",
+            "1332",
+            "1564"
+          ],
+          "error_rule": null,
+          "predicted_answer": null,
+          "rule_verified_by_hand": false
+        }
+      ]
+    },
+    {
+      "question_id": 1604,
+      "subject": "Squares, Cubes, etc",
+      "skill": "Calculate the square of a number",
+      "questions_sharing_skill": 14,
+      "question_text": "What is the value of \\( 1^{2} \\) ?",
+      "correct_option": "A",
+      "correct_text": "\\( 1 \\)",
+      "distractors": [
+        {
+          "option": "B",
+          "text": "\\( 2 \\)",
+          "misconception_id": "1072",
+          "misconception_label": "Multiplies by the index",
+          "same_error_in_questions": [
+            "1331",
+            "1807"
+          ],
+          "error_rule": null,
+          "predicted_answer": null,
+          "rule_verified_by_hand": false
+        },
+        {
+          "option": "C",
+          "text": "\\( 3 \\)",
+          "misconception_id": "952",
+          "misconception_label": "Adds the index to the number",
+          "same_error_in_questions": [
+            "426",
+            "1807"
+          ],
+          "error_rule": null,
+          "predicted_answer": null,
+          "rule_verified_by_hand": false
+        },
+        {
+          "option": "D",
+          "text": "\\( 12 \\)",
+          "misconception_id": "2352",
+          "misconception_label": "Writes the index as a digit on the end of a number",
+          "same_error_in_questions": [
+            "796",
+            "872"
+          ],
+          "error_rule": null,
+          "predicted_answer": null,
+          "rule_verified_by_hand": false
+        }
+      ]
+    },
+    {
+      "question_id": 1727,
+      "subject": "Expanding Single Brackets",
+      "skill": "Multiply a single term over a bracket where the term on the outside is a number and the inside contains a linear expression",
+      "questions_sharing_skill": 11,
+      "question_text": "Expand:\n\\[\n3(1-2 p)\n\\]",
+      "correct_option": "B",
+      "correct_text": "\\( 3-6 p \\)",
+      "distractors": [
+        {
+          "option": "A",
+          "text": "\\( 4-6 p \\)",
+          "misconception_id": "2143",
+          "misconception_label": "Adds instead of multiplying when expanding bracket",
+          "same_error_in_questions": [
+            "376"
+          ],
+          "error_rule": null,
+          "predicted_answer": null,
+          "rule_verified_by_hand": false
+        },
+        {
+          "option": "C",
+          "text": "\\( 1-6 p \\)",
+          "misconception_id": "1911",
+          "misconception_label": "Only multiplies second term in the expansion of a bracket",
+          "same_error_in_questions": [
+            "376",
+            "910",
+            "1035",
+            "1048",
+            "1269"
+          ],
+          "error_rule": null,
+          "predicted_answer": null,
+          "rule_verified_by_hand": false
+        },
+        {
+          "option": "D",
+          "text": "\\( 6 p-3 \\)",
+          "misconception_id": "1510",
+          "misconception_label": "Believes subtraction is commutative ",
+          "same_error_in_questions": [
+            "376"
+          ],
+          "error_rule": null,
+          "predicted_answer": null,
+          "rule_verified_by_hand": false
+        }
+      ]
+    }
+  ]
+}

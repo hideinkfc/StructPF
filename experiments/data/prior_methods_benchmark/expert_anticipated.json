@@ -1,0 +1,186 @@
+[
+  {
+    "exercise": "kapur2012_complex_1",
+    "source": "Kapur & Bielaczyc (2012)",
+    "topic": "average_speed",
+    "closest_benchmark_concepts": [
+      "c4_partwhole"
+    ],
+    "methods": [
+      {
+        "name": "Qualitative insight: Hady should walk more",
+        "description": "Because Hady's biking speed > Jasmine's, he should do more walking",
+        "why_fails": null,
+        "type": "correct_but_insufficient"
+      },
+      {
+        "name": "Distance constraint insight",
+        "description": "Jasmine's walking distance = Hady's biking distance and vice versa",
+        "why_fails": null,
+        "type": "correct_but_insufficient"
+      },
+      {
+        "name": "Diagrams",
+        "description": "Accurate diagram showing distances, speeds, partition point",
+        "why_fails": null,
+        "type": "correct_but_insufficient"
+      },
+      {
+        "name": "LCM/HCF method",
+        "description": "Use LCM of biking speeds to find distance factor",
+        "why_fails": "LCM (600) doesn't divide remaining distance (5000) completely",
+        "type": "correct_but_insufficient"
+      },
+      {
+        "name": "Ratios method",
+        "description": "Divide total distance using ratio of speeds",
+        "why_fails": "Walking speed ratio (5:3) ≠ biking speed ratio (4:3) — non-additive property",
+        "type": "correct_but_insufficient"
+      },
+      {
+        "name": "Trial and Error A (brute force)",
+        "description": "Guess partition point, compute times, increment systematically",
+        "why_fails": null,
+        "type": "partial_canonical"
+      },
+      {
+        "name": "Trial and Error B (ratio-informed)",
+        "description": "Start guess from ratio method result, then increment",
+        "why_fails": null,
+        "type": "partial_canonical"
+      },
+      {
+        "name": "Letter-symbolic algebra (multiple variables)",
+        "description": "Set up equations with x and y but more variables than equations",
+        "why_fails": "System is underdetermined",
+        "type": "correct_but_insufficient"
+      },
+      {
+        "name": "Letter-symbolic algebra (single variable)",
+        "description": "Reduce to single variable equation",
+        "why_fails": "Lack of algebraic manipulation skills at Grade 7",
+        "type": "correct_but_insufficient"
+      }
+    ]
+  },
+  {
+    "exercise": "kerrigan2021_invention_1",
+    "source": "Kerrigan, Weber & Chinn (2021)",
+    "topic": "continuous_fair_division",
+    "closest_benchmark_concepts": [],
+    "methods": [
+      {
+        "name": "Identify fair share of $250",
+        "description": "",
+        "why_fails": null,
+        "type": "correct_but_insufficient"
+      },
+      {
+        "name": "Try to assign pieces greedily",
+        "description": "",
+        "why_fails": null,
+        "type": "correct_but_insufficient"
+      },
+      {
+        "name": "Propose splitting piece 2 or other heuristics",
+        "description": "",
+        "why_fails": null,
+        "type": "correct_but_insufficient"
+      }
+    ]
+  },
+  {
+    "exercise": "loibl2014_invention_1",
+    "source": "Loibl & Rummel (2014)",
+    "topic": "variance_consistency",
+    "closest_benchmark_concepts": [
+      "x_range",
+      "x_avgfreq"
+    ],
+    "methods": [
+      {
+        "name": "Range method",
+        "description": "max - min for each player",
+        "why_fails": "All three have the same range → cannot distinguish",
+        "type": "correct_but_insufficient"
+      },
+      {
+        "name": "Mean comparison",
+        "description": "Compare averages",
+        "why_fails": "All three have the same mean → cannot distinguish",
+        "type": "correct_but_insufficient"
+      },
+      {
+        "name": "Visual/qualitative",
+        "description": "Look at how 'spread out' the numbers are",
+        "why_fails": "Not a precise mathematical method",
+        "type": "correct_but_insufficient"
+      },
+      {
+        "name": "Sum of differences from neighbors",
+        "description": "Add up |year_i - year_{i-1}| for each consecutive pair",
+        "why_fails": "Depends on ordering/sequencing of data",
+        "type": "correct_but_insufficient"
+      },
+      {
+        "name": "Sum of deviations from mean (unsigned)",
+        "description": "Σ|xi - mean| — approximates MAD",
+        "why_fails": null,
+        "type": "partial_canonical"
+      },
+      {
+        "name": "Count deviations from mean",
+        "description": "Count how many values differ from mean",
+        "why_fails": "Doesn't account for magnitude of deviations",
+        "type": "correct_but_insufficient"
+      }
+    ]
+  },
+  {
+    "exercise": "puech2025_consistency",
+    "source": "Puech, Macina, Chatain, Sachan & Kapur (2025)",
+    "topic": "variance_consistency",
+    "closest_benchmark_concepts": [
+      "x_range",
+      "x_avgfreq"
+    ],
+    "methods": [
+      {
+        "name": "Range (max - min)",
+        "description": "",
+        "why_fails": null,
+        "type": "correct_but_insufficient"
+      },
+      {
+        "name": "Mean year-to-year difference",
+        "description": "",
+        "why_fails": null,
+        "type": "correct_but_insufficient"
+      },
+      {
+        "name": "Mean absolute deviation from mean",
+        "description": "",
+        "why_fails": null,
+        "type": "correct_but_insufficient"
+      },
+      {
+        "name": "Count of years above/below mean",
+        "description": "",
+        "why_fails": null,
+        "type": "correct_but_insufficient"
+      },
+      {
+        "name": "Variance or sum of squared deviations",
+        "description": "",
+        "why_fails": null,
+        "type": "correct_but_insufficient"
+      },
+      {
+        "name": "Visual inspection / qualitative judgment",
+        "description": "",
+        "why_fails": null,
+        "type": "correct_but_insufficient"
+      }
+    ]
+  }
+]

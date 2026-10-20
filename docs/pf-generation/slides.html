@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Generating Productive Failure — design, check, then write</title>
+<style>
+  :root{
+    --ink:#1a1a1a; --muted:#6f6f6f; --line:#d9d9d9;
+    --eth:#215CAF;        /* ETH blue */
+    --eth-dark:#08407e;
+    --bg:#ffffff; --bg-alt:#f7f7f7;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);
+       font:16px/1.55 "Helvetica Neue",Arial,Helvetica,sans-serif;
+       -webkit-font-smoothing:antialiased;}
+  .slide{min-height:100vh;display:flex;flex-direction:column;justify-content:center;
+         padding:9vh 9vw;border-bottom:1px solid var(--line);}
+  .slide.alt{background:var(--bg-alt);}
+  .kicker{font-size:.78rem;letter-spacing:.16em;text-transform:uppercase;
+          color:var(--eth);font-weight:700;margin-bottom:1rem;}
+  .kicker::before{content:"";display:inline-block;width:26px;height:3px;
+          background:var(--eth);vertical-align:middle;margin-right:.6rem;}
+  h1{font-size:2.4rem;font-weight:700;line-height:1.12;margin:0 0 1.1rem;max-width:22ch;}
+  h2{font-size:1.6rem;font-weight:700;margin:0 0 1rem;}
+  .lead{font-size:1.15rem;color:var(--muted);max-width:62ch;}
+  p{max-width:70ch;}
+  table{border-collapse:collapse;width:auto;min-width:52%;font-size:.95rem;margin:.8rem 0;}
+  th,td{border:none;border-bottom:1px solid var(--line);padding:.5rem .9rem .5rem 0;text-align:left;}
+  th{font-weight:700;color:var(--ink);border-bottom:2px solid var(--eth);}
+  td.num,th.num{text-align:right;font-variant-numeric:tabular-nums;}
+  .small{font-size:.85rem;}
+  code{background:var(--bg-alt);border:1px solid var(--line);padding:.05rem .35rem;
+       font-size:.9em;border-radius:3px;font-family:"SF Mono",Menlo,monospace;}
+  pre{background:var(--bg-alt);border-left:3px solid var(--eth);padding:1rem 1.2rem;
+      font-family:"SF Mono",Menlo,monospace;font-size:.9rem;line-height:1.55;overflow:auto;max-width:70ch;}
+  ul{margin:.3rem 0;padding-left:1.2rem;max-width:64ch;} li{margin:.4rem 0;}
+  .foot{margin-top:2.2rem;font-size:.82rem;color:var(--muted);border-top:1px solid var(--line);padding-top:.8rem;max-width:70ch;}
+  .steps{list-style:none;padding:0;margin:1rem 0;max-width:70ch;}
+  .steps li{display:flex;gap:1rem;padding:.55rem 0;border-bottom:1px solid var(--line);align-items:baseline;}
+  .steps .n{color:var(--eth);font-weight:700;min-width:3.2rem;}
+  .pos{color:var(--eth);font-weight:700;}
+  .neg{color:#b32e2e;font-weight:700;}
+  .frame{border:1px solid var(--line);padding:1.1rem 1.3rem;max-width:70ch;background:#fff;}
+  .alt .frame{background:var(--bg);}
+  b.eth{color:var(--eth-dark);}
+  em{font-style:italic;}
+  .titlebar{height:6px;width:64px;background:var(--eth);margin-bottom:1.6rem;}
+</style>
+</head>
+<body>
+
+<!-- 1 TITLE -->
+<section class="slide">
+  <div class="titlebar"></div>
+  <h1>Generating Productive Failure</h1>
+  <p class="lead">A bounded design-data pipeline for tasks that invite meaningful approaches and comparison.</p>
+  <div class="foot">Master thesis · October 10, 2026 · <a href="index.html">Interactive dashboard</a> · <a href="PF_PIPELINE.md">Current research record</a></div>
+</section>
+
+<!-- 2 RQ -->
+<section class="slide alt">
+  <div class="kicker">Research question</div>
+  <h2>Not a hard problem — a productive one</h2>
+  <p class="lead">A Productive Failure task should let students <b>start</b> with what they know, encounter useful limitations, and leave material for comparison. Partial and successful approaches can also contribute.</p>
+  <pre>What will students try?
+What does each approach reveal or leave unresolved?
+How can we check the task before calling it PF?</pre>
+</section>
+
+<!-- 3 DIRECT GEN -->
+<section class="slide">
+  <div class="kicker">Historical attempt 1 — direct generation</div>
+  <h2>Asking the model for a PF exercise directly</h2>
+  <ul>
+    <li>The numbers accidentally make the shortcut <em>valid</em> — the trap disappears.</li>
+    <li>A "wrong" method turns out mathematically correct.</li>
+    <li>The narrative announces the error instead of eliciting it.</li>
+  </ul>
+  <div class="frame">
+    <b>Historical example of a narrated error</b>
+    <p class="small" style="margin:.5rem 0 .3rem;">Maya and Leo's recipe is 2 cups lemon juice to 5 cups water. They have 3 cups of juice. Leo says: <em>"add 1 more cup of each and it'll taste the same."</em> Maya disagrees: <em>"2 to 5 isn't 3 to 6."</em> Design a plan so the lemonade tastes exactly like Grandma's.</p>
+    <p class="small" style="margin:.2rem 0 0;color:var(--muted);"><b style="color:var(--ink);">Design concern:</b> the story <em>names the error</em> (add-to-both) and has a character refute it. The goal is settled by keeping the 2:5 ratio (3 cups juice → 7.5 cups water). Different representations are possible, but the task may remain routine; this inspection is not observed student evidence.</p>
+  </div>
+  <table>
+    <tr><th>Condition</th><th class="num">Multiple methods</th><th class="num">Open-ended</th><th class="num">Total / 15</th></tr>
+    <tr><td>V1 blind</td><td class="num neg">1.00</td><td class="num">1.71</td><td class="num">9.00</td></tr>
+    <tr><td>V2 Eedi-grounded</td><td class="num neg">1.00</td><td class="num">1.43</td><td class="num">8.14</td></tr>
+    <tr><td>V3 LLM-inferred</td><td class="num neg">1.00</td><td class="num">1.86</td><td class="num">9.29</td></tr>
+  </table>
+  <p class="foot">Historical blind AI rubric ratings of 21 exercises. Multiple representations &amp; solutions scored 1.00/3 in every condition; higher is better, up to 3. Total scores are out of 15. These are model ratings, not student outcomes or proof of a general quality advantage for the current pipeline.</p>
+</section>
+
+<!-- 4 DIAGNOSIS -->
+<section class="slide alt">
+  <div class="kicker">Diagnosis</div>
+  <h2>The jobs were in the wrong order</h2>
+  <pre>old   write a story  →  hope the design works  →  list mistakes
+new   select a brief  →  data + conditions  →  check / repair  →  write</pre>
+  <p class="lead">Separate design from prose. Check a numerical contrast when the design requires one; do not require every familiar method to fail.</p>
+</section>
+
+<!-- 5 MCQ -->
+<section class="slide">
+  <div class="kicker">Historical attempt 2 — MCQ error generation</div>
+  <h2>Multiple-choice questions (MCQs) as an error instrument</h2>
+  <ul>
+    <li>Best reported match to documented Eedi errors was about <b class="neg">22%</b>; higher means closer reference alignment, not better PF design.</li>
+    <li>Wrong answers do not capture all useful prior tools, diagrams, qualitative insights, or correct-but-insufficient approaches.</li>
+    <li>Structured paths make model-generated error hypotheses inspectable. They do <em>not</em> demonstrate observed student thinking or reliable behavioral prediction.</li>
+  </ul>
+  <p class="foot">MCQ is a design instrument, not the primary D1 source. Behavioral probes remain proposed evaluation work; a full pathway-to-PF run has not established student outcomes.</p>
+</section>
+
+<!-- 6 EXPERT PATTERN -->
+<section class="slide alt">
+  <div class="kicker">Turning point — reading the experts</div>
+  <h2>Expert examples motivate different design demands</h2>
+  <table>
+    <tr><th>Reference task</th><th>Possible starting tools</th><th>Design demand</th></tr>
+    <tr><td>Kapur · average speed</td><td>ratio, trial-and-error, diagrams</td><td>Choose an unknown bike-handover point</td></tr>
+    <tr><td>Loibl · consistency</td><td>mean, range</td><td>Construct a useful measure beyond familiar summaries</td></tr>
+    <tr><td>Kerrigan · fair division</td><td>equal shares, valuation comparisons</td><td>Construct a fair allocation under stated rules</td></tr>
+  </table>
+  <p class="lead" style="margin-top:1.1rem;">A numerical mismatch is one design option, not a property required of every expert task. Successful and partial approaches can supply useful material for comparison.</p>
+  <p class="foot">These are compact design summaries, not verbatim task texts or exhaustive observed method lists. Some references are reconstructions; the Loibl reference lacks its complete original numerical table.</p>
+</section>
+
+<!-- 7 PIPELINE -->
+<section class="slide">
+  <div class="kicker">Current default implementation</div>
+  <h2>Select a brief, then run the bounded data loop</h2>
+  <ol class="steps">
+    <li><span class="n">D1</span><span><b>Anticipate</b> — curriculum / textbook grounding supports prior-resource candidates; first moves are model hypotheses.</span></li>
+    <li><span class="n">D2a</span><span><b>Select a design brief</b> — goal, relationships, allowed actions, possible approaches, learning opportunity, and requirements.</span></li>
+    <li><span class="n">D2b</span><span><b>Propose given data + conditions</b> → restricted exact calculations and quoted model textual judgments.</span></li>
+    <li><span class="n">Loop</span><span><b>Repair known essential numerical failures</b> — values only, with rechecking; at most 3 data calls, including invalid-proposal retries.</span></li>
+    <li><span class="n">D3</span><span><b>Fixed-data writer</b> — preserve givens and rules; keep teacher-only checks and anticipated methods out of the student task.</span></li>
+  </ol>
+  <p class="foot">No universal quantity translation or separate mathematical-plan gate. D4 names verification work, not a mandatory later trap test in the default route.</p>
+</section>
+
+<!-- 7b D1 grounding pipeline -->
+<section class="slide alt">
+  <div class="kicker">Current D1 sourcing</div>
+  <h2>Two ways to source the prior methods</h2>
+  <p class="lead">The same target and learner context can be paired with different sources of prior-resource candidates.</p>
+  <div class="frame" style="margin-bottom:.8rem;">
+    <p style="margin:.1rem 0;"><b class="eth">Grounded</b> &nbsp;·&nbsp; retrieve curriculum / textbook excerpts → map to taught-skill candidates → retain provenance and coverage limits.</p>
+  </div>
+  <div class="frame">
+    <p style="margin:.1rem 0;"><b>Ungrounded</b> &nbsp;·&nbsp; the model proposes what students <em>might</em> know from the description. Provenance is model-only, not curricular evidence.</p>
+  </div>
+  <p class="foot">The corpus uses official curricula and open textbook excerpts. Current D1 excludes expert-resource lists from generation; that policy does not demonstrate an independent recovery advantage. Model expansion adds activation notes and first moves, not complete solution methods or evidence of what students actually do.</p>
+</section>
+
+<!-- 7c D1 result -->
+<section class="slide">
+  <div class="kicker">Historical August 24 reconstruction — not current D1</div>
+  <h2>Historical curated-record propagation, not recovery</h2>
+  <table>
+    <tr><th>Supplied / preserved curated labels</th><th>Model-only candidates (summary)</th></tr>
+    <tr><td>Speed = distance / time</td><td>Addition of distances</td></tr>
+    <tr><td>Ratio and proportion</td><td>Addition of time intervals</td></tr>
+    <tr><td>Least common multiple / highest common factor</td><td>Division as sharing / grouping</td></tr>
+    <tr><td>Trial and error / guess-and-check</td><td>Simple unit-rate calculation</td></tr>
+  </table>
+  <p class="foot">Both August 24 runs, <code>expert_comparison_gpt41mini_capped.json</code> and <code>expert_comparison_gpt56luna.json</code>, supplied and preserved curated expert-resource records: the 4 speed labels above were propagated, not independently recovered. The model-only column is a historical summary, not a current holdout comparison. Current prompt files are not frozen historical prompts. <a href="PRIOR_RECOMMENDATIONS_TRACE.md">Historical trace and provenance limits</a>.</p>
+</section>
+
+<!-- 8 D2 skeleton example -->
+<section class="slide alt">
+  <div class="kicker">Illustrative example — not the final live speed task</div>
+  <h2>A two-plan teaching example</h2>
+  <div class="frame">
+    <p style="margin:.2rem 0;"><b>Quantities</b> &nbsp;two plans; each a list of legs; each leg a <code>distance</code> and a <code>time</code>.</p>
+    <p style="margin:.6rem 0 .2rem;"><b>Question</b> &nbsp;"Which plan covers more distance per unit of total elapsed time — or are they equally effective?"</p>
+  </div>
+  <p class="foot">This simplified example illustrates a possible numerical contrast. It is not a selected current design or evidence of open-endedness. A current brief also specifies rules, approaches, learning opportunity, and requirements.</p>
+</section>
+
+<!-- 9 D2 numbers example -->
+<section class="slide">
+  <div class="kicker">Illustrative arithmetic — not measured student responses</div>
+  <h2>Numbers can reverse a comparison</h2>
+  <table>
+    <tr><th>Plan</th><th>Leg 1 (km in h)</th><th>Leg 2 (km in h)</th></tr>
+    <tr><td>A</td><td>9 in 9</td><td>9 in 1</td></tr>
+    <tr><td>B</td><td>9 in 3</td><td>9 in 3</td></tr>
+  </table>
+  <table>
+    <tr><th>Method</th><th class="num">A (km/h)</th><th class="num">B (km/h)</th><th>picks</th></tr>
+    <tr><td>average of leg speeds &nbsp;<span style="color:var(--muted);font-size:.82rem;">(shortcut)</span></td><td class="num">5.0</td><td class="num">3.0</td><td class="neg">A</td></tr>
+    <tr><td>total distance ÷ total time &nbsp;<span style="color:var(--muted);font-size:.82rem;">(target)</span></td><td class="num">1.8</td><td class="num">3.0</td><td class="pos">B</td></tr>
+  </table>
+  <p class="foot">The formulas disagree on the faster plan. This checks arithmetic, not whether students choose the shortcut or learn from it. A tie or a successful familiar approach is not automatically a PF failure; the required contrast depends on the design.</p>
+</section>
+
+<!-- 10 D3 story -->
+<section class="slide alt">
+  <div class="kicker">Illustrative prompt — D3 · the story</div>
+  <h2>The story comes last</h2>
+  <div class="frame">
+    <p style="margin:.2rem 0;"><b>Choose the Better Route.</b> A delivery robot can use Plan A or Plan B, each with two legs (distance in kilometres and elapsed time in hours shown). Decide which plan covers more distance per unit of total elapsed time — or whether they are equally effective. <em>Show and explain your reasoning.</em></p>
+  </div>
+  <p class="foot">The prompt does not prescribe a formula. That alone does not make it PF: it may still invite one routine computation. The production writer preserves fixed givens and must not invent missing assumptions or turn model predictions into student facts.</p>
+</section>
+
+<!-- 11 STATUS -->
+<section class="slide alt">
+  <div class="kicker">Where we are</div>
+  <h2>D2b is complete for the agreed scope, not PF validation</h2>
+  <table>
+    <tr><th>Component</th><th>Status</th></tr>
+    <tr><td>D1 prior-resource sourcing + D2a brief selection</td><td class="pos">implemented · hypotheses, not student evidence</td></tr>
+    <tr><td>D2b data, calculations, judgments, bounded repair</td><td class="pos">agreed scope complete · frozen</td></tr>
+    <tr><td>D3 fixed-data writer</td><td class="pos">implemented · fidelity still needs inspection</td></tr>
+    <tr><td>Affected software checks</td><td class="pos">551 tests passed · full suite not run</td></tr>
+    <tr><td>Independent formula / textual-judgment validity</td><td class="neg">not established</td></tr>
+    <tr><td>Student-facing design refinement</td><td>agreed next focus · not implemented</td></tr>
+    <tr><td>Simulated / real approaches and learning outcomes</td><td class="neg">not evaluated in final runs</td></tr>
+  </table>
+  <p class="foot">An exact calculation verifies the supplied expression, not whether it represents the intended claim. Unit checks compare declared strings, not every formula's dimensions.</p>
+</section>
+
+<section class="slide">
+  <div class="kicker">Current continuation policy</div>
+  <h2>Known failure and missing evidence are different</h2>
+  <pre>known essential numerical failure  →  values-only repair → recheck
+known essential textual error      →  design review
+missing support / unknown result   →  visible warning → continue
+no known essential failure        →  fixed-data writer</pre>
+  <p class="lead">Warnings continue even for essential claims. Textual failures take precedence when both kinds of failure occur; uncertainty does not hide a numerical failure.</p>
+  <p class="foot">Meanings, units, data sizes, conditions, and formulas freeze after a valid proposal. The 3-data-call budget includes invalid replies. “Accepted” permits writing; it does not mean every claim was verified. Textual judgments use quoted source wording and remain model judgments.</p>
+</section>
+
+<section class="slide alt">
+  <div class="kicker">Final October 10 fixed-design live runs</div>
+  <h2>Three ready tasks; research validity remains open</h2>
+  <pre>3 reused designs: speed · consistency · fair division
+5 data calls + 3 writer calls → 3 ready tasks
+2 invalid-proposal retries · 0 numerical repairs</pre>
+  <ul>
+    <li><b>Speed:</b> a fixed journey, not the expert task's unknown handover point.</li>
+    <li><b>Consistency:</b> equal averages and extremes are disclosed to students.</li>
+    <li><b>Division:</b> threshold-marked and proposed-allocation values are supplied.</li>
+  </ul>
+  <p class="foot">These are development runs with frozen existing designs, not fresh end-to-end or held-out generation. All 3 textual judgments were “holds”; 4 of 5 quoted fragments match verbatim and one changes terminal punctuation. Source presence does not prove logical sufficiency. No student responses or learning outcomes were tested. <a href="../../experiments/results/d2b_claim_policy_replays_20261010/final_validation_summary.json">Validation record</a>.</p>
+</section>
+
+<!-- 11b REFERENCES -->
+<section class="slide alt">
+  <div class="kicker">Where each decision comes from</div>
+  <h2>Selected references</h2>
+  <table>
+    <tr><th>Design decision</th><th>Source</th></tr>
+    <tr><td>The target phenomenon &amp; the four PF mechanisms</td><td>Kapur (2008); Kapur &amp; Bielaczyc (2012); Loibl &amp; Rummel (2014)</td></tr>
+    <tr><td>Effect depends on the design being right</td><td>Sinha &amp; Kapur (2021), meta-analysis</td></tr>
+    <tr><td>D1: prior methods as <em>resources</em>, not misconceptions</td><td>diSessa (1993); Hammer (2000)</td></tr>
+    <tr><td>MCQ error alignment is limited → hypotheses, not full prior knowledge</td><td>Liu et al. (2023); Wang et al. (2021, Eedi)</td></tr>
+    <tr><td>LLM-for-PF baseline &amp; evaluation frame</td><td>Puech et al. (2025, StratL); Rahimi et al. (2025)</td></tr>
+    <tr><td>Motivation for later model-based behavioral probes</td><td>Lu &amp; Wang (2024)</td></tr>
+  </table>
+  <p class="foot">Distractor-generation context: Feng et al. (2024); Parikh et al. (2025). Propose→judge→refine pattern: Madaan et al. (2023). These references motivate design choices; they do not validate current generated tasks. Implementation: <a href="../../scripts/design_data_stage.py">data loop + writer</a>, <a href="../../src/generation/design_calculator.py">restricted calculator</a>, <a href="../../src/generation/prompts/design_data.yaml">prompts</a>.</p>
+</section>
+
+<!-- 12 CLOSE -->
+<section class="slide">
+  <div class="kicker">The next research question</div>
+  <h2>What is left for students to discover?</h2>
+  <p class="lead">Trace solution-revealing information across the selected brief, given data, and writer. Improve the student-facing design without hiding necessary information or banning valid approaches; then evaluate actual approaches against direct generation and expert references.</p>
+  <div class="foot">D2b is frozen for the next experiments. Design refinement and student-response evaluation are proposed work, not completed validation.</div>
+</section>
+
+</body>
+</html>

@@ -1,0 +1,267 @@
+{
+  "concept_id": "x_estimation",
+  "concept_text": "Overestimating requires rounding at least one number up and none down.",
+  "grade": 7,
+  "anchor": {
+    "quiz": "emnt",
+    "quiz_name": "Estimation 3",
+    "topic": "Rounding and estimating",
+    "questions": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "questions_omitted": []
+  },
+  "dominant_threshold_pct": 10,
+  "dominant_errors": [
+    {
+      "question": 1,
+      "option_label": "D",
+      "option_text": "12 × 2.45",
+      "explanation": "The student has found the exact answer, not an estimate.",
+      "pct_students": 14,
+      "question_stem": "Erin wants to check that she has enough money to pay for 12 tickets at £2.45 each.\nWhich calculation will give an overestimate?",
+      "matchable": true
+    },
+    {
+      "question": 2,
+      "option_label": "B",
+      "option_text": "420,000",
+      "explanation": "I think you rounded 138 to the nearest ten, not 1 significant figure.",
+      "pct_students": 20,
+      "question_stem": "Estimate 3269 × 138",
+      "matchable": true
+    },
+    {
+      "question": 2,
+      "option_label": "C",
+      "option_text": "330,000",
+      "explanation": "I think you rounded 3269 to the nearest hundred, not 1 significant figure.",
+      "pct_students": 17,
+      "question_stem": "Estimate 3269 × 138",
+      "matchable": true
+    },
+    {
+      "question": 2,
+      "option_label": "D",
+      "option_text": "451,122",
+      "explanation": "It looks like you have worked out the exact answer, rather than estimating. Try rounding each value to 1 significant figure.",
+      "pct_students": 17,
+      "question_stem": "Estimate 3269 × 138",
+      "matchable": true
+    },
+    {
+      "question": 3,
+      "option_label": "A",
+      "option_text": "14.4",
+      "explanation": "The student has rounded to the nearest whole number, rather than 1 significant figure, and has divided by 5 rather than 0.2.",
+      "pct_students": 15,
+      "question_stem": "Estimate the value of (4.12 × 18.3) / 0.226",
+      "matchable": true
+    },
+    {
+      "question": 3,
+      "option_label": "B",
+      "option_text": "16",
+      "explanation": "The student has divided by 5, instead of 0.2.",
+      "pct_students": 18,
+      "question_stem": "Estimate the value of (4.12 × 18.3) / 0.226",
+      "matchable": true
+    },
+    {
+      "question": 3,
+      "option_label": "D",
+      "option_text": "360",
+      "explanation": "The student has rounded to the nearest whole number, rather than 1 significant figure.",
+      "pct_students": 30,
+      "question_stem": "Estimate the value of (4.12 × 18.3) / 0.226",
+      "matchable": true
+    },
+    {
+      "question": 4,
+      "option_label": "A",
+      "option_text": "4 × 130 / 0.5",
+      "explanation": "We can round everything to just 1 significant figure. What is 127 to 1 sf?",
+      "pct_students": 24,
+      "question_stem": "Which of the following would be a correct first step for an estimation to (4.36 × 127) / 0.51?",
+      "matchable": true
+    },
+    {
+      "question": 4,
+      "option_label": "D",
+      "option_text": "4 × 100 / 1",
+      "explanation": "Sometimes significant figures are after the decimal point, where is the first significant figure in 0.51?",
+      "pct_students": 15,
+      "question_stem": "Which of the following would be a correct first step for an estimation to (4.36 × 127) / 0.51?",
+      "matchable": true
+    },
+    {
+      "question": 5,
+      "option_label": "B",
+      "option_text": "Only Katie",
+      "explanation": "Remember, an overestimate is bigger than the real answer. Try thinking about which number we divide, and which number we divide by.",
+      "pct_students": 15,
+      "question_stem": "Tom and Katie are discussing how to estimate the answer to 38.8745 + 7.9302\nTom says 40 + 7.9302 would give an overestimate.\nKatie says 38.8745 + 8 would give an overestimate.\n\nWho is correct?",
+      "matchable": true
+    },
+    {
+      "question": 5,
+      "option_label": "C",
+      "option_text": "Both Tom and Katie",
+      "explanation": "Rounding up doesn't always give an overestimate. If we divide by a larger number, does our answer get bigger or smaller?",
+      "pct_students": 26,
+      "question_stem": "Tom and Katie are discussing how to estimate the answer to 38.8745 + 7.9302\nTom says 40 + 7.9302 would give an overestimate.\nKatie says 38.8745 + 8 would give an overestimate.\n\nWho is correct?",
+      "matchable": true
+    },
+    {
+      "question": 5,
+      "option_label": "D",
+      "option_text": "Neither is correct",
+      "explanation": "Remember, an overestimate is bigger than the real answer. Try thinking about which number we divide, and which number we divide by.",
+      "pct_students": 21,
+      "question_stem": "Tom and Katie are discussing how to estimate the answer to 38.8745 + 7.9302\nTom says 40 + 7.9302 would give an overestimate.\nKatie says 38.8745 + 8 would give an overestimate.\n\nWho is correct?",
+      "matchable": true
+    }
+  ],
+  "all_errors": [
+    {
+      "question": 1,
+      "option_label": "A",
+      "option_text": "12 × 2",
+      "explanation": "The student has rounded sensibly, but this will underestimate.",
+      "pct_students": 9,
+      "question_stem": "Erin wants to check that she has enough money to pay for 12 tickets at £2.45 each.\nWhich calculation will give an overestimate?",
+      "matchable": true
+    },
+    {
+      "question": 1,
+      "option_label": "B",
+      "option_text": "10 × 2.45",
+      "explanation": "The student has rounded sensibly, but this will underestimate.",
+      "pct_students": 7,
+      "question_stem": "Erin wants to check that she has enough money to pay for 12 tickets at £2.45 each.\nWhich calculation will give an overestimate?",
+      "matchable": true
+    },
+    {
+      "question": 1,
+      "option_label": "D",
+      "option_text": "12 × 2.45",
+      "explanation": "The student has found the exact answer, not an estimate.",
+      "pct_students": 14,
+      "question_stem": "Erin wants to check that she has enough money to pay for 12 tickets at £2.45 each.\nWhich calculation will give an overestimate?",
+      "matchable": true
+    },
+    {
+      "question": 2,
+      "option_label": "B",
+      "option_text": "420,000",
+      "explanation": "I think you rounded 138 to the nearest ten, not 1 significant figure.",
+      "pct_students": 20,
+      "question_stem": "Estimate 3269 × 138",
+      "matchable": true
+    },
+    {
+      "question": 2,
+      "option_label": "C",
+      "option_text": "330,000",
+      "explanation": "I think you rounded 3269 to the nearest hundred, not 1 significant figure.",
+      "pct_students": 17,
+      "question_stem": "Estimate 3269 × 138",
+      "matchable": true
+    },
+    {
+      "question": 2,
+      "option_label": "D",
+      "option_text": "451,122",
+      "explanation": "It looks like you have worked out the exact answer, rather than estimating. Try rounding each value to 1 significant figure.",
+      "pct_students": 17,
+      "question_stem": "Estimate 3269 × 138",
+      "matchable": true
+    },
+    {
+      "question": 3,
+      "option_label": "A",
+      "option_text": "14.4",
+      "explanation": "The student has rounded to the nearest whole number, rather than 1 significant figure, and has divided by 5 rather than 0.2.",
+      "pct_students": 15,
+      "question_stem": "Estimate the value of (4.12 × 18.3) / 0.226",
+      "matchable": true
+    },
+    {
+      "question": 3,
+      "option_label": "B",
+      "option_text": "16",
+      "explanation": "The student has divided by 5, instead of 0.2.",
+      "pct_students": 18,
+      "question_stem": "Estimate the value of (4.12 × 18.3) / 0.226",
+      "matchable": true
+    },
+    {
+      "question": 3,
+      "option_label": "D",
+      "option_text": "360",
+      "explanation": "The student has rounded to the nearest whole number, rather than 1 significant figure.",
+      "pct_students": 30,
+      "question_stem": "Estimate the value of (4.12 × 18.3) / 0.226",
+      "matchable": true
+    },
+    {
+      "question": 4,
+      "option_label": "A",
+      "option_text": "4 × 130 / 0.5",
+      "explanation": "We can round everything to just 1 significant figure. What is 127 to 1 sf?",
+      "pct_students": 24,
+      "question_stem": "Which of the following would be a correct first step for an estimation to (4.36 × 127) / 0.51?",
+      "matchable": true
+    },
+    {
+      "question": 4,
+      "option_label": "C",
+      "option_text": "4 × 100 / 0.05",
+      "explanation": "Look carefully at your denominator, is it roughly the same size as 0.51?",
+      "pct_students": 8,
+      "question_stem": "Which of the following would be a correct first step for an estimation to (4.36 × 127) / 0.51?",
+      "matchable": true
+    },
+    {
+      "question": 4,
+      "option_label": "D",
+      "option_text": "4 × 100 / 1",
+      "explanation": "Sometimes significant figures are after the decimal point, where is the first significant figure in 0.51?",
+      "pct_students": 15,
+      "question_stem": "Which of the following would be a correct first step for an estimation to (4.36 × 127) / 0.51?",
+      "matchable": true
+    },
+    {
+      "question": 5,
+      "option_label": "B",
+      "option_text": "Only Katie",
+      "explanation": "Remember, an overestimate is bigger than the real answer. Try thinking about which number we divide, and which number we divide by.",
+      "pct_students": 15,
+      "question_stem": "Tom and Katie are discussing how to estimate the answer to 38.8745 + 7.9302\nTom says 40 + 7.9302 would give an overestimate.\nKatie says 38.8745 + 8 would give an overestimate.\n\nWho is correct?",
+      "matchable": true
+    },
+    {
+      "question": 5,
+      "option_label": "C",
+      "option_text": "Both Tom and Katie",
+      "explanation": "Rounding up doesn't always give an overestimate. If we divide by a larger number, does our answer get bigger or smaller?",
+      "pct_students": 26,
+      "question_stem": "Tom and Katie are discussing how to estimate the answer to 38.8745 + 7.9302\nTom says 40 + 7.9302 would give an overestimate.\nKatie says 38.8745 + 8 would give an overestimate.\n\nWho is correct?",
+      "matchable": true
+    },
+    {
+      "question": 5,
+      "option_label": "D",
+      "option_text": "Neither is correct",
+      "explanation": "Remember, an overestimate is bigger than the real answer. Try thinking about which number we divide, and which number we divide by.",
+      "pct_students": 21,
+      "question_stem": "Tom and Katie are discussing how to estimate the answer to 38.8745 + 7.9302\nTom says 40 + 7.9302 would give an overestimate.\nKatie says 38.8745 + 8 would give an overestimate.\n\nWho is correct?",
+      "matchable": true
+    }
+  ],
+  "excluded": []
+}

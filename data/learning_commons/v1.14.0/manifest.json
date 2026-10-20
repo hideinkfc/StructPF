@@ -1,0 +1,43 @@
+{
+  "source_version": "v1.14.0",
+  "retrieved_on": "2026-09-29",
+  "nodes_export_url": "https://cdn.learningcommons.org/knowledge-graph/v1.14.0/exports/nodes.jsonl?ref=docs",
+  "relationships_export_url": "https://cdn.learningcommons.org/knowledge-graph/v1.14.0/exports/relationships.jsonl?ref=docs",
+  "source_files": {
+    "nodes.jsonl": 350885254,
+    "relationships.jsonl": 588920694
+  },
+  "snapshot_files": {
+    "nodes.jsonl": {
+      "bytes": 88337,
+      "records": 84,
+      "labels": {
+        "LearningComponent": 27,
+        "StandardsFrameworkItem": 57
+      },
+      "licenses": {
+        "https://creativecommons.org/licenses/by/4.0/": 84
+      }
+    },
+    "relationships.jsonl": {
+      "bytes": 94422,
+      "records": 85,
+      "labels": {
+        "buildsTowards": 32,
+        "hasChild": 29,
+        "relatesTo": 2,
+        "supports": 22
+      },
+      "licenses": {
+        "https://creativecommons.org/licenses/by/4.0/": 85
+      }
+    }
+  },
+  "target_ids": [
+    "kapur_average_speed_g7_singapore",
+    "loibl_variance_g10_nrw",
+    "kerrigan_fair_division_undergrad_usa"
+  ],
+  "selection_file": "data/learning_commons/target_selection.json",
+  "scope_note": "Curated candidates and one-hop links; not a complete graph export."
+}

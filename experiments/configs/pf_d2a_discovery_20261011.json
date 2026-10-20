@@ -1,0 +1,36 @@
+{
+  "schema_version": "pf-d2a-comparison/v1",
+  "model_selector": "luna",
+  "source_directory": "experiments/results/pf_topic_sweep_20261011/final_20",
+  "baseline_prompts": "experiments/results/pf_d2a_discovery_20261011/baseline_design_briefs.yaml",
+  "proposal_k": 2,
+  "repeats": 3,
+  "seed": 20261011,
+  "calibration_cases": ["area_perimeter", "weighted_mean"],
+  "protocol": {
+    "evidence_kind": "development_frozen_D1_fresh_D2a_D2b_D3_assistant_review_not_student_evidence",
+    "max_calls_per_attempt": 9,
+    "max_calls_total": 468,
+    "max_completion_tokens_per_call": 6000,
+    "sdk_max_retries": 0,
+    "timeout_seconds": 120,
+    "rounds_authorized": 1,
+    "gain_minimum_disclosure_free_ready_tasks": 6,
+    "maximum_ready_task_loss": 1,
+    "maximum_increase_invalid_or_missing_data": 0,
+    "unknown_is_not_pass": true,
+    "failed_attempts_replaced": false,
+    "quality_review": "Anonymized assistant reading, not blinded human expert review.",
+    "pricing_status": "Provider prices unverified; report recorded usage, not invented monetary costs."
+  },
+  "cases": [
+    {"id": "area_perimeter"},
+    {"id": "fraction_division"},
+    {"id": "fraction_equivalence"},
+    {"id": "volume_surface"},
+    {"id": "inequalities"},
+    {"id": "sample_space"},
+    {"id": "weighted_mean"},
+    {"id": "correlation_causation"}
+  ]
+}

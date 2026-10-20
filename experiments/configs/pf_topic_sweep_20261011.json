@@ -1,0 +1,158 @@
+{
+  "schema_version": "pf-topic-sweep/v1",
+  "model_selector": "luna",
+  "proposal_k": 2,
+  "max_resources": 5,
+  "evidence_k": 6,
+  "d1_condition": "grounded",
+  "selection_note": "Twenty assistant-selected mathematics topics, excluding the three prior discovery-writer calibration topics. These are development coverage cases, not a random sample or preregistered holdout. Grades and recently taught skills are stipulated learner specifications, not observed student knowledge.",
+  "cases": [
+    {
+      "id": "fraction_equivalence",
+      "topic": "fraction equivalence",
+      "target_concept": "Equivalent fractions as the same proportion despite different partitions. Students have not yet learned a formal equivalence rule.",
+      "grade": 5,
+      "teacher_recently_taught": ["Fractions as parts of equal wholes", "Equal sharing", "Drawing fraction diagrams"]
+    },
+    {
+      "id": "fraction_addition",
+      "topic": "adding fractions with unlike denominators",
+      "target_concept": "A common unit for adding fractions with different denominators. Students have not yet learned the common-denominator algorithm.",
+      "grade": 5,
+      "teacher_recently_taught": ["Fractions as parts of a whole", "Equivalent fraction diagrams", "Adding fractions with the same denominator"]
+    },
+    {
+      "id": "fraction_division",
+      "topic": "division by a fraction",
+      "target_concept": "Division by a fraction as measuring how many fractional units fit. Students have not yet learned invert-and-multiply.",
+      "grade": 6,
+      "teacher_recently_taught": ["Whole-number division as grouping", "Fraction multiplication", "Fraction and number-line diagrams"]
+    },
+    {
+      "id": "ratio_sharing",
+      "topic": "sharing a total in a ratio",
+      "target_concept": "Part-to-part versus part-to-whole ratios when sharing a total. Students have not yet learned the ratio-sharing algorithm.",
+      "grade": 6,
+      "teacher_recently_taught": ["Equal grouping and division", "Simple ratio language", "Fractions of a quantity"]
+    },
+    {
+      "id": "percentage_change",
+      "topic": "successive percentage changes",
+      "target_concept": "Percentage changes depend on their reference quantity; equal increases and decreases do not generally cancel.",
+      "grade": 7,
+      "teacher_recently_taught": ["Percent as a fraction of 100", "Finding a percentage of a quantity", "Decimal multiplication"]
+    },
+    {
+      "id": "proportionality",
+      "topic": "proportional and nonproportional relationships",
+      "target_concept": "Distinguishing a proportional relationship from an additive or fixed-charge relationship. Students have not yet learned the constant-of-proportionality criterion.",
+      "grade": 7,
+      "teacher_recently_taught": ["Unit rates", "Reading two-column tables", "Integer and decimal arithmetic"]
+    },
+    {
+      "id": "linear_systems",
+      "topic": "simultaneous linear equations",
+      "target_concept": "A common solution satisfying two linear conditions. Students have not yet learned elimination or substitution for systems.",
+      "grade": 8,
+      "teacher_recently_taught": ["Solving one-variable linear equations", "Plotting coordinate pairs", "Trial-and-check with tables"]
+    },
+    {
+      "id": "inequalities",
+      "topic": "linear inequalities and feasible choices",
+      "target_concept": "Representing a set of feasible choices with linear inequalities rather than finding a single equality solution.",
+      "grade": 7,
+      "teacher_recently_taught": ["One-step equations", "Number lines", "Comparing rational numbers"]
+    },
+    {
+      "id": "linear_growth",
+      "topic": "linear growth and slope",
+      "target_concept": "Rate of change versus starting amount in a linear relationship. Students have not yet learned a formal slope formula.",
+      "grade": 8,
+      "teacher_recently_taught": ["Unit rates", "Coordinate graphs", "Reading tables and plotting points"]
+    },
+    {
+      "id": "quadratic_patterns",
+      "topic": "quadratic growth patterns",
+      "target_concept": "Representing a growing quadratic pattern and distinguishing it from linear growth. Students have not yet learned quadratic pattern formulas.",
+      "grade": 9,
+      "teacher_recently_taught": ["Growing visual patterns", "Linear expressions", "Multiplication and rectangle areas"]
+    },
+    {
+      "id": "area_perimeter",
+      "topic": "area versus perimeter",
+      "target_concept": "Area and perimeter can vary independently; fixed perimeter need not imply fixed area.",
+      "grade": 6,
+      "teacher_recently_taught": ["Rectangle area", "Perimeter of polygons", "Drawing on square grids"]
+    },
+    {
+      "id": "similarity_scaling",
+      "topic": "length and area scaling in similar shapes",
+      "target_concept": "Area scales differently from length under uniform enlargement. Students have not yet learned the squared-scale-factor rule.",
+      "grade": 7,
+      "teacher_recently_taught": ["Length scale factors", "Rectangle and triangle areas", "Ratio tables"]
+    },
+    {
+      "id": "pythagorean_distance",
+      "topic": "distance across a right triangle",
+      "target_concept": "Relating the side lengths of a right triangle using squares. Students have not yet learned the Pythagorean theorem.",
+      "grade": 8,
+      "teacher_recently_taught": ["Square areas", "Measuring and drawing lengths", "Coordinate grids and square roots"]
+    },
+    {
+      "id": "circle_area",
+      "topic": "area of a circle",
+      "target_concept": "Constructing a defensible method for circle area. Students have not yet learned the area formula.",
+      "grade": 7,
+      "teacher_recently_taught": ["Rectangle and triangle areas", "Radius and diameter", "Estimating areas on grids"]
+    },
+    {
+      "id": "volume_surface",
+      "topic": "volume and surface area of rectangular boxes",
+      "target_concept": "Equal-volume boxes can require different surface material. Students have not yet learned a surface-area optimization method.",
+      "grade": 7,
+      "teacher_recently_taught": ["Cuboid volume", "Rectangle area", "Nets of rectangular boxes"]
+    },
+    {
+      "id": "sample_space",
+      "topic": "compound-event probability",
+      "target_concept": "Constructing a complete equally likely sample space rather than treating named outcomes as equally likely. Students have not yet learned compound-event probability methods.",
+      "grade": 7,
+      "teacher_recently_taught": ["Single-event probability", "Fractions", "Systematic lists and two-way tables"]
+    },
+    {
+      "id": "conditional_probability",
+      "topic": "probability after receiving information",
+      "target_concept": "Updating probability by restricting the relevant population. Students have not yet learned a conditional-probability formula.",
+      "grade": 10,
+      "teacher_recently_taught": ["Simple probability", "Two-way count tables", "Percentages and fractions"]
+    },
+    {
+      "id": "sampling_bias",
+      "topic": "sampling and representativeness",
+      "target_concept": "A larger sample can still be systematically unrepresentative. Students have not yet learned formal sampling-bias analysis.",
+      "grade": 7,
+      "teacher_recently_taught": ["Percentages", "Reading survey counts", "Comparing proportions"]
+    },
+    {
+      "id": "weighted_mean",
+      "topic": "combining means from unequal groups",
+      "target_concept": "A combined mean must account for group sizes. Students have not yet learned the weighted-mean formula.",
+      "grade": 7,
+      "teacher_recently_taught": ["Arithmetic mean", "Multiplication and division", "Reading group-size tables"]
+    },
+    {
+      "id": "correlation_causation",
+      "topic": "association versus causation",
+      "target_concept": "An association can have competing causal explanations. Students have not yet learned formal causal inference.",
+      "grade": 9,
+      "teacher_recently_taught": ["Reading scatterplots", "Comparing group averages", "Interpreting everyday data descriptions"]
+    }
+  ],
+  "shared_context": {
+    "subject": "mathematics",
+    "jurisdiction": "USA",
+    "task_rule": "Generate a new exercise for exploration before instruction on its target, not a worked example or a lesson. Do not reuse the earlier consistency, average-speed or fair-division calibration tasks.",
+    "prior_knowledge_boundary": "The teacher_recently_taught list stipulates the recent learner repertoire. Grounded D1 may unpack these resources, but must not assume instruction in the target method. This is a hypothetical learner specification, not a measured student profile.",
+    "provenance_rule": "Use clearly fictional task data where needed; do not claim invented survey or experimental records are actual observations."
+  }
+}

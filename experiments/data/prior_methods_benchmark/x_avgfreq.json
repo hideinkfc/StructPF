@@ -1,0 +1,276 @@
+{
+  "concept_id": "x_avgfreq",
+  "concept_text": "The mean from a frequency table weights values by frequency; it is not the mean of the value column.",
+  "grade": 7,
+  "anchor": {
+    "quiz": "emo8",
+    "quiz_name": "Averages and range from a frequency table 3",
+    "topic": "Averages and range - frequency table",
+    "questions": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "questions_omitted": []
+  },
+  "dominant_threshold_pct": 10,
+  "dominant_errors": [
+    {
+      "question": 1,
+      "option_label": "B",
+      "option_text": "12",
+      "explanation": "12 is the highest frequency but it is not the range. The range tells us the spread of the data, the difference between the minimum and maximum results.",
+      "pct_students": 29,
+      "question_stem": "The table shows the numbers of TVs in the households of students in a different class.\n\nTVs: 0 1 2 3 4\nFreq: 0 7 2 5 12\n\nWhat is the range for the number of TVs?",
+      "matchable": true
+    },
+    {
+      "question": 1,
+      "option_label": "C",
+      "option_text": "10",
+      "explanation": "I think you have found the difference between the highest and lowest frequencies. The range tells us the spread of the data, not the frequencies so we need the difference between the highest and lowest results.",
+      "pct_students": 13,
+      "question_stem": "The table shows the numbers of TVs in the households of students in a different class.\n\nTVs: 0 1 2 3 4\nFreq: 0 7 2 5 12\n\nWhat is the range for the number of TVs?",
+      "matchable": true
+    },
+    {
+      "question": 1,
+      "option_label": "D",
+      "option_text": "4",
+      "explanation": "I think you did 4 - 0 = 4 but be careful. When we work out the range, we need to look at the maximum and minimum results that actually occur.",
+      "pct_students": 33,
+      "question_stem": "The table shows the numbers of TVs in the households of students in a different class.\n\nTVs: 0 1 2 3 4\nFreq: 0 7 2 5 12\n\nWhat is the range for the number of TVs?",
+      "matchable": true
+    },
+    {
+      "question": 2,
+      "option_label": "A",
+      "option_text": "Only Tom",
+      "explanation": "Try working out the mean and the mode for the data in this table. Then double all the frequencies and work out the new mean and new mode. Then you will be able to see if Tom or Katie are correct. Remember to multiply the number of TVs by the frequency to work out the total number of TVs for the mean.",
+      "pct_students": 22,
+      "question_stem": "The table shows the numbers of TVs in the households of students in a class.\nTom and Katie are arguing about what would happen if all the frequencies doubled.\nTom says the mean would double.\nKatie says the range would double.\n\nWho is correct?",
+      "matchable": true
+    },
+    {
+      "question": 2,
+      "option_label": "B",
+      "option_text": "Only Katie",
+      "explanation": "Try working out the mean and the mode for the data in this table. Then double all the frequencies and work out the new mean and new mode. Then you will be able to see if Tom or Katie are correct. Remember that the mode is the most common result.",
+      "pct_students": 21,
+      "question_stem": "The table shows the numbers of TVs in the households of students in a class.\nTom and Katie are arguing about what would happen if all the frequencies doubled.\nTom says the mean would double.\nKatie says the range would double.\n\nWho is correct?",
+      "matchable": true
+    },
+    {
+      "question": 2,
+      "option_label": "C",
+      "option_text": "Both Tom and Katie",
+      "explanation": "Try working out the mean and the mode for the data in this table. Then double all the frequencies and work out the new mean and new mode. Then you will be able to see if Tom or Katie are correct.",
+      "pct_students": 27,
+      "question_stem": "The table shows the numbers of TVs in the households of students in a class.\nTom and Katie are arguing about what would happen if all the frequencies doubled.\nTom says the mean would double.\nKatie says the range would double.\n\nWho is correct?",
+      "matchable": true
+    },
+    {
+      "question": 3,
+      "option_label": "B",
+      "option_text": "5.65",
+      "explanation": "I think you have divided the total of every person's shoe size by the sum of the 'shoe size' column. Remember that to find the mean, we need to add together every person's shoe size and then divide by the total number of people we have. To picture what's happening, it might help you to list out every person's shoe size: 2,2,2,2,2,3,3,3,... and so on.",
+      "pct_students": 22,
+      "question_stem": "What is the mean shoe size?\n\nShoe Size: 2 3 4 5 6\nFrequency: 5 8 9 5 3",
+      "matchable": true
+    },
+    {
+      "question": 3,
+      "option_label": "C",
+      "option_text": "4.50",
+      "explanation": "I think you have divided the total frequency by the sum of the 'shoe size' column. Remember that to find the mean, we need to add together every person's shoe size and then divide by the total number of people we have. To picture what's happening, it might help you to list out every person's shoe size: 2,2,2,2,2,3,3,3,... and so on.",
+      "pct_students": 11,
+      "question_stem": "What is the mean shoe size?\n\nShoe Size: 2 3 4 5 6\nFrequency: 5 8 9 5 3",
+      "matchable": true
+    },
+    {
+      "question": 3,
+      "option_label": "D",
+      "option_text": "1.50",
+      "explanation": "I think you have worked out the total of every person's shoe sizes correctly but then divided by the number of categories of shoe size (5). Remember that to find the mean, we need to add together every person's shoe size and then divide by the total number of people we have.",
+      "pct_students": 16,
+      "question_stem": "What is the mean shoe size?\n\nShoe Size: 2 3 4 5 6\nFrequency: 5 8 9 5 3",
+      "matchable": true
+    },
+    {
+      "question": 4,
+      "option_label": "A",
+      "option_text": "4",
+      "explanation": "I think you have taken the number of siblings that corresponds to the median frequency (3, 4, 7, 9, 10 with 7 being the middle). But we want the number of siblings of the middle person, if we line them up in order of how many siblings they have. How many people were asked how many siblings they have? And where is the middle person in the table?",
+      "pct_students": 12,
+      "question_stem": "What is the median number of siblings?\n\nSiblings: 0 1 2 3\nFrequency: 4 3 9 10",
+      "matchable": true
+    },
+    {
+      "question": 4,
+      "option_label": "B",
+      "option_text": "3",
+      "explanation": "I think you have taken the middle number from the number of siblings column (0, 1, 2, 3, 4 with 2 being the middle). But we want the number of siblings of the middle person, if we line them up in order of how many siblings they have. How many people were asked how many siblings they have? And where is the middle person in the table?",
+      "pct_students": 30,
+      "question_stem": "What is the median number of siblings?\n\nSiblings: 0 1 2 3\nFrequency: 4 3 9 10",
+      "matchable": true
+    },
+    {
+      "question": 5,
+      "option_label": "B",
+      "option_text": "32.75",
+      "explanation": "The student has divided the total sports by the number of classes.",
+      "pct_students": 15,
+      "question_stem": "The table below is a summary of the number of spots counted on 20 ladybirds. Calculate the mean number of spots per ladybird.\n\nSpots: 5 3 4 12 6\nFreq: ? ? ? ? ?",
+      "matchable": true
+    },
+    {
+      "question": 5,
+      "option_label": "D",
+      "option_text": "6.3",
+      "explanation": "The student may have rounded incorrectly.",
+      "pct_students": 25,
+      "question_stem": "The table below is a summary of the number of spots counted on 20 ladybirds. Calculate the mean number of spots per ladybird.\n\nSpots: 5 3 4 12 6\nFreq: ? ? ? ? ?",
+      "matchable": true
+    }
+  ],
+  "all_errors": [
+    {
+      "question": 1,
+      "option_label": "B",
+      "option_text": "12",
+      "explanation": "12 is the highest frequency but it is not the range. The range tells us the spread of the data, the difference between the minimum and maximum results.",
+      "pct_students": 29,
+      "question_stem": "The table shows the numbers of TVs in the households of students in a different class.\n\nTVs: 0 1 2 3 4\nFreq: 0 7 2 5 12\n\nWhat is the range for the number of TVs?",
+      "matchable": true
+    },
+    {
+      "question": 1,
+      "option_label": "C",
+      "option_text": "10",
+      "explanation": "I think you have found the difference between the highest and lowest frequencies. The range tells us the spread of the data, not the frequencies so we need the difference between the highest and lowest results.",
+      "pct_students": 13,
+      "question_stem": "The table shows the numbers of TVs in the households of students in a different class.\n\nTVs: 0 1 2 3 4\nFreq: 0 7 2 5 12\n\nWhat is the range for the number of TVs?",
+      "matchable": true
+    },
+    {
+      "question": 1,
+      "option_label": "D",
+      "option_text": "4",
+      "explanation": "I think you did 4 - 0 = 4 but be careful. When we work out the range, we need to look at the maximum and minimum results that actually occur.",
+      "pct_students": 33,
+      "question_stem": "The table shows the numbers of TVs in the households of students in a different class.\n\nTVs: 0 1 2 3 4\nFreq: 0 7 2 5 12\n\nWhat is the range for the number of TVs?",
+      "matchable": true
+    },
+    {
+      "question": 2,
+      "option_label": "A",
+      "option_text": "Only Tom",
+      "explanation": "Try working out the mean and the mode for the data in this table. Then double all the frequencies and work out the new mean and new mode. Then you will be able to see if Tom or Katie are correct. Remember to multiply the number of TVs by the frequency to work out the total number of TVs for the mean.",
+      "pct_students": 22,
+      "question_stem": "The table shows the numbers of TVs in the households of students in a class.\nTom and Katie are arguing about what would happen if all the frequencies doubled.\nTom says the mean would double.\nKatie says the range would double.\n\nWho is correct?",
+      "matchable": true
+    },
+    {
+      "question": 2,
+      "option_label": "B",
+      "option_text": "Only Katie",
+      "explanation": "Try working out the mean and the mode for the data in this table. Then double all the frequencies and work out the new mean and new mode. Then you will be able to see if Tom or Katie are correct. Remember that the mode is the most common result.",
+      "pct_students": 21,
+      "question_stem": "The table shows the numbers of TVs in the households of students in a class.\nTom and Katie are arguing about what would happen if all the frequencies doubled.\nTom says the mean would double.\nKatie says the range would double.\n\nWho is correct?",
+      "matchable": true
+    },
+    {
+      "question": 2,
+      "option_label": "C",
+      "option_text": "Both Tom and Katie",
+      "explanation": "Try working out the mean and the mode for the data in this table. Then double all the frequencies and work out the new mean and new mode. Then you will be able to see if Tom or Katie are correct.",
+      "pct_students": 27,
+      "question_stem": "The table shows the numbers of TVs in the households of students in a class.\nTom and Katie are arguing about what would happen if all the frequencies doubled.\nTom says the mean would double.\nKatie says the range would double.\n\nWho is correct?",
+      "matchable": true
+    },
+    {
+      "question": 3,
+      "option_label": "B",
+      "option_text": "5.65",
+      "explanation": "I think you have divided the total of every person's shoe size by the sum of the 'shoe size' column. Remember that to find the mean, we need to add together every person's shoe size and then divide by the total number of people we have. To picture what's happening, it might help you to list out every person's shoe size: 2,2,2,2,2,3,3,3,... and so on.",
+      "pct_students": 22,
+      "question_stem": "What is the mean shoe size?\n\nShoe Size: 2 3 4 5 6\nFrequency: 5 8 9 5 3",
+      "matchable": true
+    },
+    {
+      "question": 3,
+      "option_label": "C",
+      "option_text": "4.50",
+      "explanation": "I think you have divided the total frequency by the sum of the 'shoe size' column. Remember that to find the mean, we need to add together every person's shoe size and then divide by the total number of people we have. To picture what's happening, it might help you to list out every person's shoe size: 2,2,2,2,2,3,3,3,... and so on.",
+      "pct_students": 11,
+      "question_stem": "What is the mean shoe size?\n\nShoe Size: 2 3 4 5 6\nFrequency: 5 8 9 5 3",
+      "matchable": true
+    },
+    {
+      "question": 3,
+      "option_label": "D",
+      "option_text": "1.50",
+      "explanation": "I think you have worked out the total of every person's shoe sizes correctly but then divided by the number of categories of shoe size (5). Remember that to find the mean, we need to add together every person's shoe size and then divide by the total number of people we have.",
+      "pct_students": 16,
+      "question_stem": "What is the mean shoe size?\n\nShoe Size: 2 3 4 5 6\nFrequency: 5 8 9 5 3",
+      "matchable": true
+    },
+    {
+      "question": 4,
+      "option_label": "A",
+      "option_text": "4",
+      "explanation": "I think you have taken the number of siblings that corresponds to the median frequency (3, 4, 7, 9, 10 with 7 being the middle). But we want the number of siblings of the middle person, if we line them up in order of how many siblings they have. How many people were asked how many siblings they have? And where is the middle person in the table?",
+      "pct_students": 12,
+      "question_stem": "What is the median number of siblings?\n\nSiblings: 0 1 2 3\nFrequency: 4 3 9 10",
+      "matchable": true
+    },
+    {
+      "question": 4,
+      "option_label": "B",
+      "option_text": "3",
+      "explanation": "I think you have taken the middle number from the number of siblings column (0, 1, 2, 3, 4 with 2 being the middle). But we want the number of siblings of the middle person, if we line them up in order of how many siblings they have. How many people were asked how many siblings they have? And where is the middle person in the table?",
+      "pct_students": 30,
+      "question_stem": "What is the median number of siblings?\n\nSiblings: 0 1 2 3\nFrequency: 4 3 9 10",
+      "matchable": true
+    },
+    {
+      "question": 4,
+      "option_label": "D",
+      "option_text": "1",
+      "explanation": "I think you have the right idea but remember that we want the median number of siblings, not the frequency.",
+      "pct_students": 9,
+      "question_stem": "What is the median number of siblings?\n\nSiblings: 0 1 2 3\nFrequency: 4 3 9 10",
+      "matchable": true
+    },
+    {
+      "question": 5,
+      "option_label": "A",
+      "option_text": "0.2 (1dp)",
+      "explanation": "The student may have done the division the wrong way around.",
+      "pct_students": 5,
+      "question_stem": "The table below is a summary of the number of spots counted on 20 ladybirds. Calculate the mean number of spots per ladybird.\n\nSpots: 5 3 4 12 6\nFreq: ? ? ? ? ?",
+      "matchable": true
+    },
+    {
+      "question": 5,
+      "option_label": "B",
+      "option_text": "32.75",
+      "explanation": "The student has divided the total sports by the number of classes.",
+      "pct_students": 15,
+      "question_stem": "The table below is a summary of the number of spots counted on 20 ladybirds. Calculate the mean number of spots per ladybird.\n\nSpots: 5 3 4 12 6\nFreq: ? ? ? ? ?",
+      "matchable": true
+    },
+    {
+      "question": 5,
+      "option_label": "D",
+      "option_text": "6.3",
+      "explanation": "The student may have rounded incorrectly.",
+      "pct_students": 25,
+      "question_stem": "The table below is a summary of the number of spots counted on 20 ladybirds. Calculate the mean number of spots per ladybird.\n\nSpots: 5 3 4 12 6\nFreq: ? ? ? ? ?",
+      "matchable": true
+    }
+  ],
+  "excluded": []
+}

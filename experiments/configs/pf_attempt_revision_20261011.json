@@ -1,0 +1,75 @@
+{
+  "schema_version": "pf-attempt-revision/v1",
+  "question": "Does adding simulated learner work to an otherwise identical revision request improve PF task design more than task-review-only revision?",
+  "hypothesis": "Learner work can reveal actual misreadings or method limitations, but may bias revision toward simulator quirks. Benefit must exceed ordinary revision on independent task criteria without damaging mathematics, target, discovery or accessibility.",
+  "source_root": "experiments/results/pf_method_comparison_draft_first_20261011/fresh",
+  "previous_attempts": "experiments/results/pf_student_diagnosis_20261011/panel",
+  "output": "experiments/results/pf_attempt_revision_20261011",
+  "cases": [
+    {"id":"speed_direct","family":"kapur_average_speed","path":"kapur_average_speed/003/direct/result.json","previous_task_id":"speed_direct_003"},
+    {"id":"speed_pipeline","family":"kapur_average_speed","path":"kapur_average_speed/002/pipeline/result.json","previous_task_id":"speed_pipeline_002"},
+    {"id":"consistency_direct","family":"loibl_variance","path":"loibl_variance/001/direct/result.json","previous_task_id":"consistency_direct_001"},
+    {"id":"consistency_pipeline","family":"loibl_variance","path":"loibl_variance/003/pipeline/result.json","previous_task_id":"consistency_pipeline_003"},
+    {"id":"division_direct","family":"kerrigan_fair_division","path":"kerrigan_fair_division/001/direct/result.json","previous_task_id":"division_direct_001"},
+    {"id":"division_pipeline","family":"kerrigan_fair_division","path":"kerrigan_fair_division/001/pipeline/result.json","previous_task_id":"division_pipeline_001"}
+  ],
+  "selection_rule": "One direct and one pipeline task per family, including already adequate consistency tasks. Speed includes the checked book-delivery ambiguity and an unambiguous fixed-rate control; division includes two mathematically feasible tasks. Selected inspected cases, not random or held out.",
+  "calibration_cases": [
+    {"id":"calibration_speed","family":"kapur_average_speed","path":"kapur_average_speed/001/direct/result.json","previous_task_id":"speed_direct_001"},
+    {"id":"calibration_consistency","family":"loibl_variance","path":"loibl_variance/002/direct/result.json","previous_task_id":"consistency_direct_002"}
+  ],
+  "arms": ["original","ordinary_revision","attempt_revision"],
+  "revision": {
+    "model": "luna",
+    "max_tokens": 6000,
+    "timeout_seconds": 180,
+    "repeats": 1,
+    "calls_calibration": 4,
+    "calls_fresh": 12,
+    "sdk_retries": 0,
+    "transport_retries": 0
+  },
+  "attempt_evaluation": {
+    "models": ["gpt41mini","gpt41"],
+    "profiles": [
+      {"id":"ordinary_solver","condition":"solver"},
+      {"id":"recent_prerequisites","condition":"learner"},
+      {"id":"one_prerequisite_gap","condition":"learner","omit_resources":{"kapur_average_speed":"Ratio and proportion","loibl_variance":"Arithmetic mean","kerrigan_fair_division":"Divider-Chooser method"}}
+    ],
+    "repeats": 2,
+    "workers": 4,
+    "settings": {"temperature":0.7,"max_tokens":2400,"timeout_seconds":180,"sdk_retries":0},
+    "calls_calibration": 8,
+    "calls_fresh": 216
+  },
+  "budget": {
+    "max_requests": 240,
+    "max_completion_tokens": 633600,
+    "derivation": "16 revision requests x6000 plus224 student requests x2400. Original versions have no revision calls. No paid automated fine-method judge; separate assistant label-hidden reviews.",
+    "rounds": 1
+  },
+  "feedback": {
+    "source": "Eight saved learner-role attempts per selected task (two profiles, two models, two repeats); ordinary-solver outputs excluded. Same complete raw written work retained, including partial failures.",
+    "filter": "Remove model/profile/source labels and provenance boilerplate, not substantive mistakes. Do not feed rejected automated task-change suggestions or claimed correct solutions. A shared instruction requires task-supported interpretation and warns that attempt slips are not task defects.",
+    "treatment": "Attempt arm receives raw learner work as evidence in addition to common task and prior learning; ordinary arm receives common task and same comprehensive design-improvement instruction only.",
+    "scope": "Evidence-informed task rewriting, not a changed global generator or stage-specific decomposition claim."
+  },
+  "evaluation": {
+    "task_review": "Independent assistant reading of18anonymous task versions before observing attempt outcomes; grade/prerequisites and target visible; no arm or earlier ratings.",
+    "attempt_review": "Coarse applied mathematical approaches and timing/valuation misreads from fresh outputs. Same prereq conditions; no preceding answers, ideal approaches, feedback or version labels in student prompts.",
+    "dimensions": ["mathematics supported/invalid/unknown","target preserved/narrowed/lost/unknown","accessible start yes/no/unknown","central method or conclusion disclosure none/method/conclusion/both/unknown","consequential mathematical choice yes/no/unknown","unambiguous required inputs yes/no/unknown"],
+    "primary_decision": "Attempt arm must have at least two more supported,target-preserving,accessible,undisclosed tasks with consequential choices than ordinary revision among the six paired cases, with no net loss of mathematical support or accessible starts. This exploratory continuation rule is not a validated PF score or statistical test.",
+    "secondary": "Report clarity-only improvement separately, coarse learner-only method variation, recognisable familiar-method limits, all failures and costs. Errors/convergence alone are not productive failure.",
+    "failure_policy": "No replacement attempts. Revision malformed/no usable task remains an explicit unavailable variant and unknown educational outcome; retain partial artifacts. Do not substitute original text as a successful revision."
+  },
+  "limits": [
+    "Six deliberately selected already inspected development tasks; no statistical power or representative population claim.",
+    "One stochastic revision per case/arm; accidental output variation can affect results.",
+    "Same maximum revision calls/tokens but attempt arm has extra input tokens; report incremental acquisition/input cost.",
+    "Saved feedback uses both GPT-4.1 variants, so new GPT-4.1 attempts are fresh samples, not independent model-family validation.",
+    "Human-independent educational review/real-student attempts/learning are absent.",
+    "Assistant selection and instructions condition the method; raw simulated work is not verified human feedback.",
+    "No external simulator training, global PF prompt promotion or iterative tuning in this round."
+  ],
+  "seed": 20261011
+}

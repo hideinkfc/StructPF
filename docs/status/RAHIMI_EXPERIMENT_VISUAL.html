@@ -1,0 +1,1526 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rahimi et al.: the experiment, visually</title>
+<style>
+html { scroll-snap-type: y mandatory; }
+body { margin: 0; font: 18px/1.5 system-ui, -apple-system, Segoe UI, sans-serif; color: #1d2733; background: #fff; }
+.slide { min-height: 100vh; box-sizing: border-box; padding: 48px 7vw; max-width: 1200px; margin: 0 auto;
+  scroll-snap-align: start; border-bottom: 1px solid #e3e9ef; display: flex; flex-direction: column; justify-content: center; }
+.kicker { color: #6b7a8a; font-size: 14px; letter-spacing: .08em; margin: 0 0 6px; }
+h1 { font-size: 46px; line-height: 1.15; margin: 0 0 14px; }
+h2 { font-size: 34px; line-height: 1.2; margin: 0 0 14px; }
+.lead { font-size: 22px; color: #2f3d4c; margin: 0 0 22px; }
+.note { font-size: 15px; color: #596878; margin: 14px 0 0; }
+svg { width: 100%; height: auto; }
+svg text { font-size: 15px; fill: #1d2733; }
+svg .small { font-size: 13px; fill: #596878; }
+svg .big { font-size: 20px; font-weight: 600; }
+.legend { font-size: 15px; color: #2f3d4c; margin: 6px 0 10px; }
+.sw { display: inline-block; width: 13px; height: 13px; border-radius: 3px; margin: 0 6px 0 16px; vertical-align: -1px; }
+.ok { color: #2f6f4a; font-weight: 600; }
+.no { color: #b5523b; font-weight: 600; }
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:12px 18px;margin:8px 0 0}
+.card{border:1px solid #c4cfdb;border-radius:10px;padding:10px 16px;background:#f5f8fb}
+.cnum{font-size:24px;font-weight:700;margin:0;color:#2f6f9f}
+.ctitle{font-size:16px;font-weight:600;margin:2px 0 4px}
+.cev{font-size:14px;line-height:1.4;color:#2f3d4c;margin:0}
+.strip{margin:14px 0 0;font-size:14px;color:#2f3d4c;background:#fdf4ec;border:1px solid #e0b8a8;border-radius:8px;padding:10px 14px}
+.theory-source { font-size: 17px; color: #596878; margin: 0 0 16px; }
+.theory-source a { color: #2f6f9f; text-decoration: none; }
+.theory-source a:hover { text-decoration: underline; }
+.theory-intro { font-size: 20px; line-height: 1.4; margin: 0 0 20px; }
+.mechanism-list, .principle-list { list-style: none; padding: 0; margin: 0; }
+.mechanism-item, .principle-item { display: flex; align-items: center; gap: 18px;
+  padding: 16px 20px; margin-bottom: 12px; border: 1px solid #dce5ed;
+  border-radius: 10px; background: #f5f8fb; }
+.mechanism-item:last-child, .principle-item:last-child { margin-bottom: 0; }
+.theory-code { flex: 0 0 42px; font-size: 24px; font-weight: 700; color: #2f6f9f; }
+.theory-copy { flex: 1; margin: 0; font-size: 22px; line-height: 1.35; }
+.principle-link { flex: 0 0 165px; margin: 0; font-size: 18px; text-align: center;
+  color: #596878; border-left: 1px solid #c4cfdb; padding-left: 16px; }
+.principle-link strong { display: block; color: #2f6f9f; font-weight: 600; }
+.theory-bridge { font-size: 18px; line-height: 1.4; margin: 20px 0 0; color: #2f3d4c; }
+.preparation-chain { display: grid; grid-template-columns: 1fr 26px 1fr 26px 1fr;
+  align-items: stretch; gap: 8px; }
+#s19 .preparation-chain { grid-template-columns: 1fr 26px 1fr 26px 1.35fr; }
+.preparation-step { padding: 20px; border: 1px solid #dce5ed; border-radius: 10px;
+  background: #f5f8fb; }
+.preparation-step h3 { font-size: 22px; line-height: 1.3; margin: 0 0 12px; }
+.preparation-step p { font-size: 20px; line-height: 1.35; margin: 0; }
+.preparation-step .preparation-tag { font-size: 17px; color: #2f6f9f; margin: 0 0 12px; }
+.preparation-arrow { align-self: center; text-align: center; font-size: 28px; color: #6b7a8a; }
+.preparation-example { margin-top: 20px; padding: 18px 20px; border: 1px solid #e0b8a8;
+  border-radius: 10px; background: #fdf4ec; }
+.preparation-example h3 { font-size: 20px; margin: 0 0 10px; }
+.preparation-example p { font-size: 20px; line-height: 1.4; margin: 0; }
+.preparation-example p + p { margin-top: 8px; }
+.preparation-example .example-question { color: #b5523b; font-weight: 600; }
+.story-question { font-size: 22px; line-height: 1.4; font-weight: 600; color: #2f6f9f;
+  padding: 14px 18px; margin: 0 0 20px; border-radius: 10px; background: #e7eef5; }
+.preparation-step .research-link { font-size: 17px; line-height: 1.4; margin-top: 18px;
+  padding-top: 12px; border-top: 1px solid #c4cfdb; color: #596878; }
+.research-link a { color: #2f6f9f; text-decoration: none; font-weight: 600; }
+.research-link a:hover { text-decoration: underline; }
+#s20 .preparation-step { display: flex; flex-direction: column; }
+#s20 .preparation-step > p:not(.preparation-tag):not(.research-link) { flex: 1; }
+#s20 .research-link { min-height: 96px; }
+.evidence-details { margin-top: 12px; font-size: 16px; color: #596878; }
+.evidence-details summary { cursor: pointer; }
+.evidence-details p { margin: 10px 0 0; }
+.check-list { display: flex; flex-direction: column; gap: 6px; }
+.check-row { display: grid; grid-template-columns: 210px 1fr 1fr; gap: 18px; align-items: center;
+  padding: 8px 14px; border-radius: 8px; background: #f5f8fb; }
+.check-row.check-head { background: none; padding-top: 0; padding-bottom: 0; }
+.check-head span { font-size: 15px; font-weight: 600; color: #596878; }
+.check-name { font-size: 18px; font-weight: 600; margin: 0; }
+.check-name span { color: #2f6f9f; margin-right: 8px; }
+.check-question { font-size: 18px; line-height: 1.35; margin: 0; }
+.check-example { font-size: 17px; line-height: 1.35; margin: 0; color: #2f3d4c; }
+@media (max-width: 700px) {
+  .check-row { grid-template-columns: 1fr; gap: 4px; }
+  .check-head { display: none; }
+  .principle-item { flex-wrap: wrap; }
+  .principle-link { flex-basis: 100%; border-left: 0; padding-left: 60px; text-align: left; }
+  .principle-link strong { display: inline; }
+  .preparation-chain, #s19 .preparation-chain { grid-template-columns: 1fr; }
+  .preparation-arrow { transform: rotate(90deg); }
+}
+.verdict-list, .evidence-list { display: flex; flex-direction: column; gap: 8px; margin-top: 14px; }
+.verdict-row { display: grid; grid-template-columns: 230px 150px 130px 1fr; gap: 14px; align-items: center;
+  padding: 8px 14px; border-radius: 8px; background: #f5f8fb; font-size: 16px; }
+.verdict-row.verdict-head { background: none; font-size: 14px; font-weight: 600; color: #596878; padding: 0 14px; }
+.verdict-note { font-size: 15px; color: #2f3d4c; line-height: 1.3; }
+.pill { display: inline-block; text-align: center; font-size: 14px; font-weight: 600; padding: 4px 10px;
+  border-radius: 14px; border: 1px solid; }
+.pill-met { background: #eef6f1; color: #2f6f4a; border-color: #2f6f4a; }
+.pill-often { background: #fdf4ec; color: #b5523b; border-color: #b5523b; }
+.pill-examples { background: #fdf8e8; color: #8a6d1a; border-color: #8a6d1a; }
+.pill-none { background: #f0f2f5; color: #596878; border-color: #596878; }
+.evidence-row { display: grid; grid-template-columns: 190px 1fr; gap: 20px; align-items: center;
+  padding: 12px 18px; border-radius: 10px; background: #f5f8fb; border: 1px solid #dce5ed; }
+.evidence-num { margin: 0; font-size: 26px; font-weight: 700; color: #2f6f9f; line-height: 1.1; }
+.evidence-num small { display: block; margin-top: 4px; font-size: 14px; font-weight: 600; color: #596878; }
+.evidence-body { margin: 0; font-size: 17px; line-height: 1.4; color: #1d2733; }
+</style>
+<body>
+
+<!-- 1 -->
+<section class="slide" id="s1">
+  <p class="kicker">Rahimi et al. (ICLS 2026)</p>
+  <h1>Does a small model write Productive Failure problems as well as a large one?</h1>
+  <p class="lead">One topic, one theme, two models, five rubric dimensions, two blinded human raters.</p>
+  <svg viewBox="0 0 1000 170" role="img" aria-label="Two models, one rubric">
+    <rect x="40" y="30" width="260" height="110" rx="14" fill="#2f6f9f"/>
+    <text x="170" y="78" text-anchor="middle" style="fill:#fff" class="big">GPT-4o</text>
+    <text x="170" y="108" text-anchor="middle" style="fill:#fff">large model, 30 problems</text>
+    <text x="500" y="92" text-anchor="middle" class="big">vs</text>
+    <rect x="700" y="30" width="260" height="110" rx="14" fill="#b5523b"/>
+    <text x="830" y="78" text-anchor="middle" style="fill:#fff" class="big">Phi-3 mini</text>
+    <text x="830" y="108" text-anchor="middle" style="fill:#fff">3.8B model, 30 problems</text>
+  </svg>
+  <p class="note">Source: Rahimi et al., Methods and Table 2. Numbers on this page come from the paper.</p>
+</section>
+
+<!-- 2 -->
+<section class="slide" id="s2">
+  <p class="kicker">02 · Design</p>
+  <h2>How the study ran</h2>
+  <svg viewBox="0 0 1000 250" role="img" aria-label="Six step design flow">
+    <defs><marker id="a" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#6b7a8a"/></marker></defs>
+    <g>
+      <rect x="10" y="40" width="150" height="110" rx="10" fill="#f5f8fb" stroke="#b8c7d6"/>
+      <text x="85" y="72" text-anchor="middle" class="big">1 Prompt</text>
+      <text x="85" y="98" text-anchor="middle" class="small">same six parts</text>
+      <text x="85" y="118" text-anchor="middle" class="small">for both models</text>
+      <rect x="200" y="40" width="150" height="110" rx="10" fill="#f5f8fb" stroke="#b8c7d6"/>
+      <text x="275" y="72" text-anchor="middle" class="big">2 Generate</text>
+      <text x="275" y="98" text-anchor="middle" class="small">30 + 30 problems</text>
+      <rect x="390" y="40" width="150" height="110" rx="10" fill="#f5f8fb" stroke="#b8c7d6"/>
+      <text x="465" y="72" text-anchor="middle" class="big">3 Blind</text>
+      <text x="465" y="98" text-anchor="middle" class="small">unique IDs,</text>
+      <text x="465" y="118" text-anchor="middle" class="small">source hidden</text>
+      <rect x="580" y="40" width="150" height="110" rx="10" fill="#f5f8fb" stroke="#b8c7d6"/>
+      <text x="655" y="72" text-anchor="middle" class="big">4 Rate</text>
+      <text x="655" y="98" text-anchor="middle" class="small">two humans,</text>
+      <text x="655" y="118" text-anchor="middle" class="small">5 dimensions 1–3</text>
+      <rect x="770" y="40" width="220" height="110" rx="10" fill="#f5f8fb" stroke="#b8c7d6"/>
+      <text x="880" y="72" text-anchor="middle" class="big">5 Analyse</text>
+      <text x="880" y="98" text-anchor="middle" class="small">t-tests, Cohen's d</text>
+      <text x="880" y="118" text-anchor="middle" class="small">95% CI</text>
+    </g>
+    <line x1="160" y1="95" x2="198" y2="95" stroke="#6b7a8a" stroke-width="2" marker-end="url(#a)"/>
+    <line x1="350" y1="95" x2="388" y2="95" stroke="#6b7a8a" stroke-width="2" marker-end="url(#a)"/>
+    <line x1="540" y1="95" x2="578" y2="95" stroke="#6b7a8a" stroke-width="2" marker-end="url(#a)"/>
+    <line x1="730" y1="95" x2="768" y2="95" stroke="#6b7a8a" stroke-width="2" marker-end="url(#a)"/>
+    <rect x="580" y="170" width="390" height="62" rx="10" fill="#fdf4ec" stroke="#e0b8a8"/>
+    <text x="775" y="196" text-anchor="middle" class="big" style="fill:#b5523b">Gap of 5+ points?</text>
+    <text x="775" y="220" text-anchor="middle" class="small">then a third rater (16 cases); final = mean of two closest</text>
+    <line x1="655" y1="150" x2="655" y2="168" stroke="#b5523b" stroke-width="2" marker-end="url(#a)"/>
+  </svg>
+  <p class="note">Source: Methods, "Problem Generation" and "Evaluation Process".</p>
+</section>
+
+<!-- 3 -->
+<section class="slide" id="s3">
+  <p class="kicker">03 · Controls</p>
+  <h2>Only the model changed</h2>
+  <p class="lead">The paper holds these fixed across all 60 problems.</p>
+  <svg viewBox="0 0 1000 300" role="img" aria-label="Fixed factors around one varied factor">
+    <rect x="390" y="110" width="220" height="80" rx="14" fill="#2f6f9f"/>
+    <text x="500" y="146" text-anchor="middle" class="big" style="fill:#fff">Model</text>
+    <text x="500" y="170" text-anchor="middle" style="fill:#fff">the only thing that varies</text>
+    <g>
+      <rect x="20" y="20" width="250" height="56" rx="10" fill="#e7eef5"/><text x="145" y="45" text-anchor="middle" class="big">Grade 7</text><text x="145" y="66" text-anchor="middle" class="small">same grade</text>
+      <rect x="375" y="20" width="250" height="56" rx="10" fill="#e7eef5"/><text x="500" y="45" text-anchor="middle" class="big">7.RP.A.2</text><text x="500" y="66" text-anchor="middle" class="small">same standard</text>
+      <rect x="730" y="20" width="250" height="56" rx="10" fill="#e7eef5"/><text x="855" y="45" text-anchor="middle" class="big">Basketball</text><text x="855" y="66" text-anchor="middle" class="small">Stephen Curry theme</text>
+      <rect x="20" y="222" width="250" height="56" rx="10" fill="#e7eef5"/><text x="145" y="247" text-anchor="middle" class="big">7.RP.A.1, 7.NS.A.1</text><text x="145" y="268" text-anchor="middle" class="small">prior knowledge</text>
+      <rect x="375" y="222" width="250" height="56" rx="10" fill="#e7eef5"/><text x="500" y="247" text-anchor="middle" class="big">Sports interest</text><text x="500" y="268" text-anchor="middle" class="small">student interest</text>
+      <rect x="730" y="222" width="250" height="56" rx="10" fill="#e7eef5"/><text x="855" y="247" text-anchor="middle" class="big">Same prompt</text><text x="855" y="268" text-anchor="middle" class="small">six components</text>
+    </g>
+    <line x1="270" y1="48" x2="390" y2="130" stroke="#8fa4b8" stroke-width="2"/>
+    <line x1="500" y1="76" x2="500" y2="110" stroke="#8fa4b8" stroke-width="2"/>
+    <line x1="730" y1="48" x2="610" y2="130" stroke="#8fa4b8" stroke-width="2"/>
+    <line x1="270" y1="250" x2="390" y2="180" stroke="#8fa4b8" stroke-width="2"/>
+    <line x1="500" y1="222" x2="500" y2="190" stroke="#8fa4b8" stroke-width="2"/>
+    <line x1="730" y1="250" x2="610" y2="180" stroke="#8fa4b8" stroke-width="2"/>
+  </svg>
+  <p class="note">Source: Methods, "Problem Generation". Student interest is held constant, but the paper does not name it beyond the sports theme.</p>
+</section>
+
+<!-- 4 -->
+<section class="slide" id="s4">
+  <p class="kicker">04 · Is the topic single?</p>
+  <h2>One standard, one domain, one grade</h2>
+  <svg viewBox="0 0 1000 300" role="img" aria-label="Topic tree: one domain, one standard">
+    <rect x="330" y="10" width="340" height="56" rx="10" fill="#2f6f9f"/>
+    <text x="500" y="36" text-anchor="middle" class="big" style="fill:#fff">Grade 7 · Ratios and proportional relationships</text>
+    <text x="500" y="56" text-anchor="middle" style="fill:#fff" class="small">domain</text>
+    <line x1="500" y1="66" x2="500" y2="92" stroke="#6b7a8a" stroke-width="2"/>
+    <rect x="330" y="92" width="340" height="56" rx="10" fill="#4f7fa3"/>
+    <text x="500" y="118" text-anchor="middle" class="big" style="fill:#fff">CCSS 7.RP.A.2</text>
+    <text x="500" y="138" text-anchor="middle" style="fill:#fff" class="small">the only target standard named</text>
+    <line x1="500" y1="148" x2="500" y2="174" stroke="#6b7a8a" stroke-width="2"/>
+    <rect x="330" y="174" width="340" height="56" rx="10" fill="#e7eef5" stroke="#8fa4b8"/>
+    <text x="500" y="200" text-anchor="middle" class="big">Basketball · Stephen Curry</text>
+    <text x="500" y="220" text-anchor="middle" class="small">the only theme named</text>
+    <rect x="40" y="250" width="260" height="36" rx="8" fill="#f5f8fb" stroke="#b8c7d6"/>
+    <text x="170" y="274" text-anchor="middle" class="small">prereqs: 7.RP.A.1, 7.NS.A.1</text>
+    <rect x="700" y="250" width="260" height="36" rx="8" fill="#fdf4ec" stroke="#e0b8a8"/>
+    <text x="830" y="274" text-anchor="middle" class="small" style="fill:#b5523b">5 examples: not published</text>
+  </svg>
+  <p class="note"><b>Verdict:</b> single at standard, domain, grade and theme level. The word "topics" (plural) is never backed by a second standard. The five prompt examples are the one gap.</p>
+</section>
+
+<!-- 5 -->
+<section class="slide" id="s5">
+  <p class="kicker">05 · The prompt</p>
+  <h2>Six parts, identical for both models</h2>
+  <svg viewBox="0 0 1000 260" role="img" aria-label="Six prompt components">
+    <g>
+      <rect x="10" y="10" width="300" height="110" rx="12" fill="#f5f8fb" stroke="#b8c7d6"/>
+      <text x="160" y="46" text-anchor="middle" class="big">1 Role</text><text x="160" y="76" text-anchor="middle" class="small">educational design assistant</text><text x="160" y="98" text-anchor="middle" class="small">writing PF math problems</text>
+      <rect x="350" y="10" width="300" height="110" rx="12" fill="#f5f8fb" stroke="#b8c7d6"/>
+      <text x="500" y="46" text-anchor="middle" class="big">2 Response rules</text><text x="500" y="76" text-anchor="middle" class="small">narrative, tone,</text><text x="500" y="98" text-anchor="middle" class="small">open-endedness, limits</text>
+      <rect x="690" y="10" width="300" height="110" rx="12" fill="#f5f8fb" stroke="#b8c7d6"/>
+      <text x="840" y="46" text-anchor="middle" class="big">3 PF overview</text><text x="840" y="76" text-anchor="middle" class="small">phases and purpose</text><text x="840" y="98" text-anchor="middle" class="small">of Productive Failure</text>
+      <rect x="10" y="140" width="300" height="110" rx="12" fill="#f5f8fb" stroke="#b8c7d6"/>
+      <text x="160" y="176" text-anchor="middle" class="big">4 Rubric</text><text x="160" y="206" text-anchor="middle" class="small">five dimensions, 1–3 each</text><text x="160" y="228" text-anchor="middle" class="small">(Table 1)</text>
+      <rect x="350" y="140" width="300" height="110" rx="12" fill="#f5f8fb" stroke="#b8c7d6"/>
+      <text x="500" y="176" text-anchor="middle" class="big">5 Examples</text><text x="500" y="206" text-anchor="middle" class="small">five sample problems</text><text x="500" y="228" text-anchor="middle" class="small">(content not published)</text>
+      <rect x="690" y="140" width="300" height="110" rx="12" fill="#f5f8fb" stroke="#b8c7d6"/>
+      <text x="840" y="176" text-anchor="middle" class="big">6 Instructions</text><text x="840" y="206" text-anchor="middle" class="small">one new problem for given</text><text x="840" y="228" text-anchor="middle" class="small">standard, theme, prior knowledge</text>
+    </g>
+  </svg>
+  <p class="note">Sampling settings are not reported. The full prompt text is not published.</p>
+</section>
+
+<!-- 6 -->
+<section class="slide" id="s6">
+  <p class="kicker">06 · The rubric</p>
+  <h2>Five dimensions, scored 1 to 3</h2>
+  <div class="legend"><span class="sw" style="background:#e7eef5"></span>low (1)<span class="sw" style="background:#8fa4b8"></span>moderate (2)<span class="sw" style="background:#2f6f9f"></span>high (3)</div>
+  <svg viewBox="0 0 1000 340" role="img" aria-label="Rubric level bars for five dimensions">
+    <g>
+      <text x="0" y="36" class="big">Prior knowledge (APK)</text><rect x="260" y="14" width="200" height="30" fill="#e7eef5"/><rect x="460" y="14" width="200" height="30" fill="#8fa4b8"/><rect x="660" y="14" width="200" height="30" fill="#2f6f9f"/>
+      <text x="260" y="58" class="small">no prerequisite</text><text x="460" y="58" class="small">one prerequisite</text><text x="660" y="58" class="small">two or more</text>
+      <text x="0" y="104" class="big">Sweet spot (SSC)</text><rect x="260" y="82" width="200" height="30" fill="#e7eef5"/><rect x="460" y="82" width="200" height="30" fill="#8fa4b8"/><rect x="660" y="82" width="200" height="30" fill="#2f6f9f"/>
+      <text x="260" y="126" class="small">too easy or hard</text><text x="460" y="126" class="small">some failures</text><text x="660" y="126" class="small">challenging but manageable</text>
+      <text x="0" y="172" class="big">Engagement (AE)</text><rect x="260" y="150" width="200" height="30" fill="#e7eef5"/><rect x="460" y="150" width="200" height="30" fill="#8fa4b8"/><rect x="660" y="150" width="200" height="30" fill="#2f6f9f"/>
+      <text x="260" y="194" class="small">not relatable</text><text x="460" y="194" class="small">somewhat relatable</text><text x="660" y="194" class="small">meaningful narrative</text>
+      <text x="0" y="240" class="big">Representations (MR)</text><rect x="260" y="218" width="200" height="30" fill="#e7eef5"/><rect x="460" y="218" width="200" height="30" fill="#8fa4b8"/><rect x="660" y="218" width="200" height="30" fill="#2f6f9f"/>
+      <text x="260" y="262" class="small">few or none</text><text x="460" y="262" class="small">some, limited</text><text x="660" y="262" class="small">wide range</text>
+      <text x="0" y="308" class="big">Open-endedness (OE)</text><rect x="260" y="286" width="200" height="30" fill="#e7eef5"/><rect x="460" y="286" width="200" height="30" fill="#8fa4b8"/><rect x="660" y="286" width="200" height="30" fill="#2f6f9f"/>
+      <text x="260" y="332" class="small">simple, single path</text><text x="460" y="332" class="small">moderate, limited variables</text><text x="660" y="332" class="small">highly complex, integrated</text>
+    </g>
+  </svg>
+  <p class="note">Total score = sum of the five, range 5–15. Source: Table 1.</p>
+</section>
+
+<!-- 7 -->
+<section class="slide" id="s7">
+  <p class="kicker">07 · Results</p>
+  <h2>GPT-4o scored higher on every dimension</h2>
+  <div class="legend"><span class="sw" style="background:#2f6f9f"></span>GPT-4o<span class="sw" style="background:#b5523b"></span>Phi-3 mini</div>
+  <svg viewBox="0 0 1000 330" role="img" aria-label="Mean subscale scores out of 3 for GPT-4o and Phi-3">
+    <!-- scale: 200 px per point, 0 to 3 -->
+    <g>
+      <text x="0" y="36" class="big">APK</text><rect x="150" y="12" width="530" height="22" fill="#2f6f9f"/><text x="690" y="29">2.65</text><rect x="150" y="38" width="484" height="22" fill="#b5523b"/><text x="644" y="55">2.42</text>
+      <text x="0" y="96" class="big">SSC</text><rect x="150" y="72" width="504" height="22" fill="#2f6f9f"/><text x="664" y="89">2.52</text><rect x="150" y="98" width="416" height="22" fill="#b5523b"/><text x="576" y="115">2.08</text>
+      <text x="0" y="156" class="big">AE</text><rect x="150" y="132" width="550" height="22" fill="#2f6f9f"/><text x="710" y="149">2.75</text><rect x="150" y="158" width="490" height="22" fill="#b5523b"/><text x="650" y="175">2.45</text>
+      <text x="0" y="216" class="big">MR</text><rect x="150" y="192" width="540" height="22" fill="#2f6f9f"/><text x="700" y="209">2.70</text><rect x="150" y="218" width="366" height="22" fill="#b5523b"/><text x="526" y="235">1.83</text>
+      <text x="0" y="276" class="big">OE</text><rect x="150" y="252" width="554" height="22" fill="#2f6f9f"/><text x="714" y="269">2.77</text><rect x="150" y="278" width="376" height="22" fill="#b5523b"/><text x="536" y="295">1.88</text>
+    </g>
+    <line x1="150" y1="6" x2="150" y2="306" stroke="#c4cfdb"/>
+    <line x1="750" y1="6" x2="750" y2="306" stroke="#c4cfdb" stroke-dasharray="4 4"/>
+    <text x="750" y="322" class="small" text-anchor="middle">3 = top of scale</text>
+  </svg>
+  <p class="note">Means on the 1–3 scale, from Table 2 (n = 30 per model).</p>
+</section>
+
+<!-- 8 -->
+<section class="slide" id="s8">
+  <p class="kicker">08 · Where the gap is</p>
+  <h2>Effect size is largest in MR and OE</h2>
+  <svg viewBox="0 0 1000 300" role="img" aria-label="Cohen's d for each dimension">
+    <g>
+      <text x="0" y="40" class="big">MR</text><rect x="110" y="16" width="495" height="30" fill="#2f6f9f"/><text x="620" y="37" class="big">1.65</text><text x="700" y="37" class="small">p &lt; 0.001 (large)</text>
+      <text x="0" y="90" class="big">OE</text><rect x="110" y="66" width="474" height="30" fill="#2f6f9f"/><text x="598" y="87" class="big">1.58</text><text x="700" y="87" class="small">p &lt; 0.001 (large)</text>
+      <text x="0" y="140" class="big">SSC</text><rect x="110" y="116" width="222" height="30" fill="#8fa4b8"/><text x="346" y="137" class="big">0.74</text><text x="700" y="137" class="small">p = 0.01 (medium)</text>
+      <text x="0" y="190" class="big">APK</text><rect x="110" y="166" width="156" height="30" fill="#8fa4b8"/><text x="280" y="187" class="big">0.52</text><text x="700" y="187" class="small">p = 0.049 (medium)</text>
+      <text x="0" y="240" class="big">AE</text><rect x="110" y="216" width="150" height="30" fill="#c4cfdb"/><text x="274" y="237" class="big">0.50</text><text x="700" y="237" class="small">p = 0.06 (not significant)</text>
+    </g>
+    <line x1="110" y1="6" x2="110" y2="262" stroke="#c4cfdb"/>
+  </svg>
+  <p class="note">Cohen's d from Table 2. Total score: d = 1.16 (13.38 vs 10.67). The paper links the MR and OE gap to PF's focus on exploration.</p>
+</section>
+
+<!-- 9 -->
+<section class="slide" id="s9">
+  <p class="kicker">09 · What is missing</p>
+  <h2>Gaps that matter for a replication</h2>
+  <svg viewBox="0 0 1000 300" role="img" aria-label="Six items the paper does not report">
+    <g>
+      <rect x="10" y="10" width="310" height="130" rx="12" fill="#fdf4ec" stroke="#e0b8a8"/><text x="165" y="50" text-anchor="middle" class="big" style="fill:#b5523b">? Sampling</text><text x="165" y="82" text-anchor="middle" class="small">no temperature,</text><text x="165" y="104" text-anchor="middle" class="small">top-p or seed</text>
+      <rect x="345" y="10" width="310" height="130" rx="12" fill="#fdf4ec" stroke="#e0b8a8"/><text x="500" y="50" text-anchor="middle" class="big" style="fill:#b5523b">? Model versions</text><text x="500" y="82" text-anchor="middle" class="small">no snapshot or date</text><text x="500" y="104" text-anchor="middle" class="small">for GPT-4o or Phi-3</text>
+      <rect x="680" y="10" width="310" height="130" rx="12" fill="#fdf4ec" stroke="#e0b8a8"/><text x="835" y="50" text-anchor="middle" class="big" style="fill:#b5523b">? Examples</text><text x="835" y="82" text-anchor="middle" class="small">five prompt examples,</text><text x="835" y="104" text-anchor="middle" class="small">content not given</text>
+      <rect x="10" y="160" width="310" height="130" rx="12" fill="#fdf4ec" stroke="#e0b8a8"/><text x="165" y="200" text-anchor="middle" class="big" style="fill:#b5523b">? Rater training</text><text x="165" y="232" text-anchor="middle" class="small">"trained" but not</text><text x="165" y="254" text-anchor="middle" class="small">described</text>
+      <rect x="345" y="160" width="310" height="130" rx="12" fill="#fdf4ec" stroke="#e0b8a8"/><text x="500" y="200" text-anchor="middle" class="big" style="fill:#b5523b">? Agreement</text><text x="500" y="232" text-anchor="middle" class="small">no inter-rater</text><text x="500" y="254" text-anchor="middle" class="small">coefficient reported</text>
+      <rect x="680" y="160" width="310" height="130" rx="12" fill="#fdf4ec" stroke="#e0b8a8"/><text x="835" y="200" text-anchor="middle" class="big" style="fill:#b5523b">? Sample size</text><text x="835" y="232" text-anchor="middle" class="small">one set of 30 per model,</text><text x="835" y="254" text-anchor="middle" class="small">no repeats described</text>
+    </g>
+  </svg>
+  <p class="note">The authors also name their own limits: one domain and grade, 60 problems, and a call for classroom review.</p>
+</section>
+
+<!-- 10 -->
+<section class="slide" id="s10">
+  <p class="kicker">10 · Our replication</p>
+  <h2>What we match, and what we do not</h2>
+  <svg viewBox="0 0 1000 380" role="img" aria-label="Match matrix between Rahimi and the proposed replication">
+    <g font-size="15">
+      <text x="10" y="30" class="big">Element</text><text x="250" y="30" class="big">Rahimi et al.</text><text x="520" y="30" class="big">Proposed setup</text><text x="900" y="30" class="big">Match</text>
+      <line x1="0" y1="40" x2="1000" y2="40" stroke="#c4cfdb"/>
+      <text x="10" y="70">Standard and grade</text><text x="250" y="70">7.RP.A.2, grade 7</text><text x="520" y="70">7.RP.A.2, 7.RP.A.3, 7.SP.B.4, 7.G.B.6</text><text x="900" y="70" class="small">partly</text>
+      <text x="10" y="106">Prior knowledge</text><text x="250" y="106">7.RP.A.1, 7.NS.A.1</text><text x="520" y="106">same in ratio cell; own pairs elsewhere</text><text x="900" y="106" class="small">partly</text>
+      <text x="10" y="142">Themes</text><text x="250" y="142">Basketball, Stephen Curry</text><text x="520" y="142">basketball, shopping, music, home and garden</text><text x="900" y="142" class="small">extended</text>
+      <text x="10" y="178">Models</text><text x="250" y="178">GPT-4o vs Phi-3 mini</text><text x="520" y="178">GPT-5 mini vs GPT-4.1</text><text x="900" y="178" class="no">different</text>
+      <text x="10" y="214">Samples</text><text x="250" y="214">30 per model</text><text x="520" y="214">30 per cell and model: 240 in total</text><text x="900" y="214" class="small">extended</text>
+      <text x="10" y="250">Generation prompt</text><text x="250" y="250">six parts described, text unpublished</text><text x="520" y="250">same reconstructed prompt (V1)</text><text x="900" y="250" class="small">unknown</text>
+      <text x="10" y="286">Prompt examples</text><text x="250" y="286">five, not published</text><text x="520" y="286">same five StratL examples</text><text x="900" y="286" class="small">unknown</text>
+      <text x="10" y="322">Raters</text><text x="250" y="322">two blinded humans + third</text><text x="520" y="322">two Luna passes, separate shuffles</text><text x="900" y="322" class="no">different</text>
+      <text x="10" y="358">Analysis</text><text x="250" y="358">t-tests, Cohen's d</text><text x="520" y="358">not fixed yet</text><text x="900" y="358" class="small">open</text>
+    </g>
+  </svg>
+  <p class="note">Themes and topics are extended on purpose. The raters are AI passes, so the human-rater design cannot be copied. The examples and the generation prompt cannot be checked against Rahimi, because neither text is published.</p>
+</section>
+
+<!-- 11 -->
+<section class="slide" id="s11">
+  <p class="kicker">11 · Proposed cells</p>
+  <h2>Four cells: different themes and topics</h2>
+  <svg viewBox="0 0 1000 350" role="img" aria-label="Four cells with theme, topic and prerequisites">
+    <g>
+      <rect x="10" y="10" width="230" height="290" rx="12" fill="#e7eef5" stroke="#8fa4b8"/>
+      <text x="125" y="46" text-anchor="middle" class="big">Sports</text>
+      <text x="125" y="80" text-anchor="middle" class="small">Basketball, Stephen Curry</text>
+      <text x="125" y="108" text-anchor="middle" class="small">Ratios · 7.RP.A.2</text>
+      <text x="125" y="136" text-anchor="middle" class="small">Prior: 7.RP.A.1, 7.NS.A.1</text>
+      <text x="125" y="196" text-anchor="middle" class="small" style="fill:#2f6f9f">Rahimi-matched</text>
+      <text x="125" y="256" text-anchor="middle" class="big">60 tasks</text>
+      <text x="125" y="282" text-anchor="middle" class="small">30 × 2 models</text>
+    </g>
+    <g>
+      <rect x="260" y="10" width="230" height="290" rx="12" fill="#f5f8fb" stroke="#b8c7d6"/>
+      <text x="375" y="46" text-anchor="middle" class="big">Shopping</text>
+      <text x="375" y="80" text-anchor="middle" class="small">Shopping, pocket money</text>
+      <text x="375" y="108" text-anchor="middle" class="small">Percent · 7.RP.A.3</text>
+      <text x="375" y="136" text-anchor="middle" class="small">Prior: 7.RP.A.2, 7.NS.A.3</text>
+      <text x="375" y="196" text-anchor="middle" class="small" style="fill:#596878">Topic change</text>
+      <text x="375" y="256" text-anchor="middle" class="big">60 tasks</text>
+      <text x="375" y="282" text-anchor="middle" class="small">30 × 2 models</text>
+    </g>
+    <g>
+      <rect x="510" y="10" width="230" height="290" rx="12" fill="#f5f8fb" stroke="#b8c7d6"/>
+      <text x="625" y="46" text-anchor="middle" class="big">Music</text>
+      <text x="625" y="80" text-anchor="middle" class="small">Bands, songs, playlists</text>
+      <text x="625" y="108" text-anchor="middle" class="small">Statistics · 7.SP.B.4</text>
+      <text x="625" y="136" text-anchor="middle" class="small">Prior: 6.SP.B.5, 6.NS.B.3</text>
+      <text x="625" y="196" text-anchor="middle" class="small" style="fill:#596878">Topic change</text>
+      <text x="625" y="256" text-anchor="middle" class="big">60 tasks</text>
+      <text x="625" y="282" text-anchor="middle" class="small">30 × 2 models</text>
+    </g>
+    <g>
+      <rect x="760" y="10" width="230" height="290" rx="12" fill="#f5f8fb" stroke="#b8c7d6"/>
+      <text x="875" y="46" text-anchor="middle" class="big">Home and garden</text>
+      <text x="875" y="80" text-anchor="middle" class="small">Garden, patio or mural</text>
+      <text x="875" y="108" text-anchor="middle" class="small">Geometry · 7.G.B.6</text>
+      <text x="875" y="136" text-anchor="middle" class="small">Prior: 6.G.A.1, 7.NS.A.3</text>
+      <text x="875" y="196" text-anchor="middle" class="small" style="fill:#596878">Topic change</text>
+      <text x="875" y="256" text-anchor="middle" class="big">60 tasks</text>
+      <text x="875" y="282" text-anchor="middle" class="small">30 × 2 models</text>
+    </g>
+    <text x="500" y="336" text-anchor="middle" class="big">4 cells × 2 models × 30 = 240 generations, each judged twice</text>
+  </svg>
+  <p class="note">Every cell uses the same frozen prompt and the same five StratL examples. Each cell has its own theme and its own grade 7 topic, so the set is not ratio-only.</p>
+</section>
+
+<!-- 12 -->
+<section class="slide" id="s12">
+  <p class="kicker">12 · Rater design</p>
+  <h2>Two blinded AI passes, shuffled separately</h2>
+  <svg viewBox="0 0 1000 400" role="img" aria-label="How two judge passes rate blinded tasks">
+    <g>
+      <rect x="10" y="20" width="150" height="80" rx="10" fill="#f5f8fb" stroke="#b8c7d6"/>
+      <text x="85" y="52" text-anchor="middle" class="big">Task</text>
+      <text x="85" y="76" text-anchor="middle" class="small">ready, not yet rated</text>
+      <text x="180" y="66" class="big">→</text>
+      <rect x="200" y="14" width="200" height="54" rx="10" fill="#e7eef5" stroke="#8fa4b8"/>
+      <text x="300" y="36" text-anchor="middle" class="small">Judge 1 · own blind IDs</text>
+      <text x="300" y="56" text-anchor="middle" class="small">shuffle seed 20261014</text>
+      <rect x="200" y="84" width="200" height="54" rx="10" fill="#e7eef5" stroke="#8fa4b8"/>
+      <text x="300" y="106" text-anchor="middle" class="small">Judge 2 · own blind IDs</text>
+      <text x="300" y="126" text-anchor="middle" class="small">shuffle seed 20261015</text>
+      <text x="420" y="66" class="big">→</text>
+      <rect x="440" y="20" width="200" height="118" rx="10" fill="#f5f8fb" stroke="#b8c7d6"/>
+      <text x="540" y="52" text-anchor="middle" class="big">Table 1 rubric</text>
+      <text x="540" y="76" text-anchor="middle" class="small">five dimensions, 1 to 3 each</text>
+      <text x="540" y="96" text-anchor="middle" class="small">JSON only; null if no evidence</text>
+      <text x="660" y="66" class="big">→</text>
+      <rect x="680" y="20" width="310" height="118" rx="10" fill="#f5f8fb" stroke="#b8c7d6"/>
+      <text x="835" y="52" text-anchor="middle" class="big">Totals and final</text>
+      <text x="835" y="76" text-anchor="middle" class="small">each judge: sum out of 15</text>
+      <text x="835" y="96" text-anchor="middle" class="small">final = mean of the two totals</text>
+      <text x="835" y="120" text-anchor="middle" class="small" style="fill:#b5523b">a gap of 5 or more is flagged</text>
+    </g>
+    <g>
+      <rect x="10" y="170" width="480" height="150" rx="12" fill="#eef6f1" stroke="#9cc9ae"/>
+      <text x="30" y="200" class="big">What a judge sees</text>
+      <text x="30" y="232" class="small">Setting: PF use before instruction, the untaught target</text>
+      <text x="30" y="256" class="small">Setting: theme and student interest</text>
+      <text x="30" y="280" class="small">Grade 7 and assumed prior knowledge</text>
+      <text x="30" y="304" class="small">The student task: title, body, question</text>
+    </g>
+    <g>
+      <rect x="510" y="170" width="480" height="150" rx="12" fill="#fdf4ec" stroke="#e0b8a8"/>
+      <text x="530" y="200" class="big">What a judge never sees</text>
+      <text x="530" y="232" class="small">Which model wrote the task</text>
+      <text x="530" y="256" class="small">Cell ID and the five prompt examples</text>
+      <text x="530" y="280" class="small">Generation rules given to the model</text>
+      <text x="530" y="304" class="small">The other judge's scores or order</text>
+    </g>
+    <text x="500" y="356" text-anchor="middle" class="small">Blind IDs are random per judge; the ID-to-task mapping is kept in a private file.</text>
+    <text x="500" y="384" text-anchor="middle" class="small" style="fill:#b5523b">Both passes use the same Luna deployment. They differ in order and IDs, not in model.</text>
+  </svg>
+  <p class="note">All 15 anchors are verbatim from the paper's Table 1 (src/evaluation/prompts/pf_rubric_setting.yaml). The judge also gets the fixed setting a trained rater would know; it is the same for both models, so the model stays hidden.</p>
+</section>
+
+<!-- 13 -->
+<section class="slide" id="s13">
+  <p class="kicker">13 · Decisions</p>
+  <h2>Three choices to confirm before generation</h2>
+  <svg viewBox="0 0 1000 250" role="img" aria-label="Three decisions to confirm">
+    <g>
+      <rect x="10" y="20" width="310" height="210" rx="12" fill="#f5f8fb" stroke="#b8c7d6"/>
+      <text x="165" y="58" text-anchor="middle" class="big">Cells</text>
+      <text x="165" y="92" text-anchor="middle" class="small">Keep four cells (recommended)</text>
+      <text x="165" y="114" text-anchor="middle" class="small">ratios, percent, statistics, area</text>
+      <text x="165" y="150" text-anchor="middle" class="small">or drop one cell (three cells)</text>
+      <text x="165" y="186" text-anchor="middle" class="small">240 generations (180 with three cells)</text>
+      <rect x="345" y="20" width="310" height="210" rx="12" fill="#f5f8fb" stroke="#b8c7d6"/>
+      <text x="500" y="58" text-anchor="middle" class="big">Examples</text>
+      <text x="500" y="92" text-anchor="middle" class="small">Keep the five StratL examples</text>
+      <text x="500" y="114" text-anchor="middle" class="small">(recommended: same as the prompt)</text>
+      <text x="500" y="150" text-anchor="middle" class="small">or swap to rate-related StratL:</text>
+      <text x="500" y="172" text-anchor="middle" class="small">biking, hummingbird, biking structured</text>
+      <rect x="680" y="20" width="310" height="210" rx="12" fill="#f5f8fb" stroke="#b8c7d6"/>
+      <text x="835" y="58" text-anchor="middle" class="big">Judges</text>
+      <text x="835" y="92" text-anchor="middle" class="small">Two Luna passes, high effort</text>
+      <text x="835" y="114" text-anchor="middle" class="small">gpt-5.6-luna, verified to accept high</text>
+      <text x="835" y="150" text-anchor="middle" class="small">Same model: not independent raters</text>
+      <text x="835" y="172" text-anchor="middle" class="small">Gap of 5 or more flagged, no third</text>
+    </g>
+  </svg>
+  <p class="note">Luna is gpt-5.6-luna here: gpt-6-luna returns 404 in this environment. Errored attempts are deleted, not replaced. Deleted: the calibration run with one API connection error, and four unfinished attempts. Kept as a superseded pilot: six completed attempts.</p>
+</section>
+
+<!-- 14 -->
+<section class="slide" id="s14">
+  <p class="kicker">14 · Our results, same plot</p>
+  <h2>The gap is largest in open-endedness and multiple representations</h2>
+  <img src="../../experiments/results/pf_rahimi_multi_theme_20261013/main_30/rahimi_style_comparison.svg" alt="Mean dimension scores for GPT-5 mini and GPT-4.1 with Cohen's d" style="width:100%;height:auto">
+  <p class="note">Four theme cells pooled: 117 GPT-5 mini and 120 GPT-4.1 final tasks; 3 of 240 attempts were lost to a deleted judge call or an invalid output. Scores are the mean of two blinded Luna passes on the 1–3 scale. Cohen&#8217;s d is descriptive, not a test, and positive values mean GPT-5 mini scored higher. AE has no variance in either model, so d is undefined (n/a). APK is 2.99 against 2.97, effectively a tie. Both passes come from one model, and there is no human rating.</p>
+</section>
+
+<!-- 15 -->
+<section class="slide" id="s15">
+  <p class="kicker">15 · Paper and replication, same plot</p>
+  <h2>Both studies show the largest gaps in multiple representations and open-endedness</h2>
+  <img src="../../experiments/results/pf_rahimi_multi_theme_20261013/main_30/rahimi_vs_replication_comparison.svg" alt="Mean dimension scores: Rahimi et al. GPT-4o and Phi-3 mini beside our GPT-5 mini and GPT-4.1" style="width:100%;height:auto">
+  <p class="note">Rahimi values from Table 2 (GPT-4o vs Phi-3, n = 30 each, two trained human raters). Ours: GPT-5 mini vs GPT-4.1, four theme cells, two Luna AI passes. The model pairs, raters and tasks differ, so compare the pattern of gaps, not the absolute levels. In both studies the top two gaps are MR and OE. Cohen&#8217;s d is first model minus second. Affective engagement is at the ceiling in our run (no variance), so its gap is undefined.</p>
+</section>
+
+<!-- 16 -->
+<section class="slide" id="s16">
+  <p class="kicker">16 · The definition</p>
+  <h2>PF is defined by its outcome: fail first, learn more later</h2>
+  <svg viewBox="0 0 1000 446" role="img" aria-label="Kapur’s definition, the four outcomes, and the two phases">
+    <rect x="10" y="10" width="470" height="260" rx="12" fill="#2f6f9f" stroke="#2f6f9f"/>
+    <text x="245" y="50" text-anchor="middle" class="big" style="fill:#ffffff">Kapur (2008)</text>
+    <text x="245" y="74" text-anchor="middle" class="small" style="fill:#dbe7f1">founding study · Grade 11 kinematics</text>
+    <text x="245" y="118" text-anchor="middle" style="fill:#ffffff;font-style:italic">“Engaging students in solving complex,</text>
+    <text x="245" y="142" text-anchor="middle" style="fill:#ffffff;font-style:italic">ill-structured problems without the provision</text>
+    <text x="245" y="166" text-anchor="middle" style="fill:#ffffff;font-style:italic">of support structures can be a productive</text>
+    <text x="245" y="190" text-anchor="middle" style="fill:#ffffff;font-style:italic">exercise in failure.”</text>
+    <text x="245" y="226" text-anchor="middle" class="small" style="fill:#dbe7f1">Groups struggled and produced poor solutions,</text>
+    <text x="245" y="246" text-anchor="middle" class="small" style="fill:#dbe7f1">yet outperformed on near- and far-transfer tests.</text>
+    <rect x="520" y="10" width="470" height="260" rx="12" fill="#f5f8fb" stroke="#b8c7d6"/>
+    <text x="755" y="50" text-anchor="middle" class="big">Kapur (2016)</text>
+    <text x="755" y="74" text-anchor="middle" class="small">initial performance and later learning are separate axes</text>
+    <text x="540" y="108" text-anchor="start" class="small">later learning</text>
+    <text x="725" y="108" text-anchor="middle" class="small">First attempt fails</text>
+    <text x="895" y="108" text-anchor="middle" class="small">First attempt succeeds</text>
+    <text x="540" y="156" text-anchor="start">Productive</text>
+    <text x="540" y="226" text-anchor="start">Unproductive</text>
+    <rect x="645" y="120" width="160" height="60" rx="8" fill="#2f6f9f" stroke="#2f6f9f"/>
+    <text x="725" y="156" text-anchor="middle" style="fill:#ffffff;font-size:14px;font-weight:600">Productive failure</text>
+    <rect x="815" y="120" width="160" height="60" rx="8" fill="#e7eef5" stroke="#8fa4b8"/>
+    <text x="895" y="156" text-anchor="middle" style="fill:#1d2733;font-size:14px;font-weight:600">Productive success</text>
+    <rect x="645" y="190" width="160" height="60" rx="8" fill="#f5f8fb" stroke="#b8c7d6"/>
+    <text x="725" y="226" text-anchor="middle" style="fill:#1d2733;font-size:14px;font-weight:600">Unproductive failure</text>
+    <rect x="815" y="190" width="160" height="60" rx="8" fill="#f5f8fb" stroke="#b8c7d6"/>
+    <text x="895" y="226" text-anchor="middle" style="fill:#1d2733;font-size:14px;font-weight:600">Unproductive success</text>
+    <text x="500" y="300" text-anchor="middle" class="small">Kapur &amp; Bielaczyc (2012) split the design into two phases</text>
+    <rect x="10" y="318" width="470" height="120" rx="12" fill="#e7eef5" stroke="#8fa4b8"/>
+    <text x="245" y="350" text-anchor="middle" class="big">Phase 1 · Try (the failure)</text>
+    <text x="245" y="374" text-anchor="middle" class="small">students attempt a complex problem, alone or in groups, with no help</text>
+    <text x="245" y="396" text-anchor="middle">→ varied approaches, mostly incomplete</text>
+    <text x="245" y="418" text-anchor="middle" class="small">the first attempt falls short of the canonical solution</text>
+    <text x="500" y="386" text-anchor="middle" class="big">→</text>
+    <rect x="520" y="318" width="470" height="120" rx="12" fill="#f5f8fb" stroke="#b8c7d6"/>
+    <text x="755" y="350" text-anchor="middle" class="big">Phase 2 · Compare (the learning)</text>
+    <text x="755" y="374" text-anchor="middle" class="small">the teacher sets student attempts beside the canonical method</text>
+    <text x="755" y="396" text-anchor="middle">→ students name the critical features and build the concept</text>
+    <text x="755" y="418" text-anchor="middle" class="small">the later gain, which the definition counts</text>
+  </svg>
+  <p class="note">Phase 1 must end in a shortfall; only the Phase 2 comparison turns it into learning. Sources: Kapur 2008, 2016; Kapur &amp; Bielaczyc 2012.</p>
+</section>
+
+<!-- 17 -->
+<section class="slide" id="s17">
+  <p class="kicker">17 · How PF is intended to support learning</p>
+  <h2>Four learning mechanisms that PF design must trigger</h2>
+  <p class="theory-source">Mechanisms quoted from <a href="../../thesis/otherpapers/Designing%20for%20Productive%20Failure.pdf#page=6">Kapur &amp; Bielaczyc (2012), p. 49</a>.</p>
+  <p class="theory-intro">Drawing on prior research and their own PF studies, the authors propose four interdependent learning processes.</p>
+  <ol class="mechanism-list" aria-label="The four mechanisms in the paper">
+    <li class="mechanism-item"><span class="theory-code">(a)</span><p class="theory-copy">activation and differentiation of prior knowledge in relation to the targeted concepts</p></li>
+    <li class="mechanism-item"><span class="theory-code">(b)</span><p class="theory-copy">attention to critical conceptual features of the targeted concepts</p></li>
+    <li class="mechanism-item"><span class="theory-code">(c)</span><p class="theory-copy">explanation and elaboration of these features</p></li>
+    <li class="mechanism-item"><span class="theory-code">(d)</span><p class="theory-copy">organization and assembly of the critical conceptual features into the targeted concepts</p></li>
+  </ol>
+  <p class="theory-bridge">Next: the authors' design principles explain how to support these learning processes.</p>
+</section>
+
+<!-- 18 -->
+<section class="slide" id="s18">
+  <p class="kicker">18 · How to design for those learning processes</p>
+  <h2>Three design principles support these learning mechanisms</h2>
+  <p class="theory-source">Principles summarised from <a href="../../thesis/otherpapers/Designing%20for%20Productive%20Failure.pdf#page=6">Kapur &amp; Bielaczyc (2012), p. 49</a>; mapping follows the paper.</p>
+  <p class="theory-intro">The same authors use three design principles to put the four mechanisms into practice.</p>
+  <ol class="principle-list" aria-label="The authors' design principles and their mechanism mapping">
+    <li class="principle-item">
+      <span class="theory-code">1</span>
+      <p class="theory-copy">Use complex problems that challenge but do not frustrate, rely on prior knowledge, and allow multiple representations and solution methods.</p>
+      <p class="principle-link">Supports mechanisms<strong>(a) and (b)</strong></p>
+    </li>
+    <li class="principle-item">
+      <span class="theory-code">2</span>
+      <p class="theory-copy">Provide opportunities for explanation and elaboration.</p>
+      <p class="principle-link">Supports mechanisms<strong>(b) and (c)</strong></p>
+    </li>
+    <li class="principle-item">
+      <span class="theory-code">3</span>
+      <p class="theory-copy">Compare what failed or partial methods can and cannot do, and use that comparison to build the standard method.</p>
+      <p class="principle-link">Supports mechanisms<strong>(b), (c) and (d)</strong></p>
+    </li>
+  </ol>
+  <p class="theory-bridge">The principles guide both phases: the initial attempts and the later teacher-led comparison.</p>
+</section>
+
+<!-- 19 -->
+<section class="slide" id="s19">
+  <p class="kicker">19 · Definition to design</p>
+  <h2>PF is defined by its outcome, so a task can only be judged by what it makes possible</h2>
+  <svg viewBox="0 0 1000 300" role="img" aria-label="Definition, learning design, and what a task text can carry">
+    <rect x="10" y="20" width="300" height="120" rx="12" fill="#2f6f9f" stroke="#2f6f9f"/><text x="160.0" y="50" text-anchor="middle" style="fill:#ffffff" class="big">Definition</text><text x="160.0" y="72" text-anchor="middle" style="fill:#ffffff" class="">Kapur (2008)</text><text x="160.0" y="94" text-anchor="middle" style="fill:#ffffff" class="">Complex problems, no support;</text><text x="160.0" y="116" text-anchor="middle" style="fill:#ffffff" class="">first attempts fall short,</text>
+    <text x="330" y="90" class="big">→</text>
+    <rect x="350" y="20" width="300" height="120" rx="12" fill="#e7eef5" stroke="#8fa4b8"/><text x="500.0" y="50" text-anchor="middle" style="fill:#1d2733" class="big">Learning design</text><text x="500.0" y="72" text-anchor="middle" style="fill:#1d2733" class="">Kapur & Bielaczyc (2012)</text><text x="500.0" y="94" text-anchor="middle" style="fill:#1d2733" class="">four mechanisms, three principles,</text><text x="500.0" y="116" text-anchor="middle" style="fill:#1d2733" class="">two phases in the classroom</text>
+    <text x="670" y="90" class="big">→</text>
+    <rect x="690" y="20" width="300" height="120" rx="12" fill="#f5f8fb" stroke="#b8c7d6"/><text x="840.0" y="50" text-anchor="middle" style="fill:#1d2733" class="big">What a task carries</text><text x="840.0" y="72" text-anchor="middle" style="fill:#1d2733" class="">the problem and its wording</text><text x="840.0" y="94" text-anchor="middle" style="fill:#1d2733" class="">the rest happens with students</text><text x="840.0" y="116" text-anchor="middle" style="fill:#1d2733" class="">and in the classroom</text>
+    <rect x="10" y="176" width="980" height="100" rx="12" fill="#fdf4ec" stroke="#e0b8a8"/>
+    <text x="500" y="210" text-anchor="middle" class="big">A task can only set up part of this chain</text>
+    <text x="500" y="240" text-anchor="middle">Its wording and data can shape the first attempt and its failure.</text>
+    <text x="500" y="262" text-anchor="middle" class="small">Learning, explanation and consolidation need students and a teacher.</text>
+  </svg>
+  <p class="note">The steps that follow describe what the design must trigger, and which of those a task text can carry.</p>
+</section>
+
+<!-- 20 -->
+<section class="slide" id="s20">
+  <p class="kicker">20 · Expert tasks</p>
+  <h2>The expert tasks share one pattern: a familiar method that falls short</h2>
+  <svg viewBox="0 0 1000 330" role="img" aria-label="Three expert tasks and the features they share">
+    <rect x="10" y="20" width="310" height="150" rx="12" fill="#f5f8fb" stroke="#b8c7d6"/><text x="165.0" y="50" text-anchor="middle" style="fill:#1d2733" class="big">Kapur 2012 · bicycle</text><text x="165.0" y="72" text-anchor="middle" style="fill:#1d2733" class="">speed ratios 4:3 and 5:3 differ;</text><text x="165.0" y="94" text-anchor="middle" style="fill:#1d2733" class="">a ratio split misses walking time</text><text x="165.0" y="116" text-anchor="middle" style="fill:#1d2733" class="">nine approaches coded in students</text>
+    <rect x="345" y="20" width="310" height="150" rx="12" fill="#f5f8fb" stroke="#b8c7d6"/><text x="500.0" y="50" text-anchor="middle" style="fill:#1d2733" class="big">Loibl 2014 · consistency</text><text x="500.0" y="72" text-anchor="middle" style="fill:#1d2733" class="">equal means and equal ranges;</text><text x="500.0" y="94" text-anchor="middle" style="fill:#1d2733" class="">students must invent a measure</text><text x="500.0" y="116" text-anchor="middle" style="fill:#1d2733" class="">key features not named</text>
+    <rect x="680" y="20" width="310" height="150" rx="12" fill="#f5f8fb" stroke="#b8c7d6"/><text x="835.0" y="50" text-anchor="middle" style="fill:#1d2733" class="big">StratL · country</text><text x="835.0" y="72" text-anchor="middle" style="fill:#1d2733" class="">non-integer division;</text><text x="835.0" y="94" text-anchor="middle" style="fill:#1d2733" class="">rounding needs a rule students choose</text><text x="835.0" y="116" text-anchor="middle" style="fill:#1d2733" class="">several approaches reach one answer</text>
+    <rect x="10" y="196" width="980" height="110" rx="12" fill="#eef6f1" stroke="#9cc9ae"/>
+    <text x="500" y="228" text-anchor="middle" class="big">What they share</text>
+    <text x="500" y="256" text-anchor="middle">A plausible first method falls short · the concept is not named · several routes are open</text>
+    <text x="500" y="282" text-anchor="middle" class="small">Recorded in data/pf_exercises/*.yaml (design_features, critical_conceptual_features)</text>
+  </svg>
+  <p class="note">These design features are recorded by the repository from the source papers. They describe the expert tasks, not student data.</p>
+</section>
+
+<!-- 21 -->
+<section class="slide" id="s21">
+  <p class="kicker">21 · Derivation</p>
+  <h2>Five measures, with two conditional checks</h2>
+  <svg viewBox="0 0 1000 430" role="img" aria-label="Five measures: validity only if alignment is Yes; limits of familiar approaches only if accessibility is Yes; invention judged separately">
+    <text x="40" y="49" style="font-size:30px;font-weight:700;fill:#2f6f9f">1</text>
+    <text x="110" y="49" style="font-size:22px;font-weight:700">Target alignment</text>
+    <text x="110" y="79" style="font-size:16px;fill:#596878">Does the central mathematical challenge address the intended target?</text>
+    <text x="40" y="129" style="font-size:30px;font-weight:700;fill:#2f6f9f">2</text>
+    <text x="110" y="129" style="font-size:22px;font-weight:700">Mathematical validity</text>
+    <text x="110" y="159" style="font-size:16px;fill:#596878">Only if alignment is Yes: is the mathematics correct?</text>
+    <text x="40" y="209" style="font-size:30px;font-weight:700;fill:#2f6f9f">3</text>
+    <text x="110" y="209" style="font-size:22px;font-weight:700">Prior-knowledge accessibility</text>
+    <text x="110" y="239" style="font-size:16px;fill:#596878">Can students start at least one meaningful approach using the stated prior knowledge?</text>
+    <text x="40" y="289" style="font-size:30px;font-weight:700;fill:#2f6f9f">4</text>
+    <text x="110" y="289" style="font-size:22px;font-weight:700">Limits of familiar approaches</text>
+    <text x="110" y="319" style="font-size:16px;fill:#596878">Only if accessibility is Yes: do plausible approaches reveal limits the target helps address?</text>
+    <text x="40" y="369" style="font-size:30px;font-weight:700;fill:#596878">5</text>
+    <text x="190" y="369" style="font-size:22px;font-weight:700">Room for invention</text>
+    <text x="190" y="399" style="font-size:16px;fill:#596878">What meaningful ideas or approaches remain for students to invent? Judged separately.</text>
+    <path d="M 10 302 L 10 358 L 28 358 M 20 353.5 L 28 358 L 20 362.5" fill="none" stroke="#596878" stroke-width="2"/>
+  </svg>
+  <p class="note">If a prerequisite is No or Unclear, its dependent measure is Not assessed, not No. Familiar approaches may succeed or fall short; record both. Invention is judged separately. <a href="../pf-generation/PF_DESIGN_AUDIT.md#proposed-rubric-october-14-not-yet-run">Full definitions</a>.</p>
+</section>
+
+<!-- 22 -->
+<section class="slide" id="s22">
+  <p class="kicker">22 · What the measures show</p>
+  <h2>Our generated tasks miss the concept and the method most often</h2>
+  <div class="verdict-list" role="table" aria-label="Verdict for each measure on directly generated tasks">
+    <div class="verdict-row verdict-head"><span>Measure</span><span>Verdict</span><span>Count</span><span>What we saw</span></div>
+    <div class="verdict-row"><span>Target alignment</span><span class="pill pill-often">Often missed</span><span>27 of 30</span><span class="verdict-note">GPT-4.1 music tasks flagged off target by both judges; a lower bound.</span></div>
+    <div class="verdict-row"><span>Mathematical validity</span><span class="pill pill-none">Not yet judged</span><span>—</span><span class="verdict-note">New rule: assess only where alignment is Yes. Historical math concerns are not conditional ratings.</span></div>
+    <div class="verdict-row"><span>Prior-knowledge accessibility</span><span class="pill pill-none">Not yet judged</span><span>—</span><span class="verdict-note">No task-level check exists yet.</span></div>
+    <div class="verdict-row"><span>Limits of familiar approaches</span><span class="pill pill-examples">Examples only</span><span>5/3 · 20/11</span><span class="verdict-note">Assessed only where accessibility is Yes. Drill C’s twist cannot change the answer. No attempts yet.</span></div>
+    <div class="verdict-row"><span>Room for invention</span><span class="pill pill-often">Often missed</span><span>24 of 30</span><span class="verdict-note">Basketball questions name the concept, “proportional”, and prescribe methods.</span></div>
+  </div>
+  <p class="note">Historical flags and keyword matches over 238 ready tasks before the evaluator was run. For the executed five-measure results and v3.0 calibration, see <a href="#s26">Slide 26</a> and <a href="#s27">Slide 27</a>.</p>
+</section>
+
+<!-- 23 -->
+<section class="slide" id="s23">
+  <p class="kicker">23 · Evidence</p>
+  <h2>Each verdict rests on a checkable example</h2>
+  <div class="evidence-list">
+    <div class="evidence-row"><p class="evidence-num">27 of 30<small>Target alignment</small></p><p class="evidence-body">GPT-4.1 music tasks flagged by both judges. They never present the data as a sample, although 7.SP.B.4 concerns samples.</p></div>
+    <div class="evidence-row"><p class="evidence-num">2 concerns<small>Math and prerequisites</small></p><p class="evidence-body">Garden-028: a triangle-side inconsistency. Garden-019: √3 beyond prerequisites for a full solution, not proof of an inaccessible start. Neither is a new conditional rating.</p></div>
+    <div class="evidence-row"><p class="evidence-num">5/3 and 20/11<small>Limits of familiar approaches</small></p><p class="evidence-body">Basketball-021, Drill C: makes per session are 5/3 at every length, so the rest-break twist cannot change the answer.</p></div>
+    <div class="evidence-row"><p class="evidence-num">24 of 30<small>Room for invention: concept</small></p><p class="evidence-body">Basketball questions ask whether a relationship is “proportional” (GPT-4.1: 0 of 30). Garden-028 gives its formula as a “Hint”.</p></div>
+    <div class="evidence-row"><p class="evidence-num">100 of 118<small>Room for invention: method</small></p><p class="evidence-body">GPT-5 mini tasks are multi-part worksheets (GPT-4.1: 0 of 120). Numbered sub-questions set the route for students.</p></div>
+  </div>
+  <p class="note">Counts are keyword and judge-flag heuristics over ready tasks; worked examples were checked by quotation or exact calculation.</p>
+</section>
+
+<!-- 24 -->
+<section class="slide" id="s24">
+  <p class="kicker">24 · Scope</p>
+  <h2>The five measures cover task design; the rest of PF needs students</h2>
+  <svg viewBox="0 0 1000 300" role="img" aria-label="Which parts of PF the measures cover and which need students">
+    <rect x="10" y="20" width="480" height="250" rx="12" fill="#eef6f1" stroke="#9cc9ae"/>
+    <text x="250" y="54" text-anchor="middle" class="big">Covered by the task text</text>
+    <text x="250" y="88" text-anchor="middle">Definition: the first attempt</text>
+    <text x="250" y="112" text-anchor="middle">Mechanisms (a) and (b)</text>
+    <text x="250" y="136" text-anchor="middle">Principle 1</text>
+    <text x="250" y="170" text-anchor="middle" class="small">Five measures, with worked and checked evidence</text>
+    <rect x="510" y="20" width="480" height="250" rx="12" fill="#f0f2f5" stroke="#b8c7d6"/>
+    <text x="750" y="54" text-anchor="middle" class="big">Needs students or a classroom</text>
+    <text x="750" y="88" text-anchor="middle">Learning after failure (definition)</text>
+    <text x="750" y="112" text-anchor="middle">Mechanisms (c) and (d)</text>
+    <text x="750" y="136" text-anchor="middle">Principles 2 and 3: explanation and comparison</text>
+    <text x="750" y="170" text-anchor="middle" class="small">Measured later through attempts and outcomes</text>
+  </svg>
+  <p class="note">Affective engagement is not part of this chain, so Rahimi’s AE score is reported only as a comparability column next to the Table 1 scores.</p>
+</section>
+
+<!-- 25 -->
+<section class="slide" id="s25">
+  <p class="kicker">25 · Conclusion</p>
+  <h2>High rubric scores do not show that tasks are good PF tasks</h2>
+  <p class="lead">Direct generation reaches the rubric’s ceiling, but its tasks often name the concept, prescribe the method, or are solved outright by familiar prior methods.</p>
+  <p class="note">Slides 26–29 plot the executed five-measure campaign (893 saved conditions), the v3.0 calibration, and the 76-task solver recall benchmark. All judgements are model-based, not human-validated or student-tested.</p>
+</section>
+
+<!-- 26 -->
+<section class="slide" id="s26">
+  <p class="kicker">26 · Executed 893-task campaign (pf-three-role/v2.1, Luna primary reviewer)</p>
+  <h2>Open wording is common (78%), but approach limits are rare (12%)</h2>
+  <div class="legend">
+    <span class="sw" style="background:#2f6f4a"></span>Yes
+    <span class="sw" style="background:#d99b26"></span>Partly
+    <span class="sw" style="background:#b5523b"></span>No
+    <span class="sw" style="background:#c4cfdb"></span>Unclear
+  </div>
+  <svg viewBox="0 0 1000 350" role="img" aria-label="Stacked horizontal bars for the five PF task measures across 893 saved conditions">
+    <!-- Bar width = 600px (x=280 to x=880) -->
+    <g>
+      <!-- 1. Target alignment (n=850 assessed: 753 yes=531.5, 44 partly=31.1, 14 no=9.9, 39 unclear=27.5) -->
+      <text x="0" y="42" class="big">1. Target alignment</text>
+      <text x="0" y="62" class="small">n = 850 assessed (43 invalid)</text>
+      <rect x="280" y="22" width="531.5" height="32" fill="#2f6f4a"/>
+      <rect x="811.5" y="22" width="31.1" height="32" fill="#d99b26"/>
+      <rect x="842.6" y="22" width="9.9" height="32" fill="#b5523b"/>
+      <rect x="852.5" y="22" width="27.5" height="32" fill="#c4cfdb"/>
+      <text x="545" y="44" text-anchor="middle" style="fill:#fff;font-weight:600">753 Yes (89%)</text>
+      <text x="892" y="44" class="small">44 Partly · 14 No</text>
+
+      <!-- 2. Mathematical validity (n=753 aligned: 713 yes=568.1, 16 no=12.7, 24 unclear=19.1) -->
+      <text x="0" y="110" class="big">2. Math validity</text>
+      <text x="0" y="130" class="small">n = 753 aligned (140 gated)</text>
+      <rect x="280" y="90" width="568.1" height="32" fill="#2f6f4a"/>
+      <rect x="848.1" y="90" width="12.7" height="32" fill="#b5523b"/>
+      <rect x="860.8" y="90" width="19.2" height="32" fill="#c4cfdb"/>
+      <text x="564" y="112" text-anchor="middle" style="fill:#fff;font-weight:600">713 Yes (95%)</text>
+      <text x="892" y="112" class="small">16 No · 24 Unclear</text>
+
+      <!-- 3. Prior-knowledge accessibility gate (n=889 assessed: 853 yes=575.7, 36 unclear=24.3) -->
+      <text x="0" y="178" class="big">3. Accessibility gate</text>
+      <text x="0" y="198" class="small">n = 889 (v2.8 gate: 20/20 cal)</text>
+      <rect x="280" y="158" width="575.7" height="32" fill="#2f6f4a"/>
+      <rect x="855.7" y="158" width="24.3" height="32" fill="#c4cfdb"/>
+      <text x="568" y="180" text-anchor="middle" style="fill:#fff;font-weight:600">853 Yes (96%)</text>
+      <text x="892" y="180" class="small">36 no history</text>
+
+      <!-- 4. Room for invention (n=867 assessed: 677 yes=468.5, 115 partly=79.6, 75 no=51.9) -->
+      <text x="0" y="246" class="big">5. Room for invention</text>
+      <text x="0" y="266" class="small">n = 867 assessed (26 invalid)</text>
+      <rect x="280" y="226" width="468.5" height="32" fill="#2f6f4a"/>
+      <rect x="748.5" y="226" width="79.6" height="32" fill="#d99b26"/>
+      <rect x="828.1" y="226" width="51.9" height="32" fill="#b5523b"/>
+      <text x="514" y="248" text-anchor="middle" style="fill:#fff;font-weight:600">677 Yes (78%)</text>
+      <text x="892" y="248" class="small">115 Partly · 75 No</text>
+
+      <!-- 5. Limits of familiar approaches (n=853 accessible: 104 yes=73.2, 654 no=460.0, 95 unclear=66.8) -->
+      <text x="0" y="314" class="big">4. Approach limits</text>
+      <text x="0" y="334" class="small">n = 853 accessible (40 gated)</text>
+      <rect x="280" y="294" width="73.2" height="32" fill="#2f6f4a"/>
+      <rect x="353.2" y="294" width="460.0" height="32" fill="#b5523b"/>
+      <rect x="813.2" y="294" width="66.8" height="32" fill="#c4cfdb"/>
+      <text x="316" y="316" text-anchor="middle" style="fill:#fff;font-weight:600">12%</text>
+      <text x="583" y="316" text-anchor="middle" style="fill:#fff;font-weight:600">654 No: familiar method already solves it (77%)</text>
+      <text x="892" y="316" class="small">104 Yes · 95 Unc.</text>
+    </g>
+  </svg>
+  <p class="note">Why 1–3 are high while 4 is 12%: 61% of the 893 catalog repeats 4 broad CCSS standards (prompt echoing inflates 1), validity (2) is gated on aligned tasks, and accessibility (3) is the “not frustrated” floor gate (both routine and PF tasks are startable). Measure 4 is the “challenged” ceiling: 77% fail because taught prior methods already solve them.</p>
+</section>
+
+<!-- 27 -->
+<section class="slide" id="s27">
+  <p class="kicker">27 · Literature-grounded strict calibration (pf-three-role/v3.0)</p>
+  <h2>100% calibration (29/29) separates expert PF tasks (100%) from Rahimi direct tasks (4%)</h2>
+  <div class="legend">
+    <span class="sw" style="background:#2f6f4a"></span>Passes all 5 PF measures (<code>All 5 = Yes</code>)
+    <span class="sw" style="background:#b5523b"></span>Solved by routine prior knowledge (<code>familiar_approach_limits = no</code>)
+    <span class="sw" style="background:#d99b26"></span>Off-target / invalid / giveaway (<code>align, valid, or invent != yes</code>)
+  </div>
+  <svg viewBox="0 0 1000 320" role="img" aria-label="Comparison of v3.0 outcomes across expert PF tasks, non-PF controls, Rahimi generated cohorts, and Improved Pipeline">
+    <!-- Bar width = 560px (x=310 to x=870) -->
+    <g>
+      <!-- Row 1: Expert PF Tasks in Calibration + Transfer (n=13: 13 pass=560) -->
+      <text x="0" y="44" class="big">Expert PF Tasks (n = 13)</text>
+      <text x="0" y="64" class="small">5 Dev + 8 Transfer (Kapur, Loibl, Kerrigan, StratL)</text>
+      <rect x="310" y="24" width="560.0" height="34" fill="#2f6f4a"/>
+      <text x="590" y="47" text-anchor="middle" style="fill:#fff;font-weight:600">13 / 13 Pass All 5 Measures (100%)</text>
+
+      <!-- Row 2: Non-PF Routine & Control Tasks in Calibration + Transfer (n=16: 0 pass, 100% exact ref match) -->
+      <text x="0" y="118" class="big">Routine &amp; Control Tasks (n = 16)</text>
+      <text x="0" y="138" class="small">8 Dev Non-PF + 7 Controls + 1 Transfer Control</text>
+      <rect x="310" y="98" width="350.0" height="34" fill="#b5523b"/>
+      <rect x="660.0" y="98" width="210.0" height="34" fill="#d99b26"/>
+      <text x="485" y="121" text-anchor="middle" style="fill:#fff;font-weight:600">10 / 16 Routine prior solves</text>
+      <text x="765" y="121" text-anchor="middle" style="fill:#fff;font-weight:600">6 / 16 Control/Giveaway</text>
+      <text x="880" y="121" class="small">0 / 16 PF (100% cal)</text>
+
+      <!-- Row 3: Rahimi Benchmark v4 + Main30 Generated Tasks (n=24: 1 PF=23.3, 22 limits=no=513.3, 1 align=no=23.3) -->
+      <text x="0" y="192" class="big">Rahimi Generated (n = 24)</text>
+      <text x="0" y="212" class="small">16 Main30 Direct + 8 Benchmark v4 (0 errors/drops)</text>
+      <rect x="310" y="172" width="23.3" height="34" fill="#2f6f4a"/>
+      <rect x="333.3" y="172" width="513.3" height="34" fill="#b5523b"/>
+      <rect x="846.6" y="172" width="23.4" height="34" fill="#d99b26"/>
+      <text x="590" y="195" text-anchor="middle" style="fill:#fff;font-weight:600">22 / 24 Routine prior knowledge solves (92% limits = no)</text>
+      <text x="880" y="195" class="small">1 / 24 PF (4%)</text>
+
+      <!-- Row 4: Improved Pipeline Round 2 (n=9: 6 PF=373.3, 2 limits=no=124.4, 1 valid=no=62.3) -->
+      <text x="0" y="266" class="big">Improved Pipeline R2 (n = 9)</text>
+      <text x="0" y="286" class="small">LC Graph + Impasse Package (Speed, Fair Div, Variance)</text>
+      <rect x="310" y="246" width="373.3" height="34" fill="#2f6f4a"/>
+      <rect x="683.3" y="246" width="124.4" height="34" fill="#b5523b"/>
+      <rect x="807.7" y="246" width="62.3" height="34" fill="#d99b26"/>
+      <text x="496" y="269" text-anchor="middle" style="fill:#fff;font-weight:600">6 / 9 Pass All 5 Measures (67%)</text>
+      <text x="745" y="269" text-anchor="middle" style="fill:#fff;font-weight:600">2 routine</text>
+      <text x="838" y="269" text-anchor="middle" style="fill:#fff;font-weight:600">1 math</text>
+    </g>
+  </svg>
+  <p class="note">Source: <code>experiments/results/pf_v30_calibration_20261015/</code>. Under <code>pf-three-role/v3.0</code>, Luna matches 20/20 Dev+Control cases (100/100 verdicts), 9/9 Transfer cases (45/45 verdicts), 7/7 strict sensitivity cases, and 13/13 attempt fixtures.</p>
+</section>
+
+<!-- 28 -->
+<section class="slide" id="s28">
+  <p class="kicker">28 · Solver Validation (1/2) · Motivation, Hypothesis &amp; Experiment</p>
+  <h2>Why we test the 4-approach solver: does capping it at 4 miss obvious traps or easy solutions?</h2>
+  <svg viewBox="0 0 1000 360" role="img" aria-label="Three-step flow from Motivation (the reviewer's doubt about the 4-approach cap) to Hypothesis and the 76-task Approach Recall Experiment">
+    <g font-family="sans-serif" font-size="13">
+      <!-- Box 1: Motivation -->
+      <rect x="10" y="16" width="306" height="320" rx="10" fill="#fbeaea" stroke="#b5523b" stroke-width="1.6"/>
+      <text x="28" y="48" font-size="15.5" font-weight="700" fill="#8f2d2b">1. Motivation (Why We Need This)</text>
+      <text x="28" y="80" fill="#1f2a36">In our evaluator, the score for</text>
+      <text x="28" y="100" font-weight="700" fill="#1f2a36">approach_limits depends entirely</text>
+      <text x="28" y="120" fill="#1f2a36">on what the solver tries (≤4 attempts):</text>
+      <text x="28" y="152" fill="#1f2a36">• Good PF task: solver must try the</text>
+      <text x="28" y="172" fill="#1f2a36">  familiar method and hit its trap.</text>
+      <text x="28" y="200" fill="#1f2a36">• Bad (routine) task: solver must try</text>
+      <text x="28" y="220" fill="#1f2a36">  the standard method and solve it.</text>
+      <rect x="24" y="244" width="278" height="76" rx="6" fill="#ffffff" stroke="#e0b4b4"/>
+      <text x="36" y="266" font-size="12" font-weight="700" fill="#8f2d2b">The Critic's Doubt:</text>
+      <text x="36" y="286" font-size="12" fill="#1f2a36">"What if your 4-approach solver misses</text>
+      <text x="36" y="304" font-size="12" fill="#1f2a36">obvious methods and scores tasks wrong?"</text>
+
+      <polygon points="323,168 341,176 323,184" fill="#4a5560"/>
+
+      <!-- Box 2: Hypothesis -->
+      <rect x="347" y="16" width="306" height="320" rx="10" fill="#eef4fa" stroke="#2f6f9f" stroke-width="1.6"/>
+      <text x="365" y="48" font-size="15.5" font-weight="700" fill="#2f6f9f">2. Hypothesis to Check</text>
+      <text x="365" y="80" fill="#1f2a36">When given only the task text and</text>
+      <text x="365" y="100" fill="#1f2a36">prior knowledge (with target and</text>
+      <text x="365" y="120" fill="#1f2a36">design notes hidden), our 4-approach</text>
+      <text x="365" y="140" fill="#1f2a36">solver reliably recovers:</text>
+      <rect x="361" y="162" width="278" height="72" rx="6" fill="#ffffff" stroke="#9cc0de"/>
+      <text x="373" y="185" font-size="12.5" font-weight="700" fill="#2f6f9f">A. Intended Baseline Traps</text>
+      <text x="373" y="205" font-size="12" fill="#1f2a36">On real PF tasks, so built-in obstacles</text>
+      <text x="373" y="222" font-size="12" fill="#1f2a36">are consistently detected.</text>
+      <rect x="361" y="246" width="278" height="74" rx="6" fill="#ffffff" stroke="#9cc0de"/>
+      <text x="373" y="269" font-size="12.5" font-weight="700" fill="#2f6f9f">B. Direct Working Solutions</text>
+      <text x="373" y="289" font-size="12" fill="#1f2a36">On routine tasks, so easy textbook</text>
+      <text x="373" y="306" font-size="12" fill="#1f2a36">problems are caught (no fake failure).</text>
+
+      <polygon points="660,168 678,176 660,184" fill="#4a5560"/>
+
+      <!-- Box 3: Experiment & Interpretation -->
+      <rect x="684" y="16" width="306" height="320" rx="10" fill="#eef7f1" stroke="#2f6f4a" stroke-width="1.6"/>
+      <text x="702" y="48" font-size="15.5" font-weight="700" fill="#2f6f4a">3. Experiment &amp; Interpretation</text>
+      <text x="702" y="80" font-weight="700" fill="#1f2a36">Benchmark: 76 Tasks · 256 Approaches</text>
+      <text x="702" y="102" font-size="12" fill="#1f2a36">• 12 published PF tasks (literature RSMs)</text>
+      <text x="702" y="122" font-size="12" fill="#1f2a36">• 12 routine &amp; control tasks</text>
+      <text x="702" y="142" font-size="12" fill="#1f2a36">• 52 pipeline tasks (pre-saved briefs)</text>
+      <text x="702" y="172" fill="#1f2a36">Run the blind solver (Luna + GPT-4.1)</text>
+      <text x="702" y="192" fill="#1f2a36">and measure Approach Recall (%).</text>
+      <rect x="698" y="214" width="278" height="106" rx="6" fill="#ffffff" stroke="#9cc9ae"/>
+      <text x="710" y="236" font-size="12" font-weight="700" fill="#2f6f4a">How to Interpret the Result:</text>
+      <text x="710" y="256" font-size="12" fill="#1f2a36">• High recall (&gt;85%): Capping at 4 does</text>
+      <text x="710" y="274" font-size="12" fill="#1f2a36">  NOT blind the evaluator; scores reflect</text>
+      <text x="710" y="292" font-size="12" fill="#1f2a36">  the TASK, not solver failure.</text>
+      <text x="710" y="310" font-size="11.5" fill="#4a5560">• Low (&lt;50%): Evaluator would be noisy.</text>
+    </g>
+  </svg>
+  <p class="note">Benchmark config: <code>experiments/configs/pf_solver_recall_benchmark_20261016.json</code> (sha256 <code>1421ee49…</code>). Every solver input is strictly target-blind (<code>student_task</code> + <code>learner_context</code> only).</p>
+</section>
+
+<!-- 29 -->
+<section class="slide" id="s29">
+  <p class="kicker">29 · Solver Validation (2/2) · Benchmark Result &amp; Manual Verification</p>
+  <h2>The solver recovers 85.5% of all 256 approaches (91.4% with partial), 92.9% on expert PF, and 100% on routine tasks</h2>
+  <div class="legend">
+    <span class="sw" style="background:#2f6f4a"></span>Complete match (<code>yes</code>)
+    <span class="sw" style="background:#8abf9e"></span>Partial match (<code>partly</code>)
+    <span class="sw" style="background:#2f6f9f"></span>Task-level PF trap / working-route coverage
+    <span class="sw" style="background:#b5523b"></span>Routine-task direct solve (no fake failure)
+  </div>
+  <svg viewBox="0 0 1000 375" role="img" aria-label="Horizontal bars showing 85.5% complete / 91.4% partial recall across 256 approaches, 92.9% on published PF tasks, 100% naive trap coverage on published PF tasks, and 100% routine-solve sensitivity, plus manual audit summary">
+    <!-- Bar scale: 450px = 100% (x=340 to x=790) -->
+    <g font-family="sans-serif" font-size="12.5">
+      <!-- Bar 1: All 256 Known Approaches -->
+      <text x="10" y="32" font-weight="700" fill="#1f2a36">All Known Approaches (n = 256, 76 tasks)</text>
+      <rect x="340" y="14" width="384.8" height="22" fill="#2f6f4a"/>
+      <rect x="724.8" y="14" width="26.5" height="22" fill="#8abf9e"/>
+      <text x="800" y="30" font-size="12" font-weight="700" fill="#1f2a36">85.5% complete (219/256) · 91.4% w/ partial</text>
+
+      <!-- Bar 2: Published Expert PF Cohort -->
+      <text x="10" y="68" font-weight="700" fill="#1f2a36">Published Expert PF Tasks (n = 28, 12 tasks)</text>
+      <rect x="340" y="50" width="418.1" height="22" fill="#2f6f4a"/>
+      <rect x="758.1" y="50" width="15.7" height="22" fill="#8abf9e"/>
+      <text x="800" y="66" font-size="12" font-weight="700" fill="#1f2a36">92.9% complete (26/28) · 96.4% w/ partial</text>
+
+      <!-- Bar 3: 19-Topic Curriculum Sweep -->
+      <text x="10" y="104" font-weight="700" fill="#1f2a36">19-Topic Curriculum Sweep (n = 75, 19 tasks)</text>
+      <rect x="340" y="86" width="414.0" height="22" fill="#2f6f4a"/>
+      <rect x="754.0" y="86" width="12.2" height="22" fill="#8abf9e"/>
+      <text x="800" y="102" font-size="12" font-weight="700" fill="#1f2a36">92.0% complete (69/75) · 94.7% w/ partial</text>
+
+      <!-- Bar 4: Hits True First Naive Trap on Published PF & Topic Sweep -->
+      <text x="10" y="140" font-weight="700" fill="#2f6f9f">Hits True Naive Trap (Expert PF: 12 tasks)</text>
+      <rect x="340" y="122" width="450.0" height="22" fill="#2f6f9f"/>
+      <text x="800" y="138" font-size="12" font-weight="700" fill="#2f6f9f">100.0% (12/12 expert PF · 89.5% on 19-topic sweep)</text>
+
+      <!-- Bar 5: Finds Complete Working Route on PF Tasks -->
+      <text x="10" y="176" font-weight="700" fill="#2f6f9f">Finds Working Route on PF Tasks (N = 64)</text>
+      <rect x="340" y="158" width="442.8" height="22" fill="#2f6f9f"/>
+      <rect x="782.8" y="158" width="7.2" height="22" fill="#7aa6c7"/>
+      <text x="800" y="174" font-size="12" font-weight="700" fill="#2f6f9f">98.4% complete (63/64) · 100% w/ partial</text>
+
+      <!-- Bar 6: Routine-Solve Sensitivity -->
+      <text x="10" y="212" font-weight="700" fill="#b5523b">Solves Routine Tasks Directly (N = 8 controls)</text>
+      <rect x="340" y="194" width="450.0" height="22" fill="#b5523b"/>
+      <text x="800" y="210" font-size="12" font-weight="700" fill="#b5523b">100.0% (8/8 tasks · 12/12 routine solutions)</text>
+
+      <line x1="340" y1="8" x2="340" y2="224" stroke="#c4cfdb"/>
+      <line x1="790" y1="8" x2="790" y2="224" stroke="#c4cfdb" stroke-dasharray="4 4"/>
+
+      <!-- Bottom Box: Manual Audit Finding & Conclusion -->
+      <rect x="10" y="238" width="980" height="126" rx="8" fill="#f8fafc" stroke="#c4cfdb" stroke-width="1.5"/>
+      <text x="26" y="264" font-size="14" font-weight="700" fill="#1f2a36">Manual Verification (12 Stratified Tasks, 42 Approaches) &amp; Takeaway</text>
+      <text x="26" y="288" font-size="12.5" fill="#1f2a36">• <tspan font-weight="700" fill="#2f6f4a">Judge consistency (42 / 42 verified):</tspan> Manual reading of the solver outputs confirms all 42 sampled yes / partly / no verdicts match the written math.</text>
+      <text x="26" y="310" font-size="12.5" fill="#1f2a36">• <tspan font-weight="700" fill="#2f6f9f">Why old Pipeline R1 skipped 5/9 naive traps:</tspan> In those tasks, the writer had already given away the rule in the prompt (e.g. stating that</text>
+      <text x="26" y="328" font-size="12.5" fill="#1f2a36">  elapsed time includes the pause), turning them into routine problems—so the solver rightly solved them directly instead of faking an error.</text>
+      <text x="26" y="350" font-size="12.5" font-weight="700" fill="#2f6f4a">Conclusion: The 4-approach solver is complete and objective; approach_limits measures the quality of the TASK, not solver blind spots.</text>
+    </g>
+  </svg>
+  <p class="note">Source: <code>experiments/results/pf_solver_recall_20261016/summary.json</code> (Luna + GPT-4.1 panel, mean 4.04 attempts/task; Luna alone achieves 84.4% strict / 89.8% w/ partial). Manual check audited 12 tasks across all 6 cohorts.</p>
+</section>
+
+<!-- 30 -->
+<section class="slide" id="s30">
+  <p class="kicker">30 · Breakdown by generator model (240 Rahimi Main30 + 90 Benchmark v4 Direct)</p>
+  <h2>GPT-4.1 writes open stories that familiar math solves; GPT-5 mini writes guided worksheets</h2>
+  <div class="legend">
+    <span class="sw" style="background:#2f6f9f"></span>GPT-4.1 Direct (n = 120, Main30)
+    <span class="sw" style="background:#b5523b"></span>GPT-5 mini Direct (n = 120, Main30)
+    <span class="sw" style="background:#2f6f4a"></span>Luna Direct V1–V3 (n = 90, Benchmark v4)
+  </div>
+  <svg viewBox="0 0 1000 355" role="img" aria-label="Yes rates by generator model across the five measures and all-five PF pass rate">
+    <!-- Bar scale: 500px = 100% (x=310 to x=810) -->
+    <g>
+      <!-- 1. Target alignment Yes -->
+      <text x="0" y="34" class="big">1. Target alignment (Yes)</text>
+      <rect x="310" y="10" width="312.5" height="16" fill="#2f6f9f"/><text x="630" y="23" class="small">GPT-4.1: 75 / 120 (63% · 28 Partly, 10 No)</text>
+      <rect x="310" y="28" width="445.8" height="16" fill="#b5523b"/><text x="764" y="41" class="small">GPT-5 mini: 107 / 120 (89%)</text>
+      <rect x="310" y="46" width="455.6" height="16" fill="#2f6f4a"/><text x="774" y="59" class="small">Luna V1–V3: 82 / 90 (91%)</text>
+
+      <!-- 2. Math validity Yes (of aligned) -->
+      <text x="0" y="104" class="big">2. Math validity (Yes)</text>
+      <rect x="310" y="80" width="453.3" height="16" fill="#2f6f9f"/><text x="771" y="93" class="small">GPT-4.1: 68 / 75 aligned (91%)</text>
+      <rect x="310" y="98" width="457.9" height="16" fill="#b5523b"/><text x="776" y="111" class="small">GPT-5 mini: 98 / 107 aligned (92%)</text>
+      <rect x="310" y="116" width="463.4" height="16" fill="#2f6f4a"/><text x="781" y="129" class="small">Luna V1–V3: 76 / 82 aligned (93%)</text>
+
+      <!-- 3. Room for invention Yes -->
+      <text x="0" y="174" class="big">5. Room for invention (Yes)</text>
+      <rect x="310" y="150" width="320.8" height="16" fill="#2f6f9f"/><text x="639" y="163" class="small">GPT-4.1: 77 / 120 (64% · 17 Partly, 22 No)</text>
+      <rect x="310" y="168" width="229.2" height="16" fill="#b5523b"/><text x="547" y="181" class="small">GPT-5 mini: 55 / 120 (46% · 43 Partly, 15 No)</text>
+      <rect x="310" y="186" width="472.2" height="16" fill="#2f6f4a"/><text x="790" y="199" class="small">Luna V1–V3: 85 / 90 (94%)</text>
+
+      <!-- 4. Approach limits Yes -->
+      <text x="0" y="244" class="big">4. Approach limits (Yes)</text>
+      <rect x="310" y="220" width="50.0" height="16" fill="#2f6f9f"/><text x="368" y="233" class="small">GPT-4.1: 12 / 120 Yes (10%) · 97 / 120 No (81%)</text>
+      <rect x="310" y="238" width="20.8" height="16" fill="#b5523b"/><text x="339" y="251" class="small">GPT-5 mini: 5 / 120 Yes (4%) · 78 / 120 No (65%)</text>
+      <rect x="310" y="256" width="77.8" height="16" fill="#2f6f4a"/><text x="396" y="269" class="small">Luna V1–V3: 14 / 90 Yes (16%) · 57 / 90 No (63%)</text>
+
+      <!-- 5. Pass all 5 as Real PF -->
+      <text x="0" y="314" class="big">All 5 = Yes (Real PF)</text>
+      <rect x="310" y="290" width="12.5" height="16" fill="#2f6f9f"/><text x="331" y="303" class="small">GPT-4.1: 3 / 120 (2.5%)</text>
+      <rect x="310" y="308" width="4.2" height="16" fill="#b5523b"/><text x="323" y="321" class="small">GPT-5 mini: 1 / 120 (0.8%)</text>
+      <rect x="310" y="326" width="44.4" height="16" fill="#2f6f4a"/><text x="362" y="339" class="small">Luna V1–V3: 8 / 90 (8.9%)</text>
+    </g>
+    <line x1="310" y1="4" x2="310" y2="348" stroke="#c4cfdb"/>
+    <line x1="810" y1="4" x2="810" y2="348" stroke="#c4cfdb" stroke-dasharray="4 4"/>
+    <text x="810" y="354" class="small" text-anchor="middle">100%</text>
+  </svg>
+  <p class="note">Accessibility gate is 98–100% Yes across all three models (119/120, 117/120, 90/90). Despite near-ceiling Rahimi rubric scores (13.3–14.8 / 15), only 1–9% of directly generated tasks satisfy all five PF conditions.</p>
+</section>
+
+<!-- 31 -->
+<section class="slide" id="s31">
+  <p class="kicker">31 · Pipeline Storyline (1/2) · Why Decompose &amp; Why We Tried Eedi MCQs First (Branch A)</p>
+  <h2>To fix direct generation, we decomposed PF design (D1 → D2 → D3) and first tried mining student error paths from MCQs</h2>
+  <svg viewBox="0 0 1000 365" role="img" aria-label="Three-step progression from why direct generation fails to decomposing into D1-D2-D3 and testing Branch A (Eedi MCQ error pathways across 11 conditions and 19,800 distractors)">
+    <g font-family="sans-serif" font-size="13">
+      <!-- Box 1: Why Direct Fails -> Decompose into D1-D2-D3 -->
+      <rect x="10" y="16" width="306" height="325" rx="10" fill="#fbeaea" stroke="#b5523b" stroke-width="1.6"/>
+      <text x="28" y="48" font-size="15.5" font-weight="700" fill="#8f2d2b">1. From Direct Failure to Pipeline</text>
+      <text x="28" y="80" fill="#1f2a36">Direct generation gets high rubric scores,</text>
+      <text x="28" y="100" font-weight="700" fill="#8f2d2b">but 92% fail approach_limits:</text>
+      <text x="28" y="120" fill="#1f2a36">one-shot prompts write a nice story around</text>
+      <text x="28" y="140" fill="#1f2a36">one procedure instead of building a trap.</text>
+      <rect x="24" y="162" width="278" height="162" rx="6" fill="#ffffff" stroke="#e0b4b4"/>
+      <text x="36" y="185" font-size="12.5" font-weight="700" fill="#1f2a36">Our Pipeline Solution (3 Stages):</text>
+      <text x="36" y="210" font-size="12" font-weight="700" fill="#2f6f9f">• Stage D1 (Anticipate):</text>
+      <text x="36" y="228" font-size="12" fill="#1f2a36">  Predict how students will try &amp; fail.</text>
+      <text x="36" y="252" font-size="12" font-weight="700" fill="#2f6f9f">• Stage D2 (Engineer Data):</text>
+      <text x="36" y="270" font-size="12" fill="#1f2a36">  Choose numbers that trigger that trap.</text>
+      <text x="36" y="294" font-size="12" font-weight="700" fill="#2f6f9f">• Stage D3 (Write Task):</text>
+      <text x="36" y="312" font-size="12" fill="#1f2a36">  Write the open story without giveaways.</text>
+
+      <polygon points="323,168 341,176 323,184" fill="#4a5560"/>
+
+      <!-- Box 2: First Idea for Stage D1 (Branch A: MCQ Error Pathways) -->
+      <rect x="347" y="16" width="306" height="325" rx="10" fill="#eef4fa" stroke="#2f6f9f" stroke-width="1.6"/>
+      <text x="365" y="48" font-size="15.5" font-weight="700" fill="#2f6f9f">2. Attempt 1 for D1: Eedi MCQs</text>
+      <text x="365" y="80" font-weight="700" fill="#1f2a36">The Core Design Question:</text>
+      <text x="365" y="100" fill="#1f2a36">Where does Stage D1 get realistic student</text>
+      <text x="365" y="120" fill="#1f2a36">methods and mistakes from?</text>
+      <rect x="361" y="142" width="278" height="96" rx="6" fill="#ffffff" stroke="#9cc0de"/>
+      <text x="373" y="164" font-size="12.5" font-weight="700" fill="#2f6f9f">Branch A Hypothesis (MCQ Pathways):</text>
+      <text x="373" y="184" font-size="12" fill="#1f2a36">Generate wrong MCQ options on Eedi</text>
+      <text x="373" y="202" font-size="12" fill="#1f2a36">with explicit step-by-step error paths</text>
+      <text x="373" y="220" font-size="12" fill="#1f2a36">(faulty_step + reasoning_steps) for D2.</text>
+      <rect x="361" y="248" width="278" height="76" rx="6" fill="#ffffff" stroke="#9cc0de"/>
+      <text x="373" y="270" font-size="12.5" font-weight="700" fill="#1f2a36">What We Ran (6,600 Question-Runs):</text>
+      <text x="373" y="290" font-size="12" fill="#1f2a36">• 200 held-out Eedi items × 3 repeats</text>
+      <text x="373" y="308" font-size="12" fill="#1f2a36">• 11 conditions = 19,800 distractors</text>
+
+      <polygon points="660,168 678,176 660,184" fill="#4a5560"/>
+
+      <!-- Box 3: How We Evaluated MCQ Pathways -->
+      <rect x="684" y="16" width="306" height="325" rx="10" fill="#eef7f1" stroke="#2f6f4a" stroke-width="1.6"/>
+      <text x="702" y="48" font-size="15.5" font-weight="700" fill="#2f6f4a">3. Four-Part Pathway Evaluation</text>
+      <text x="702" y="80" fill="#1f2a36">Instead of only copying Eedi strings (PM),</text>
+      <text x="702" y="100" fill="#1f2a36">we tested if paths are usable for D1:</text>
+      <rect x="698" y="118" width="278" height="46" rx="5" fill="#ffffff" stroke="#9cc9ae"/>
+      <text x="710" y="138" font-size="12" font-weight="700" fill="#2f6f4a">1. Incorrectness (Math Check)</text>
+      <text x="710" y="155" font-size="11.5" fill="#1f2a36">Not equivalent to the correct answer.</text>
+      <rect x="698" y="172" width="278" height="46" rx="5" fill="#ffffff" stroke="#9cc9ae"/>
+      <text x="710" y="192" font-size="12" font-weight="700" fill="#2f6f4a">2. Student Plausibility (0–2, Blinded)</text>
+      <text x="710" y="209" font-size="11.5" fill="#1f2a36">Realistic error (blinded to rationale).</text>
+      <rect x="698" y="226" width="278" height="46" rx="5" fill="#ffffff" stroke="#9cc9ae"/>
+      <text x="710" y="246" font-size="12" font-weight="700" fill="#2f6f4a">3. Path Coherence</text>
+      <text x="710" y="263" font-size="11.5" fill="#1f2a36">Steps actually reach the wrong option.</text>
+      <rect x="698" y="280" width="278" height="46" rx="5" fill="#ffffff" stroke="#9cc9ae"/>
+      <text x="710" y="300" font-size="12" font-weight="700" fill="#2f6f4a">4. Pathway Diversity</text>
+      <text x="710" y="317" font-size="11.5" fill="#1f2a36">Distinct faulty steps across options.</text>
+    </g>
+  </svg>
+  <p class="note">Sources: <code>docs/mcq/MCQ_GENERATION_OVERVIEW.md</code> and <code>experiments/results/phase1_mcq/structured_generation_full_v1_20260810/</code> (200 held-out Eedi questions, 11 conditions, 3 runs = 6,600 question-runs and 19,800 structured distractors).</p>
+</section>
+
+<!-- 32 -->
+<section class="slide" id="s32">
+  <p class="kicker">32 · Pipeline Storyline (2/2) · What MCQs Taught Us &amp; Why We Pivoted to the Learning Commons Graph (Branch B)</p>
+  <h2>MCQs capture post-instruction slips, whereas real PF traps require valid prior tools that hit a limit</h2>
+  <svg viewBox="0 0 1000 390" role="img" aria-label="Top: MCQ evaluation results across 19,800 distractors; Bottom: side-by-side contrast between Branch A (post-instruction MCQ slips) and Branch B (pre-instruction curriculum tools via Learning Commons)">
+    <g font-family="sans-serif" font-size="12.5">
+      <!-- Top Box: What Worked in the 19,800-Distractor MCQ Study -->
+      <rect x="10" y="10" width="980" height="146" rx="8" fill="#f8fafc" stroke="#c4cfdb" stroke-width="1.5"/>
+      <text x="26" y="34" font-size="14" font-weight="700" fill="#1f2a36">A. What the 19,800-Distractor MCQ Benchmark Showed (11 Conditions · 200 Eedi Items)</text>
+
+      <!-- 3 compact metric cards inside Top Box -->
+      <rect x="26" y="48" width="298" height="94" rx="6" fill="#ffffff" stroke="#2f6f9f" stroke-width="1.4"/>
+      <text x="40" y="70" font-weight="700" fill="#2f6f9f">Few-Shot RAG Best Matches Human Errors</text>
+      <text x="40" y="92" font-size="12" fill="#1f2a36">• Normalized PM: <tspan font-weight="700">23.6% → 35.3%</tspan> (+11.7%)</text>
+      <text x="40" y="112" font-size="12" fill="#1f2a36">• LLM-Verified PM: <tspan font-weight="700">36.4% → 47.1%</tspan> (+10.7%)</text>
+      <text x="40" y="130" font-size="11" fill="#4a5560">Retrieving similar Eedi items grounds answers.</text>
+
+      <rect x="348" y="48" width="302" height="94" rx="6" fill="#ffffff" stroke="#2f6f4a" stroke-width="1.4"/>
+      <text x="362" y="70" font-weight="700" fill="#2f6f4a">Structured Paths Are Coherent &amp; Distinct</text>
+      <text x="362" y="92" font-size="12" fill="#1f2a36">• Path Coherence: <tspan font-weight="700">92.3% – 94.9%</tspan> reach option</text>
+      <text x="362" y="112" font-size="12" fill="#1f2a36">• Pathway Diversity: <tspan font-weight="700">74.7% → 85.5%</tspan> distinct</text>
+      <text x="362" y="130" font-size="11" fill="#4a5560">Misconception labels separate faulty steps.</text>
+
+      <rect x="674" y="48" width="300" height="94" rx="6" fill="#fdf6e6" stroke="#b08a3e" stroke-width="1.4"/>
+      <text x="688" y="70" font-weight="700" fill="#7d5d1b">The Alignment–Diversity Trade-Off</text>
+      <text x="688" y="92" font-size="12" fill="#1f2a36">• Direct / RAG: high plausibility (<tspan font-weight="700">1.40–1.46 / 2</tspan>)</text>
+      <text x="688" y="112" font-size="12" fill="#1f2a36">• Label conditioning: higher diversity, lower PM</text>
+      <text x="688" y="130" font-size="11" fill="#4a5560">Forced labels can feel less natural on the item.</text>
+
+      <!-- Bottom Half: The Key Insight — Why We Pivoted from Branch A to Branch B -->
+      <text x="16" y="182" font-size="14" font-weight="700" fill="#1f2a36">B. The Key Pedagogical Finding: Why Stage D1 Pivoted from MCQ Slips (Branch A) to Curriculum Tools (Branch B)</text>
+
+      <!-- Left Box: Branch A (MCQ Slips) -->
+      <rect x="10" y="196" width="465" height="182" rx="10" fill="#fbeaea" stroke="#b5523b" stroke-width="1.6"/>
+      <text x="28" y="224" font-size="15" font-weight="700" fill="#8f2d2b">Branch A · What Eedi MCQs Give Us</text>
+      <text x="28" y="248" font-weight="700" fill="#1f2a36">Post-Instruction Procedural Slips (After Teaching)</text>
+      <text x="28" y="272" font-size="12" fill="#1f2a36">• Careless execution errors on already-taught rules:</text>
+      <text x="28" y="292" font-size="12" fill="#1f2a36">  e.g. adding denominators (1/2 + 1/3 = 2/5), dropping a</text>
+      <text x="28" y="310" font-size="12" fill="#1f2a36">  negative sign, or misaligning decimal places.</text>
+      <rect x="24" y="324" width="437" height="42" rx="5" fill="#ffffff" stroke="#e0b4b4"/>
+      <text x="36" y="343" font-size="12" font-weight="700" fill="#8f2d2b">Why this fails for PF:</text>
+      <text x="168" y="343" font-size="12" fill="#1f2a36">Building a task around an arithmetic slip</text>
+      <text x="36" y="359" font-size="12" fill="#1f2a36">only creates a trick question—not Productive Failure.</text>
+
+      <polygon points="484,280 512,288 484,296" fill="#2f6f4a"/>
+
+      <!-- Right Box: Branch B (Learning Commons Curriculum Graph) -->
+      <rect x="520" y="196" width="470" height="182" rx="10" fill="#eef7f1" stroke="#2f6f4a" stroke-width="1.8"/>
+      <text x="538" y="224" font-size="15" font-weight="700" fill="#2f6f4a">Branch B · What Real PF Design Needs</text>
+      <text x="538" y="248" font-weight="700" fill="#1f2a36">Pre-Instruction Valid Tools That Hit a Limit (S_prior → S_target)</text>
+      <text x="538" y="272" font-size="12" fill="#1f2a36">• Methods that ARE valid on simpler problems (e.g. Mean or</text>
+      <text x="538" y="292" font-size="12" fill="#1f2a36">  Range), but break down on the new target (Variance/SD</text>
+      <text x="538" y="310" font-size="12" fill="#1f2a36">  when players tie on both Mean and Range).</text>
+      <rect x="534" y="324" width="442" height="42" rx="5" fill="#ffffff" stroke="#9cc9ae"/>
+      <text x="546" y="343" font-size="12" font-weight="700" fill="#2f6f4a">Our Pivot:</text>
+      <text x="615" y="343" font-size="12" fill="#1f2a36">Ground Stage D1 in the Learning Commons graph</text>
+      <text x="546" y="359" font-size="12" fill="#1f2a36">(S_prior buildsTowards S_target) → raises PF pass rate to 67–78%.</text>
+    </g>
+  </svg>
+  <p class="note">Sources: <code>docs/mcq/MCQ_EVALUATION_OVERVIEW.md</code> (<code>structured_eval_full_v2_20260810/aggregated.json</code>) and <code>docs/pf-generation/PF_PIPELINE.md</code> Section 4. This finding bridges Phase 1 (MCQ error pathways) to Phase 2 (curriculum-grounded PF pipeline).</p>
+</section>
+
+<!-- 33 -->
+<section class="slide" id="s33">
+  <p class="kicker">33 · Improved PF Pipeline vs. Direct Baselines (pf-three-role/v2.9)</p>
+  <h2>Adding the Learning Commons graph and impasse checks raises All-5 PF pass rate from 33% to 78%</h2>
+  <div class="legend">
+    <span class="sw" style="background:#b5523b"></span>Direct Generation Baselines
+    <span class="sw" style="background:#8fa4b8"></span>Old Saved Pipeline (Oct 11)
+    <span class="sw" style="background:#2f6f4a"></span>Improved Pipeline (LC Graph + Impasse Package, Rounds 1 &amp; 2)
+  </div>
+  <svg viewBox="0 0 1000 340" role="img" aria-label="Comparison of All-5 Yes PF pass rates under v2.9 across Direct baselines, Old Pipeline, and Improved Pipeline Rounds 1 and 2">
+    <!-- Bar scale: 500px = 100% (x=340 to x=840) -->
+    <g>
+      <text x="0" y="38" class="big">Benchmark v4 Direct (n = 6)</text>
+      <rect x="340" y="16" width="83.3" height="28" fill="#b5523b"/>
+      <text x="433" y="36" class="small">1 / 6 All-5 Yes (17%) · Align 5/6, Valid 3/6, Limits 3/6</text>
+
+      <text x="0" y="92" class="big">Rahimi Main30 Direct (n = 16)</text>
+      <rect x="340" y="70" width="156.3" height="28" fill="#b5523b"/>
+      <text x="506" y="90" class="small">5 / 16 All-5 Yes (31%) · Align 12/16, Valid 8/16, Invent 9/16</text>
+
+      <text x="0" y="146" class="big">All Direct Combined (n = 31)</text>
+      <rect x="340" y="124" width="193.5" height="28" fill="#b5523b"/>
+      <text x="543" y="144" class="small">12 / 31 All-5 Yes (39%) · Valid 18/31, Invent 23/31, Limits 22/31</text>
+
+      <text x="0" y="200" class="big">Old Saved Pipeline (n = 9)</text>
+      <rect x="340" y="178" width="166.7" height="28" fill="#8fa4b8"/>
+      <text x="516" y="198" class="small">3 / 9 All-5 Yes (33%) · Valid 6/9, Invent 6/9, Limits 7/9</text>
+
+      <text x="0" y="254" class="big">Improved Pipeline · Round 1 (n = 9)</text>
+      <rect x="340" y="232" width="277.8" height="28" fill="#2f6f9f"/>
+      <text x="627" y="252" class="small">5 / 9 All-5 Yes (56%) · Align 9/9, Access 9/9, Invent 9/9, Limits 8/9</text>
+
+      <text x="0" y="308" class="big">Improved Pipeline · Round 2 (n = 9)</text>
+      <rect x="340" y="286" width="388.9" height="28" fill="#2f6f4a"/>
+      <text x="738" y="306" class="small" style="font-weight:600;fill:#2f6f4a">7 / 9 All-5 Yes (78%) · Align 9/9, Access 9/9, Limits 9/9, Invent 8/9, Valid 7/9</text>
+    </g>
+    <line x1="340" y1="8" x2="340" y2="324" stroke="#c4cfdb"/>
+    <line x1="840" y1="8" x2="840" y2="324" stroke="#c4cfdb" stroke-dasharray="4 4"/>
+    <text x="840" y="336" class="small" text-anchor="middle">100%</text>
+  </svg>
+  <p class="note">Sources: <code>pf_generated_tasks_v29_20261015</code>, <code>pf_pipeline_lc_impasse_v2_20261015</code> (Round 1), and <code>pf_pipeline_lc_impasse_v3_20261015</code> (Round 2). Nine fresh generations (3 families × 3 repeats); computational model judgements, not budget-matched or human-validated.</p>
+</section>
+
+<!-- 34 -->
+<section class="slide" id="s34">
+  <p class="kicker">34 · Old pipeline vs refined pipeline (pf-three-role/v2.9, same evaluator for all three)</p>
+  <h2>The refined pipeline passes more tasks on every measure, but only 9 tasks per arm</h2>
+  <div class="legend">
+    <span class="sw" style="background:#8fa4b8"></span>Old saved pipeline (8 of 9 evaluated; 1 not run)
+    <span class="sw" style="background:#2f6f9f"></span>Refined · Round 1 (n = 9)
+    <span class="sw" style="background:#2f6f4a"></span>Refined · Round 2 (n = 9)
+  </div>
+  <svg viewBox="0 0 1000 390" role="img" aria-label="Number of tasks passing each PF measure: old pipeline versus two refined rounds, out of nine tasks each">
+    <!-- Each task = 60 px (9 tasks = 540 px, x = 260 to 800) -->
+    <g>
+      <text x="0" y="36" class="big">1. Target alignment</text>
+      <rect x="260" y="20" width="480" height="14" fill="#8fa4b8"/><text x="748" y="31" class="small">8 / 9</text>
+      <rect x="260" y="37" width="540" height="14" fill="#2f6f9f"/><text x="808" y="48" class="small">9 / 9</text>
+      <rect x="260" y="54" width="540" height="14" fill="#2f6f4a"/><text x="808" y="65" class="small">9 / 9</text>
+
+      <text x="0" y="94" class="big">2. Mathematical validity</text>
+      <rect x="260" y="78" width="360" height="14" fill="#8fa4b8"/><text x="628" y="89" class="small">6 / 9</text>
+      <rect x="260" y="95" width="360" height="14" fill="#2f6f9f"/><text x="628" y="106" class="small">6 / 9</text>
+      <rect x="260" y="112" width="420" height="14" fill="#2f6f4a"/><text x="688" y="123" class="small">7 / 9</text>
+
+      <text x="0" y="152" class="big">3. Prior-knowledge access</text>
+      <rect x="260" y="136" width="480" height="14" fill="#8fa4b8"/><text x="748" y="147" class="small">8 / 9</text>
+      <rect x="260" y="153" width="540" height="14" fill="#2f6f9f"/><text x="808" y="164" class="small">9 / 9</text>
+      <rect x="260" y="170" width="540" height="14" fill="#2f6f4a"/><text x="808" y="181" class="small">9 / 9</text>
+
+      <text x="0" y="210" class="big">4. Approach limits</text>
+      <rect x="260" y="194" width="420" height="14" fill="#8fa4b8"/><text x="688" y="205" class="small">7 / 9</text>
+      <rect x="260" y="211" width="480" height="14" fill="#2f6f9f"/><text x="748" y="222" class="small">8 / 9</text>
+      <rect x="260" y="228" width="540" height="14" fill="#2f6f4a"/><text x="808" y="239" class="small">9 / 9</text>
+
+      <text x="0" y="268" class="big">5. Room for invention</text>
+      <rect x="260" y="252" width="360" height="14" fill="#8fa4b8"/><text x="628" y="263" class="small">6 / 9</text>
+      <rect x="260" y="269" width="540" height="14" fill="#2f6f9f"/><text x="808" y="280" class="small">9 / 9</text>
+      <rect x="260" y="286" width="480" height="14" fill="#2f6f4a"/><text x="748" y="297" class="small">8 / 9</text>
+
+      <text x="0" y="326" class="big">All five = yes</text>
+      <rect x="260" y="310" width="180" height="14" fill="#8fa4b8"/><text x="448" y="321" class="small">3 / 9</text>
+      <rect x="260" y="327" width="300" height="14" fill="#2f6f9f"/><text x="568" y="338" class="small">5 / 9</text>
+      <rect x="260" y="344" width="420" height="14" fill="#2f6f4a"/><text x="688" y="355" class="small" style="font-weight:600;fill:#2f6f4a">7 / 9</text>
+    </g>
+    <line x1="260" y1="6" x2="260" y2="366" stroke="#c4cfdb"/>
+    <line x1="800" y1="6" x2="800" y2="366" stroke="#c4cfdb" stroke-dasharray="4 4"/>
+    <text x="800" y="382" class="small" text-anchor="middle">9 of 9 tasks</text>
+  </svg>
+  <p class="note">Sources: <code>pf_generated_tasks_v29_20261015</code> (old) · <code>pf_pipeline_lc_impasse_v2_20261015</code> (Round 1) · <code>pf_pipeline_lc_impasse_v3_20261015</code> (Round 2). Computational model judgements. One old-pipeline task (variance) hit the model-call budget before any judgment, so the old arm has 8 evaluated tasks; its all-five count is 3 of 8 evaluated, and the bars above show it on the 9-task scale. The three families were used to develop the Round 2 prompts, so this is not a holdout test. Each arm has nine tasks from one run, so the differences are not statistically established. The counts of tasks that no familiar approach fully solves are 2 for the old pipeline, 2 for Round 1, and 0 for Round 2; the reasons for this change have not been analysed.</p>
+</section>
+
+<!-- 35 -->
+<section class="slide" id="s35">
+  <p class="kicker">35 · Per-task view of the four arms</p>
+  <h2>Each task and measure: where the refinement added passes</h2>
+  <img src="figures/pf_pipeline_rounds_20261016.png" alt="Heatmap of each task's five measures for the old pipeline, Round 1, Round 2 and the generalized check, with bars of pass counts per measure" style="width:100%;height:auto">
+  <p class="note">Computational judgments (pf-three-role v2.9), not human ratings. Built by <code>scripts/plot_pf_pipeline_rounds.py</code> from saved evaluations only; no model calls. Old arm: 8 of 9 tasks evaluated. Generalized check: 3 tasks, one repeat per family.</p>
+</section>
+
+<!-- 36 -->
+<section class="slide" id="s36">
+  <p class="kicker">36 · Motivation and changes for each refinement round</p>
+  <h2>Each round responded to the failures of the one before</h2>
+  <svg viewBox="0 0 1000 405" role="img" aria-label="Four boxes showing, for the baseline, Round 1, Round 2 and the generalized check, the motivation, the changes and the result">
+    <g font-family="sans-serif" font-size="12">
+      <!-- Baseline -->
+      <rect x="10" y="20" width="224" height="350" rx="8" fill="#f3f5f8" stroke="#8fa4b8"/>
+      <text x="22" y="50" font-size="15" font-weight="700" fill="#1f2a36">Baseline: old pipeline</text>
+      <text x="22" y="82" font-weight="700" fill="#4a5560">Why</text>
+      <text x="22" y="102" fill="#1f2a36">Familiar method solved 7 of 9</text>
+      <text x="22" y="120" fill="#1f2a36">Writer added coaching menus</text>
+      <text x="22" y="138" fill="#1f2a36">Some briefs left validity open</text>
+      <text x="22" y="170" font-weight="700" fill="#4a5560">Change</text>
+      <text x="22" y="190" fill="#1f2a36">None (reference arm)</text>
+      <text x="22" y="292" font-weight="700" fill="#4a5560">Result</text>
+      <text x="22" y="312" font-weight="700" fill="#1f2a36">3 of 8 evaluated all five</text>
+      <text x="22" y="330" fill="#1f2a36">1 task not run (model budget)</text>
+
+      <!-- Round 1 -->
+      <rect x="262" y="20" width="224" height="350" rx="8" fill="#f3f5f8" stroke="#2f6f9f"/>
+      <text x="274" y="50" font-size="15" font-weight="700" fill="#1f2a36">Round 1</text>
+      <text x="274" y="82" font-weight="700" fill="#4a5560">Why</text>
+      <text x="274" y="102" fill="#1f2a36">Fix the baseline failures</text>
+      <text x="274" y="142" font-weight="700" fill="#4a5560">Changes</text>
+      <text x="274" y="162" fill="#1f2a36">Learning Commons prerequisites</text>
+      <text x="274" y="180" fill="#1f2a36">Brief: shortcut needs a limit</text>
+      <text x="274" y="198" fill="#1f2a36">Data check: shortcut must fail</text>
+      <text x="274" y="216" fill="#1f2a36">Writer: no coaching menus</text>
+      <text x="274" y="292" font-weight="700" fill="#4a5560">Result</text>
+      <text x="274" y="312" font-weight="700" fill="#1f2a36">5 of 9 all five yes</text>
+      <text x="274" y="330" fill="#1f2a36">Failures: 3 validity, 1 limits</text>
+
+      <!-- Round 2 -->
+      <rect x="514" y="20" width="224" height="350" rx="8" fill="#f3f5f8" stroke="#2f6f4a"/>
+      <text x="526" y="50" font-size="15" font-weight="700" fill="#1f2a36">Round 2</text>
+      <text x="526" y="82" font-weight="700" fill="#4a5560">Why</text>
+      <text x="526" y="102" fill="#1f2a36">Fix Round 1 validity failures</text>
+      <text x="526" y="142" font-weight="700" fill="#4a5560">Changes</text>
+      <text x="526" y="162" fill="#1f2a36">Rate task: keep the claim</text>
+      <text x="526" y="180" fill="#1f2a36">Consistency defined plainly</text>
+      <text x="526" y="198" fill="#1f2a36">Fair division: fixed numbers</text>
+      <text x="526" y="216" fill="#1f2a36">Any valid solution is accepted</text>
+      <text x="526" y="292" font-weight="700" fill="#4a5560">Result</text>
+      <text x="526" y="312" font-weight="700" fill="#1f2a36">7 of 9 all five yes</text>
+      <text x="526" y="330" fill="#1f2a36">Validity 2, invention 1 failed</text>
+
+      <!-- Generalized check -->
+      <rect x="766" y="20" width="224" height="350" rx="8" fill="#f3f5f8" stroke="#b08a3e"/>
+      <text x="778" y="50" font-size="15" font-weight="700" fill="#1f2a36">Generalized check</text>
+      <text x="778" y="82" font-weight="700" fill="#4a5560">Why</text>
+      <text x="778" y="102" fill="#1f2a36">Audit: family-specific rules</text>
+      <text x="778" y="142" font-weight="700" fill="#4a5560">Changes</text>
+      <text x="778" y="162" fill="#1f2a36">Three general mechanisms</text>
+      <text x="778" y="180" fill="#1f2a36">General checks, plain wording</text>
+      <text x="778" y="198" fill="#1f2a36">Writer keeps the conjecture</text>
+      <text x="778" y="292" font-weight="700" fill="#4a5560">Result</text>
+      <text x="778" y="312" font-weight="700" fill="#1f2a36">2 of 3 all five yes</text>
+      <text x="778" y="330" fill="#1f2a36">One repeat; not comparable</text>
+      <text x="778" y="348" fill="#1f2a36">with the 9-task rounds</text>
+    </g>
+    <polygon points="240,190 256,200 240,210" fill="#8fa4b8"/>
+    <polygon points="492,190 508,200 492,210" fill="#2f6f9f"/>
+    <polygon points="744,190 760,200 744,210" fill="#2f6f4a"/>
+    <text x="500" y="396" text-anchor="middle" font-size="11" fill="#4a5560" font-family="sans-serif">Scores: pf-three-role v2.9 model judgments (not human ratings). Prompt changes are verified from saved system prompts.</text>
+  </svg>
+  <p class="note">Round 1 and Round 2 differ only in the brief-proposal and writer prompts; the Round 2 changes added task-specific numbers, which the generalization pass then replaced with general mechanisms.</p>
+</section>
+
+<!-- 37 -->
+<section class="slide" id="s37">
+  <p class="kicker">37 · Learning Commons Grounding — Experiment Design (3 Arms, Prior-Set Validity &amp; Solver Trap Check)</p>
+  <h2>Each arm outputs a prior-skill set K_prior and a task T; we test left-to-right validity (Gate 1) and whether a K_prior-only solver hits the trap (Gate 2)</h2>
+  <svg viewBox="0 0 1000 440" role="img" aria-label="Experiment design diagram showing 3 generator arms outputting a prior skill set K_prior and Task T, followed by Gate 1 left-to-right set validity and Gate 2 K_prior-only solver check">
+    <g font-family="sans-serif" font-size="12">
+      <!-- STEP 1: Input + 3 Arms -->
+      <rect x="10" y="8" width="980" height="128" rx="8" fill="#f8fafc" stroke="#c4cfdb"/>
+      <text x="24" y="29" font-size="13" font-weight="700" fill="#1f2a36">Step 1 · Common Input &amp; Three Generator Arms (each outputs Prior Set K_prior = {k1, ..., km} + Task T)</text>
+
+      <!-- Clean input box -->
+      <rect x="24" y="40" width="210" height="84" rx="6" fill="#ffffff" stroke="#8fa4b8" stroke-width="1.5"/>
+      <text x="36" y="61" font-size="12.5" font-weight="700" fill="#1f2a36">Clean Input (30 Topics)</text>
+      <text x="36" y="80" font-size="11.5" fill="#1f2a36">• Target concept C_target + Grade</text>
+      <text x="36" y="97" font-size="11" font-weight="700" fill="#8f2d2b">• No trap hint in prompt</text>
+      <text x="36" y="113" font-size="11" fill="#4a5560">• No curated D1 teacher list</text>
+
+      <!-- Arrows to 3 arms -->
+      <line x1="234" y1="56" x2="276" y2="52" stroke="#8fa4b8" stroke-width="1.8"/>
+      <line x1="234" y1="82" x2="276" y2="82" stroke="#2f6f9f" stroke-width="1.8"/>
+      <line x1="234" y1="108" x2="276" y2="112" stroke="#2f6f4a" stroke-width="1.8"/>
+
+      <!-- Arm 1 -->
+      <rect x="278" y="38" width="445" height="26" rx="4" fill="#ffffff" stroke="#8fa4b8"/>
+      <text x="290" y="55" font-size="11.5" font-weight="700" fill="#4a5560">Arm 1 · Direct Generation:</text>
+      <text x="458" y="55" font-size="11.5" fill="#1f2a36">One-shot LLM proposes K_prior = {k1..km} + Task T</text>
+
+      <!-- Arm 2 -->
+      <rect x="278" y="69" width="445" height="26" rx="4" fill="#ffffff" stroke="#2f6f9f"/>
+      <text x="290" y="86" font-size="11.5" font-weight="700" fill="#2f6f9f">Arm 2 · Pipeline without LC:</text>
+      <text x="466" y="86" font-size="11.5" fill="#1f2a36">Stage D1 guesses K_prior = {k1..km}  ---&gt;  D2a/D2b/D3 builds Task T</text>
+
+      <!-- Arm 3 -->
+      <rect x="278" y="100" width="445" height="26" rx="4" fill="#eef7f1" stroke="#2f6f4a" stroke-width="1.5"/>
+      <text x="290" y="117" font-size="11.5" font-weight="700" fill="#2f6f4a">Arm 3 · Pipeline with LC:</text>
+      <text x="450" y="117" font-size="11.5" fill="#1f2a36">Stage D1 gets LC buildsTowards graph  ---&gt;  D2a/D2b/D3 builds Task T</text>
+
+      <!-- Output box -->
+      <line x1="723" y1="82" x2="756" y2="82" stroke="#1f2a36" stroke-width="1.8"/>
+      <polygon points="754,77 766,82 754,87" fill="#1f2a36"/>
+      <rect x="768" y="40" width="208" height="84" rx="6" fill="#eef4fa" stroke="#2f6f9f" stroke-width="1.5"/>
+      <text x="780" y="62" font-size="12" font-weight="700" fill="#2f6f9f">Arm Output (Same Format)</text>
+      <text x="780" y="82" font-size="11.5" font-weight="700" fill="#1f2a36">1. Set K_prior = {k1, ..., km}</text>
+      <text x="780" y="100" font-size="11.5" font-weight="700" fill="#1f2a36">2. Student Task T</text>
+      <text x="780" y="116" font-size="10.5" fill="#4a5560">(Evaluated blindly with the same rules)</text>
+
+      <!-- Arrow down to Gate 1 -->
+      <line x1="500" y1="136" x2="500" y2="154" stroke="#1f2a36" stroke-width="2"/>
+      <polygon points="494,152 500,162 506,152" fill="#1f2a36"/>
+
+      <!-- STEP 2: GATE 1 -->
+      <rect x="10" y="164" width="980" height="126" rx="8" fill="#ffffff" stroke="#2f6f9f" stroke-width="1.6"/>
+      <text x="24" y="186" font-size="13.5" font-weight="700" fill="#2f6f9f">Gate 1 · Left-to-Right Validity of the Set K_prior = {k1, ..., km}</text>
+
+      <!-- Left-to-right progression bar inside Gate 1 -->
+      <rect x="24" y="196" width="540" height="82" rx="6" fill="#f8fafc" stroke="#c4cfdb"/>
+      <text x="36" y="214" font-size="11.5" font-weight="700" fill="#1f2a36">Left-to-Right Rule for each ki (skips in between are allowed):</text>
+      <rect x="36" y="222" width="118" height="24" rx="4" fill="#eef7f1" stroke="#2f6f4a"/>
+      <text x="95" y="238" text-anchor="middle" font-size="11" font-weight="700" fill="#2f6f4a">Basic ki (Valid)</text>
+      <text x="164" y="238" font-size="12" font-weight="700" fill="#2f6f4a">---&gt; ... ---&gt;</text>
+      <rect x="234" y="222" width="142" height="24" rx="4" fill="#eef7f1" stroke="#2f6f4a"/>
+      <text x="305" y="238" text-anchor="middle" font-size="11" font-weight="700" fill="#2f6f4a">Direct Prereq ki (Valid)</text>
+      <text x="386" y="238" font-size="12" font-weight="700" fill="#8f2d2b">===&gt;</text>
+      <rect x="418" y="222" width="134" height="24" rx="4" fill="#fbeaea" stroke="#b94a48"/>
+      <text x="485" y="238" text-anchor="middle" font-size="11" font-weight="700" fill="#8f2d2b">C_target (Spoiler!)</text>
+      <text x="36" y="266" font-size="11" fill="#4a5560">• Valid ki: arrow ki ---&gt; ... ---&gt; C_target exists AND ki helps start Task T.   • Invalid ki: Irrelevant/unusable OR Spoiler (&gt;= C_target).</text>
+
+      <!-- Set-level Gate 1 decision -->
+      <rect x="580" y="196" width="396" height="82" rx="6" fill="#fbeaea" stroke="#e0b4b4"/>
+      <text x="594" y="215" font-size="12" font-weight="700" fill="#8f2d2b">Set-Level Gate 1 Decision:</text>
+      <text x="594" y="234" font-size="11" fill="#1f2a36">• Score 0 (Invalid Set): ANY ki in K_prior (or their combination)</text>
+      <text x="594" y="249" font-size="11" fill="#1f2a36">  is a Spoiler (&gt;= C_target), OR zero ki are valid &amp; usable on Task T.</text>
+      <text x="594" y="268" font-size="11" font-weight="700" fill="#2f6f4a">• Pass Gate 1: No spoilers, and K_valid = {valid ki} is non-empty.</text>
+
+      <!-- Arrow down to Gate 2 -->
+      <line x1="500" y1="290" x2="500" y2="308" stroke="#2f6f4a" stroke-width="2"/>
+      <polygon points="494,306 500,316 506,306" fill="#2f6f4a"/>
+
+      <!-- STEP 3: GATE 2 -->
+      <rect x="10" y="318" width="980" height="114" rx="8" fill="#ffffff" stroke="#2f6f4a" stroke-width="1.6"/>
+      <text x="24" y="340" font-size="13.5" font-weight="700" fill="#2f6f4a">Gate 2 · K_valid-Only Solver Tries Task T (using ONLY the valid prior skills K_valid)</text>
+
+      <!-- Score 1 box -->
+      <rect x="24" y="350" width="465" height="70" rx="6" fill="#fdf6e6" stroke="#d9b25f"/>
+      <text x="38" y="370" font-size="12" font-weight="700" fill="#7d5d1b">Score 1 · Valid Prior Set, but Trap Bypassed / Off-Target</text>
+      <text x="38" y="388" font-size="11" fill="#1f2a36">• Bypass: AT LEAST ONE ki in K_valid (or their combination) directly</text>
+      <text x="38" y="404" font-size="11" fill="#1f2a36">  gets the right answer/winner on Task T, OR fails on an unrelated chore.</text>
+
+      <!-- Score 2 box -->
+      <rect x="511" y="350" width="465" height="70" rx="6" fill="#eef7f1" stroke="#2f6f4a"/>
+      <text x="525" y="370" font-size="12" font-weight="700" fill="#2f6f4a">Score 2 · Valid Prior Set + Productive Trap Toward C_target</text>
+      <text x="525" y="388" font-size="11" fill="#1f2a36">• Trap Hit: Skills in K_valid produce concrete attempts on Task T that</text>
+      <text x="525" y="404" font-size="11" fill="#1f2a36">  conflict or fall short on T's numbers for the exact reason C_target is needed.</text>
+    </g>
+  </svg>
+  <p class="note">Also track the valid-skill ratio <code>|K_valid| / |K_prior|</code> to see how many proposed prior skills in each arm's set are usable stepping stones rather than irrelevant filler.</p>
+</section>
+
+<!-- 38 -->
+<section class="slide" id="s38">
+  <p class="kicker">38 · Learning Commons Grounding — 30-Topic 3-Arm Measured Results (Grades 5–10, 90 Tasks)</p>
+  <h2>Gate 1 invalid/spoiler sets drop from 15/30 (Direct) to 4/30 (Pipeline without LC) to 0/30 (Pipeline with LC), raising productive traps from 6/30 to 17/30 to 21/30</h2>
+  <svg viewBox="0 0 1000 400" role="img" aria-label="Stacked horizontal bar chart comparing Direct Generation, Pipeline without LC, and Pipeline with LC across 30 curriculum topics on Gate 1 Prior-Set Validity and Gate 2 Solver Trap Check">
+    <g font-family="sans-serif" font-size="12.5">
+      <!-- Legend -->
+      <rect x="20" y="14" width="16" height="16" rx="3" fill="#b94a48"/>
+      <text x="42" y="27" font-weight="700" fill="#8f2d2b">Score 0 · Failed Gate 1 (Invalid / Spoiler K_prior Set)</text>
+      <rect x="370" y="14" width="16" height="16" rx="3" fill="#e6b85c"/>
+      <text x="392" y="27" font-weight="700" fill="#7d5d1b">Score 1 · Passed Gate 1, Failed Gate 2 (Trap Bypassed)</text>
+      <rect x="725" y="14" width="16" height="16" rx="3" fill="#2f6f4a"/>
+      <text x="747" y="27" font-weight="700" fill="#2f6f4a">Score 2 · Passed Both (Productive Trap)</text>
+
+      <!-- Bar chart area (30 topics = 600px -> 20px per topic, starting at x=250) -->
+      <!-- Arm 1: Direct Generation (15 Score 0 = 300px, 9 Score 1 = 180px, 6 Score 2 = 120px) -->
+      <text x="20" y="84" font-size="14" font-weight="700" fill="#4a5560">Arm 1 · Direct Generation</text>
+      <text x="20" y="103" font-size="11.5" fill="#4a5560">One-shot (K_prior + Task T)</text>
+      <rect x="250" y="68" width="300" height="36" fill="#b94a48"/>
+      <text x="400" y="91" text-anchor="middle" font-weight="700" fill="#ffffff">15 / 30 invalid K_prior (50.0%)</text>
+      <rect x="550" y="68" width="180" height="36" fill="#f3dfb3" stroke="#d9b25f"/>
+      <text x="640" y="91" text-anchor="middle" font-weight="700" fill="#7d5d1b">9 / 30 bypassed</text>
+      <rect x="730" y="68" width="120" height="36" fill="#8fa4b8"/>
+      <text x="790" y="91" text-anchor="middle" font-weight="700" fill="#ffffff">6 / 30 (20%)</text>
+      <text x="862" y="84" font-size="13" font-weight="700" fill="#1f2a36">Mean: 0.70 / 2.0</text>
+      <text x="862" y="102" font-size="11" font-weight="700" fill="#8f2d2b">15/30 failed Gate 1</text>
+
+      <!-- Arm 2: Pipeline without LC (4 Score 0 = 80px, 9 Score 1 = 180px, 17 Score 2 = 340px) -->
+      <text x="20" y="158" font-size="14" font-weight="700" fill="#2f6f9f">Arm 2 · Pipeline without LC</text>
+      <text x="20" y="177" font-size="11.5" fill="#4a5560">D1 guesses K_prior -&gt; D2a/D2b/D3</text>
+      <rect x="250" y="142" width="80" height="36" fill="#b94a48"/>
+      <text x="290" y="165" text-anchor="middle" font-size="11.5" font-weight="700" fill="#ffffff">4 / 30</text>
+      <rect x="330" y="142" width="180" height="36" fill="#f3dfb3" stroke="#d9b25f"/>
+      <text x="420" y="165" text-anchor="middle" font-weight="700" fill="#7d5d1b">9 / 30 bypassed (30%)</text>
+      <rect x="510" y="142" width="340" height="36" fill="#2f6f9f"/>
+      <text x="680" y="165" text-anchor="middle" font-weight="700" fill="#ffffff">17 / 30 hit trap (56.7%)</text>
+      <text x="862" y="158" font-size="13" font-weight="700" fill="#2f6f9f">Mean: 1.43 / 2.0</text>
+      <text x="862" y="176" font-size="11" font-weight="700" fill="#8f2d2b">4/30 failed Gate 1</text>
+
+      <!-- Arm 3: Pipeline with LC (0 Score 0 = 0px, 9 Score 1 = 180px, 21 Score 2 = 420px) -->
+      <text x="20" y="232" font-size="14" font-weight="700" fill="#2f6f4a">Arm 3 · Pipeline with LC</text>
+      <text x="20" y="251" font-size="11.5" fill="#2f6f4a">LC buildsTowards -&gt; D1..D3</text>
+      <rect x="250" y="216" width="180" height="36" fill="#f3dfb3" stroke="#d9b25f"/>
+      <text x="340" y="239" text-anchor="middle" font-weight="700" fill="#7d5d1b">9 / 30 bypassed (30%)</text>
+      <rect x="430" y="216" width="420" height="36" fill="#2f6f4a"/>
+      <text x="640" y="239" text-anchor="middle" font-weight="700" fill="#ffffff">21 / 30 hit productive trap (70.0%)</text>
+      <text x="862" y="232" font-size="13" font-weight="700" fill="#2f6f4a">Mean: 1.70 / 2.0</text>
+      <text x="862" y="250" font-size="11" font-weight="700" fill="#2f6f4a">0/30 failed Gate 1</text>
+
+      <!-- Axis ticks -->
+      <line x1="250" y1="56" x2="250" y2="266" stroke="#8fa4b8"/>
+      <line x1="550" y1="56" x2="550" y2="266" stroke="#c4cfdb" stroke-dasharray="4 4"/>
+      <line x1="850" y1="56" x2="850" y2="266" stroke="#8fa4b8"/>
+      <text x="250" y="282" font-size="11" text-anchor="middle" fill="#4a5560">0 tasks</text>
+      <text x="550" y="282" font-size="11" text-anchor="middle" fill="#4a5560">15 tasks (50%)</text>
+      <text x="850" y="282" font-size="11" text-anchor="middle" fill="#4a5560">30 tasks (100%)</text>
+
+      <!-- Bottom summary cards -->
+      <rect x="20" y="298" width="470" height="86" rx="6" fill="#fbeaea" stroke="#e0b4b4"/>
+      <text x="34" y="319" font-size="12.5" font-weight="700" fill="#8f2d2b">Gate 1 Finding · Invalid &amp; Spoiler Prior Knowledge</text>
+      <text x="34" y="338" font-size="11" fill="#1f2a36">• Direct leaked target moves into K_prior on 15/30 topics (50%).</text>
+      <text x="34" y="355" font-size="11" fill="#1f2a36">• Pipeline without LC leaked target formulas on 4/30 topics (8.F.B.4 slope,</text>
+      <text x="34" y="371" font-size="11" fill="#1f2a36">  HSF-LE.A.1 ratios, HSA-SSE.B.3.b square identity, 8.SP.A.3) + 6 unused items.</text>
+
+      <rect x="510" y="298" width="470" height="86" rx="6" fill="#eef7f1" stroke="#2f6f4a"/>
+      <text x="524" y="319" font-size="12.5" font-weight="700" fill="#2f6f4a">Gate 1 + Gate 2 Takeaway · Why LC Grounding Matters</text>
+      <text x="524" y="338" font-size="11" fill="#1f2a36">• With LC grounding, 30/30 prior sets pass Gate 1 with 0 spoilers (0/96 items).</text>
+      <text x="524" y="355" font-size="11" fill="#1f2a36">• Productive traps rise from 6/30 (20%, Direct) -&gt; 17/30 (56.7%, Pipeline</text>
+      <text x="524" y="371" font-size="11" fill="#1f2a36">  without LC) -&gt; 21/30 (70.0%, Pipeline with LC; mean score 0.70 -&gt; 1.43 -&gt; 1.70).</text>
+    </g>
+  </svg>
+  <p class="note">Source: <code>experiments/results/pf_progression_bridge_30cases_3arms_20261016/summary_three_arm.json</code> (30 CCSSM progression topics across Grades 5–10; 30/30 tasks produced per arm; <code>gpt-5.6-luna</code>).</p>
+</section>
+
+<!-- 39 -->
+<section class="slide" id="s39">
+  <p class="kicker">39 · Gate 1 Prior-Knowledge Audit — What Goes Wrong in K_prior Without Learning Commons</p>
+  <h2>Direct leaks the target move in 15/30 sets; Pipeline without LC still invents 4 spoiler formulas and 6 disconnected skills; LC Grounding has 0 spoilers</h2>
+  <svg viewBox="0 0 1000 420" role="img" aria-label="Three-column comparison of Gate 1 item-level validity and concrete spoiler or disconnected K_prior examples across Direct, Pipeline without LC, and Pipeline with LC">
+    <g font-family="sans-serif" font-size="12">
+      <!-- Column 1: Arm 1 Direct -->
+      <rect x="10" y="10" width="316" height="398" rx="8" fill="#ffffff" stroke="#b94a48" stroke-width="1.6"/>
+      <rect x="10" y="10" width="316" height="54" rx="8" fill="#fbeaea"/>
+      <text x="24" y="33" font-size="14" font-weight="700" fill="#8f2d2b">Arm 1 · Direct Generation</text>
+      <text x="24" y="52" font-size="11.5" font-weight="700" fill="#1f2a36">15 / 30 sets failed Gate 1 (14 spoiler items / 90)</text>
+
+      <text x="24" y="84" font-weight="700" fill="#8f2d2b">Why it fails Gate 1:</text>
+      <text x="24" y="102" font-size="11" fill="#1f2a36">Generating K_prior and Task T in one call causes</text>
+      <text x="24" y="118" font-size="11" fill="#1f2a36">the LLM to write the task's target solution step</text>
+      <text x="24" y="134" font-size="11" fill="#1f2a36">directly inside K_prior's student_move.</text>
+
+      <rect x="22" y="150" width="292" height="114" rx="6" fill="#fbeaea" stroke="#e0b4b4"/>
+      <text x="32" y="170" font-size="11.5" font-weight="700" fill="#8f2d2b">Spoiler Example 1 (HSS-CP.A.2 Independence):</text>
+      <text x="32" y="188" font-size="10.8" fill="#1f2a36">• Proposed k_1: "Multiply the separate event</text>
+      <text x="32" y="204" font-size="10.8" fill="#1f2a36">  proportions P(A) and P(B) and compare with</text>
+      <text x="32" y="220" font-size="10.8" fill="#1f2a36">  the proportion for both events occurring."</text>
+      <text x="32" y="240" font-size="10.8" font-weight="700" fill="#8f2d2b">-&gt; Literally teaches P(A)P(B) = P(A and B).</text>
+
+      <rect x="22" y="276" width="292" height="116" rx="6" fill="#fbeaea" stroke="#e0b4b4"/>
+      <text x="32" y="296" font-size="11.5" font-weight="700" fill="#8f2d2b">Spoiler Example 2 (HSS-CP.B.6 Cond. Prob.):</text>
+      <text x="32" y="314" font-size="10.8" fill="#1f2a36">• Proposed k_2: "Identify which students count</text>
+      <text x="32" y="330" font-size="10.8" fill="#1f2a36">  as the possible outcomes for the stated</text>
+      <text x="32" y="346" font-size="10.8" fill="#1f2a36">  subgroup and compare with both conditions."</text>
+      <text x="32" y="366" font-size="10.8" font-weight="700" fill="#8f2d2b">-&gt; Teaches subgroup denominator restriction.</text>
+
+      <!-- Column 2: Arm 2 Pipeline without LC -->
+      <rect x="342" y="10" width="316" height="398" rx="8" fill="#ffffff" stroke="#2f6f9f" stroke-width="1.6"/>
+      <rect x="342" y="10" width="316" height="54" rx="8" fill="#eef4fa"/>
+      <text x="356" y="33" font-size="14" font-weight="700" fill="#2f6f9f">Arm 2 · Pipeline without LC</text>
+      <text x="356" y="52" font-size="11.5" font-weight="700" fill="#1f2a36">4 / 30 spoiler sets + 6 useless items (10/98 invalid)</text>
+
+      <text x="356" y="84" font-weight="700" fill="#2f6f9f">Two distinct Gate 1 failure modes:</text>
+      <text x="356" y="102" font-size="11" fill="#1f2a36">1. Stage D1 guesses target formulas as "prior" (4).</text>
+      <text x="356" y="118" font-size="11" fill="#1f2a36">2. Stage D1 proposes skills that cannot be used</text>
+      <text x="356" y="134" font-size="11" fill="#1f2a36">   on Stage D3's generated task objects (6).</text>
+
+      <rect x="354" y="150" width="292" height="114" rx="6" fill="#fbeaea" stroke="#e0b4b4"/>
+      <text x="364" y="170" font-size="11.5" font-weight="700" fill="#8f2d2b">4 Formula Spoilers in D1 (Score 0 Sets):</text>
+      <text x="364" y="188" font-size="10.8" fill="#1f2a36">• 8.F.B.4 &amp; 8.SP.A.3: "Calculate (y2-y1)/(x2-x1)"</text>
+      <text x="364" y="206" font-size="10.8" fill="#1f2a36">• HSF-LE.A.1: "Divide each value by preceding</text>
+      <text x="364" y="222" font-size="10.8" fill="#1f2a36">  value to identify multiplicative change"</text>
+      <text x="364" y="240" font-size="10.8" fill="#1f2a36">• HSA-SSE.B.3.b: "Match (x+b)^2 = x^2 + 2bx + b^2"</text>
+
+      <rect x="354" y="276" width="292" height="116" rx="6" fill="#fdf6e6" stroke="#d9b25f"/>
+      <text x="364" y="296" font-size="11.5" font-weight="700" fill="#7d5d1b">6 Useless / Disconnected Skills in D1:</text>
+      <text x="364" y="314" font-size="10.8" fill="#1f2a36">• HSS-ID.A.2 &amp; 7.SP.B.4: D1 proposes "Read dot</text>
+      <text x="364" y="330" font-size="10.8" fill="#1f2a36">  plots &amp; box plots", but D3 only gives raw lists.</text>
+      <text x="364" y="348" font-size="10.8" fill="#1f2a36">• 8.G.B.8: D1 proposes "Identify hypotenuse of</text>
+      <text x="364" y="364" font-size="10.8" fill="#1f2a36">  a given triangle", when no triangle is given.</text>
+
+      <!-- Column 3: Arm 3 Pipeline with LC -->
+      <rect x="674" y="10" width="316" height="398" rx="8" fill="#ffffff" stroke="#2f6f4a" stroke-width="1.8"/>
+      <rect x="674" y="10" width="316" height="54" rx="8" fill="#eef7f1"/>
+      <text x="688" y="33" font-size="14" font-weight="700" fill="#2f6f4a">Arm 3 · Pipeline with LC</text>
+      <text x="688" y="52" font-size="11.5" font-weight="700" fill="#1f2a36">30 / 30 sets pass Gate 1 (0 / 96 spoiler items!)</text>
+
+      <text x="688" y="84" font-weight="700" fill="#2f6f4a">How Learning Commons fixes Gate 1:</text>
+      <text x="688" y="102" font-size="11" fill="#1f2a36">Stage D1 is locked to official buildsTowards</text>
+      <text x="688" y="118" font-size="11" fill="#1f2a36">prerequisites (S_prior) and supports components,</text>
+      <text x="688" y="134" font-size="11" fill="#1f2a36">preventing target-level formula hallucinations.</text>
+
+      <rect x="686" y="150" width="292" height="114" rx="6" fill="#eef7f1" stroke="#b7dfc5"/>
+      <text x="696" y="170" font-size="11.5" font-weight="700" fill="#2f6f4a">Same Topics with LC Grounding (0 Spoilers):</text>
+      <text x="696" y="188" font-size="10.8" fill="#1f2a36">• 8.F.B.4: Locked to 7.RP.A.2 (check if ratio y/x</text>
+      <text x="696" y="204" font-size="10.8" fill="#1f2a36">  is constant) -&gt; fails on non-zero starting fee.</text>
+      <text x="696" y="222" font-size="10.8" fill="#1f2a36">• HSF-LE.A.1: Locked to 8.F.B.4 (linear constant</text>
+      <text x="696" y="238" font-size="10.8" fill="#1f2a36">  rate) -&gt; fails on exponential doubling table.</text>
+
+      <rect x="686" y="276" width="292" height="116" rx="6" fill="#eef7f1" stroke="#b7dfc5"/>
+      <text x="696" y="296" font-size="11.5" font-weight="700" fill="#2f6f4a">Item-Level Gate 1 Summary (96 items):</text>
+      <text x="696" y="316" font-size="10.8" font-weight="700" fill="#2f6f4a">• 0 / 96 Spoiler skills (0.0%)</text>
+      <text x="696" y="334" font-size="10.8" fill="#1f2a36">• 87 / 96 Valid &amp; usable on Task T (90.8%)</text>
+      <text x="696" y="352" font-size="10.8" fill="#4a5560">• 9 / 96 Unused alternate representation branches</text>
+      <text x="696" y="370" font-size="10.8" font-weight="700" fill="#2f6f4a">• 30 / 30 sets pass Gate 1 -&gt; 21 / 30 hit trap</text>
+    </g>
+  </svg>
+  <p class="note">Source: Per-item Gate 1 classifications in <code>experiments/results/pf_progression_bridge_30cases_3arms_20261016/evaluations_three_arm/*.json</code>.</p>
+</section>
+
+</body>
+
+</html>

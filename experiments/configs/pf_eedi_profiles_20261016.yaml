@@ -1,0 +1,67 @@
+version: pf-eedi-profiles/v1
+status: frozen-before-run-2026-10-16
+source: >
+  Written from the UK key stage 2 to key stage 3 sequence for each topic name. Each profile
+  lists what a learner has been taught BEFORE the topic. The topic's own core procedure and
+  its common errors are deliberately left out, so the profile does not supply the route
+  to any answer and does not encode any misconception. The Eedi quizzes were given after
+  teaching, so these profiles describe a pre-instruction learner, which is the Productive
+  Failure setting. This is a mismatch to report with any result.
+profiles:
+  Rounding and estimating:
+    - Place value of whole numbers and decimals to two decimal places.
+    - Rounding whole numbers to the nearest 10, 100 or 1000.
+    - Multiplying and dividing whole numbers, including multiplication facts up to 12 by 12.
+    - Multiplying and dividing decimals by whole numbers.
+  Fractions - basics:
+    - A fraction as a part of a whole, with numerator and denominator meaning.
+    - Equivalent fractions obtained by multiplying or dividing numerator and denominator by the same number.
+    - Simplifying a fraction to its lowest terms.
+    - Adding and subtracting fractions with the same denominator.
+  Proportion:
+    - Multiplying and dividing whole numbers and decimals.
+    - Converting between grams and kilograms, millilitres and litres, pence and pounds.
+    - Scaling a quantity by a whole number.
+    - Reading prices and quantities from a shopping list or a table.
+  Probability of a single event:
+    - Finding a fraction of an amount.
+    - Adding and subtracting decimals.
+    - Totalling the frequencies in a table.
+    - Describing an event as likely, unlikely, certain or impossible in words.
+  Linear equations:
+    - Inverse operations on whole numbers, such as finding a missing factor in a multiplication fact.
+    - Order of operations.
+    - Substituting a number into a simple expression.
+    - Collecting like terms in an expression.
+  Decimals:
+    - Place value of decimals to three decimal places.
+    - Adding and subtracting whole numbers using column methods.
+    - Multiplying and dividing a decimal by 10, 100 or 1000.
+  Brackets - single:
+    - Order of operations, including brackets around a single number.
+    - Multiplying a single term by a number.
+    - Collecting like terms.
+    - Multiplying two single letters or numbers, such as a times b.
+  Averages and range - frequency table:
+    - Finding the mean, median, mode and range of a list of numbers.
+    - Ordering a list of numbers to find its median.
+    - Reading a simple table with headings for a value and a frequency.
+    - Multiplying a number by its frequency.
+  Inequalities:
+    - Solving one-step and two-step linear equations.
+    - Ordering whole numbers and decimals on a number line.
+    - Reading a number line marked with whole numbers.
+  Factors, multiples and primes:
+    - Multiplication tables to 12 by 12 and their division facts.
+    - Recognising even and odd numbers.
+    - Arrays showing equal groups of objects.
+  Negative numbers:
+    - Ordering whole numbers on a number line.
+    - Adding and subtracting whole numbers.
+    - Temperature as a context, reading a thermometer marked with whole numbers.
+    - Counting forwards and backwards in steps.
+  Fraction, Decimal, Percentage equivalence:
+    - Writing a tenth or a hundredth as a decimal.
+    - Writing a fraction with denominator 10 or 100 as a decimal.
+    - Dividing one whole number by another to give a decimal.
+    - Place value of decimals.

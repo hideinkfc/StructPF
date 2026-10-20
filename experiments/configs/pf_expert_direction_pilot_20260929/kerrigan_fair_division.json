@@ -1,0 +1,99 @@
+{
+  "schema_version": "pf-paper-benchmark/v1",
+  "conditions": ["V1", "V2", "V3", "PIPELINE"],
+  "n_per_condition": 1,
+  "model_selector": "luna",
+  "workers": 1,
+  "shuffle_seed": 20260931,
+  "generation_max_tokens": 6000,
+  "inference_max_tokens": 2000,
+  "pipeline": {
+    "k": 6,
+    "max_resources": 5,
+    "evidence_k": 6,
+    "d1_condition": "grounded"
+  },
+  "case": {
+    "id": "expert_kerrigan_fair_division_undergrad_usa",
+    "target_concept": "A fair procedure for dividing resources among multiple people with different valuations, including how to proceed when claims conflict; the new multi-player resolution method has not yet been taught.",
+    "topic": "multi-player fair division and fair shares",
+    "grade": "undergraduate",
+    "jurisdiction": "USA",
+    "subject": "mathematics",
+    "teacher_recently_taught": [
+      "Use the two-person Divider-Chooser method.",
+      "Use basic division and arithmetic.",
+      "Interpret a fair share as at least 1/n of a person's total valuation."
+    ],
+    "benchmark_context": {
+      "theme": "a new shared-resource situation relevant to adult learners",
+      "setting_rule": "Invent the context, people, and data. Do not reproduce a published land, furniture, or other named division task.",
+      "prior_knowledge_boundary": "Use only the supplied recently taught resources; do not assume that a multi-player standoff-resolution method has been taught.",
+      "task_rule": "Create a new task for exploration before instruction on the target, not a worked example or a lesson teaching the target method."
+    }
+  },
+  "learner_context": {
+    "grade": "undergraduate",
+    "subject": "mathematics",
+    "jurisdiction": "USA",
+    "assumed_prior_knowledge": [
+      {
+        "resource": "Divider-Chooser method",
+        "taught_as": "Use a two-person procedure in which one person divides and another chooses."
+      },
+      {
+        "resource": "Basic division and arithmetic",
+        "taught_as": "Calculate shares and compare numerical quantities."
+      },
+      {
+        "resource": "Fair-share concept",
+        "taught_as": "A fair allocation should give each of n participants value at least 1/n of the total according to that participant's own valuation."
+      }
+    ]
+  },
+  "grounding_evidence": [
+    {
+      "standard_id": "KERRIGAN-MATH103-PRIOR-DIVIDER-CHOOSER",
+      "label": "Math 103 course sequence: prior two-person division",
+      "source_url": "https://doi.org/10.7282/T3QV3QX5",
+      "text": "The documented Math 103 sequence teaches the Divider-Chooser method before the multi-player fair-division invention task (Kerrigan dissertation, Appendix A and course sequence).",
+      "retrieved_at": "2026-09-29",
+      "provenance": "course_sequence"
+    },
+    {
+      "standard_id": "LIPPMAN-FAIR-DIVISION-FAIR-SHARE",
+      "label": "Fair shares and two-person division",
+      "source_url": "https://www.opentextbookstore.com/mathinsociety/",
+      "text": "The open textbook treatment defines fair shares relative to participants' own valuations and introduces two-person Divider-Chooser procedures before more complex fair division.",
+      "retrieved_at": "2026-09-29",
+      "provenance": "open_textbook"
+    }
+  ],
+  "misconceptions": [
+    "Assumes that equal physical amounts are necessarily fair even when participants value them differently.",
+    "Judges fairness from total market value alone instead of each participant's own valuation.",
+    "Assumes each participant's claim can be handled independently of the other participants' claims.",
+    "Treats an allocation as fair because it looks balanced without checking each person's minimum fair share.",
+    "Assumes a two-person divide-and-choose procedure automatically resolves any multi-person allocation.",
+    "Assumes a fair allocation must give every participant the same items or the same numerical value."
+  ],
+  "misconception_provenance": {
+    "source": "Curator-authored after reviewing the expert exercise's task description and design analysis; these may overlap with expert-anticipated pathways.",
+    "limitation": "Not Eedi labels, not student-validated, and not evidence of observed learner behavior."
+  },
+  "pilot_protocol": {
+    "pilot_id": "pf_expert_direction_pilot_20260929",
+    "reference_exercise": "data/pf_exercises/kerrigan_weber_chinn_2021.yaml#kerrigan2021_invention_1",
+    "sampling": "One scheduled attempt in each of V1, V2, V3, and PIPELINE; preserve every blocked or failed attempt.",
+    "holdout_rule": "The exact reference problem statement, names, numbers, and solution are withheld from generation inputs. V2 hypotheses were written after consulting expert design descriptions and may expose overlapping conceptual contrasts; V2 is not a blind held-out condition.",
+    "v2_treatment": "Six curator-authored hypotheses informed by the expert design analysis; exploratory only, not student-validated, and not equivalent to the historically Eedi-labeled V2 condition.",
+    "interpretation": "One attempt per condition is descriptive calibration only; automated ratings are model judgments, not human/student evidence."
+  },
+  "protocol": {
+    "comparison_scope": "Twelve-attempt exploratory pilot across three expert-task directions; one attempt per condition and direction.",
+    "rating_policy": "Use the runner's frozen rubric rating only as a model judgment; inspect task outputs and blocked cases separately.",
+    "failure_policy": "Do not replace blocked, malformed, interrupted, or failed attempts.",
+    "mathematics_policy": "PIPELINE arithmetic/checker outcomes are distinct from PF quality; unsupported or blocked checks are not scored as task defects without case-level evidence.",
+    "limitation": "The V2 hypothesis source differs from the historical Eedi treatment; n=1 per direction-condition does not support causal or statistical claims. The current PIPELINE checker may not represent a full fair-division allocation."
+  }
+}

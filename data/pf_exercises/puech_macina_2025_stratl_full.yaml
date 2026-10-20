@@ -1,0 +1,532 @@
+metadata:
+  source: Puech, Macina, Chatain, Sachan & Kapur (2025) — StratL PF dataset
+  license: CC-BY-4.0
+  arxiv: arXiv:2410.03781
+  dataset_repo: github.com/eth-lre/Productive-Failure-Problems
+  domain: Mathematics
+  n_exercises: 15
+  grade_levels:
+  - 11th
+  - 5th
+  - 7th
+  - 9th
+  - non-STEM-undergraduate
+  provenance_note: Exercise and solution text come from the StratL PF dataset CSV. The fields prior_knowledge_required, expected_student_rsms,
+    and critical_conceptual_features are NOT in the source and are left empty; do not treat their emptiness as 'none exist'.
+exercises:
+- id: puech2025_stratl_consistency
+  type: invention
+  phase: generation
+  topic: variance / consistency (descriptive statistics)
+  format: word_problem
+  grade: 9th
+  source_reference: Kapur, 2015
+  problem: 'The organizers of the Premier League Federation have to decide which one of the three players Mike Arwen, Dave
+    Backhand and Ivan Right - should receive the "The Most Consistent Player for the Past 5 Years" award. Table 1 shows the
+    number of goals that each striker scored between 2019 and 2023.
+
+
+    The organizers agreed to approach this decision mathematically by designing a measure of consistency. They decided to
+    get your help. Here is what you must do:
+
+    (1) Design as many different measures of consistency as you can.
+
+    (2) Your measure of consistency should make use of all data points in the table.
+
+
+
+    Table 1. Number of goals scored by the three players in the Premier League between 2007 and 2011.
+
+
+    | Year | Mike Arwen | Dave Backhand | Ivan Right |
+
+    | :--- | :--------: | :-----------: | :--------: |
+
+    | 2007 |     13     |      12       |     14     |
+
+    | 2008 |     12     |      14       |     10     |
+
+    | 2009 |     15     |      16       |     18     |
+
+    | 2010 |     17     |      15       |     18     |
+
+    | 2011 |     13     |      13       |     15     |'
+  canonical_solution: 'The concept of variance and standard deviation is unknown to students.
+
+    Any measure proposed by the student is acceptable as long as it can be justified to measure consistency.
+
+    The goal is for them to construct their own measure of consistency and justify it based on the data provided.
+
+
+    Example of canonical solution: computing the variance (or standard deviation) for each player (standard deviation is also
+    valid):
+
+    First, compute the mean:
+
+    Mean number of goals for Mike: 14
+
+    Mean number of goals for Dave: 14
+
+    Mean number of goals for Ivan: 15
+
+
+    Then, compute the sum of square deviations from the mean for each player:
+
+    Sum squared deviation for Mike: 16
+
+    Sum squared deviation for Dave: 10
+
+    Sum squared deviation for Ivan: 44
+
+
+    Then devide by the number of data points to get the variance:
+
+    Variance for Mike: 12/5 = 3.2
+
+    Variance for Dave: 10/5 = 2
+
+    Variance for Ivan: 44/5 = 8.8
+
+
+    So according to the variance, Dave is the most consistent player.'
+  prior_knowledge_required: []
+  expected_student_rsms: []
+  critical_conceptual_features: []
+- id: puech2025_stratl_country
+  type: ill-structured/invention
+  phase: generation
+  topic: apportionment / proportional representation
+  format: word_problem
+  grade: non-STEM-undergraduate
+  source_reference: Kerrigan, 2018
+  problem: "A new country has recently been founded.\nThe country is split into six states, call them A, B, C, D, E, and F.\
+    \ \nThe population of state A is 1,646,000 people, the population of state B is 6,936,000 people, the population of state\
+    \ C is 154,000 people, the population of state D is 2,091,000 people, the population of state E is 685,000 people, and\
+    \ the population of state F is 988,000 people.\nThere are 250 seats available on a legislative body to govern the new\
+    \ country. \nHow many seats should be assigned to each state so that each state would receive a fair representation? \n\
+    Show your work and justify why you think your method is correct."
+  canonical_solution: "To solve this problem, we want to assign the 250 legislative seats to each state in such a way that\
+    \ the representation aligns as closely as possible with the population of each state. A common method to distribute seats\
+    \ in a way that is proportionally fair is using the method of largest remainders (also known as the Hamilton method).\
+    \ Here's a step-by-step process:\n\n1. **Calculate the total population.**\n   Add up the populations of all the states\
+    \ to find the total population of the country.\n\n   Total population = 1,646,000 (A) + 6,936,000 (B) + 154,000 (C) +\
+    \ 2,091,000 (D) + 685,000 (E) + 988,000 (F)      \n                     = 12,500,000\n\n2. **Calculate the standard divisor.**\n\
+    \   Divide the total population by the number of available seats to determine the standard divisor, which is the average\
+    \ population represented by one seat.\n\n   Standard divisor = Total population / Number of seats\n                  \
+    \  = 12,500,000 / 250\n                    = 50,000\n\n3. **Calculate the initial quota for each state.**\n   Divide the\
+    \ population of each state by the standard divisor to determine how many whole seats each state should receive initially,\
+    \ rounding down to the nearest whole number.\n\n   Initial quotas:\n   - A: 1,646,000 / 50,000 = 32.92 -> 32 seats\n \
+    \  - B: 6,936,000 / 50,000 = 138.72 -> 138 seats\n   - C: 154,000 / 50,000 = 3.08 -> 3 seats\n   - D: 2,091,000 / 50,000\
+    \ = 41.82 -> 41 seats\n   - E: 685,000 / 50,000 = 13.70 -> 13 seats\n   - F: 988,000 / 50,000 = 19.76 -> 19 seats\n\n\
+    4. **Add up the initial quotas and calculate the surplus seats.**\n   After assigning the initial whole number of seats,\
+    \ see how many seats are left over that need to be distributed.\n\n   Total initial seats assigned = 32 + 138 + 3 + 41\
+    \ + 13 + 19\n                               = 246\n\n   Seats left to distribute = 250 - 246\n                       \
+    \     = 4\n\n5. **Distribute the surplus seats based on largest remainders.**\n   The remainders from the initial quotas\
+    \ will determine who gets the surplus seats. Assign these seats to the states with the largest remainders until all surplus\
+    \ seats are distributed.\n\n   Remainders:\n   - A: 0.92\n   - B: 0.72\n   - C: 0.08\n   - D: 0.82\n   - E: 0.70\n   -\
+    \ F: 0.76\n\n   The four highest remainders are from states A, B, D, and F. Give one extra seat to each.\n\n6. **Final\
+    \ seat distribution.**\n   Update the initial quotas with the surplus seats distributed:\n\n   Final distribution:\n \
+    \  - A: 32 + 1 = 33 seats\n   - B: 138 + 1 = 139 seats\n   - C: 3 + 0 = 3 seats\n   - D: 41 + 1 = 42 seats\n   - E: 13\
+    \ + 0 = 13 seats\n   - F: 19 + 1 = 20 seats\n\n   Check: 33 + 139 + 3 + 42 + 13 + 20 = 250 seats\n\nTherefore, the final\
+    \ fair representation based on the largest remainder method would assign 33 seats to state A, 139 seats to state B, 3\
+    \ seats to state C, 42 seats to state D, 13 seats to state E, and 20 seats to state F for a total of 250 seats. This approach\
+    \ ensures that the representation is as proportionally fair as possible according to the populations of the states."
+  prior_knowledge_required: []
+  expected_student_rsms: []
+  critical_conceptual_features: []
+- id: puech2025_stratl_land_sharing
+  type: invention
+  phase: generation
+  topic: fair division
+  format: word_problem
+  grade: non-STEM-undergraduate
+  source_reference: Kerrigan et al., 2021
+  problem: "Suppose Andrea, Beatrice, Cleo and David are dividing a plot of land worth $1,000. \nThe land comes in four sections,\
+    \ call them piece 1, piece 2, piece 3, and piece 4. \nAndrea values piece 1 at $150, piece 2 at $300, piece 3 at $200,\
+    \ and piece 4 at $350. \nBeatrice values piece 1 at $200, piece 2 at $350, piece 3 at $100, and piece 4 at $350. \nCleo\
+    \ values piece 1 at $200, piece 2 at $450, piece 3 at $200, and piece 4 at $150. \nDavid values piece 1 at $250, piece\
+    \ 2 at $250, piece 3 at $250, and piece 4 at $250. \nDescribe a way for the players to fairly divide the land."
+  canonical_solution: "Since the piece of land is worth $1,000, in order for each person to get a “fair share,” he/she would\
+    \ need to walk away with $1,000/ 4 = $250 worth of land. \nThis solution gives a way to solve the problem using “The Lone\
+    \ Divider Method,” which students received instruction on after attempting to solve the task. \nOf the available pieces,\
+    \ the following are worth at least $250 to each player, and as a result, would be deemed “fair” to each player: Andrea:\
+    \ pieces 2 and 4 Beatrice: pieces 2 and 4 Cleo: piece 2 David: pieces 1, 2, 3, and 4 \nStep 1: David can get any of the\
+    \ four pieces, so it is best to give him a piece that no one else wants. He can receive either piece 1 or 3 (suppose piece\
+    \ 3). \nStep 2: Andrea, Beatrice, and Cleo all find piece 2 to be mathematically fair. Andrea and Beatrice also find piece\
+    \ 4 to be fair. Give one of them piece 4 (suppose Andrea). \nStep 3: Cleo and Beatrice are both left only finding piece\
+    \ 2 to be mathematically fair. Piece 1 has yet to be given out. Thus, there is a standoff. \nStep 4: Recombine pieces\
+    \ 1 and 2 into one piece, or a “supershare.” Then, have Cleo and Beatrice employ the Divider-Chooser method to divide\
+    \ and choose a fair piece of land. Each piece is guaranteed (by the Divider-Chooser Method) to be worth at least half\
+    \ the value of pieces 1 and 2 combined, which in both cases, is at least $250, and thus mathematically fair. The actual\
+    \ details of this transaction cannot be worked out without more information, but we can be sure mathematically that the\
+    \ outcome is fair."
+  prior_knowledge_required: []
+  expected_student_rsms: []
+  critical_conceptual_features: []
+- id: puech2025_stratl_fair_distribution
+  type: invention
+  phase: generation
+  topic: fair division
+  format: word_problem
+  grade: non-STEM-undergraduate
+  source_reference: Kerrigan et al., 2021
+  problem: "Ashley, Bill, and Cliff have been roommates through college and now are getting ready to graduate and go separate\
+    \ ways. They have jointly owned a table, dresser, chair, and couch among the 3 of them. \nAshley values the table at $150,\
+    \ the dresser at $150, the chair at $175, and the couch at $275. \nBill values the table at $250, the dresser at $200,\
+    \ the chair at $150, and the couch at $300. \nCliff values the table at $175, the dresser at $125, the chair at $125,\
+    \ and the couch at $250. \nDescribe a way for all three people to walk away with a \"fair share\". Justify your answer\
+    \ using dollar amounts and explanations."
+  canonical_solution: "Each person needs to walk away with at least one-third of the total amount they value the items at.\
+    \ This solution gives a way to solve the problem using “The Method of Sealed Bids,” which students received instruction\
+    \ on after attempting to solve the task. \nStep 1: The fair share amounts for each person are: Ashley: (150 + 150 + 175\
+    \ + 275)/3 = $250 Bill: (250 + 200 + 150 + 300)/3 = $300 Cliff: (175 + 125 + 125 + 250)/3 = $225 (A common error here\
+    \ is to divide by the number of items (4) instead of the number of people (3), which is results in an unfair distribution).\
+    \ \nStep 2: The highest bidder for each item gets the item. Ashley: chair Bill: table, couch, dresser Cliff: no items\
+    \ \nStep 3: The players who receive items in excess of their fair share pay the difference in cash. They players who do\
+    \ not receive items that total their fair share receive the difference in cash. Ashley: receives (250− 75) = $75 in cash\
+    \ Bill: pays (250 + 200 + 300 – 300) = $450 in cash Cliff: receives entire fair share, $225, in cash \nStep 4: The surplus\
+    \ money generated by balancing fair shares gets redistributed evenly to the players as a bonus. Surplus: 450 – (75 + 225)\
+    \ = $150, so each person gets another $50 (or pays $50 less). \nStep 5: The final allocation is: \n\tAshley: chair, plus\
+    \ $125 in cash\n\tBill: table, couch, dresser, pays $400 in cash \n\tCliff: receives $275 in cash"
+  prior_knowledge_required: []
+  expected_student_rsms: []
+  critical_conceptual_features: []
+- id: puech2025_stratl_fair_distrubution_time
+  type: invention
+  phase: generation
+  topic: fair division
+  format: word_problem
+  grade: non-STEM-undergraduate
+  source_reference: Kerrigan, 2018
+  problem: "Ann and Bob share the rights to use a certain store location in the mall, but they have separate businesses, and\
+    \ only one can use the space at a time. \nThey agree that each year, one should get the space from January 1 until a certain\
+    \ date, and the other should get the space from that date through the end of December. \nAnn estimates that she can make\
+    \ $10,000 per month from January through July, and $14,000 per month from August through December. \nBob estimates that\
+    \ he can make $6,000 per month from January through June, and $12,000 per month from July through December. \nDescribe\
+    \ a way in which Ann and Bob could each receive a fair share of the year, if it is left up to Ann to make the first move."
+  canonical_solution: "**Step 1: Calculate the Total Value Each Person Assigns to the Entire Year**\nFirst, we calculate how\
+    \ much Ann and Bob value the entire year based on their monthly estimates.\n\nAnn's Valuation:\n- January through July:\
+    \ \\(7 \\times 10,000 = 70,000\\)\n- August through December: \\(5 \\times 14,000 = 70,000\\)\n  \nTotal value according\
+    \ to Ann: \\(70,000 + 70,000 = 140,000\\)\n\nBob's Valuation:\n- January through June: \\(6 \\times 6,000 = 36,000\\)\n\
+    - July through December: \\(6 \\times 12,000 = 72,000\\)\n\nTotal value according to Bob: \\(36,000 + 72,000 = 108,000\\\
+    )\n\n**Step 2: Calculate Each Person's Minimum Fair Share**\nSince there are 12 months in a year and only one person can\
+    \ use the space at a time, each person is entitled to at least half of the total value they assign to the year.\n\n- **Ann's\
+    \ minimum fair share:** \\( \\frac{140,000}{2} = 70,000 \\)\n- **Bob's minimum fair share:** \\( \\frac{108,000}{2} =\
+    \ 54,000 \\)\n\n**Step 3: Ann Makes the First Move**\nSince Ann is making the first move, she needs to decide how to divide\
+    \ the year so that Bob's half-year allocation is worth exactly \\(54,000\\) according to his own valuation.\n\n**Step\
+    \ 3a: Consider Bob’s Valuation**\n- January through June (6 months): \\(36,000\\)\n- July through December (6 months):\
+    \ \\(72,000\\)\n\nBob values the latter half of the year more, so to reach his minimum fair share of \\(54,000\\), he\
+    \ needs more than just the first 6 months.\n\nWe can solve this by finding a cutoff point in July where Bob’s valuation\
+    \ reaches \\(54,000\\).\n\nBob’s monthly revenue during July to December is \\(12,000\\). Let's find out how many months\
+    \ from July Bob needs to reach \\(54,000 - 36,000 = 18,000\\).\n\n- Bob earns \\(12,000\\) per month from July onwards.\n\
+    - To make \\(18,000\\), he would need \\( \\frac{18,000}{12,000} = 1.5\\) months.\n\nSo, Bob should get January through\
+    \ mid-July to reach his minimum fair share of \\(54,000\\).\n\nAnn's Allocation:\n- Ann then gets the rest of July (half\
+    \ a month) and all months from August through December.\n- Ann's valuation for these months: \n  - Half of July: \\(0.5\
+    \ \\times 10,000 = 5,000\\)\n  - August through December: \\(5 \\times 14,000 = 70,000\\)\n  - Total for Ann: \\(5,000\
+    \ + 70,000 = 75,000\\)\n\n**Step 4: Surplus and Final Settlement**\nNow we calculate the surplus. \n\n- Total value according\
+    \ to Ann: \\(140,000\\)\n- Total value according to Bob: \\(108,000\\)\n- Total value combined: \\(140,000 + 108,000 =\
+    \ 248,000\\)\n- Total split in half: \\(248,000 / 2 = 124,000\\)\n\nAnn's final allocation is worth \\(75,000\\), which\
+    \ exceeds her minimum fair share of \\(70,000\\), so there’s a surplus. \nBob’s final allocation is worth \\(54,000\\\
+    ), exactly his minimum fair share, so he doesn’t contribute to the surplus.\n\n- Surplus = Ann’s allocation - Ann’s minimum\
+    \ fair share = \\(75,000 - 70,000 = 5,000\\)\n\nThe surplus \\(5,000\\) is divided equally between Ann and Bob.\n\n- Ann\
+    \ receives: \\(2,500\\) from the surplus.\n- Bob receives: \\(2,500\\) from the surplus.\n\nFinal Settlement:\n\n- **Ann’s\
+    \ total:** \\(75,000 + 2,500 = 77,500\\)\n- **Bob’s total:** \\(54,000 + 2,500 = 56,500\\)\n\nSo, in the final settlement:\n\
+    - Ann uses the space from mid-July to December, plus receives a net cash benefit.\n- Bob uses the space from January to\
+    \ mid-July, plus receives a net cash benefit.\n\nThis ensures both Ann and Bob receive a fair share based on their valuations."
+  prior_knowledge_required: []
+  expected_student_rsms: []
+  critical_conceptual_features: []
+- id: puech2025_stratl_biking
+  type: ill-structured
+  phase: generation
+  topic: average speed / rates
+  format: word_problem
+  grade: 7th
+  source_reference: Kapur, 2010
+  problem: "It was a bright, sunny morning and the day of the Singapore Idol auditions. Hady and Jasmine were going to audition\
+    \ as a team. They were practicing at their friend Ken’s house and were planning to bike to the auditions at Singapore\
+    \ Expo. The auditions were supposed to start at 2 p.m. and Hady and Jasmine wanted to make sure that they could make it\
+    \ in time. \n\n- Hady: Ken, how do we get to the Singapore Expo from here? \n- Ken: Well, follow this road (pointing to\
+    \ a map) until you reach the expressway. I usually drive at a uniform speed of 90 km/h on the expressway for about 3 min.\
+    \ After that there is a sign telling you how to get to Singapore Expo. \n- Jasmine: How long does it take you to reach\
+    \ Singapore Expo?\nKen: It normally takes me 7 min to drive from my house when I am traveling at an average speed of 75\
+    \ km/h. \n\nAfter getting the directions, Hady and Jasmine left Ken’s house and biked together at Jasmine’s average speed\
+    \ of 0.15 km/min. After biking for 25 min, Jasmine biked over a piece of glass and her tire went flat. \n\n- Jasmine:\
+    \ Oops! My tire is flat! What shall we do now? Can I just ride with you on your bike or shall we take a bus the rest of\
+    \ the way? \n- Hady: I don’t think that is a good idea. My bike is old and rusty and it cannot hold both of us. Taking\
+    \ the bus is not a very good idea either. There is no direct bus from here to Singapore Expo, so we would have to take\
+    \ one bus and then transfer to another one. All the waiting for buses would definitely make us late. Do you have any money\
+    \ on you? \n- Jasmine: Let me check….. I forgot to withdraw money today. I only have $2. Hady: I did not bring my wallet.\
+    \ I only have $1 for a drink. \n- Jasmine: Since we do not have enough money to take a taxi, shall we just leave our bikes\
+    \ here and walk?\n- Hady: It takes me approximately 5 min to walk to school which is about 250 m from my home. How long\
+    \ does it take you to walk to school? \n- Jasmine: It takes me approximately 15 min to walk to school which is about 450\
+    \ m from my home. \n- Hady: No, no, no! Walking would take too much time. We will end up late. Why don’t you lock up your\
+    \ bike and take my bike and bike ahead. Leave my bike somewhere along the route and begin walking to the audition. I will\
+    \ walk from here until I get to my bike and ride it the rest of the way since I can bike at a faster speed. My average\
+    \ biking speed is 0.2 km/min. \n- Jasmine: That sounds like a good idea! But how far should I ride your bike before leaving\
+    \ it for you and walking the rest of the way. Since we are auditioning together as a team, we have to reach there at the\
+    \ same time!? \n\nHow far should Jasmine ride Hady’s bike so they both arrive at the audition at the same time?"
+  canonical_solution: ''
+  prior_knowledge_required: []
+  expected_student_rsms: []
+  critical_conceptual_features: []
+- id: puech2025_stratl_hummingbird
+  type: ill-structured/well-structured
+  phase: generation
+  topic: rates / proportion
+  format: word_problem
+  grade: 7th
+  source_reference: Kapur and Bielaczyc, 2012
+  problem: Hummingbirds are small birds that are known for their ability to hover in mid-air by rapidly flapping their wings.
+    Each year they migrate approximately 9,000 km from Canada to Chile and then back again. The Giant Hummingbird is the largest
+    member of the hummingbird family, weighing 18–20 gm. It measures 23 cm long and it flaps its wings between 70–80 times
+    per minute. For every 18 hours of flying it requires 6 hours of rest. The Broad Tailed Hummingbird flaps its wings 100–125
+    times per minute. It is approximately 10–11 cm long and weighs approximately 3–4 gm. For every 12 hours of flying it requires
+    12 hours of rest. If both birds can travel 1 km for every 550 wing flaps and they leave Canada at approximately the same
+    time, which hummingbird will get to Chile first?
+  canonical_solution: ''
+  prior_knowledge_required: []
+  expected_student_rsms: []
+  critical_conceptual_features: []
+- id: puech2025_stratl_biking_structured
+  type: well-structured
+  phase: generation
+  topic: average speed / rates
+  format: word_problem
+  grade: 7th
+  source_reference: Kapur and Bielaczyc, 2012
+  problem: Jack walks at an average speed of 4 km/hr for one hour. He then cycles 6km at 12 km/hr. Find his average speed
+    for the whole journey.
+  canonical_solution: ''
+  prior_knowledge_required: []
+  expected_student_rsms: []
+  critical_conceptual_features: []
+- id: puech2025_stratl_lawer
+  type: ill-structured
+  phase: generation
+  topic: speed, distance, time (car braking)
+  format: word_problem
+  grade: 11th
+  source_reference: Kapur, 2008
+  problem: 'Anita was on her way to school on a beautiful mild day in November. Just as she approached an intersection, she
+    noticed that the light had turned yellow and pedestrians were already starting to move across the intersection. She slammed
+    on her brakes and came to a screeching halt. A large delivery truck was following closely behind Anita’s car. Anita heard
+    brakes screeching behind her and then felt the truck crash into the rear of her car. The impact shoved her car into the
+    intersection before it came to a stop. Luckily, she escaped serious injury, as did the driver of the truck. Not surprisingly,
+    her car was badly damaged. The driver of the delivery truck came over to her and said, “Miss, are you crazy—why did you
+    slam on your brakes? The light was just turning yellow! This accident is your fault!”
+
+
+    Two policemen arrived on the scene to investigate the accident. The delivery truck driver ran over to the policeman and
+    repeated his statements. Anita was still recovering from the incident; her chest hurt from the shoulder strap of her seatbelt,
+    but other than that she felt OK.
+
+
+    The policemen then interviewed some witnesses. Most of them told him that both the car and the truck were speeding and
+    almost ran over some pedestrians who had started to cross the road as the light turned yellow. Others, however, felt that
+    the car and truck were traveling at a normal speed for the area. After taking full statements from the witnesses, Officer
+    Singh went back to the police station, and started preparing to file his report on the accident. He began by reading through
+    the various statements and reports.
+
+
+    **ANITA’S STATEMENT**
+
+
+    I was heading to class in my car, when the light at the intersection turned yellow. I saw students starting to cross and
+    so I hit my brakes, coming to a stop. I heard more screeching of brakes; then a truck crashed into the back of my car,
+    dragging my car into the intersection along with it. I was traveling under the speed limit, but the driver of the truck
+    must have been speeding. Did you get the truck driver’s insurance information?
+
+
+    **TRUCK DRIVER’S STATEMENT**
+
+
+    I had just delivered some boxes to Delhi Public School. This high school kid in an old beat-up car was in front of me—when
+    all of a sudden, she slams on her brakes. So did I, but I still slammed into her. The light had just turned yellow; we
+    both had time to go through the light. This is her fault!
+
+
+    **REPORT SUBMITTED BY THE ACCIDENT ANALYSIS SPECIALIST**
+
+
+    At the scene of the accident, there were skid marks showing that both vehicles had braked. The speedometer of the truck
+    was stuck at 24 kmph, leading me to believe that the truck was traveling at least 24 kmph when it crashed into the car.
+
+
+    The car was dragged 9 meters into the intersection, coming to a stop close to the northeast corner of the intersection.
+    The truck was found directly behind the car leading me to believe that it had dragged the car along with it. Both vehicles
+    showed straight skid marks from the south side of the intersection to the position where they came to a stop. My analysis
+    of the measurements shows that the car left a 12-meter skid mark prior to being struck by the truck, while the truck left
+    a 6 meter skid mark before hitting the car.
+
+
+    I estimate the average deceleration on the road to be roughly 6.0 m/s2. I also noted that the speed limit on the road
+    is 40 kmph. The truck weighs approximately twice the weight of the car. Since we know that the car had stopped just prior
+    to being hit by the truck, the speed of the truck before impact can be estimated to be about 1.5 times the speed of the
+    two vehicles just after impact.
+
+
+    **Question:**
+
+
+    Should Officer Singh charge either driver for speeding? If so, whom should he charge for the accident? Present your case
+    as best you can.'
+  canonical_solution: ''
+  prior_knowledge_required: []
+  expected_student_rsms: []
+  critical_conceptual_features: []
+- id: puech2025_stratl_lawer_structured
+  type: well-structured
+  phase: generation
+  topic: speed, distance, time (car braking)
+  format: word_problem
+  grade: 11th
+  source_reference: Kapur, 2008
+  problem: You are driving your brand new car on a straight inner-city road when you suddenly see a goat at a distance directly
+    in front of your car. You slam on the brakes right away and just about manage to avoid crashing into the goat. A traffic
+    policeman comes right over and immediately gives you a speeding ticket. Still shaking from the experience, you decide
+    to investigate the accident scene to see if you should fight the ticket in court. You look around for the signpost indicating
+    the speed limit and find it to read 50 kmph. Looking at the skid marks left by your car, you estimate their length to
+    be about 11 meters. You consult with your car’s information manual to find that the car weighs 800 kg and that the coefficient
+    of friction between the car tires and road during braking is usually between 0.6 and 0.8. You estimate your own weight
+    to be 75 kg and reaction time to be about 0.8 seconds. Will you fight the ticket in court? Present your case as best you
+    can.
+  canonical_solution: ''
+  prior_knowledge_required: []
+  expected_student_rsms: []
+  critical_conceptual_features: []
+- id: puech2025_stratl_lawer_2
+  type: ill-structured
+  phase: generation
+  topic: speed, distance, time (car braking)
+  format: word_problem
+  grade: 11th
+  source_reference: Kapur, 2008
+  problem: "You have recently been hired as a lawyer for a prestigious law firm. On your first day, you are sent to meet with\
+    \ an important client who has been fined for speeding. Opening your work file, you find your assignment: \n\n\tDear new\
+    \ lawyer, This morning, I received a call from Mr. Gupta asking me for help. According to him, he almost ran over a small\
+    \ boy this morning in downtown Ghaziabad and was fined for speeding. He insists that he was not. He says that the boy\
+    \ suddenly ran on to the road and he braked very hard and managed to avoid an accident. However, this was enough for a\
+    \ policeman who happened to be there to fine him Rs. 20,000 for speeding. Mr. Gupta is a very important client of our\
+    \ firm and we must do our best to help him. I trust you will give this case your best effort. I am attaching his file\
+    \ for your reference. I am meeting with Mr. Gupta later this evening. So, I need you to investigate this case and submit\
+    \ your report to me with your analyses and recommendation by today. \n\tSincerely,Nitin Sharma Senior Partner \n\tPS–Please\
+    \ note that the word of law is very clear on this. A person is speeding if and only if he is driving above the legal speed\
+    \ limit of the road. No exceptions. \n\n**CLIENT FILE**\nName: Mr. Amit Gupta \nAge: 52 years \nDriving Experience: 34\
+    \ years \nPrior Traffic Violations: 1981 (Fined for speeding, Rs. 500), 1993 (Fined for drunk driving, Rs. 10,000) \n\n\
+    To carry out your investigation, you go through a number of steps such as \na) interviewing an eyewitness, b) analyzing\
+    \ the incident report filed by traffic police, c) accessing the medical examination reports, and d) interviewing the mechanic\
+    \ who inspected the car after the incident. \n\n**EYEWITNESS’ ACCOUNT**\n“I was walking on the roadside pavement. I don’t\
+    \ recall the traffic on the road to be particularly heavy. Suddenly, I noticed a small boy run out on to the road chasing\
+    \ a cricket ball. The next thing I heard was a loud screeching sound. I realized that it came from an Ambassador car skidding\
+    \ to a stop in order to avoid running the boy over. The boy was 42 M. Kapur, C.K. Kinzer very lucky to have escaped any\
+    \ injury. I think the boy took about 3 s to cross the road, but I don’t think he looked at the traffic before crossing\
+    \ the road. He was just chasing the ball!” \n\n**TRAFFIC POLICE INCIDENT REPORT** \n- Traffic conditions: Normal \n- Weather\
+    \ conditions: Bright and sunny; dry road \n- No evidence of a collision between the car and the boy. \n- Number of passengers\
+    \ in the car besides the driver: None \n- Evidence of skid marks: about 15 m \n- Speed limit on the road: 55kmph \n- Width\
+    \ of the road: about 4.5 m \n\n**MEDICAL EXAMINATION REPORT**\nGeneral Comments: Neither the driver nor the boy sustained\
+    \ any physical injury whatsoever. \nResults of the car driver’s medical tests :\n- BP (Blood Pressure)=110/80 \n- HR (Heart\
+    \ Rate)=80 \n- Weight=75 kg \n- Reaction Time=0.8 s on an average \n- Drug/Alcohol Screen=Negative\n\n\n**INTERVIEW WITH\
+    \ THE MECHANIC** \nYou: What can you say about the condition of the car from your inspection? \nMechanic: Well, this is\
+    \ a heavy car weighing about 1,570 kg and I can clearly see some wear and tear of the tires and the braking system. The\
+    \ braking fluid is also running out. As a result, the traction between the tires and the road does not seem to be as good\
+    \ as it can be. \nYou: Oh! Does this mean the car was not maintained properly? \nMechanic: Not really. You see, the traction\
+    \ also depends on the condition of the road. The coefficient of friction between the car’s tires and the road is usually\
+    \ between 0.6 and 0.7. So, given the city’s roads, the level of traction not being as good is quite understandable. \n\
+    You: So, what are you saying?\nMechanic: What I’m saying is that although the traction is not as good as it could have\
+    \ been, this is quite normal in Ghaziabad. Also, it is hard to tell how much of the wear and tear happened during the\
+    \ skidding itself. \nYou: OK. Thank you for your time."
+  canonical_solution: ''
+  prior_knowledge_required: []
+  expected_student_rsms: []
+  critical_conceptual_features: []
+- id: puech2025_stratl_lawer_2_structured
+  type: well-structured
+  phase: generation
+  topic: speed, distance, time (car braking)
+  format: word_problem
+  grade: 11th
+  source_reference: Kapur, 2008
+  problem: "You are a lawyer in a prestigious law ﬁrm. You’ve been assigned the following case:\n\nA man was driving his car\
+    \ when, suddenly, a small boy ran out on to the road chasing a ball. He slammed on the brakes and skidded to a stop, leaving\
+    \ a 15 m long skid mark on the road. \nLuckily the boy was not hurt, but a policeman watching from the sidewalk walked\
+    \ over and ﬁned the man for speeding. \nAn investigation found out that the speed limit on the road is 55 kmph. It also\
+    \ determined that the coefﬁcient of friction between the tires and the road was 0.6. \nThe man’s mass was 75 kg and his\
+    \ reaction time, on average, was found to be about 0.8 seconds. \nThe car’s information manual indicated the mass of the\
+    \ car to be 1570 kg. \nWitnesses say that the boy took about 3 seconds to cross the 4.5 m wide road.\n\nAs the man’s lawyer,\
+    \ will you ﬁght the ﬁne in court? Present your case as best you can."
+  canonical_solution: ''
+  prior_knowledge_required: []
+  expected_student_rsms: []
+  critical_conceptual_features: []
+- id: puech2025_stratl_fraction_comparison
+  type: ill-structured
+  phase: generation
+  topic: fraction comparison
+  format: word_problem
+  grade: 5th
+  source_reference: Loibl and Rummel, 2014
+  problem: "Fair comparison of number of goals\n\nTwo teams compete in a scoring contest in which each player attempts to\
+    \ score a goal. Each player has only one attempt. The scoreboard shows the results of the two teams:\n\nScoreboard\n\n\
+    |        | Goals |\n|--------|-------|\n| **Pia's team** (5 girls)     | ⬜⬜⬜ |\n| **Ole's team** (10 boys) | ⬜⬜⬜⬜⬜ |\n\
+    \nCompare the results of the two teams. Who wins – girls or boys?  \nDraw a graphical representation (e.g., boxes or bars)\
+    \ to explain your decision. Label your representation with fractions.\n\nThe table represents a scoreboard. It is a detail\
+    \ of a larger drawing showing the sporting event. The scoreboard provides the results of the two teams, with each square\
+    \ representing one goal."
+  canonical_solution: ''
+  prior_knowledge_required: []
+  expected_student_rsms: []
+  critical_conceptual_features: []
+- id: puech2025_stratl_consistency_tea
+  type: invention
+  phase: generation
+  topic: variance / consistency
+  format: word_problem
+  grade: 9th
+  source_reference: Newman and DeCaro, 2019
+  problem: 'Let me help recreate this table and problem in markdown format:
+
+
+    # Tea Growers
+
+
+    | Year | Thourbo (Antioxidants per mg) | Dareen | Ging |
+
+    |------|-------------------------------|--------|------|
+
+    | 2010 | --                           | 14     | 11   |
+
+    | 2011 | 10                           | 19     | 12   |
+
+    | 2012 | 16                           | 14     | 14   |
+
+    | 2013 | 16                           | 17     | 21   |
+
+    | 2014 | 20                           | 17     | 18   |
+
+    | 2015 | 13                           | 9      | 14   |
+
+
+    Come up with a formula for consistency to show which tea grower has the most consistent levels of antioxidants. Show your
+    proposed formulas and calculations on the next page. You may also list steps for how you would calculate consistency.
+    Circle the tea grower that you decide is most consistent.'
+  canonical_solution: ''
+  prior_knowledge_required: []
+  expected_student_rsms: []
+  critical_conceptual_features: []
+- id: puech2025_stratl_fraction_comparison_2
+  type: ill-structured
+  phase: generation
+  topic: fraction comparison
+  format: word_problem
+  grade: 5th
+  source_reference: Mazziotti et al., 2016
+  problem: 'Steven ordered pizzas for his birthday dinner. For the six boys he ordered four "Pizza Salami", and for the three
+    girls he ordered two "Pizza Hawaii". The boys share the four "Pizza Salami" equally among each other. The girls also share
+    the two "Pizza Hawaii" equally among each other.
+
+    Who gets more: Does a boy or a girl get a greater proportion of pizza? Try to find as many solution paths as possible.'
+  canonical_solution: ''
+  prior_knowledge_required: []
+  expected_student_rsms: []
+  critical_conceptual_features: []

@@ -1,0 +1,267 @@
+{
+  "concept_id": "x_revperc",
+  "concept_text": "Reversing a p% change needs division by (1 +/- p/100), not subtracting p% of the new value.",
+  "grade": 7,
+  "anchor": {
+    "quiz": "fso6",
+    "quiz_name": "Reverse percentages",
+    "topic": "Percentages",
+    "questions": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "questions_omitted": []
+  },
+  "dominant_threshold_pct": 10,
+  "dominant_errors": [
+    {
+      "question": 1,
+      "option_label": "A",
+      "option_text": "504,000",
+      "explanation": "Not quite, I think we have increased 402,000 by 20%. Remember that 402,000 is our original value increased by 20%, so 120%. Can we find 1% and then change this to 100%?",
+      "pct_students": 14,
+      "question_stem": "Between 2020 and 2021, the population of a city increased by 20%.\nIn 2021, the population of the city was 420,000.\nWhat was the population of the city in 2020?",
+      "matchable": true
+    },
+    {
+      "question": 1,
+      "option_label": "D",
+      "option_text": "336,000",
+      "explanation": "Not quite, I think we have found 20% of our new value 420,000. However 420,000 is 120% of the original. We need to find 1% and then 100%.",
+      "pct_students": 25,
+      "question_stem": "Between 2020 and 2021, the population of a city increased by 20%.\nIn 2021, the population of the city was 420,000.\nWhat was the population of the city in 2020?",
+      "matchable": true
+    },
+    {
+      "question": 2,
+      "option_label": "B",
+      "option_text": "81,795",
+      "explanation": "Not quite, I think you've reduced 86,100 by 5%. Remember 86,100 is 105% so we need to divide it by the correct multiplier.",
+      "pct_students": 22,
+      "question_stem": "Between 2020 and 2021, the population of a town increased by 5%.\nIn 2021, the population of the town was 86,100.\nWhat was the population of the town in 2020?",
+      "matchable": true
+    },
+    {
+      "question": 2,
+      "option_label": "C",
+      "option_text": "90,405",
+      "explanation": "Not quite, I think you have increased 86,100 by 5%. Remember we have 105% so we need to do the inverse to return it to 100%",
+      "pct_students": 11,
+      "question_stem": "Between 2020 and 2021, the population of a town increased by 5%.\nIn 2021, the population of the town was 86,100.\nWhat was the population of the town in 2020?",
+      "matchable": true
+    },
+    {
+      "question": 3,
+      "option_label": "A",
+      "option_text": "p / 1.4",
+      "explanation": "Not quite. This would be correct if we had increased by 40% but we increased by 140%",
+      "pct_students": 29,
+      "question_stem": "Between 2020 and 2021, the population of a country increased by 140%.\nIn 2021, the population of the country was p.\nWhich of the following would correctly calculate the population of the country in 2020?",
+      "matchable": true
+    },
+    {
+      "question": 3,
+      "option_label": "B",
+      "option_text": "p × 0.6",
+      "explanation": "Not quite, I think you have tried to reduce p by 40% and have converted this to the multiplier. If we started with p, what would we multiply by to increase it by 140%? We need to use the inverse of this multiplication to find p.",
+      "pct_students": 12,
+      "question_stem": "Between 2020 and 2021, the population of a country increased by 140%.\nIn 2021, the population of the country was p.\nWhich of the following would correctly calculate the population of the country in 2020?",
+      "matchable": true
+    },
+    {
+      "question": 3,
+      "option_label": "C",
+      "option_text": "p × 1.4",
+      "explanation": "Not quite, this would be increasing an amount by 40%. Think about what we would multiply by to increase something by 140%? We need to use the inverse of this multiplication to find p.",
+      "pct_students": 27,
+      "question_stem": "Between 2020 and 2021, the population of a country increased by 140%.\nIn 2021, the population of the country was p.\nWhich of the following would correctly calculate the population of the country in 2020?",
+      "matchable": true
+    },
+    {
+      "question": 4,
+      "option_label": "B",
+      "option_text": "128,115",
+      "explanation": "Not quite, I think you have increased by 35%. We know that 100% - 35% = 65%, so 94900 is only 65% of the population. What was 100% of the calculation?",
+      "pct_students": 25,
+      "question_stem": "Between 2020 and 2021, the population of a town decreased by 35%.\nIn 2021, the population of the town was 94,900.\nWhat was the population of the town in 2020?",
+      "matchable": true
+    },
+    {
+      "question": 4,
+      "option_label": "D",
+      "option_text": "61,685",
+      "explanation": "I think you have reduced this by 35%, but this is what was left after the reduction had happened. How many % is this equivalent to? Can you find 100% using this?",
+      "pct_students": 19,
+      "question_stem": "Between 2020 and 2021, the population of a town decreased by 35%.\nIn 2021, the population of the town was 94,900.\nWhat was the population of the town in 2020?",
+      "matchable": true
+    },
+    {
+      "question": 5,
+      "option_label": "B",
+      "option_text": "q + 0.504",
+      "explanation": "Almost, but this calculation would be an inverse of decreasing by 49.6%. Here we have reduced by 50.4%, so think about how many percent we have left.",
+      "pct_students": 21,
+      "question_stem": "Between 2020 and 2021, the population of a country decreased by 50.4%.\nIn 2021, the population of the country was q.\nWhich of the following would correctly calculate the population of the country in 2020?",
+      "matchable": true
+    },
+    {
+      "question": 5,
+      "option_label": "C",
+      "option_text": "q × 0.496",
+      "explanation": "Almost, we would x0.496 to reduce an amount by 50.4%, but here the reduction has happened and we need to undo it. We need to use the inverse operation.",
+      "pct_students": 18,
+      "question_stem": "Between 2020 and 2021, the population of a country decreased by 50.4%.\nIn 2021, the population of the country was q.\nWhich of the following would correctly calculate the population of the country in 2020?",
+      "matchable": true
+    },
+    {
+      "question": 5,
+      "option_label": "D",
+      "option_text": "q / 0.504",
+      "explanation": "Not quite, this would find 50.4% of the population. The population has been reduced by 50.4%, so how many percent do we have left? Remember this change has happened so we need to undo it using the inverse.",
+      "pct_students": 19,
+      "question_stem": "Between 2020 and 2021, the population of a country decreased by 50.4%.\nIn 2021, the population of the country was q.\nWhich of the following would correctly calculate the population of the country in 2020?",
+      "matchable": true
+    }
+  ],
+  "all_errors": [
+    {
+      "question": 1,
+      "option_label": "A",
+      "option_text": "504,000",
+      "explanation": "Not quite, I think we have increased 402,000 by 20%. Remember that 402,000 is our original value increased by 20%, so 120%. Can we find 1% and then change this to 100%?",
+      "pct_students": 14,
+      "question_stem": "Between 2020 and 2021, the population of a city increased by 20%.\nIn 2021, the population of the city was 420,000.\nWhat was the population of the city in 2020?",
+      "matchable": true
+    },
+    {
+      "question": 1,
+      "option_label": "C",
+      "option_text": "84,000",
+      "explanation": "Not quite, I think we have found 20% of 420,000. Remember 420,000 has been increased by 20% so this is now 120%. Can we find 1%? And then from this find 100%?",
+      "pct_students": 9,
+      "question_stem": "Between 2020 and 2021, the population of a city increased by 20%.\nIn 2021, the population of the city was 420,000.\nWhat was the population of the city in 2020?",
+      "matchable": true
+    },
+    {
+      "question": 1,
+      "option_label": "D",
+      "option_text": "336,000",
+      "explanation": "Not quite, I think we have found 20% of our new value 420,000. However 420,000 is 120% of the original. We need to find 1% and then 100%.",
+      "pct_students": 25,
+      "question_stem": "Between 2020 and 2021, the population of a city increased by 20%.\nIn 2021, the population of the city was 420,000.\nWhat was the population of the city in 2020?",
+      "matchable": true
+    },
+    {
+      "question": 2,
+      "option_label": "A",
+      "option_text": "57,400",
+      "explanation": "Not quite, I think you knew that 86,100 was 105% however instead of dividing it by the correct multiplier you have divided it by 1.5%. What is 105% as a decimal?",
+      "pct_students": 5,
+      "question_stem": "Between 2020 and 2021, the population of a town increased by 5%.\nIn 2021, the population of the town was 86,100.\nWhat was the population of the town in 2020?",
+      "matchable": true
+    },
+    {
+      "question": 2,
+      "option_label": "B",
+      "option_text": "81,795",
+      "explanation": "Not quite, I think you've reduced 86,100 by 5%. Remember 86,100 is 105% so we need to divide it by the correct multiplier.",
+      "pct_students": 22,
+      "question_stem": "Between 2020 and 2021, the population of a town increased by 5%.\nIn 2021, the population of the town was 86,100.\nWhat was the population of the town in 2020?",
+      "matchable": true
+    },
+    {
+      "question": 2,
+      "option_label": "C",
+      "option_text": "90,405",
+      "explanation": "Not quite, I think you have increased 86,100 by 5%. Remember we have 105% so we need to do the inverse to return it to 100%",
+      "pct_students": 11,
+      "question_stem": "Between 2020 and 2021, the population of a town increased by 5%.\nIn 2021, the population of the town was 86,100.\nWhat was the population of the town in 2020?",
+      "matchable": true
+    },
+    {
+      "question": 3,
+      "option_label": "A",
+      "option_text": "p / 1.4",
+      "explanation": "Not quite. This would be correct if we had increased by 40% but we increased by 140%",
+      "pct_students": 29,
+      "question_stem": "Between 2020 and 2021, the population of a country increased by 140%.\nIn 2021, the population of the country was p.\nWhich of the following would correctly calculate the population of the country in 2020?",
+      "matchable": true
+    },
+    {
+      "question": 3,
+      "option_label": "B",
+      "option_text": "p × 0.6",
+      "explanation": "Not quite, I think you have tried to reduce p by 40% and have converted this to the multiplier. If we started with p, what would we multiply by to increase it by 140%? We need to use the inverse of this multiplication to find p.",
+      "pct_students": 12,
+      "question_stem": "Between 2020 and 2021, the population of a country increased by 140%.\nIn 2021, the population of the country was p.\nWhich of the following would correctly calculate the population of the country in 2020?",
+      "matchable": true
+    },
+    {
+      "question": 3,
+      "option_label": "C",
+      "option_text": "p × 1.4",
+      "explanation": "Not quite, this would be increasing an amount by 40%. Think about what we would multiply by to increase something by 140%? We need to use the inverse of this multiplication to find p.",
+      "pct_students": 27,
+      "question_stem": "Between 2020 and 2021, the population of a country increased by 140%.\nIn 2021, the population of the country was p.\nWhich of the following would correctly calculate the population of the country in 2020?",
+      "matchable": true
+    },
+    {
+      "question": 4,
+      "option_label": "A",
+      "option_text": "33,215",
+      "explanation": "Not quite, I think you have found 35% of 94,900. Remember we have decreased our original 100% by 35%. How many percent do we have now? Can we find 100% using this?",
+      "pct_students": 9,
+      "question_stem": "Between 2020 and 2021, the population of a town decreased by 35%.\nIn 2021, the population of the town was 94,900.\nWhat was the population of the town in 2020?",
+      "matchable": true
+    },
+    {
+      "question": 4,
+      "option_label": "B",
+      "option_text": "128,115",
+      "explanation": "Not quite, I think you have increased by 35%. We know that 100% - 35% = 65%, so 94900 is only 65% of the population. What was 100% of the calculation?",
+      "pct_students": 25,
+      "question_stem": "Between 2020 and 2021, the population of a town decreased by 35%.\nIn 2021, the population of the town was 94,900.\nWhat was the population of the town in 2020?",
+      "matchable": true
+    },
+    {
+      "question": 4,
+      "option_label": "D",
+      "option_text": "61,685",
+      "explanation": "I think you have reduced this by 35%, but this is what was left after the reduction had happened. How many % is this equivalent to? Can you find 100% using this?",
+      "pct_students": 19,
+      "question_stem": "Between 2020 and 2021, the population of a town decreased by 35%.\nIn 2021, the population of the town was 94,900.\nWhat was the population of the town in 2020?",
+      "matchable": true
+    },
+    {
+      "question": 5,
+      "option_label": "B",
+      "option_text": "q + 0.504",
+      "explanation": "Almost, but this calculation would be an inverse of decreasing by 49.6%. Here we have reduced by 50.4%, so think about how many percent we have left.",
+      "pct_students": 21,
+      "question_stem": "Between 2020 and 2021, the population of a country decreased by 50.4%.\nIn 2021, the population of the country was q.\nWhich of the following would correctly calculate the population of the country in 2020?",
+      "matchable": true
+    },
+    {
+      "question": 5,
+      "option_label": "C",
+      "option_text": "q × 0.496",
+      "explanation": "Almost, we would x0.496 to reduce an amount by 50.4%, but here the reduction has happened and we need to undo it. We need to use the inverse operation.",
+      "pct_students": 18,
+      "question_stem": "Between 2020 and 2021, the population of a country decreased by 50.4%.\nIn 2021, the population of the country was q.\nWhich of the following would correctly calculate the population of the country in 2020?",
+      "matchable": true
+    },
+    {
+      "question": 5,
+      "option_label": "D",
+      "option_text": "q / 0.504",
+      "explanation": "Not quite, this would find 50.4% of the population. The population has been reduced by 50.4%, so how many percent do we have left? Remember this change has happened so we need to undo it using the inverse.",
+      "pct_students": 19,
+      "question_stem": "Between 2020 and 2021, the population of a country decreased by 50.4%.\nIn 2021, the population of the country was q.\nWhich of the following would correctly calculate the population of the country in 2020?",
+      "matchable": true
+    }
+  ],
+  "excluded": []
+}

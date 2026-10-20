@@ -1,0 +1,125 @@
+{
+  "schema_version": "pf-bounded-research-campaign/v1",
+  "authorization": "User requested autonomous measurement-gap and curriculum/Learning Commons research on October 12, 2026, with results by the following morning.",
+  "scope": {
+    "measurement": "Test whether original high ratings and independently audited concerns occur on the same saved tasks.",
+    "grounding": "Compare the latest generator without retrieval, with curriculum evidence, and with curriculum plus Learning Commons evidence.",
+    "excluded": [
+      "human ratings fabricated by an assistant",
+      "real-student or learning-effect claims",
+      "resuming simulated-student feedback tuning",
+      "changing historical rubric scores or generated tasks",
+      "optimizing generation against the new auditor",
+      "unbounded retries or prompt sweeps"
+    ]
+  },
+  "measurement_gap": {
+    "source_benchmark": "experiments/results/pf_paper_benchmark/20260923_luna_v4",
+    "sampling": "Freeze a score-independent representative sample before new judgments; retain original ratings on precisely those tasks.",
+    "proposed_sample": {
+      "V1": 30,
+      "V2": 6,
+      "V3": 6,
+      "PIPELINE_ready_controls": 12
+    },
+    "judges": ["gpt41", "gpt54"],
+    "judge_independence_boundary": "Different OpenAI model series, not independent human experts or different model vendors.",
+    "high_rating_screen": {
+      "TOTAL_at_least": 14,
+      "interpretation": "A predefined descriptive subset, not a validated educational-quality threshold."
+    },
+    "finding_categories": [
+      "mechanically verified mathematical inconsistency",
+      "agreed concern under an original rubric anchor",
+      "agreed concern under an additional PF design criterion",
+      "judge disagreement",
+      "unsupported or unknown"
+    ],
+    "controls": "Freeze positive, negative and ambiguous controls. Assess errors rather than adjusting expectations to obtain a perfect calibration.",
+    "main_calls_at_most": 108,
+    "all_calls_at_most": 200,
+    "historical_prompts_unchanged": true,
+    "source_quotes_required": true,
+    "task_input_allowlist": [
+      "title",
+      "body",
+      "question",
+      "learning_target",
+      "common_learner_context"
+    ],
+    "excluded_auditor_inputs": [
+      "generation_condition",
+      "original_scores",
+      "generator_internal_design_notes",
+      "pipeline_acceptance_labels"
+    ]
+  },
+  "grounding": {
+    "generator": "luna",
+    "arms": [
+      {
+        "id": "none",
+        "external_evidence": "No retrieved curriculum or Learning Commons evidence."
+      },
+      {
+        "id": "curriculum",
+        "external_evidence": "Frozen curriculum/textbook excerpts; curated expert-resource lists held out."
+      },
+      {
+        "id": "curriculum_lc",
+        "external_evidence": "The same curriculum excerpts plus frozen Learning Commons descriptions, explicitly not additional assumed learner knowledge."
+      }
+    ],
+    "comparisons": {
+      "primary": "curriculum minus none",
+      "secondary": "curriculum_lc minus curriculum",
+      "package_only": "curriculum_lc minus none"
+    },
+    "task_specifications": 5,
+    "repeats_per_specification_per_arm": 4,
+    "scheduled_main_generations": 60,
+    "calibration": "One or two distinct specifications; single generation per arm; execution checks only.",
+    "generation_request_cap_including_calibration": 800,
+    "max_generation_workers": 3,
+    "fixed": [
+      "target",
+      "grade",
+      "stated prior learning",
+      "pipeline version",
+      "model",
+      "generation instructions",
+      "proposal candidate count",
+      "bounded revision policy"
+    ],
+    "retrieval": "Retrieve and freeze per specification before main generation; keep source, licensing, excerpts, query, selection and hashes.",
+    "topic_status": "Choose distinct task specifications and report whether their broader topics were previously inspected; do not relabel transfer cases as untouched holdouts.",
+    "failed_attempts_replaced": false,
+    "quality_stop_gates_added": false,
+    "learner_attempts_added": false,
+    "audit": "Use the same frozen evidence-specific task audit for every arm, blinded to condition and retrieval payload, with the common authoritative learner context."
+  },
+  "statistical_interpretation": {
+    "primary_grounding_outcome": "A prespecified conjunction of mathematics support, target preserved, accessible start, discovery preserved and consequential choice, reported with component findings and unknowns.",
+    "not_a_complete_pf_validation": true,
+    "routes": "Distinct mathematical reasoning and representation opportunities reported separately from the primary conjunction.",
+    "nested_sampling": "Four outputs within each of five task specifications are repeated generations, not twenty independent curriculum or task-family observations.",
+    "report": [
+      "per-specification paired differences",
+      "condition component rates with explicit scheduled and judged denominators",
+      "judge agreement and disagreement",
+      "task-specification-block uncertainty if estimable",
+      "worked same-task evidence examples",
+      "retrieval and API failures",
+      "request and available token costs"
+    ],
+    "no_naive_twenty_pair_significance_gate": true,
+    "conclusion": "Evidence for or against a benefit in this bounded pilot, not proof of general educational effectiveness."
+  },
+  "stopping": {
+    "development_rounds": 1,
+    "control_misclassification": "Record instrument limitations; do not retune to reject a favored or disfavored generation arm.",
+    "api_failures": "Preserve explicit errors; no automatic replacement of failed experimental attempts.",
+    "unavailable_learning_commons": "Do not substitute invented records or silently collapse arms. Preserve unavailable status and report the narrowed comparison.",
+    "unexpected_bug": "Version a technical correction with its cause and affected calls; preserve previous artifacts."
+  }
+}

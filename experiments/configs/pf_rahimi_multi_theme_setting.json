@@ -1,0 +1,232 @@
+{
+  "schema_version": "pf-rahimi-multi-theme-setting/v1",
+  "status": "proposed; not frozen until the cell matrix is confirmed",
+  "purpose": "Same-condition direct PF generation by GPT-5 mini and GPT-4.1 under the Rahimi-style grade 7 setting, extended to four cells that differ in both theme and grade 7 topic: ratios, percent, statistics and area.",
+  "models": {
+    "gpt-5-mini": {
+      "tag": "gpt5mini",
+      "sampling": "API default; no temperature sent"
+    },
+    "gpt-4.1": {
+      "tag": "gpt41",
+      "sampling": "API default; no temperature sent"
+    }
+  },
+  "generation": {
+    "condition": "V1 direct: frozen six-component prompt, no misconceptions, no grounding evidence",
+    "prompt_path": "src/generation/prompts/pf_paper_benchmark.yaml",
+    "prompt_version": "rahimi-generation-reconstruction/v1",
+    "example_file": "data/pf_exercises/puech_macina_2025_stratl_full.yaml",
+    "example_ids": [
+      "puech2025_stratl_consistency",
+      "puech2025_stratl_country",
+      "puech2025_stratl_land_sharing",
+      "puech2025_stratl_fair_distribution",
+      "puech2025_stratl_biking"
+    ],
+    "example_policy": "The same five StratL examples in every cell, as in the frozen prompt. Examples are not varied by cell.",
+    "attempts_per_cell_per_model": 30,
+    "max_completion_tokens": 6000,
+    "workers": 60,
+    "failure_policy": "Errored or interrupted attempts are deleted and not replaced; achieved counts are reported per cell and model.",
+    "cell_input_policy": "All cells follow the basketball cell template: setting_rule names only the theme situation plus a fiction disclaimer, interest names only the student interest, and prior_knowledge_boundary fixes the two prior standards and bans the target method and the prompt examples' topics. No cell input prescribes the task form."
+  },
+  "rater": {
+    "prompt_path": "src/evaluation/prompts/pf_rubric_setting.yaml",
+    "prompt_version": "rahimi-table1/v1-setting",
+    "judges": [
+      {
+        "judge_id": "luna-judge-1",
+        "deployment": "gpt-5.6-luna",
+        "reasoning_effort": "high",
+        "temperature": "not sent",
+        "shuffle_seed": 20261014
+      },
+      {
+        "judge_id": "luna-judge-2",
+        "deployment": "gpt-5.6-luna",
+        "reasoning_effort": "high",
+        "temperature": "not sent",
+        "shuffle_seed": 20261015
+      }
+    ],
+    "max_completion_tokens": 16000,
+    "workers": 60,
+    "input_allowlist": [
+      "task_setting (intended use, learning target, theme, student interest)",
+      "learner_context (grade, subject, jurisdiction, assumed prior knowledge)",
+      "student_task (title, body, question)"
+    ],
+    "hidden_from_judges": [
+      "generator model",
+      "cell id",
+      "prompt examples",
+      "generation rules (setting_rule, prior_knowledge_boundary, task_rule)",
+      "the other judge's scores and order"
+    ],
+    "blinding": "Each judge receives its own opaque blind IDs and its own seeded shuffle of the same tasks. The ID-to-task mapping is kept in a private file. Judges never see each other's scores.",
+    "total_and_adjudication": "Total = sum of the five 1-3 scores (maximum 15). Final score per task = mean of the two judge totals. If the two totals differ by 5 or more, the task is flagged, as Rahimi et al. flag third-rater cases. No third judge is run in this design.",
+    "null_policy": "A null dimension score stays null. Tasks with a null dimension are reported separately and are not scored as zero.",
+    "independence_limitation": "Both judges use the same Luna deployment. They differ only in order and blind IDs, so this is two passes of one model, not two independent raters.",
+    "input_builder": "src/evaluation/pf_rubric_setting.py: judge_input(student_task_text(task), cell.case, cell.learner_context)",
+    "context_rationale": "Rahimi et al. held standard, grade, theme, interest and prior knowledge constant and blinded raters only to the generating model. The judge therefore sees the same fixed setting a trained rater would know. The setting is identical for both models in a cell, so it does not reveal the model."
+  },
+  "cells": [
+    {
+      "cell_id": "sports_basketball_ratio",
+      "role": "Rahimi-matched cell: ratios (7.RP.A.2)",
+      "case": {
+        "id": "rahimi_ratio_g7_usa_basketball",
+        "target_concept": "Recognize and represent proportional relationships between quantities (CCSS.Math.Content.7.RP.A.2). Students have not yet received direct instruction on this target.",
+        "topic": "ratios and proportional relationships",
+        "grade": 7,
+        "jurisdiction": "USA",
+        "subject": "mathematics",
+        "teacher_recently_taught": [
+          "Compute unit rates involving fractional quantities (7.RP.A.1).",
+          "Add and subtract rational numbers, using numerical and number-line interpretations (7.NS.A.1)."
+        ],
+        "benchmark_context": {
+          "theme": "sports",
+          "interest": "basketball and Stephen Curry",
+          "setting_rule": "The generated student task must use a basketball situation involving Stephen Curry. Invented practice or camp data are fictional, not claims about real statistics.",
+          "prior_knowledge_boundary": "Treat the two supplied prior standards as the fixed recently taught repertoire. Grounding may unpack these skills, but must not add extra assumed courses, formal proportional-relation methods, variance, fair-division algorithms, or probability instruction.",
+          "task_rule": "Generate a new task for exploration before instruction on the target, not a worked example or a lesson teaching the target method."
+        }
+      },
+      "learner_context": {
+        "grade": 7,
+        "subject": "mathematics",
+        "jurisdiction": "USA",
+        "assumed_prior_knowledge": [
+          {
+            "resource": "Unit rates (7.RP.A.1)",
+            "taught_as": "Compute unit rates involving ratios of fractional quantities, including lengths and areas in like or different units."
+          },
+          {
+            "resource": "Rational-number addition and subtraction (7.NS.A.1)",
+            "taught_as": "Add and subtract rational numbers and interpret these operations numerically and on a number line."
+          }
+        ]
+      },
+      "learner_context_source": "Prior standards as named by Rahimi et al. (7.RP.A.1, 7.NS.A.1); taught_as wording is a close paraphrase of the official CCSS text, inherited unchanged from experiments/configs/pf_paper_benchmark.json (official text retrieved 2026-09-23)."
+    },
+    {
+      "cell_id": "shopping_percent",
+      "role": "Topic change: percent (7.RP.A.3)",
+      "case": {
+        "id": "g7_percent_shopping",
+        "target_concept": "Use proportional relationships to solve multistep ratio and percent problems, such as tax, markups and markdowns (CCSS.Math.Content.7.RP.A.3). Students have not yet received direct instruction on this target.",
+        "topic": "percent and multistep ratio problems",
+        "grade": 7,
+        "jurisdiction": "USA",
+        "subject": "mathematics",
+        "teacher_recently_taught": [
+          "Recognize and represent proportional relationships between quantities (7.RP.A.2).",
+          "Solve real-world and mathematical problems involving the four operations with rational numbers (7.NS.A.3)."
+        ],
+        "benchmark_context": {
+          "theme": "shopping",
+          "interest": "shopping and spending pocket money",
+          "setting_rule": "The generated student task must use a shopping situation. Invented stores, prices and rates are fictional, not claims about real prices.",
+          "prior_knowledge_boundary": "Treat the two supplied prior standards as the fixed recently taught repertoire. Grounding may unpack these skills, but must not add extra assumed courses, formal percent-equation methods, variance, fair-division algorithms, or probability instruction.",
+          "task_rule": "Generate a new task for exploration before instruction on the target, not a worked example or a lesson teaching the target method."
+        }
+      },
+      "learner_context": {
+        "grade": 7,
+        "subject": "mathematics",
+        "jurisdiction": "USA",
+        "assumed_prior_knowledge": [
+          {
+            "resource": "Proportional relationships (7.RP.A.2)",
+            "taught_as": "Recognize and represent proportional relationships between quantities."
+          },
+          {
+            "resource": "Operations with rational numbers (7.NS.A.3)",
+            "taught_as": "Solve real-world and mathematical problems involving the four operations with rational numbers."
+          }
+        ]
+      },
+      "learner_context_source": "Stipulated by us for this cell (October 13, 2026): prerequisite standards chosen as the CCSS standards a grade 7 class would normally have covered before the target; taught_as wording checked against thecorestandards.org on 2026-10-13. Not observed student knowledge."
+    },
+    {
+      "cell_id": "music_compare_distributions",
+      "role": "Topic change: statistics, comparing two data sets (7.SP.B.4)",
+      "case": {
+        "id": "g7_music_compare_distributions",
+        "target_concept": "Use measures of center and measures of variability for numerical data from random samples to draw informal comparative inferences about two populations (CCSS.Math.Content.7.SP.B.4). Students have not yet received direct instruction on this target.",
+        "topic": "comparing two numerical data sets",
+        "grade": 7,
+        "jurisdiction": "USA",
+        "subject": "mathematics",
+        "teacher_recently_taught": [
+          "Summarizing numerical data sets (6.SP.B.5c)",
+          "Multi-digit decimal operations (6.NS.B.3)"
+        ],
+        "benchmark_context": {
+          "theme": "music",
+          "interest": "bands, songs and playlists",
+          "setting_rule": "The generated student task must use a music situation involving bands, songs or playlists. Invented bands, songs and data are fictional, not claims about real artists or streaming data.",
+          "prior_knowledge_boundary": "Treat the two supplied prior standards as the fixed recently taught repertoire. Grounding may unpack these skills, but must not add extra assumed courses, formal standard deviation or inference methods, fair-division algorithms, or probability instruction.",
+          "task_rule": "Generate a new task for exploration before instruction on the target, not a worked example or a lesson teaching the target method."
+        }
+      },
+      "learner_context": {
+        "grade": 7,
+        "subject": "mathematics",
+        "jurisdiction": "USA",
+        "assumed_prior_knowledge": [
+          {
+            "resource": "Summarizing numerical data sets (6.SP.B.5c)",
+            "taught_as": "Summarize numerical data sets with quantitative measures of center (median and/or mean) and variability (interquartile range and/or mean absolute deviation)."
+          },
+          {
+            "resource": "Multi-digit decimal operations (6.NS.B.3)",
+            "taught_as": "Fluently add, subtract, multiply and divide multi-digit decimals using the standard algorithm for each operation."
+          }
+        ]
+      },
+      "learner_context_source": "Stipulated by us for this cell (October 13, 2026): prerequisite standards chosen as the CCSS standards a grade 7 class would normally have covered before the target; taught_as wording checked against thecorestandards.org on 2026-10-13. Not observed student knowledge."
+    },
+    {
+      "cell_id": "garden_composite_area",
+      "role": "Topic change: geometry, area of composite figures (7.G.B.6)",
+      "case": {
+        "id": "g7_garden_composite_area",
+        "target_concept": "Solve real-world and mathematical problems involving the area of two-dimensional objects composed of triangles, quadrilaterals and polygons (the area part of CCSS.Math.Content.7.G.B.6; volume and surface area are excluded). Students have not yet received direct instruction on this target.",
+        "topic": "area of composite figures",
+        "grade": 7,
+        "jurisdiction": "USA",
+        "subject": "mathematics",
+        "teacher_recently_taught": [
+          "Area of polygons by composing and decomposing (6.G.A.1)",
+          "Rational-number operations (7.NS.A.3)"
+        ],
+        "benchmark_context": {
+          "theme": "home and garden",
+          "interest": "designing a garden, patio or mural",
+          "setting_rule": "The generated student task must use a home and garden situation, such as designing a garden, patio or mural. Invented dimensions and costs are fictional, not claims about real properties.",
+          "prior_knowledge_boundary": "Treat the two supplied prior standards as the fixed recently taught repertoire. Grounding may unpack these skills, but must not add extra assumed courses, circle area, volume, surface area, algebraic area formulas, variance, fair-division algorithms, or probability instruction.",
+          "task_rule": "Generate a new task for exploration before instruction on the target, not a worked example or a lesson teaching the target method."
+        }
+      },
+      "learner_context": {
+        "grade": 7,
+        "subject": "mathematics",
+        "jurisdiction": "USA",
+        "assumed_prior_knowledge": [
+          {
+            "resource": "Area of polygons by composing and decomposing (6.G.A.1)",
+            "taught_as": "Find the area of right triangles, other triangles, special quadrilaterals and polygons by composing them into rectangles or decomposing them into triangles and other shapes."
+          },
+          {
+            "resource": "Rational-number operations (7.NS.A.3)",
+            "taught_as": "Solve real-world and mathematical problems involving the four operations with rational numbers."
+          }
+        ]
+      },
+      "learner_context_source": "Stipulated by us for this cell (October 13, 2026): prerequisite standards chosen as the CCSS standards a grade 7 class would normally have covered before the target; taught_as wording checked against thecorestandards.org on 2026-10-13. Not observed student knowledge."
+    }
+  ]
+}

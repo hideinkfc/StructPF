@@ -1,0 +1,66 @@
+version: pf-eedi-profiles/v2
+status: frozen-before-full-run-2026-10-16
+supersedes: pf_eedi_profiles_20261016.yaml (v1; calibration on v1 is kept as superseded)
+source: >
+  Revised after the blocking leakage review on 2026-10-16. v1 listed procedures that solve
+  specific questions (for example rounding for the 23 x 199 estimate, equivalent-fraction
+  simplification, scaling, inverse operations, decimal conversions, mean and median). v2 keeps
+  only earlier prerequisites, sets aside each topic's core procedure, and encodes no
+  misconception. Profiles describe a pre-instruction learner, which is the Productive Failure
+  setting; the Eedi quizzes were given after teaching, and this mismatch is reported with any result.
+profiles:
+  Rounding and estimating:
+    - Place value of whole numbers and decimals to two decimal places.
+    - Multiplying and dividing whole numbers, including multiplication facts up to 12 by 12.
+    - Multiplying and dividing decimals by whole numbers.
+    - Comparing the size of two whole numbers.
+  Fractions - basics:
+    - A fraction as a part of a whole, with numerator and denominator meaning.
+    - Adding and subtracting fractions with the same denominator.
+    - Counting equal parts of a shape or a set.
+  Proportion:
+    - Multiplying and dividing whole numbers and decimals.
+    - Converting between grams and kilograms, millilitres and litres, pence and pounds.
+    - Repeated addition as multiplication, such as three lots of four make twelve.
+    - Reading prices and quantities from a shopping list or a table.
+  Probability of a single event:
+    - Finding a fraction of an amount.
+    - Adding and subtracting decimals.
+    - Adding and subtracting fractions with unlike denominators.
+    - Totalling the frequencies in a table.
+    - Describing an event as likely, unlikely, certain or impossible in words.
+    - Sharing a quantity in a given part-to-part ratio.
+  Linear equations:
+    - Multiplication and division facts.
+    - Order of operations.
+    - Substituting a number into a simple expression.
+    - Using a letter to stand for an unknown number.
+  Decimals:
+    - Place value of decimals to three decimal places.
+    - Adding and subtracting whole numbers using column methods.
+    - Multiplying and dividing a decimal by 10, 100 or 1000.
+  Brackets - single:
+    - Addition and subtraction of whole numbers.
+    - Multiplying a single term by a whole number.
+    - Using a letter to stand for an unknown number.
+  Averages and range - frequency table:
+    - Adding numbers in a list.
+    - Dividing a total by a whole number.
+    - Reading a table with a column of values and a column of frequencies.
+    - Counting how many items belong to each value.
+  Inequalities:
+    - Solving one-step and two-step linear equations.
+    - Ordering whole numbers and decimals on a number line.
+    - Reading a number line marked with whole numbers.
+  Factors, multiples and primes:
+    - Multiplication tables to 12 by 12 and their division facts.
+    - Recognising even and odd numbers.
+    - Arrays showing equal groups of objects.
+  Negative numbers:
+    - Ordering whole numbers on a number line.
+    - Adding and subtracting whole numbers.
+    - Temperature as a context, reading a thermometer marked with whole numbers.
+    - Counting forwards and backwards in steps.
+  Fraction, Decimal, Percentage equivalence:
+    - Place value of decimals.
+    - Reading a decimal on a number line marked in tenths.

@@ -1,0 +1,28 @@
+[
+  {
+    "case_id": "synthetic_prescribed_division_plain",
+    "purpose": "Illustrative negative control, not generated or human-rated: familiar division with an explicitly prescribed method. Compare MR/OE with the presentation variant; this is not a gold-score label.",
+    "learner_context": {
+      "grade": "7",
+      "subject": "mathematics",
+      "assumed_prior_knowledge": [
+        {"resource": "Whole-number division", "taught_as": "Divide whole numbers to find an equal share."},
+        {"resource": "Multiplication facts", "taught_as": "Use multiplication facts through 12 times 12."}
+      ]
+    },
+    "student_task": "Share 24 pencils equally among 6 students. Use 24 divided by 6 to calculate each student's share. Write the number of pencils per student and one sentence explaining the division. Do not use another method."
+  },
+  {
+    "case_id": "synthetic_prescribed_division_presented",
+    "purpose": "Illustrative presentation control, not generated or human-rated: same quantities, operation, required response and method restriction, with a name, context, table and repeated expression. Engagement may legitimately differ; inspect whether cosmetic formats inflate MR/OE.",
+    "learner_context": {
+      "grade": "7",
+      "subject": "mathematics",
+      "assumed_prior_knowledge": [
+        {"resource": "Whole-number division", "taught_as": "Divide whole numbers to find an equal share."},
+        {"resource": "Multiplication facts", "taught_as": "Use multiplication facts through 12 times 12."}
+      ]
+    },
+    "student_task": "Help Maya prepare her classroom's art supplies.\n\nMaya needs to share 24 pencils equally among 6 students so everyone can begin drawing.\n\n| Pencils | Students |\n|---|---|\n| 24 | 6 |\n\nCalculation: 24 / 6.\n\nUse 24 divided by 6 to calculate each student's share. Write the number of pencils per student and one sentence explaining the division. Do not use another method."
+  }
+]

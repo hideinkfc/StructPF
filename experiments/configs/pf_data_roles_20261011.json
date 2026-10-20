@@ -1,0 +1,68 @@
+{
+  "schema_version": "pf-data-role-test-set/v1",
+  "model_selector": "luna",
+  "source_directory": "experiments/results/pf_topic_sweep_20261011/final_20",
+  "protocol": {
+    "evidence_kind": "selected_development_fixed_brief_fresh_D2b_D3_not_student_evidence",
+    "frozen": ["case_input", "prior_context", "selected_design_brief"],
+    "regenerated": ["data", "conditions", "student_task"],
+    "attempts_per_case": 1,
+    "data_call_budget": 3,
+    "writer_calls_if_accepted": 1,
+    "sdk_max_retries": 0,
+    "failed_cases_replaced": false,
+    "calibration_cases": ["area_perimeter", "fraction_division"],
+    "predictions_written_before_calls": true,
+    "comparison_limit": "Both data and writer change; this is not an isolated writer or causal quality comparison."
+  },
+  "cases": [
+    {
+      "id": "area_perimeter",
+      "expected_given": "None: students choose rectangle dimensions, without an invented fixed area or fencing amount.",
+      "expected_teacher_example": "Both fixed-perimeter and fixed-area example rectangle pairs.",
+      "expected_student_job": "Design and justify both comparisons rather than verify prepared rectangles."
+    },
+    {
+      "id": "fraction_division",
+      "expected_given": "Every supplied ribbon length and the fractional measuring-unit length, with their associations.",
+      "expected_teacher_example": "No necessary numerical examples; any worked construction or counts belong only to teacher evidence.",
+      "expected_student_job": "Determine and justify the number of measuring units for each given ribbon."
+    },
+    {
+      "id": "fraction_equivalence",
+      "expected_given": "None: students choose their fraction-card partitions and selected regions.",
+      "expected_teacher_example": "Successful and contrasting partition counts and any chosen refinement factor.",
+      "expected_student_job": "Construct equivalent descriptions and a contrasting alteration without a supplied answer pair."
+    },
+    {
+      "id": "volume_surface",
+      "expected_given": "None: students choose box dimensions, without an invented fixed volume.",
+      "expected_teacher_example": "Both chosen box-dimension triples.",
+      "expected_student_job": "Design equal-volume boxes with different surface areas, then justify the comparison."
+    },
+    {
+      "id": "inequalities",
+      "expected_given": "Both packet prices, minimum packet count and budget.",
+      "expected_teacher_example": "Optional feasible and infeasible sample orders used for verification, not the supplied constraints.",
+      "expected_student_job": "Represent all feasible choices; do not receive prepared order examples."
+    },
+    {
+      "id": "sample_space",
+      "expected_given": "The bag composition of three red and two blue distinguishable tokens and any necessary token labels.",
+      "expected_teacher_example": "A worked sample-space listing or event outcome count, if introduced, is not a starting input.",
+      "expected_student_job": "Represent the full experiment and justify the different-color probability."
+    },
+    {
+      "id": "weighted_mean",
+      "expected_given": "Both group counts and means, with the group-to-value associations.",
+      "expected_teacher_example": "A chosen raw-score reconstruction, if used only for verification, not the group summaries.",
+      "expected_student_job": "Find and justify the combined mean without a worked weighted calculation."
+    },
+    {
+      "id": "correlation_causation",
+      "expected_given": "All paired screen-time, sleep-duration and homework-time observations.",
+      "expected_teacher_example": "Any chosen causal illustration is teacher-only; derived category indices or summaries belong in expressions, not givens.",
+      "expected_student_job": "Assess the claim, offer competing explanations and identify further evidence."
+    }
+  ]
+}

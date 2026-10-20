@@ -1,0 +1,58 @@
+# Curriculum grounding: Singapore Grade 7 (Secondary 1) — Average Speed
+# Grounds: kapur_bielaczyc_2012.yaml (average-speed PF tasks), puech2025_stratl_biking
+id: moe_sg_grade7_average_speed
+country: Singapore
+grade: 7
+school_level: "Secondary 1 (O-Level track, Express)"
+target_concept: "Average speed (average rate of change of distance over time)"
+expert_tasks_grounded:
+  - kapur2012_complex_1
+  - puech2025_stratl_biking
+  - puech2025_stratl_hummingbird
+
+sources:
+  - name: "MOE Singapore — 2020 Express/N(A) Mathematics Syllabuses (O-Level & N(A)-Level)"
+    file: "documents/moe_sg_2020_secondary_maths.pdf"
+    url: "https://www.moe.gov.sg/-/media/files/secondary/syllabuses/maths/2020-express_na-maths_syllabuses.pdf"
+    access_date: "2026-08-24"
+    type: official_curriculum
+    note: "Official Ministry of Education syllabus document, 46 pages, downloaded and stored locally."
+
+  - name: "MOE Singapore — Primary 1-6 Mathematics Syllabus (2021)"
+    url: "https://www.moe.gov.sg/-/media/files/primary/2021-primary-mathematics-syllabus-p1-to-p6.pdf"
+    access_date: "2026-08-24"
+    type: official_curriculum
+    status: url_stale
+    note: "Official MOE page exists but the direct PDF link returned 404 on 2026-08-24; section names below from MOE published topic outlines (speed/ratio are Primary 5-6 Number and Algebra topics)."
+
+prior_resources_taught_before_target:
+  # All facts below are section titles / stated contents from the sources, page-referenced.
+  - resource: "Speed (distance per unit time)"
+    taught_at: "Primary 5-6 (and consolidated Sec 1)"
+    source: "MOE Secondary syllabus; Primary syllabus (stale link)"
+    section: "Rate and Speed"
+    pages: "p.17 (N4.1-N4.5), p.27"
+    section_text: "concepts of average rate, speed, constant speed and average speed; conversion of units (e.g. km/h to m/s)"
+  - resource: "Ratio and proportion"
+    taught_at: "Secondary 1-2"
+    source: "MOE Secondary syllabus"
+    section: "N2. Ratio and proportion"
+    pages: "p.19 (Sec 2: N2.4 map scales, N2.5 direct and inverse proportion), p.29"
+  - resource: "Lowest common multiple (LCM) and highest common factor (HCF)"
+    taught_at: "Secondary 1 (Number and Algebra)"
+    source: "MOE Secondary syllabus"
+    section: "N1. Numbers and their operations"
+    pages: "p.17-18 (N1 strand)"
+  - resource: "Trial and error / guess-and-check heuristic"
+    taught_at: "Primary (heuristics in problem-solving)"
+    source: "MOE Primary syllabus (stale link); heuristics are a standard MOE problem-solving process strand"
+
+target_concept_first_appearance:
+  concept: "Average speed as formal concept"
+  location: "Secondary 1, N4.1-N4.5 'Rate and Speed'"
+  page: "p.17, p.27"
+  note: "Kapur & Bielaczyc state Grade 7 students had NOT received formal instruction on average speed. The MOE Sec-1 syllabus places rate/speed in Secondary 1, which is Grade 7 — consistent with the paper's design choice of the task at the start of that year."
+
+caveats:
+  - "Primary-source list is paper-verified only via Kapur & Bielaczyc (2012), pp. 50-51; MOE primary PDF link needs refreshing for an independent page reference."
+  - "Section titles are quoted from the official syllabus; no bulk copyrighted text reproduced."

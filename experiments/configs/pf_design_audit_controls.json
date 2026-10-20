@@ -1,0 +1,141 @@
+[
+  {
+    "case_id": "synthetic_positive_average_speed",
+    "kind": "synthetic_control_not_human_rated",
+    "topic": "average speed",
+    "control_purpose": "Illustrative positive control for a plausible prior start, a useful contrast, and mathematically distinct routes. Not a gold rating.",
+    "illustrative_signals": {
+      "prior_resource_start": "supported",
+      "useful_contrast": "supported",
+      "approach_diversity": "supported",
+      "task_openness": "partial"
+    },
+    "learning_target": "Compare average speed over a multi-part trip.",
+    "learner_context": {
+      "grade": 7,
+      "subject": "mathematics",
+      "assumed_prior_knowledge": [
+        {
+          "resource": "Unit rates",
+          "taught_as": "Find distance per unit of time for a travel segment."
+        },
+        {
+          "resource": "Ratio and proportion",
+          "taught_as": "Compare multiplicative relationships between quantities."
+        }
+      ]
+    },
+    "student_task": "A cyclist rides 6 km in 30 minutes, then 4 km in 40 minutes. What was the cyclist's average speed for the whole trip? Explain how you decided whether to combine the segment speeds or the distances and times."
+  },
+  {
+    "case_id": "synthetic_negative_fair_share",
+    "kind": "synthetic_control_not_human_rated",
+    "topic": "equal sharing",
+    "control_purpose": "Illustrative negative control: decorative representations accompany one prescribed operation. Not a gold rating.",
+    "illustrative_signals": {
+      "prior_resource_start": "supported",
+      "approach_diversity": "not_evidenced",
+      "task_openness": "not_evidenced"
+    },
+    "learning_target": "Divide a whole-number quantity into equal shares.",
+    "learner_context": {
+      "grade": 6,
+      "subject": "mathematics",
+      "assumed_prior_knowledge": [
+        {
+          "resource": "Whole-number division",
+          "taught_as": "Divide a quantity into equal groups."
+        }
+      ]
+    },
+    "student_task": "Share 24 markers equally among 6 students. A table records 24 markers and 6 students, and a bar model shows six equal groups. Use 24 divided by 6, write the answer, and explain the division. Do not use another method."
+  },
+  {
+    "case_id": "synthetic_unknown_percentages",
+    "kind": "synthetic_control_not_human_rated",
+    "topic": "percentages",
+    "control_purpose": "Illustrative unknown control: the target, prior instruction, units, and decision rule are insufficiently specified. Not a gold rating.",
+    "illustrative_signals": {
+      "target_relevance": "unknown",
+      "prior_resource_start": "unknown",
+      "useful_contrast": "unknown",
+      "mathematics_review": "unknown"
+    },
+    "learning_target": "Unspecified comparison goal.",
+    "learner_context": {
+      "grade": 9,
+      "subject": "mathematics"
+    },
+    "student_task": "A club has two percentage values in a chart, but the chart does not state what the values measure or how they were calculated. Which option is better? Explain."
+  },
+  {
+    "case_id": "synthetic_negative_consistency_procedure",
+    "kind": "synthetic_control_not_human_rated",
+    "topic": "spread of scores",
+    "control_purpose": "Illustrative topic-diverse negative control: a table accompanies one prescribed range calculation. Not a gold rating.",
+    "illustrative_signals": {
+      "prior_resource_start": "supported",
+      "approach_diversity": "not_evidenced",
+      "task_openness": "not_evidenced"
+    },
+    "learning_target": "Compare the ranges of two fixed score sets.",
+    "learner_context": {
+      "grade": 10,
+      "subject": "mathematics",
+      "assumed_prior_knowledge": [
+        {
+          "resource": "Range",
+          "taught_as": "Subtract the smallest value from the largest value in a data set."
+        }
+      ]
+    },
+    "student_task": "Set A has scores 2, 3, 3, and 8. Set B has scores 1, 4, 4, and 9. Use only range (largest minus smallest) to decide which set has the greater range. Show the subtraction and do not use another measure."
+  },
+  {
+    "case_id": "synthetic_intentional_open_consistency",
+    "kind": "synthetic_control_not_human_rated",
+    "topic": "consistency",
+    "control_purpose": "Illustrative intentionally open control: students choose what consistency means. An unspecified statistic is not automatically a mathematical defect. Not a gold rating.",
+    "illustrative_signals": {
+      "target_relevance": "supported",
+      "prior_resource_start": "supported",
+      "task_openness": "supported",
+      "mathematics_review": "unknown"
+    },
+    "learning_target": "Compare the consistency of two data sets and explain the chosen criterion.",
+    "learner_context": {
+      "grade": 10,
+      "subject": "mathematics",
+      "assumed_prior_knowledge": [
+        {
+          "resource": "Mean and range",
+          "taught_as": "Calculate the mean and range of a small data set."
+        }
+      ]
+    },
+    "student_task": "Two teams have score sets A: 1, 3, 7, 9 and B: 1, 5, 5, 9. Both sets have the same mean and range. Decide what 'more consistent' should mean for this comparison, choose or invent a way to compare the sets, and explain why your criterion is useful. No particular spread measure is prescribed."
+  },
+  {
+    "case_id": "synthetic_narrow_yes_no_display",
+    "kind": "synthetic_control_not_human_rated",
+    "topic": "water use",
+    "control_purpose": "Illustrative negative control: a fixed yes/no rate check offers display choices and generic future-risk speculation, not consequential mathematical openness. Not a gold rating.",
+    "illustrative_signals": {
+      "target_relevance": "supported",
+      "approach_diversity": "not_evidenced",
+      "task_openness": "not_evidenced"
+    },
+    "learning_target": "Decide whether water use is proportional to operating time in the listed records.",
+    "learner_context": {
+      "grade": 7,
+      "subject": "mathematics",
+      "assumed_prior_knowledge": [
+        {
+          "resource": "Unit rates",
+          "taught_as": "Find water used per minute from paired volume and time values."
+        }
+      ]
+    },
+    "student_task": "A pump uses 15 liters in 5 minutes, 30 liters in 10 minutes, and 45 liters in 15 minutes. Decide yes or no: do the records show one constant liters-per-minute rate? Choose a table, graph, or equation to present the same check. Then speculate about what might make using this pace unsafe in a future shift, even though no new shift data or safety criterion is supplied."
+  }
+]

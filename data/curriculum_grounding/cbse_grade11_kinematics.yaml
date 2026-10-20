@@ -1,0 +1,55 @@
+# Curriculum grounding: India (CBSE) Class 11 — Kinematics (lawyer/braking PF tasks)
+# Grounds: Kapur (2008) lawyer/speeding tasks in the StratL set
+id: cbse_grade11_kinematics
+country: India (CBSE board)
+grade: 11
+school_level: "Class 11, Senior Secondary (Science stream, Physics)"
+target_concept: "Newtonian kinematics: uniformly accelerated motion, reaction time, braking distance"
+expert_tasks_grounded:
+  - puech2025_stratl_lawer
+  - puech2025_stratl_lawer_structured
+  - puech2025_stratl_lawer_2
+  - puech2025_stratl_lawer_2_structured
+
+sources:
+  - name: "CBSE Senior Secondary Physics Curriculum 2025-26 (Classes XI-XII)"
+    file: "documents/cbse_physics_srsec_2025_26.pdf"
+    url: "https://cbseacademic.nic.in/web_material/CurriculumMain26/SrSec/Physics_SrSec_2025-26.pdf"
+    access_date: "2026-08-24"
+    type: official_curriculum
+    note: "Official CBSE Academic Unit curriculum PDF, 23 pages."
+
+prior_resources_taught_before_target:
+  - resource: "Units and measurement, dimensional analysis"
+    taught_at: "Class 11, Unit I (immediately before kinematics)"
+    source: "CBSE Physics curriculum"
+    section: "Unit I: Physical World and Measurement"
+    pages: "p.2-3"
+    section_text: "Units and Measurements; Dimensions of physical quantities, dimensional analysis and its applications"
+  - resource: "Frame of reference, motion in a straight line"
+    taught_at: "Class 11, Unit II Chapter 2"
+    source: "CBSE Physics curriculum"
+    section: "Unit II: Kinematics, Chapter 2: Motion in a Straight Line"
+    pages: "p.3"
+    section_text: "Frame of reference, Motion in a straight line, Elementary concepts of differentiation and integration for describing motion, uniform and non-uniform motion, average speed and average velocity"
+  - resource: "Average speed and average velocity"
+    taught_at: "Class 11, Unit II Chapter 2"
+    source: "CBSE Physics curriculum"
+    section: "Unit II, Chapter 2"
+    pages: "p.3"
+  - resource: "Laws of motion (friction, coefficient of friction)"
+    taught_at: "Class 11, Unit III (after kinematics)"
+    source: "CBSE Physics curriculum"
+    section: "Unit III: Laws of Motion, Chapter 4"
+    pages: "p.3-4"
+    note: "The lawyer task requires friction (coefficient of friction 0.6-0.8) — taught in Unit III, so a Class 11 student mid-course may have it as a recently taught resource."
+
+target_concept_first_appearance:
+  concept: "Uniformly accelerated motion with reaction-time and braking reasoning"
+  location: "Class 11, Unit II Kinematics (Chapters 2-3)"
+  page: "p.3"
+  note: "Kapur (2008) describes the task as requiring students to reason with kinematics they were being taught, in an ill-structured legal scenario. The CBSE sequence (Units I-II-III) gives the exact taught-before inventory."
+
+caveats:
+  - "Kapur (2008) was conducted in Indian CBSE schools; the 2025-26 curriculum is the current official version — the kinematics unit structure (Unit II, Chapters 2-3) has been stable across years, but cite as 'current CBSE structure consistent with the study context', not as the 2008 document."
+  - "Section titles quoted from the official curriculum."

@@ -1,0 +1,95 @@
+{
+  "source_version": "v1.14.0",
+  "retrieved_on": "2026-09-29",
+  "nodes_export_url": "https://cdn.learningcommons.org/knowledge-graph/v1.14.0/exports/nodes.jsonl?ref=docs",
+  "relationships_export_url": "https://cdn.learningcommons.org/knowledge-graph/v1.14.0/exports/relationships.jsonl?ref=docs",
+  "allowed_licenses": [
+    "https://creativecommons.org/licenses/by/4.0/",
+    "https://creativecommons.org/publicdomain/zero/1.0/"
+  ],
+  "targets": [
+    {
+      "id": "kapur_average_speed_g7_singapore",
+      "task_source": "data/pf_exercises/kapur_bielaczyc_2012.yaml",
+      "learning_target": "Average speed across a journey: total distance divided by total elapsed time.",
+      "context": "Grade 7, Singapore, mathematics",
+      "mapping_status": "concept match and US unit-rate proxies; no Singapore record",
+      "mapping_note": "Texas code 112.27.b.7.A names average speed at Grade 7 but is a US science standard. Common Core 6.RP.A.2 and 7.RP.A.1 plus linked unit-rate components are mathematical proxies, not evidence of Singapore curriculum placement or prior instruction.",
+      "standard_node_ids": [
+        "22fa100e-0db6-589c-9109-a5518d5a3675",
+        "c3126032-2984-5b67-9ed5-2f2f0821e99f",
+        "5407f284-4756-58fb-8a7f-67eb13f40eee"
+      ],
+      "learning_component_node_ids": [
+        "29e60e03-2920-51de-aff0-cb317dad7e54",
+        "863028c4-61cc-5e59-8c83-beea5ec279c3",
+        "84257a01-2af1-5cad-9f2e-3f6db9a7466b",
+        "db4c25ad-9892-5abb-bcba-2fc9781d10f8"
+      ]
+    },
+    {
+      "id": "loibl_variance_g10_nrw",
+      "task_source": "data/pf_exercises/loibl_rummel_2014.yaml",
+      "learning_target": "Invent a measure of consistency or spread; later formalized with mean absolute deviation or standard deviation.",
+      "context": "Grade 10, North Rhine-Westphalia, Germany, mathematics",
+      "mapping_status": "US K-12 standards and component proxies; no NRW record",
+      "mapping_note": "Common Core 6.SP.B.5.c and linked components cover mean absolute deviation; HSS-ID.A.2 covers standard deviation in grades 9-12. These are concept candidates, not NRW curriculum evidence or proof of what Grade 10 students had learned.",
+      "standard_node_ids": [
+        "7f73a2ac-ae0d-5b54-a09e-84627109cbc0",
+        "8a3cfdb1-392d-5dda-b888-9b6d86203c63",
+        "905232e2-a99d-5d43-8aba-19bd6f182731",
+        "9f4f2288-f6cb-5708-a703-fd4aec422541",
+        "b91b4839-3c84-5273-87e5-df6567159236",
+        "510554c8-f0c5-5ffa-8109-c58bd4abccdf"
+      ],
+      "learning_component_node_ids": [
+        "3280abf4-84e7-5306-88cf-450d79801840",
+        "50f8ae46-07fd-58f7-bd80-b04aaedf1137",
+        "a6f3f96d-a2d8-5ba5-95e8-33991edcecbc",
+        "5b4281b5-cf1a-58d8-992c-66164031594e",
+        "293d2f3c-656a-579d-bd8a-3c954a29f480",
+        "22f8b7e2-08ce-5f75-b3a8-c215e97f1ce0",
+        "2ad87414-627a-5b7c-90be-1106bc4c6876",
+        "d6f0d3bc-e9a8-5d0c-ae9e-f04c04660fad",
+        "1d605f54-e40d-5753-8881-037fad412746"
+      ]
+    },
+    {
+      "id": "kerrigan_fair_division_undergrad_usa",
+      "task_source": "data/pf_exercises/kerrigan_weber_chinn_2021.yaml",
+      "learning_target": "Fair shares and resolving a multi-person allocation standoff using a new method.",
+      "context": "Undergraduate, USA, liberal-arts mathematics",
+      "mapping_status": "US high-school fair-division standards are proxies; no undergraduate record",
+      "mapping_note": "Texas Grade 9-12 standards cover Divider-Chooser and multi-player Knaster procedures; Florida and Alabama include broader fair-division standards. They are related records, not the undergraduate course sequence or the Lone Divider standoff-resolution target.",
+      "standard_node_ids": [
+        "03d9b14e-1df6-578d-8a00-d69a6f6502e0",
+        "0c193579-8990-594c-9dd4-65b45d2a8473",
+        "761d86f2-f2b2-5af4-b02e-ae7927d54cec",
+        "112f8f3b-b7f3-5c2c-bc73-d129f397e896",
+        "c7310626-9b35-5a9e-a1a9-3d9d4f2f6e01",
+        "0019be75-bb33-55fa-bcdd-aba122a88b25",
+        "629c94da-76bc-5eb5-92bc-0c47f88507c6",
+        "dd7271fc-781f-5bd6-b5e6-99a754b6594f",
+        "d87c8180-2870-5a14-b778-339d13d36ba7",
+        "b3c790b6-633b-5fb4-b6e1-b8ec80be7f24",
+        "e5637fb7-8e84-58ff-bb0c-0a0015be2977",
+        "85ff7c54-5409-5bcb-ac89-5a24dedbe85b",
+        "370df9d9-ff4c-5469-88e7-4100843a964c",
+        "d7e6b9b1-e7cf-5037-86f8-df59c1c4093e",
+        "f1931ac7-71b2-5329-ba9d-32f54ee8f936",
+        "4238980f-cdbf-5e34-8258-875322e2b379"
+      ],
+      "learning_component_node_ids": []
+    }
+  ],
+  "progression_standard_node_ids": [
+    "c3126032-2984-5b67-9ed5-2f2f0821e99f",
+    "5407f284-4756-58fb-8a7f-67eb13f40eee",
+    "7f73a2ac-ae0d-5b54-a09e-84627109cbc0",
+    "8a3cfdb1-392d-5dda-b888-9b6d86203c63",
+    "905232e2-a99d-5d43-8aba-19bd6f182731",
+    "9f4f2288-f6cb-5708-a703-fd4aec422541",
+    "b91b4839-3c84-5273-87e5-df6567159236",
+    "510554c8-f0c5-5ffa-8109-c58bd4abccdf"
+  ]
+}

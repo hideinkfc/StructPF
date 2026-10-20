@@ -1,0 +1,168 @@
+{
+  "schema_version": "pf-topic-prerequisites/v1",
+  "verified_at": "2026-10-11",
+  "source_note": {
+    "input_config": "experiments/configs/pf_topic_sweep_20261011.json",
+    "authority": "Common Core State Standards Initiative, official thecorestandards.org mathematics pages",
+    "verification_method": "The research agent fetched each selected individual standard page and checked the excerpt against returned page text. The parent saved the verified excerpts; no model generation was performed during source verification.",
+    "timestamp_note": "The date identifies this experiment session. Independent HTTP request timestamps were unavailable; no exact retrieval time is claimed.",
+    "text_policy": "Contiguous official excerpts, with presentation-only italic markup removed. Partial sentences and clauses are identified in case verification notes. Labels and notes are assistant-authored.",
+    "coverage_policy": "Selected prerequisite anchors, not complete coverage of every teacher stipulation or evidence of actual learner knowledge. Uncovered skills and representation permissions remain hypothetical teacher assumptions. Target-method instruction is not assumed.",
+    "retrieval_issues": [
+      "Some domain landing pages returned only titles; selected individual standard pages provided the quoted text.",
+      "Discovery URLs /Math/Content/4/OA/A/5/ and /Math/Content/7/SP/A/5/ returned 404 pages. The correct /Math/Content/4/OA/C/5/ and /Math/Content/7/SP/C/5/ pages were successfully verified.",
+      "No selected excerpt depends on a failed request."
+    ],
+    "adapter_limit": "Only source_url, standard_id, label and text are forwarded as D1 evidence. Verification and coverage notes are audit metadata, not extra learner knowledge."
+  },
+  "cases": {
+    "fraction_equivalence": {
+      "grounding_evidence": [
+        {"standard_id": "3.NF.A.1", "label": "CCSS: fractions formed from equal parts of a whole", "source_url": "https://www.thecorestandards.org/Math/Content/3/NF/A/1/", "text": "Understand a fraction 1/b as the quantity formed by 1 part when a whole is partitioned into b equal parts; understand a fraction a/b as the quantity formed by a parts of size 1/b."},
+        {"standard_id": "3.OA.A.2", "label": "CCSS: whole-number division as equal sharing and grouping", "source_url": "https://www.thecorestandards.org/Math/Content/3/OA/A/2/", "text": "Interpret whole-number quotients of whole numbers, e.g., interpret 56 \u00f7 8 as the number of objects in each share when 56 objects are partitioned equally into 8 shares, or as a number of shares when 56 objects are partitioned into equal shares of 8 objects each."}
+      ],
+      "verification": "3.NF.A.1 is complete; 3.OA.A.2 is its first sentence. Both were verified at the listed official URLs. Fraction diagram conventions remain stipulated. Whole-number sharing is not evidence of every fractional-sharing skill. Equivalence instruction is deliberately excluded."
+    },
+    "fraction_addition": {
+      "grounding_evidence": [
+        {"standard_id": "3.NF.A.3.b", "label": "CCSS: simple equivalent fractions explained with visual models", "source_url": "https://www.thecorestandards.org/Math/Content/3/NF/A/3/b/", "text": "Recognize and generate simple equivalent fractions, e.g., 1/2 = 2/4, 4/6 = 2/3. Explain why the fractions are equivalent, e.g., by using a visual fraction model."},
+        {"standard_id": "4.NF.B.3.d", "label": "CCSS: fraction addition with like denominators and a common whole", "source_url": "https://www.thecorestandards.org/Math/Content/4/NF/B/3/d/", "text": "Solve word problems involving addition and subtraction of fractions referring to the same whole and having like denominators, e.g., by using visual fraction models and equations to represent the problem."}
+      ],
+      "verification": "Both complete substandards were verified at the listed official URLs. Visual equivalence and same-denominator addition are stipulated prerequisites, not an assumed general unlike-denominator algorithm. Diagram format and fluency remain hypothetical teacher stipulations."
+    },
+    "fraction_division": {
+      "grounding_evidence": [
+        {"standard_id": "3.OA.A.2", "label": "CCSS: whole-number division interpreted as grouping", "source_url": "https://www.thecorestandards.org/Math/Content/3/OA/A/2/", "text": "Interpret whole-number quotients of whole numbers, e.g., interpret 56 \u00f7 8 as the number of objects in each share when 56 objects are partitioned equally into 8 shares, or as a number of shares when 56 objects are partitioned into equal shares of 8 objects each."},
+        {"standard_id": "5.NF.B.4", "label": "CCSS: multiplication involving fractions", "source_url": "https://www.thecorestandards.org/Math/Content/5/NF/B/4/", "text": "Apply and extend previous understandings of multiplication to multiply a fraction or whole number by a fraction."},
+        {"standard_id": "3.NF.A.2.a", "label": "CCSS: unit fractions represented on a number line", "source_url": "https://www.thecorestandards.org/Math/Content/3/NF/A/2/a/", "text": "Represent a fraction 1/b on a number line diagram by defining the interval from 0 to 1 as the whole and partitioning it into b equal parts. Recognize that each part has size 1/b and that the endpoint of the part based at 0 locates the number 1/b on the number line."}
+      ],
+      "verification": "Official URLs verified. 3.OA.A.2 is its first sentence; the other excerpts are complete. The number-line excerpt covers unit fractions, not every fraction diagram. Neither unit-fraction division nor general fraction division is assumed as taught."
+    },
+    "ratio_sharing": {
+      "grounding_evidence": [
+        {"standard_id": "3.OA.A.2", "label": "CCSS: equal grouping and division", "source_url": "https://www.thecorestandards.org/Math/Content/3/OA/A/2/", "text": "Interpret whole-number quotients of whole numbers, e.g., interpret 56 \u00f7 8 as the number of objects in each share when 56 objects are partitioned equally into 8 shares, or as a number of shares when 56 objects are partitioned into equal shares of 8 objects each."},
+        {"standard_id": "6.RP.A.1", "label": "CCSS: basic ratio concepts and ratio language", "source_url": "https://www.thecorestandards.org/Math/Content/6/RP/A/1/", "text": "Understand the concept of a ratio and use ratio language to describe a ratio relationship between two quantities."},
+        {"standard_id": "4.NF.B.4.c", "label": "CCSS: a fraction of a whole-number quantity", "source_url": "https://www.thecorestandards.org/Math/Content/4/NF/B/4/c/", "text": "Solve word problems involving multiplication of a fraction by a whole number, e.g., by using visual fraction models and equations to represent the problem."}
+      ],
+      "verification": "First sentences verified at all three official URLs. Fraction-of-quantity support is scoped to whole numbers. Converting part-to-part ratios into fractions of a shared total remains the target, not prior knowledge."
+    },
+    "percentage_change": {
+      "grounding_evidence": [
+        {"standard_id": "6.RP.A.3.c", "label": "CCSS: percent as a rate per hundred and percent of a quantity", "source_url": "https://www.thecorestandards.org/Math/Content/6/RP/A/3/c/", "text": "Find a percent of a quantity as a rate per 100 (e.g., 30% of a quantity means 30/100 times the quantity); solve problems involving finding the whole, given a part and the percent."},
+        {"standard_id": "5.NBT.B.7", "label": "CCSS: decimal arithmetic to hundredths", "source_url": "https://www.thecorestandards.org/Math/Content/5/NBT/B/7/", "text": "Add, subtract, multiply, and divide decimals to hundredths, using concrete models or drawings and strategies based on place value, properties of operations, and/or the relationship between addition and subtraction; relate the strategy to a written method and explain the reasoning used."}
+      ],
+      "verification": "Complete official excerpts verified. Decimal fluency beyond hundredths is not established. Changing reference quantities and noncancellation of equal percentage increases and decreases remain for exploration."
+    },
+    "proportionality": {
+      "grounding_evidence": [
+        {"standard_id": "6.RP.A.2", "label": "CCSS: interpreting unit rates", "source_url": "https://www.thecorestandards.org/Math/Content/6/RP/A/2/", "text": "Understand the concept of a unit rate a/b associated with a ratio a:b with b \u2260 0, and use rate language in the context of a ratio relationship."},
+        {"standard_id": "5.NBT.B.7", "label": "CCSS: arithmetic with decimals to hundredths", "source_url": "https://www.thecorestandards.org/Math/Content/5/NBT/B/7/", "text": "Add, subtract, multiply, and divide decimals to hundredths, using concrete models or drawings and strategies based on place value, properties of operations, and/or the relationship between addition and subtraction; relate the strategy to a written method and explain the reasoning used."}
+      ],
+      "verification": "6.RP.A.2 first sentence and complete 5.NBT.B.7 verified. Generic two-column-table reading and the full integer-arithmetic repertoire remain teacher stipulations. No proportionality-classification criterion is assumed."
+    },
+    "linear_systems": {
+      "grounding_evidence": [
+        {"standard_id": "7.EE.B.4.a", "label": "CCSS: solving individual one-variable linear equations", "source_url": "https://www.thecorestandards.org/Math/Content/7/EE/B/4/a/", "text": "Solve word problems leading to equations of the form px + q = r and p(x + q) = r, where p, q, and r are specific rational numbers. Solve equations of these forms fluently."},
+        {"standard_id": "5.G.A.2", "label": "CCSS: plotting and interpreting coordinate points", "source_url": "https://www.thecorestandards.org/Math/Content/5/G/A/2/", "text": "Represent real world and mathematical problems by graphing points in the first quadrant of the coordinate plane, and interpret coordinate values of points in the context of the situation."}
+      ],
+      "verification": "7.EE.B.4.a first two sentences and complete 5.G.A.2 verified. Trial-and-check tables remain stipulated; plotting beyond the first quadrant is not grounded. A common solution satisfying two conditions remains the target."
+    },
+    "inequalities": {
+      "grounding_evidence": [
+        {"standard_id": "6.EE.B.7", "label": "CCSS: one-step equations with nonnegative rational numbers", "source_url": "https://www.thecorestandards.org/Math/Content/6/EE/B/7/", "text": "Solve real-world and mathematical problems by writing and solving equations of the form x + p = q and px = q for cases in which p, q and x are all nonnegative rational numbers."},
+        {"standard_id": "6.NS.C.7.a", "label": "CCSS: numerical comparisons on a number line", "source_url": "https://www.thecorestandards.org/Math/Content/6/NS/C/7/a/", "text": "Interpret statements of inequality as statements about the relative position of two numbers on a number line diagram."}
+      ],
+      "verification": "Complete 6.EE.B.7 and first sentence of 6.NS.C.7.a verified. Equations are scoped to nonnegative rational numbers. Numerical ordering does not assume instruction in variable inequalities or feasible sets."
+    },
+    "linear_growth": {
+      "grounding_evidence": [
+        {"standard_id": "6.RP.A.2", "label": "CCSS: unit rates as existing rate knowledge", "source_url": "https://www.thecorestandards.org/Math/Content/6/RP/A/2/", "text": "Understand the concept of a unit rate a/b associated with a ratio a:b with b \u2260 0, and use rate language in the context of a ratio relationship."},
+        {"standard_id": "5.G.A.2", "label": "CCSS: plotting and interpreting points in context", "source_url": "https://www.thecorestandards.org/Math/Content/5/G/A/2/", "text": "Represent real world and mathematical problems by graphing points in the first quadrant of the coordinate plane, and interpret coordinate values of points in the context of the situation."}
+      ],
+      "verification": "6.RP.A.2 first sentence and complete 5.G.A.2 verified. Reading tables and additional graphing conventions remain stipulated. All-quadrant plotting is not grounded. Formal slope and rate versus starting amount remain the target."
+    },
+    "quadratic_patterns": {
+      "grounding_evidence": [
+        {"standard_id": "4.OA.C.5", "label": "CCSS: generating number or shape patterns from a given rule", "source_url": "https://www.thecorestandards.org/Math/Content/4/OA/C/5/", "text": "Generate a number or shape pattern that follows a given rule. Identify apparent features of the pattern that were not explicit in the rule itself."},
+        {"standard_id": "6.EE.A.2.a", "label": "CCSS: recording operations with numerical and letter expressions", "source_url": "https://www.thecorestandards.org/Math/Content/6/EE/A/2/a/", "text": "Write expressions that record operations with numbers and with letters standing for numbers."},
+        {"standard_id": "3.MD.C.7.b", "label": "CCSS: multiplication and rectangular area", "source_url": "https://www.thecorestandards.org/Math/Content/3/MD/C/7/b/", "text": "Multiply side lengths to find areas of rectangles with whole-number side lengths in the context of solving real world and mathematical problems, and represent whole-number products as rectangular areas in mathematical reasoning."}
+      ],
+      "verification": "4.OA.C.5 first two sentences, 6.EE.A.2.a first sentence and complete 3.MD.C.7.b verified. Given-rule pattern activity does not assume unknown quadratic-rule discovery. Visual-pattern conventions and full linear-expression fluency remain stipulated. Area support is whole-number scoped."
+    },
+    "area_perimeter": {
+      "grounding_evidence": [
+        {"standard_id": "3.MD.C.7.b", "label": "CCSS: rectangle area from side-length multiplication", "source_url": "https://www.thecorestandards.org/Math/Content/3/MD/C/7/b/", "text": "Multiply side lengths to find areas of rectangles with whole-number side lengths in the context of solving real world and mathematical problems, and represent whole-number products as rectangular areas in mathematical reasoning."},
+        {"standard_id": "4.MD.A.3", "label": "CCSS: existing rectangle area and perimeter formulas", "source_url": "https://www.thecorestandards.org/Math/Content/4/MD/A/3/", "text": "Apply the area and perimeter formulas for rectangles in real world and mathematical problems."}
+      ],
+      "verification": "Complete 3.MD.C.7.b and first sentence of 4.MD.A.3 verified. Arbitrary-polygon perimeter and grid drawing are not fully grounded. The standard explicitly describing equal perimeter with different areas is excluded."
+    },
+    "similarity_scaling": {
+      "grounding_evidence": [
+        {"standard_id": "6.RP.A.3.a", "label": "CCSS: equivalent-ratio tables", "source_url": "https://www.thecorestandards.org/Math/Content/6/RP/A/3/a/", "text": "Make tables of equivalent ratios relating quantities with whole-number measurements, find missing values in the tables, and plot the pairs of values on the coordinate plane. Use tables to compare ratios."},
+        {"standard_id": "6.G.A.1", "label": "CCSS: triangle and polygon areas through composition and decomposition", "source_url": "https://www.thecorestandards.org/Math/Content/6/G/A/1/", "text": "Find the area of right triangles, other triangles, special quadrilaterals, and polygons by composing into rectangles or decomposing into triangles and other shapes; apply these techniques in the context of solving real-world and mathematical problems."}
+      ],
+      "verification": "Both complete official excerpts verified. Geometric length-scale factors remain specifically teacher-stipulated; whole-number ratio tables provide partial support only. Scale-drawing standards already requiring scaled-area computation are excluded."
+    },
+    "pythagorean_distance": {
+      "grounding_evidence": [
+        {"standard_id": "3.MD.C.7.b", "label": "CCSS: rectangular and square areas as products", "source_url": "https://www.thecorestandards.org/Math/Content/3/MD/C/7/b/", "text": "Multiply side lengths to find areas of rectangles with whole-number side lengths in the context of solving real world and mathematical problems, and represent whole-number products as rectangular areas in mathematical reasoning."},
+        {"standard_id": "6.EE.A.1", "label": "CCSS: evaluating whole-number exponents", "source_url": "https://www.thecorestandards.org/Math/Content/6/EE/A/1/", "text": "Write and evaluate numerical expressions involving whole-number exponents."},
+        {"standard_id": "5.G.A.2", "label": "CCSS: coordinate points in the first quadrant", "source_url": "https://www.thecorestandards.org/Math/Content/5/G/A/2/", "text": "Represent real world and mathematical problems by graphing points in the first quadrant of the coordinate plane, and interpret coordinate values of points in the context of the situation."}
+      ],
+      "verification": "All three complete official excerpts verified. Squares are a rectangle special case. Measuring, drawing lengths and square-root repertoire remain stipulated, not directly grounded. Coordinate support covers the first quadrant only. Pythagorean and diagonal-distance instruction is excluded."
+    },
+    "circle_area": {
+      "grounding_evidence": [
+        {"standard_id": "6.G.A.1", "label": "CCSS: existing rectangle, triangle, and polygon area reasoning", "source_url": "https://www.thecorestandards.org/Math/Content/6/G/A/1/", "text": "Find the area of right triangles, other triangles, special quadrilaterals, and polygons by composing into rectangles or decomposing into triangles and other shapes; apply these techniques in the context of solving real-world and mathematical problems."},
+        {"standard_id": "3.MD.C.6", "label": "CCSS: measuring area by counting unit squares", "source_url": "https://www.thecorestandards.org/Math/Content/3/MD/C/6/", "text": "Measure areas by counting unit squares (square cm, square m, square in, square ft, and improvised units)."}
+      ],
+      "verification": "Both complete official excerpts verified. Radius/diameter terminology and partial-square estimation remain teacher stipulations. The circle-area standard is excluded because it assumes the target formula."
+    },
+    "volume_surface": {
+      "grounding_evidence": [
+        {"standard_id": "5.MD.C.5.b", "label": "CCSS: existing volume formulas for rectangular prisms", "source_url": "https://www.thecorestandards.org/Math/Content/5/MD/C/5/b/", "text": "Apply the formulas V = l \u00d7 w \u00d7 h and V = b \u00d7 h for rectangular prisms to find volumes of right rectangular prisms with whole-number edge lengths in the context of solving real world and mathematical problems."},
+        {"standard_id": "3.MD.C.7.b", "label": "CCSS: existing rectangle-area calculation", "source_url": "https://www.thecorestandards.org/Math/Content/3/MD/C/7/b/", "text": "Multiply side lengths to find areas of rectangles with whole-number side lengths in the context of solving real world and mathematical problems, and represent whole-number products as rectangular areas in mathematical reasoning."},
+        {"standard_id": "6.G.A.4", "label": "CCSS: representing three-dimensional figures using nets", "source_url": "https://www.thecorestandards.org/Math/Content/6/G/A/4/", "text": "Represent three-dimensional figures using nets made up of rectangles and triangles"}
+      ],
+      "verification": "First two excerpts are complete; 6.G.A.4 is the exact opening clause ending before the comma, deliberately omitting its surface-area instruction. All official URLs verified. Volume/area support is whole-number scoped. Particular box-net layout remains stipulated. Equal-volume comparisons and optimization remain the target."
+    },
+    "sample_space": {
+      "grounding_evidence": [
+        {"standard_id": "7.SP.C.5", "label": "CCSS: elementary probability and likelihood", "source_url": "https://www.thecorestandards.org/Math/Content/7/SP/C/5/", "text": "Understand that the probability of a chance event is a number between 0 and 1 that expresses the likelihood of the event occurring. Larger numbers indicate greater likelihood. A probability near 0 indicates an unlikely event, a probability around 1/2 indicates an event that is neither unlikely nor likely, and a probability near 1 indicates a likely event."},
+        {"standard_id": "7.SP.C.7.a", "label": "CCSS: existing uniform probability models in simple-event contexts", "source_url": "https://www.thecorestandards.org/Math/Content/7/SP/C/7/a/", "text": "Develop a uniform probability model by assigning equal probability to all outcomes, and use the model to determine probabilities of events."},
+        {"standard_id": "3.NF.A.1", "label": "CCSS: fractions built from equal-sized parts", "source_url": "https://www.thecorestandards.org/Math/Content/3/NF/A/1/", "text": "Understand a fraction 1/b as the quantity formed by 1 part when a whole is partitioned into b equal parts; understand a fraction a/b as the quantity formed by a parts of size 1/b."}
+      ],
+      "verification": "7.SP.C.5 and 3.NF.A.1 are complete; 7.SP.C.7.a is its first sentence. Official URLs verified. Uniform models are used only as stipulated simple-event knowledge. Lists/two-way tables remain stipulated. Named compound outcomes are not automatically equiprobable; compound-event instruction is excluded."
+    },
+    "conditional_probability": {
+      "grounding_evidence": [
+        {"standard_id": "7.SP.C.7.a", "label": "CCSS: simple uniform probability models", "source_url": "https://www.thecorestandards.org/Math/Content/7/SP/C/7/a/", "text": "Develop a uniform probability model by assigning equal probability to all outcomes, and use the model to determine probabilities of events."},
+        {"standard_id": "6.RP.A.3.c", "label": "CCSS: percentages as fractions per hundred", "source_url": "https://www.thecorestandards.org/Math/Content/6/RP/A/3/c/", "text": "Find a percent of a quantity as a rate per 100 (e.g., 30% of a quantity means 30/100 times the quantity); solve problems involving finding the whole, given a part and the percent."}
+      ],
+      "verification": "7.SP.C.7.a first sentence and complete 6.RP.A.3.c verified. Two-way-count-table reading remains stipulated; general fraction fluency is only partially anchored. Population restriction and conditional probability remain targets, not prior instruction."
+    },
+    "sampling_bias": {
+      "grounding_evidence": [
+        {"standard_id": "6.RP.A.3.c", "label": "CCSS: elementary percent calculations", "source_url": "https://www.thecorestandards.org/Math/Content/6/RP/A/3/c/", "text": "Find a percent of a quantity as a rate per 100 (e.g., 30% of a quantity means 30/100 times the quantity); solve problems involving finding the whole, given a part and the percent."},
+        {"standard_id": "6.SP.B.5.a", "label": "CCSS: reporting observation counts", "source_url": "https://www.thecorestandards.org/Math/Content/6/SP/B/5/a/", "text": "Reporting the number of observations."},
+        {"standard_id": "6.RP.A.3.a", "label": "CCSS: using tables to compare ratios", "source_url": "https://www.thecorestandards.org/Math/Content/6/RP/A/3/a/", "text": "Make tables of equivalent ratios relating quantities with whole-number measurements, find missing values in the tables, and plot the pairs of values on the coordinate plane. Use tables to compare ratios."}
+      ],
+      "verification": "All complete official excerpts verified. Survey display conventions remain stipulated. Reporting counts and comparing ratios do not establish random-sampling, representativeness or bias knowledge. The sampling-representativeness standard is excluded."
+    },
+    "weighted_mean": {
+      "grounding_evidence": [
+        {"standard_id": "6.SP.B.5.c", "label": "CCSS: existing mean as a measure of center", "source_url": "https://www.thecorestandards.org/Math/Content/6/SP/B/5/c/", "text": "Giving quantitative measures of center (median and/or mean)"},
+        {"standard_id": "3.OA.C.7", "label": "CCSS: multiplication and division within 100", "source_url": "https://www.thecorestandards.org/Math/Content/3/OA/C/7/", "text": "Fluently multiply and divide within 100, using strategies such as the relationship between multiplication and division (e.g., knowing that 8 \u00d7 5 = 40, one knows 40 \u00f7 5 = 8) or properties of operations."},
+        {"standard_id": "6.SP.B.5.a", "label": "CCSS: observation counts as existing data information", "source_url": "https://www.thecorestandards.org/Math/Content/6/SP/B/5/a/", "text": "Reporting the number of observations."}
+      ],
+      "verification": "6.SP.B.5.c is its exact opening clause, omitting variability/distribution text; 3.OA.C.7 is its first sentence; 6.SP.B.5.a is complete. All URLs verified. Mean computation and group-size-table reading remain teacher stipulations. Arithmetic beyond 100 is not fully grounded. Combining unequal groups remains the target."
+    },
+    "correlation_causation": {
+      "grounding_evidence": [
+        {"standard_id": "8.SP.A.1", "label": "CCSS: interpreting scatter plots for association", "source_url": "https://www.thecorestandards.org/Math/Content/8/SP/A/1/", "text": "interpret scatter plots for bivariate measurement data to investigate patterns of association between two quantities."},
+        {"standard_id": "6.SP.B.5.c", "label": "CCSS: existing means as measures of center", "source_url": "https://www.thecorestandards.org/Math/Content/6/SP/B/5/c/", "text": "Giving quantitative measures of center (median and/or mean)"}
+      ],
+      "verification": "8.SP.A.1 is the exact first-sentence clause following 'Construct and'; 6.SP.B.5.c is the exact opening clause. Both official URLs verified. Group-average comparisons and everyday data descriptions remain stipulated beyond the mean anchor. The correlation-versus-causation standard is excluded."
+    }
+  }
+}

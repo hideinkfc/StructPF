@@ -1,0 +1,145 @@
+{
+  "study_version": "pf-measurement-gap/20261013-v1",
+  "instrument_version": "pf-evidence-audit/v1",
+  "seed": 20261013,
+  "hypothesis": "A paired task-text audit may expose evidence-supported supplementary PF concerns in historically high-rated tasks, without assuming their original rubric scores were wrong.",
+  "null_result": "No same-task agreed concerns, or concerns predominantly unknown/disputed, is a valid result. Additional properties do not retroactively invalidate Rahimi ratings.",
+  "sampling": {
+    "V1": "All 30 ready tasks",
+    "V2": "Six tasks: two uniform seeded draws from each attempt-number tertile",
+    "V3": "Six tasks: two uniform seeded draws from each attempt-number tertile",
+    "PIPELINE": "Twelve ready tasks: four seeded draws per attempt tertile; availability-conditioned controls"
+  },
+  "budget": {
+    "main": 108,
+    "controls": 28,
+    "adjudication": 0,
+    "old_rubric_rerating": 0,
+    "total": 136
+  },
+  "settings": {
+    "judges": ["gpt41", "gpt54"],
+    "workers": 4,
+    "max_completion_tokens": 9000,
+    "timeout_seconds": 240,
+    "max_retries": 0,
+    "gpt41_temperature": 0,
+    "gpt54_reasoning_effort": "low"
+  },
+  "claim_policy": "Only same-property two-judge agreement with exact source quotes counts as an agreed task-evidence concern. Mathematics concerns remain unresolved for interpretation review. Original anchor tensions are computational review candidates, not proof a high rating is false. No student or learning claims.",
+  "calibration_policy": "One frozen instrument; no prompt tuning to achieve perfect controls or reject direct tasks. Record misclassifications and disagreement. Proceed if runtime/schema permits paired assessment, preserving unknowns. Genuine runtime or parser repairs require new version provenance.",
+  "controls": [
+    {
+      "task_id": "control_fixed_division",
+      "role": "development_control",
+      "task": {"title": "Markers", "body": "Share 24 markers equally among 6 students. A table and a bar drawing show the same six groups.", "question": "Use only 24 divided by 6. Write the result and show it in a table or drawing. Do not choose another method."},
+      "learning_target": "Develop an equal-sharing division method.",
+      "learner_context": {"grade": 6, "subject": "mathematics", "assumed_prior_knowledge": [{"resource": "Multiplication and repeated addition", "taught_as": "Build equal groups."}]},
+      "expected": {"consequential_choice": ["not_evidenced"], "distinct_mathematical_ideas": ["not_evidenced"], "preserved_discovery": ["not_evidenced"]}
+    },
+    {
+      "task_id": "control_invent_consistency",
+      "role": "development_control",
+      "task": {"title": "Consistency", "body": "Team A scores 1, 3, 7, 9. Team B scores 1, 5, 5, 9. Both sets have mean 5 and range 8.", "question": "Decide what more consistent should mean here. Invent or choose a criterion, compare the teams with it, and defend why that criterion is useful. No particular spread formula is prescribed."},
+      "learning_target": "Develop a measure of consistency beyond the mean and range.",
+      "learner_context": {"grade": 10, "subject": "mathematics", "assumed_prior_knowledge": [{"resource": "Mean and range", "taught_as": "Compute a mean and largest-minus-smallest range."}]},
+      "expected": {"task_specification": ["supported"], "consequential_choice": ["supported"], "preserved_discovery": ["supported"]}
+    },
+    {
+      "task_id": "control_partial_units",
+      "role": "development_control",
+      "task": {"title": "Paint shares", "body": "Five friends share 3 liters of paint equally. Partial liters are allowed; paint can be poured freely.", "question": "Find a way to determine each share, represent your reasoning, and explain why the shares are equal and exhaust the paint."},
+      "learning_target": "Develop fractional equal-sharing reasoning.",
+      "learner_context": {"grade": 6, "subject": "mathematics", "assumed_prior_knowledge": [{"resource": "Fractions and equal groups", "taught_as": "Partition a whole into equal parts and add fractions."}]},
+      "expected": {"task_specification": ["supported"], "preserved_discovery": ["supported"]}
+    },
+    {
+      "task_id": "control_comparison_givens",
+      "role": "development_control",
+      "task": {"title": "Mixtures", "body": "Strip A records 2 blue cups and 3 white cups. Strip B records 4 blue cups and 6 white cups. These are the supplied mixtures to compare.", "question": "Decide whether they have the same concentration and explain how your comparison works."},
+      "learning_target": "Recognize equivalent mixture ratios.",
+      "learner_context": {"grade": 7, "subject": "mathematics", "assumed_prior_knowledge": [{"resource": "Unit rates", "taught_as": "Compare the amount of one substance per unit of another."}]},
+      "expected": {"task_specification": ["supported"], "preserved_discovery": ["supported"]}
+    },
+    {
+      "task_id": "control_conclusion_asserted",
+      "role": "development_control",
+      "task": {"title": "Garden discovery", "body": "For a fixed perimeter of 24 meters, a square has the greatest rectangular area. Two example gardens measure 2 by 10 meters and 6 by 6 meters.", "question": "Explain why the square wins and draw a graph showing that conclusion."},
+      "learning_target": "Discover which rectangular garden maximizes area for a fixed perimeter.",
+      "learner_context": {"grade": 8, "subject": "mathematics", "assumed_prior_knowledge": [{"resource": "Rectangle area and perimeter", "taught_as": "Multiply side lengths and add boundary lengths."}]},
+      "expected": {"preserved_discovery": ["not_evidenced"]}
+    },
+    {
+      "task_id": "control_math_inconsistent",
+      "role": "development_control",
+      "task": {"title": "Point total", "body": "A player scores 2 points and then 3 points. The record states that the total from these two scores is 6 points.", "question": "Use this record to explain the total."},
+      "learning_target": "Add point totals.",
+      "learner_context": {"grade": 6, "subject": "mathematics", "assumed_prior_knowledge": [{"resource": "Addition", "taught_as": "Add whole numbers."}]},
+      "expected": {"math_status": ["concern"], "task_specification": ["not_evidenced"]}
+    },
+    {
+      "task_id": "control_unknown_prior",
+      "role": "development_control",
+      "task": {"title": "Discounts", "body": "A jacket costs 80 dollars. Shop A discounts it by 20 percent and Shop B discounts it by 15 dollars.", "question": "Decide which price is lower and explain."},
+      "learning_target": "Compare percentage and fixed discounts.",
+      "learner_context": {"grade": 8, "subject": "mathematics"},
+      "expected": {"accessible_start": ["unknown"], "useful_prior_contrast": ["unknown"]}
+    },
+    {
+      "task_id": "control_same_ratio_displays",
+      "role": "development_control",
+      "task": {"title": "Pump records", "body": "A pump uses 15 liters in 5 minutes, 30 liters in 10 minutes, and 45 liters in 15 minutes.", "question": "Check whether there is one constant liters-per-minute rate. You may divide for unit rates or multiply to test equivalent ratios, and display that same check in a table, graph, or equation."},
+      "learning_target": "Recognize proportional relationships.",
+      "learner_context": {"grade": 7, "subject": "mathematics", "assumed_prior_knowledge": [{"resource": "Unit rates", "taught_as": "Calculate one quantity per unit of another."}]},
+      "expected": {"distinct_mathematical_ideas": ["not_evidenced", "partial"], "consequential_choice": ["not_evidenced", "partial"]}
+    },
+    {
+      "task_id": "control_prior_success_not_giveaway",
+      "role": "development_control",
+      "task": {"title": "Runner", "body": "Runner A covers 6 kilometers in 30 minutes. Runner B covers 9 kilometers in 60 minutes.", "question": "Which runner was faster? Develop and explain a comparison that would also work for different distances and times."},
+      "learning_target": "Compare rates for unequal distances and times.",
+      "learner_context": {"grade": 7, "subject": "mathematics", "assumed_prior_knowledge": [{"resource": "Unit rates", "taught_as": "Calculate distance per unit time."}]},
+      "expected": {"target_relevance": ["supported"], "accessible_start": ["supported"], "preserved_discovery": ["supported"]}
+    },
+    {
+      "task_id": "control_unique_answer_open",
+      "role": "development_control",
+      "task": {"title": "Best garden", "body": "You have 24 meters of fencing for a rectangle. Side lengths must be positive whole numbers of meters.", "question": "Which design gives the greatest growing area? Choose how to search, develop an argument that you have not missed a better design, and decide what evidence would convince another group."},
+      "learning_target": "Discover area maximization under fixed perimeter.",
+      "learner_context": {"grade": 8, "subject": "mathematics", "assumed_prior_knowledge": [{"resource": "Area and perimeter", "taught_as": "Find rectangle area and perimeter and enumerate whole-number possibilities."}]},
+      "expected": {"consequential_choice": ["supported", "partial"], "preserved_discovery": ["supported"]}
+    },
+    {
+      "task_id": "control_missing_necessary_data",
+      "role": "development_control",
+      "task": {"title": "Travel", "body": "A bus travels 120 kilometers, but its travel time is not provided. Students cannot collect further data and must give one exact numerical speed.", "question": "What exact speed in kilometers per hour did the bus travel? Do not make any assumptions."},
+      "learning_target": "Determine speed from distance and time.",
+      "learner_context": {"grade": 7, "subject": "mathematics", "assumed_prior_knowledge": [{"resource": "Unit rates", "taught_as": "Find distance divided by time."}]},
+      "expected": {"task_specification": ["not_evidenced"], "math_status": ["unknown", "concern"]}
+    },
+    {
+      "task_id": "control_support_without_method",
+      "role": "development_control",
+      "task": {"title": "Class trip", "body": "There are 18 students, including 6 who need wheelchair-accessible seats. A small bus costs 90 dollars and has 8 seats including 2 accessible seats. A large bus costs 150 dollars and has 12 seats including 4 accessible seats.", "question": "Choose a combination of buses for everyone. Decide how to weigh cost against unused seats, make your recommendation, and explain the tradeoffs. You may start by listing combinations."},
+      "learning_target": "Model competing constraints and make a justified decision.",
+      "learner_context": {"grade": 8, "subject": "mathematics", "assumed_prior_knowledge": [{"resource": "Whole-number arithmetic and tables", "taught_as": "Add, multiply and compare totals in a table."}]},
+      "expected": {"task_specification": ["supported"], "consequential_choice": ["supported"], "preserved_discovery": ["supported"]}
+    },
+    {
+      "task_id": "holdout_same_area_displays",
+      "role": "holdout_control",
+      "task": {"title": "Floor tiles", "body": "A floor is a rectangle 4 meters long and 7 meters wide.", "question": "Use only length times width to calculate its area. Show that same multiplication in a grid drawing, table, and equation. Do not choose a different calculation."},
+      "learning_target": "Develop a rectangle area method.",
+      "learner_context": {"grade": 6, "subject": "mathematics", "assumed_prior_knowledge": [{"resource": "Multiplication", "taught_as": "Find products of whole numbers."}]},
+      "expected": {"distinct_mathematical_ideas": ["not_evidenced"], "consequential_choice": ["not_evidenced"], "preserved_discovery": ["not_evidenced"]}
+    },
+    {
+      "task_id": "holdout_invent_fair_measure",
+      "role": "holdout_control",
+      "task": {"title": "Fair lunch choice", "body": "Meal A costs 6 dollars, has 400 calories, and supplies 15 grams of protein. Meal B costs 8 dollars, has 600 calories, and supplies 20 grams of protein.", "question": "Define what good value should mean for these meals, choose or invent a numerical comparison, and explain who might reasonably choose differently. No value formula is given."},
+      "learning_target": "Construct and critique a numerical measure from several quantities.",
+      "learner_context": {"grade": 8, "subject": "mathematics", "assumed_prior_knowledge": [{"resource": "Unit rates and arithmetic", "taught_as": "Divide quantities and combine rational-number values."}]},
+      "expected": {"task_specification": ["supported"], "consequential_choice": ["supported"], "preserved_discovery": ["supported"]}
+    }
+  ]
+}

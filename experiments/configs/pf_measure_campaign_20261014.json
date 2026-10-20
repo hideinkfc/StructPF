@@ -1,0 +1,53 @@
+{
+  "version": "pf-measure-campaign/20261014-v1",
+  "authorized_scope": "Implement and computationally calibrate the three-role measurement workflow, then assess all saved generated direct and pipeline task conditions. Do not regenerate historical tasks.",
+  "instrument": "pf-three-role/v2",
+  "roles": ["solver", "task_judge", "attempt_judge"],
+  "measures": ["target_alignment", "mathematical_validity", "prior_knowledge_accessibility", "familiar_approach_limits", "room_for_invention"],
+  "models": {
+    "primary": "gpt-5.6-luna",
+    "comparison": "gpt-4.1",
+    "independence_limit": "Two OpenAI model series, not independent model families. Configured endpoint advertises non-OpenAI model names but DeepSeek-V3.1 and qwen3-32b probes returned DeploymentNotFound. No SwissAI credentials are configured."
+  },
+  "prerequisites": "Use each run's saved learner history, never current generator defaults or approach-derived prerequisites. Missing history gives accessibility Unclear and approach limits Not assessed.",
+  "references": {
+    "provenance": "Assistant-prepared provisional mathematical/text references. No human reviewer available.",
+    "claim_limit": "Computational reference checks and inter-model consistency are not human calibration, learner fidelity or educational validation.",
+    "blind_to_judges": ["reference labels", "generator method", "source solutions", "internal design notes", "expected errors"]
+  },
+  "development": {
+    "task_judge_repeats_per_series": 2,
+    "solver_models": 2,
+    "attempt_judge_repeats_per_series_on_primary_attempts": 2,
+    "primary_judge_reviews_comparison_solver_attempts": 1,
+    "prompt_clarification_rounds_at_most": 1,
+    "stop": "Initial development plus at most one targeted clarification/rerun, then freeze. Preserve disagreements and reference ambiguity; do not force agreement."
+  },
+  "transfer": {
+    "runs": 1,
+    "retuning": false,
+    "claim_limit": "Reserved from this instrument's development; existing expert topics were previously inspected, so not untouched-topic validation."
+  },
+  "execution": {
+    "max_attempts_per_solver": 4,
+    "model_calls_per_judge_at_most": 3,
+    "calculator_checks_per_judge_at_most": 16,
+    "max_completion_tokens_per_call": 7000,
+    "primary_reasoning_effort": "high",
+    "comparison_temperature": 0,
+    "api_retries": 0,
+    "initial_workers": 16,
+    "keep_failed_calls": true,
+    "fresh_output_per_phase": true
+  },
+  "reporting": {
+    "no_total_score": true,
+    "no_task_quality_gate": true,
+    "show_denominators_and_skips": true,
+    "show_unknowns_and_execution_failures": true,
+    "deduplicate_only_identical_full_input_conditions": true,
+    "retain_all_occurrence_provenance": true,
+    "approach_counts": "Supplementary model-identified methods, not student frequency or complete diversity.",
+    "original_generation_failures": "Inventory separately; task absence is not a failed educational judgment."
+  }
+}

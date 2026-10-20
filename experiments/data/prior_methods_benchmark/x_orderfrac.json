@@ -1,0 +1,276 @@
+{
+  "concept_id": "x_orderfrac",
+  "concept_text": "Ordering fractions requires a common basis (common denominator or decimal), not comparing numerators or denominators on their own.",
+  "grade": 7,
+  "anchor": {
+    "quiz": "e901",
+    "quiz_name": "Order fractions 3",
+    "topic": "Fractions - basics",
+    "questions": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "questions_omitted": []
+  },
+  "dominant_threshold_pct": 10,
+  "dominant_errors": [
+    {
+      "question": 1,
+      "option_label": "B",
+      "option_text": "Only Katie",
+      "explanation": "In order to compare the fraction pairs, we first need to write them as equivalent fractions with the same denominator.",
+      "pct_students": 14,
+      "question_stem": "Tom and Katie are discussing fractions:\nTom says 1/7 is greater than 1/5\nKatie says 2/7 is greater than 2/5\n\nWho is correct?",
+      "matchable": true
+    },
+    {
+      "question": 1,
+      "option_label": "C",
+      "option_text": "Both Tom and Katie",
+      "explanation": "In order to compare the fraction pairs, we first need to write them as equivalent fractions with the same denominator.",
+      "pct_students": 18,
+      "question_stem": "Tom and Katie are discussing fractions:\nTom says 1/7 is greater than 1/5\nKatie says 2/7 is greater than 2/5\n\nWho is correct?",
+      "matchable": true
+    },
+    {
+      "question": 2,
+      "option_label": "A",
+      "option_text": "Only Tom",
+      "explanation": "In order to compare the fraction pairs, we first need to write them as equivalent fractions with the same denominator.",
+      "pct_students": 10,
+      "question_stem": "Tom and Katie are discussing fractions:\nTom says 3/8 is greater than 3/5\nKatie says 7/8 is greater than 7/10\n\nWho is correct?",
+      "matchable": true
+    },
+    {
+      "question": 2,
+      "option_label": "C",
+      "option_text": "Both Tom and Katie",
+      "explanation": "In order to compare the fraction pairs, we first need to write them as equivalent fractions with the same denominator.",
+      "pct_students": 13,
+      "question_stem": "Tom and Katie are discussing fractions:\nTom says 3/8 is greater than 3/5\nKatie says 7/8 is greater than 7/10\n\nWho is correct?",
+      "matchable": true
+    },
+    {
+      "question": 2,
+      "option_label": "D",
+      "option_text": "Neither is correct",
+      "explanation": "In order to compare the fraction pairs, we first need to write them as equivalent fractions with the same denominator.",
+      "pct_students": 11,
+      "question_stem": "Tom and Katie are discussing fractions:\nTom says 3/8 is greater than 3/5\nKatie says 7/8 is greater than 7/10\n\nWho is correct?",
+      "matchable": true
+    },
+    {
+      "question": 3,
+      "option_label": "C",
+      "option_text": "=",
+      "explanation": "As all numerators are the same, we can compare these fractions by looking at the denominator of each. The bigger the denominator the smaller the fraction as this shows the whole has been split into more parts.",
+      "pct_students": 10,
+      "question_stem": "Which signs belong in the boxes to make the statement correct?\n4/5 [?] 3/4",
+      "matchable": true
+    },
+    {
+      "question": 3,
+      "option_label": "D",
+      "option_text": "cannot tell",
+      "explanation": "Remember > is greater than and < is less than. As all numerators are the same, we can compare these fractions by looking at the denominator of each. The bigger the denominator the smaller the fraction as this shows the whole has been split into more parts.",
+      "pct_students": 10,
+      "question_stem": "Which signs belong in the boxes to make the statement correct?\n4/5 [?] 3/4",
+      "matchable": true
+    },
+    {
+      "question": 4,
+      "option_label": "A",
+      "option_text": "<",
+      "explanation": "In order to compare the fraction pairs, we first need to write them as equivalent fractions with the same denominator.",
+      "pct_students": 17,
+      "question_stem": "Which signs belong in the boxes to make the statement correct?\n3/5 [?] 9/15",
+      "matchable": true
+    },
+    {
+      "question": 4,
+      "option_label": "C",
+      "option_text": "=",
+      "explanation": "In order to compare the fraction pairs, we first need to write them as equivalent fractions with the same denominator.",
+      "pct_students": 17,
+      "question_stem": "Which signs belong in the boxes to make the statement correct?\n3/5 [?] 9/15",
+      "matchable": true
+    },
+    {
+      "question": 4,
+      "option_label": "D",
+      "option_text": "cannot tell",
+      "explanation": "In order to compare the fraction pairs, we first need to write them as equivalent fractions with the same denominator.",
+      "pct_students": 12,
+      "question_stem": "Which signs belong in the boxes to make the statement correct?\n3/5 [?] 9/15",
+      "matchable": true
+    },
+    {
+      "question": 5,
+      "option_label": "A",
+      "option_text": "<",
+      "explanation": "First, you need to find equivalent fractions with the same denominators to be able to compare them.",
+      "pct_students": 15,
+      "question_stem": "Which signs belong in the boxes to make the statement correct?\n7/12 [?] 2/3",
+      "matchable": true
+    },
+    {
+      "question": 5,
+      "option_label": "C",
+      "option_text": "=",
+      "explanation": "I think you have just compared the numerators. First, you need to find equivalent fractions with the same denominators to be able to compare them.",
+      "pct_students": 13,
+      "question_stem": "Which signs belong in the boxes to make the statement correct?\n7/12 [?] 2/3",
+      "matchable": true
+    },
+    {
+      "question": 5,
+      "option_label": "D",
+      "option_text": "cannot tell",
+      "explanation": "First, you need to find equivalent fractions with the same denominator to be able to compare them.",
+      "pct_students": 13,
+      "question_stem": "Which signs belong in the boxes to make the statement correct?\n7/12 [?] 2/3",
+      "matchable": true
+    }
+  ],
+  "all_errors": [
+    {
+      "question": 1,
+      "option_label": "B",
+      "option_text": "Only Katie",
+      "explanation": "In order to compare the fraction pairs, we first need to write them as equivalent fractions with the same denominator.",
+      "pct_students": 14,
+      "question_stem": "Tom and Katie are discussing fractions:\nTom says 1/7 is greater than 1/5\nKatie says 2/7 is greater than 2/5\n\nWho is correct?",
+      "matchable": true
+    },
+    {
+      "question": 1,
+      "option_label": "C",
+      "option_text": "Both Tom and Katie",
+      "explanation": "In order to compare the fraction pairs, we first need to write them as equivalent fractions with the same denominator.",
+      "pct_students": 18,
+      "question_stem": "Tom and Katie are discussing fractions:\nTom says 1/7 is greater than 1/5\nKatie says 2/7 is greater than 2/5\n\nWho is correct?",
+      "matchable": true
+    },
+    {
+      "question": 1,
+      "option_label": "D",
+      "option_text": "Neither is correct",
+      "explanation": "In order to compare the fraction pairs, we first need to write them as equivalent fractions with the same denominator.",
+      "pct_students": 8,
+      "question_stem": "Tom and Katie are discussing fractions:\nTom says 1/7 is greater than 1/5\nKatie says 2/7 is greater than 2/5\n\nWho is correct?",
+      "matchable": true
+    },
+    {
+      "question": 2,
+      "option_label": "A",
+      "option_text": "Only Tom",
+      "explanation": "In order to compare the fraction pairs, we first need to write them as equivalent fractions with the same denominator.",
+      "pct_students": 10,
+      "question_stem": "Tom and Katie are discussing fractions:\nTom says 3/8 is greater than 3/5\nKatie says 7/8 is greater than 7/10\n\nWho is correct?",
+      "matchable": true
+    },
+    {
+      "question": 2,
+      "option_label": "C",
+      "option_text": "Both Tom and Katie",
+      "explanation": "In order to compare the fraction pairs, we first need to write them as equivalent fractions with the same denominator.",
+      "pct_students": 13,
+      "question_stem": "Tom and Katie are discussing fractions:\nTom says 3/8 is greater than 3/5\nKatie says 7/8 is greater than 7/10\n\nWho is correct?",
+      "matchable": true
+    },
+    {
+      "question": 2,
+      "option_label": "D",
+      "option_text": "Neither is correct",
+      "explanation": "In order to compare the fraction pairs, we first need to write them as equivalent fractions with the same denominator.",
+      "pct_students": 11,
+      "question_stem": "Tom and Katie are discussing fractions:\nTom says 3/8 is greater than 3/5\nKatie says 7/8 is greater than 7/10\n\nWho is correct?",
+      "matchable": true
+    },
+    {
+      "question": 3,
+      "option_label": "B",
+      "option_text": ">",
+      "explanation": "As all numerators are the same, we can compare these fractions by looking at the denominator of each. The bigger the denominator the smaller the fraction as this shows the whole has been split into more parts. Remember > is greater than and < is less than.",
+      "pct_students": 8,
+      "question_stem": "Which signs belong in the boxes to make the statement correct?\n4/5 [?] 3/4",
+      "matchable": true
+    },
+    {
+      "question": 3,
+      "option_label": "C",
+      "option_text": "=",
+      "explanation": "As all numerators are the same, we can compare these fractions by looking at the denominator of each. The bigger the denominator the smaller the fraction as this shows the whole has been split into more parts.",
+      "pct_students": 10,
+      "question_stem": "Which signs belong in the boxes to make the statement correct?\n4/5 [?] 3/4",
+      "matchable": true
+    },
+    {
+      "question": 3,
+      "option_label": "D",
+      "option_text": "cannot tell",
+      "explanation": "Remember > is greater than and < is less than. As all numerators are the same, we can compare these fractions by looking at the denominator of each. The bigger the denominator the smaller the fraction as this shows the whole has been split into more parts.",
+      "pct_students": 10,
+      "question_stem": "Which signs belong in the boxes to make the statement correct?\n4/5 [?] 3/4",
+      "matchable": true
+    },
+    {
+      "question": 4,
+      "option_label": "A",
+      "option_text": "<",
+      "explanation": "In order to compare the fraction pairs, we first need to write them as equivalent fractions with the same denominator.",
+      "pct_students": 17,
+      "question_stem": "Which signs belong in the boxes to make the statement correct?\n3/5 [?] 9/15",
+      "matchable": true
+    },
+    {
+      "question": 4,
+      "option_label": "C",
+      "option_text": "=",
+      "explanation": "In order to compare the fraction pairs, we first need to write them as equivalent fractions with the same denominator.",
+      "pct_students": 17,
+      "question_stem": "Which signs belong in the boxes to make the statement correct?\n3/5 [?] 9/15",
+      "matchable": true
+    },
+    {
+      "question": 4,
+      "option_label": "D",
+      "option_text": "cannot tell",
+      "explanation": "In order to compare the fraction pairs, we first need to write them as equivalent fractions with the same denominator.",
+      "pct_students": 12,
+      "question_stem": "Which signs belong in the boxes to make the statement correct?\n3/5 [?] 9/15",
+      "matchable": true
+    },
+    {
+      "question": 5,
+      "option_label": "A",
+      "option_text": "<",
+      "explanation": "First, you need to find equivalent fractions with the same denominators to be able to compare them.",
+      "pct_students": 15,
+      "question_stem": "Which signs belong in the boxes to make the statement correct?\n7/12 [?] 2/3",
+      "matchable": true
+    },
+    {
+      "question": 5,
+      "option_label": "C",
+      "option_text": "=",
+      "explanation": "I think you have just compared the numerators. First, you need to find equivalent fractions with the same denominators to be able to compare them.",
+      "pct_students": 13,
+      "question_stem": "Which signs belong in the boxes to make the statement correct?\n7/12 [?] 2/3",
+      "matchable": true
+    },
+    {
+      "question": 5,
+      "option_label": "D",
+      "option_text": "cannot tell",
+      "explanation": "First, you need to find equivalent fractions with the same denominator to be able to compare them.",
+      "pct_students": 13,
+      "question_stem": "Which signs belong in the boxes to make the statement correct?\n7/12 [?] 2/3",
+      "matchable": true
+    }
+  ],
+  "excluded": []
+}

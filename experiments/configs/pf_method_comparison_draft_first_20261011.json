@@ -1,0 +1,64 @@
+{
+  "schema_version": "pf-method-comparison-protocol/v1",
+  "status": "authorized_exploratory_comparison",
+  "research_question": "Does the current decomposed generator create more consequential mathematical choices or invention opportunities than strong direct generation under common targets and prior knowledge?",
+  "hypothesis": "Explicit design selection and data checking may support discovery-preserving tasks, but may also constrain the student's work or disclose the target; compare these separately rather than assuming decomposition helps.",
+  "runner": "scripts/run_pf_fresh_comparison.py",
+  "output": "experiments/results/pf_method_comparison_draft_first_20261011",
+  "model_selector": "luna",
+  "pipeline_proposal_k": 2,
+  "conditions": ["direct", "pipeline"],
+  "calibration": {
+    "cases": ["loibl_variance", "kerrigan_fair_division"],
+    "repeats": 1,
+    "purpose": "Check execution and saved artifacts only; no prompt tuning or pooling with fresh results."
+  },
+  "fresh": {
+    "cases": ["kapur_average_speed", "loibl_variance", "kerrigan_fair_division"],
+    "repeats": 3,
+    "attempts_per_method": 9
+  },
+  "budget": {
+    "direct_calls_per_attempt": 1,
+    "pipeline_max_calls_per_attempt": 17,
+    "derivation": "Four possible proposals including two revisions, each with at most two schema attempts (8); three selections (3); three data calls (3); three writer calls (3). D1 is fixed, translation is disabled.",
+    "max_calls_calibration": 36,
+    "max_calls_fresh": 162,
+    "max_calls_total": 198,
+    "max_completion_tokens_per_call": 6000,
+    "max_completion_tokens_total": 1188000,
+    "timeout_seconds_per_call": 180,
+    "sdk_retries": 0,
+    "rounds": 1,
+    "monetary_cost": "Provider prices unverified; no monetary estimate is claimed."
+  },
+  "frozen_condition": {
+    "prior": "Identical fixed learner specification; D1 retrieval and recovery are not tested.",
+    "direct_guidance": "Existing strong direct prompt includes shared design-opportunity guidance and the same hypothetical example, but no expert task.",
+    "pipeline": "Current default design-brief/v2 with bounded revisions and retained usable drafts; no generation prompt edits.",
+    "provenance": "Per-case hashes, full source snapshots, exact prompts, fixed inputs and every request are preserved.",
+    "expert_references": "Existing normalized or reconstructed records used only as design anchors, not generation examples or exact student-text gold standards."
+  },
+  "evaluation": {
+    "type": "Assistant task-text review with method labels hidden, plus shared exact mathematical checks where representable; not independent human blinding.",
+    "dimensions": {
+      "mathematics": "supported / invalid / unknown; check feasibility, arithmetic and necessary assumptions from final student text, not stage acceptance.",
+      "target": "preserved / narrowed / lost / unknown; distinguish one worked instance from the requested general procedure.",
+      "accessible_start": "yes / no / unknown from the supplied prior knowledge and required task inputs.",
+      "disclosure": "none / method / conclusion / both / unknown; useful definitions and permissions are not automatically hints.",
+      "consequential_choice": "yes / no / unknown; a learner chooses or constructs a mathematically consequential object, measure or procedure, not merely a display format.",
+      "approach_opportunities": "Qualitative reasoning possibilities and anticipated limitations only; no claim of observed approach diversity."
+    },
+    "reporting": "All nine attempts per method in denominators; calibration separate; counts by dimension and task family; cost as calls, available tokens and elapsed time. Unknown never counted as pass.",
+    "decision": "No automatic promotion. More supported, target-preserving, accessible, undisclosed tasks with consequential choices is a descriptive advantage; equal or lower counts is no demonstrated advantage. Report regressions and family differences even if that count improves.",
+    "failure_policy": "Keep all failed attempts and bounded revisions, do not substitute historical tasks or replace attempts."
+  },
+  "limitations": [
+    "Already inspected development directions, not untouched final topics.",
+    "Nine attempts per method is exploratory, not a powered sample-size calculation.",
+    "Same model and guidance but unequal calls; this compares whole methods, not decomposition alone.",
+    "No independent expert ratings, student attempts or learning outcomes.",
+    "Pipeline token usage may be unavailable in the existing diagnostic trace.",
+    "No iteration or feedback-based refinement in this round."
+  ]
+}

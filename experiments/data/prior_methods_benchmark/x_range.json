@@ -1,0 +1,258 @@
+{
+  "concept_id": "x_range",
+  "concept_text": "The range measures spread as max - min over all values, not the gap between two listed numbers.",
+  "grade": 7,
+  "anchor": {
+    "quiz": "gfk1",
+    "quiz_name": "Find and interpret the range",
+    "topic": "Averages and range - list of data",
+    "questions": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "questions_omitted": []
+  },
+  "dominant_threshold_pct": 10,
+  "dominant_errors": [
+    {
+      "question": 1,
+      "option_label": "B",
+      "option_text": "12",
+      "explanation": "I think you have subtracted the first person’s age from the last person’s age, but they are not in ascending order. The range of the ages is the difference between the biggest and smallest. Recalculate your answer.",
+      "pct_students": 15,
+      "question_stem": "What is the range of these numbers?\n5, 7, 11, 14, 18",
+      "matchable": true
+    },
+    {
+      "question": 1,
+      "option_label": "C",
+      "option_text": "11",
+      "explanation": "I think you have chosen the oldest person’s age. The range of the ages is the difference between the biggest and smallest. Recalculate your answer",
+      "pct_students": 11,
+      "question_stem": "What is the range of these numbers?\n5, 7, 11, 14, 18",
+      "matchable": true
+    },
+    {
+      "question": 3,
+      "option_label": "B",
+      "option_text": "11",
+      "explanation": "I think you may have misunderstood what the range is. The range is the difference between the smallest value and the largest value. How would adding in a plant of height 15cm change either of these?",
+      "pct_students": 20,
+      "question_stem": "The range of five numbers is 8.\nFour of the numbers are: 3, 7, 9, 10\nWhat could the fifth number be?",
+      "matchable": true
+    },
+    {
+      "question": 3,
+      "option_label": "C",
+      "option_text": "1 or 11",
+      "explanation": "I think you may have misread one of the values. The range is the difference between the smallest value and the largest value. How would adding in a plant of height 15cm change either of these?",
+      "pct_students": 15,
+      "question_stem": "The range of five numbers is 8.\nFour of the numbers are: 3, 7, 9, 10\nWhat could the fifth number be?",
+      "matchable": true
+    },
+    {
+      "question": 3,
+      "option_label": "D",
+      "option_text": "18",
+      "explanation": "I think you have assumed that the range always changes. The range is the difference between the smallest value and the largest value. How would adding in a plant of height 15cm change either of these?",
+      "pct_students": 19,
+      "question_stem": "The range of five numbers is 8.\nFour of the numbers are: 3, 7, 9, 10\nWhat could the fifth number be?",
+      "matchable": true
+    },
+    {
+      "question": 4,
+      "option_label": "A",
+      "option_text": "2, 5, 8, 11",
+      "explanation": "I think you may have misunderstood what the range is. The range is the difference between the smallest value and the largest value. Consider this data and apply the changes that Tom and Katie have described – does this change the range at all?",
+      "pct_students": 13,
+      "question_stem": "Which of these sets of numbers has the largest range?",
+      "matchable": true
+    },
+    {
+      "question": 4,
+      "option_label": "C",
+      "option_text": "0, 1, 2, 3",
+      "explanation": "I think you have assumed that double the values will have no affect. Consider the range between 17cm and 40cm, how will the range change if the values are doubled and become 34cm and 80cm?",
+      "pct_students": 22,
+      "question_stem": "Which of these sets of numbers has the largest range?",
+      "matchable": true
+    },
+    {
+      "question": 4,
+      "option_label": "D",
+      "option_text": "-5, 0, 5, 10",
+      "explanation": "I think you have assumed that the range always changes. Consider the range between 17cm and 40cm, how will the range change if both the values are increased by 12?",
+      "pct_students": 18,
+      "question_stem": "Which of these sets of numbers has the largest range?",
+      "matchable": true
+    },
+    {
+      "question": 5,
+      "option_label": "A",
+      "option_text": "Only Tom",
+      "explanation": "I think you have added 3 and 20 together. If the largest number was 23, the range would be 26 (-3 to 23)",
+      "pct_students": 27,
+      "question_stem": "Tom says: 'If you add 3 to every number in a data set, the range increases by 3.'\nKatie says: 'If you add 3 to every number in a data set, the range stays the same.'\n\nWho is correct?",
+      "matchable": true
+    },
+    {
+      "question": 5,
+      "option_label": "C",
+      "option_text": "Both Tom and Katie",
+      "explanation": "I think you may have started at 3 and subtracted 20. Find the range by starting at -3 and adding the 20 on, to find the largest number.",
+      "pct_students": 11,
+      "question_stem": "Tom says: 'If you add 3 to every number in a data set, the range increases by 3.'\nKatie says: 'If you add 3 to every number in a data set, the range stays the same.'\n\nWho is correct?",
+      "matchable": true
+    },
+    {
+      "question": 5,
+      "option_label": "D",
+      "option_text": "Neither is correct",
+      "explanation": "I think you may have assumed that you need to know all of the numbers in the data set to be able to calculate the range. To calculate the range, you just need the smallest number and the largest number in the data set. If you have the range and the smallest number, you can calculate the largest number.",
+      "pct_students": 11,
+      "question_stem": "Tom says: 'If you add 3 to every number in a data set, the range increases by 3.'\nKatie says: 'If you add 3 to every number in a data set, the range stays the same.'\n\nWho is correct?",
+      "matchable": true
+    }
+  ],
+  "all_errors": [
+    {
+      "question": 1,
+      "option_label": "A",
+      "option_text": "13",
+      "explanation": "I think you may have added the ages. The question asks for the range of the ages, the difference between the biggest and smallest. Recalculate your answer.",
+      "pct_students": 6,
+      "question_stem": "What is the range of these numbers?\n5, 7, 11, 14, 18",
+      "matchable": true
+    },
+    {
+      "question": 1,
+      "option_label": "B",
+      "option_text": "12",
+      "explanation": "I think you have subtracted the first person’s age from the last person’s age, but they are not in ascending order. The range of the ages is the difference between the biggest and smallest. Recalculate your answer.",
+      "pct_students": 15,
+      "question_stem": "What is the range of these numbers?\n5, 7, 11, 14, 18",
+      "matchable": true
+    },
+    {
+      "question": 1,
+      "option_label": "C",
+      "option_text": "11",
+      "explanation": "I think you have chosen the oldest person’s age. The range of the ages is the difference between the biggest and smallest. Recalculate your answer",
+      "pct_students": 11,
+      "question_stem": "What is the range of these numbers?\n5, 7, 11, 14, 18",
+      "matchable": true
+    },
+    {
+      "question": 2,
+      "option_label": "B",
+      "option_text": "8",
+      "explanation": "I think you have just chosen the largest value. The question asks for the range – the difference from biggest to smallest. Recalculate your answer.",
+      "pct_students": 7,
+      "question_stem": "What is the range of these numbers?\n-3, 2, 5, 8, 11",
+      "matchable": true
+    },
+    {
+      "question": 2,
+      "option_label": "C",
+      "option_text": "11",
+      "explanation": "I think you have subtracted the last value from the first value. The question asks for the range – the difference from biggest to smallest. Recalculate your answer.",
+      "pct_students": 5,
+      "question_stem": "What is the range of these numbers?\n-3, 2, 5, 8, 11",
+      "matchable": true
+    },
+    {
+      "question": 2,
+      "option_label": "D",
+      "option_text": "5",
+      "explanation": "I think you may have added the smallest and largest values. The question asks for the range – the difference from biggest to smallest. Recalculate your answer.",
+      "pct_students": 9,
+      "question_stem": "What is the range of these numbers?\n-3, 2, 5, 8, 11",
+      "matchable": true
+    },
+    {
+      "question": 3,
+      "option_label": "B",
+      "option_text": "11",
+      "explanation": "I think you may have misunderstood what the range is. The range is the difference between the smallest value and the largest value. How would adding in a plant of height 15cm change either of these?",
+      "pct_students": 20,
+      "question_stem": "The range of five numbers is 8.\nFour of the numbers are: 3, 7, 9, 10\nWhat could the fifth number be?",
+      "matchable": true
+    },
+    {
+      "question": 3,
+      "option_label": "C",
+      "option_text": "1 or 11",
+      "explanation": "I think you may have misread one of the values. The range is the difference between the smallest value and the largest value. How would adding in a plant of height 15cm change either of these?",
+      "pct_students": 15,
+      "question_stem": "The range of five numbers is 8.\nFour of the numbers are: 3, 7, 9, 10\nWhat could the fifth number be?",
+      "matchable": true
+    },
+    {
+      "question": 3,
+      "option_label": "D",
+      "option_text": "18",
+      "explanation": "I think you have assumed that the range always changes. The range is the difference between the smallest value and the largest value. How would adding in a plant of height 15cm change either of these?",
+      "pct_students": 19,
+      "question_stem": "The range of five numbers is 8.\nFour of the numbers are: 3, 7, 9, 10\nWhat could the fifth number be?",
+      "matchable": true
+    },
+    {
+      "question": 4,
+      "option_label": "A",
+      "option_text": "2, 5, 8, 11",
+      "explanation": "I think you may have misunderstood what the range is. The range is the difference between the smallest value and the largest value. Consider this data and apply the changes that Tom and Katie have described – does this change the range at all?",
+      "pct_students": 13,
+      "question_stem": "Which of these sets of numbers has the largest range?",
+      "matchable": true
+    },
+    {
+      "question": 4,
+      "option_label": "C",
+      "option_text": "0, 1, 2, 3",
+      "explanation": "I think you have assumed that double the values will have no affect. Consider the range between 17cm and 40cm, how will the range change if the values are doubled and become 34cm and 80cm?",
+      "pct_students": 22,
+      "question_stem": "Which of these sets of numbers has the largest range?",
+      "matchable": true
+    },
+    {
+      "question": 4,
+      "option_label": "D",
+      "option_text": "-5, 0, 5, 10",
+      "explanation": "I think you have assumed that the range always changes. Consider the range between 17cm and 40cm, how will the range change if both the values are increased by 12?",
+      "pct_students": 18,
+      "question_stem": "Which of these sets of numbers has the largest range?",
+      "matchable": true
+    },
+    {
+      "question": 5,
+      "option_label": "A",
+      "option_text": "Only Tom",
+      "explanation": "I think you have added 3 and 20 together. If the largest number was 23, the range would be 26 (-3 to 23)",
+      "pct_students": 27,
+      "question_stem": "Tom says: 'If you add 3 to every number in a data set, the range increases by 3.'\nKatie says: 'If you add 3 to every number in a data set, the range stays the same.'\n\nWho is correct?",
+      "matchable": true
+    },
+    {
+      "question": 5,
+      "option_label": "C",
+      "option_text": "Both Tom and Katie",
+      "explanation": "I think you may have started at 3 and subtracted 20. Find the range by starting at -3 and adding the 20 on, to find the largest number.",
+      "pct_students": 11,
+      "question_stem": "Tom says: 'If you add 3 to every number in a data set, the range increases by 3.'\nKatie says: 'If you add 3 to every number in a data set, the range stays the same.'\n\nWho is correct?",
+      "matchable": true
+    },
+    {
+      "question": 5,
+      "option_label": "D",
+      "option_text": "Neither is correct",
+      "explanation": "I think you may have assumed that you need to know all of the numbers in the data set to be able to calculate the range. To calculate the range, you just need the smallest number and the largest number in the data set. If you have the range and the smallest number, you can calculate the largest number.",
+      "pct_students": 11,
+      "question_stem": "Tom says: 'If you add 3 to every number in a data set, the range increases by 3.'\nKatie says: 'If you add 3 to every number in a data set, the range stays the same.'\n\nWho is correct?",
+      "matchable": true
+    }
+  ],
+  "excluded": []
+}

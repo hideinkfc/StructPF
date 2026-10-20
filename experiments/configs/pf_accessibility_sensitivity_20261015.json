@@ -1,0 +1,141 @@
+{
+  "version": "pf-accessibility-sensitivity/20261015-v1",
+  "status": "labelled, not run",
+  "purpose": "Test whether the accessibility gate can say No or Unclear before it is trusted as a gate.",
+  "labels": "Synthetic, assistant-written; not human-reviewed. Expected verdicts are provisional.",
+  "decision_rule": "Gate passes only if inaccessible cases are not judged Yes by the primary judge in repeated runs.",
+  "cases": [
+    {
+      "case_id": "acc_inacc_derivative_no_powers",
+      "label": "inaccessible",
+      "expected": "no",
+      "rationale": "Only numeral recognition listed; any start needs powers and substitution.",
+      "student_task": "Apply the supplied rule d(x^n)/dx = n*x^(n-1) to find the derivative of x^3 at x=2.",
+      "learning_target": "Compute derivatives with the power rule.",
+      "learner_context": {
+        "assumed_prior_knowledge": [
+          {
+            "resource": "Written numerals",
+            "taught_as": "Recognize written numerals zero through nine."
+          },
+          {
+            "resource": "No arithmetic",
+            "taught_as": "No arithmetic operations, symbolic substitution, variables or powers have been learned."
+          }
+        ]
+      }
+    },
+    {
+      "case_id": "acc_inacc_proof_no_logic",
+      "label": "inaccessible",
+      "expected": "no",
+      "rationale": "Requires quantifier reasoning; the only listed knowledge is counting to ten.",
+      "student_task": "Prove that every even integer greater than 2 is the sum of two primes.",
+      "learning_target": "Construct a proof by cases.",
+      "learner_context": {
+        "assumed_prior_knowledge": [
+          {
+            "resource": "Counting",
+            "taught_as": "Count objects from one to ten."
+          }
+        ]
+      }
+    },
+    {
+      "case_id": "acc_inacc_fraction_no_division",
+      "label": "inaccessible",
+      "expected": "no",
+      "rationale": "Equal sharing needs division; only addition of whole numbers is listed.",
+      "student_task": "Share 3 pizzas equally among 4 people. How much pizza does each person get?",
+      "learning_target": "Represent equal shares as fractions.",
+      "learner_context": {
+        "assumed_prior_knowledge": [
+          {
+            "resource": "Addition",
+            "taught_as": "Add two whole numbers up to 20."
+          }
+        ]
+      }
+    },
+    {
+      "case_id": "acc_acc_speed_direct",
+      "label": "accessible",
+      "expected": "yes",
+      "rationale": "Speed as distance over time with listed arithmetic gives a direct first step.",
+      "student_task": "A cyclist rides 30 km in 1.5 hours. What is the average speed?",
+      "learning_target": "Compute average speed.",
+      "learner_context": {
+        "assumed_prior_knowledge": [
+          {
+            "resource": "Speed",
+            "taught_as": "Speed is distance divided by time."
+          }
+        ]
+      }
+    },
+    {
+      "case_id": "acc_acc_mean_direct",
+      "label": "accessible",
+      "expected": "yes",
+      "rationale": "Mean of listed values needs only the listed addition and division.",
+      "student_task": "Find the mean of the scores 4, 7, 9 and 12.",
+      "learning_target": "Compute the arithmetic mean.",
+      "learner_context": {
+        "assumed_prior_knowledge": [
+          {
+            "resource": "Mean",
+            "taught_as": "Add values and divide by how many there are."
+          }
+        ]
+      }
+    },
+    {
+      "case_id": "acc_acc_unit_rate_partial",
+      "label": "accessible",
+      "expected": "yes",
+      "rationale": "Unit rate is listed; the task needs only one division.",
+      "student_task": "A printer makes 180 pages in 12 minutes. How many pages per minute is that?",
+      "learning_target": "Compute unit rates.",
+      "learner_context": {
+        "assumed_prior_knowledge": [
+          {
+            "resource": "Unit rate",
+            "taught_as": "A unit rate divides a quantity by one unit of another quantity."
+          }
+        ]
+      }
+    },
+    {
+      "case_id": "acc_trivial_start_only",
+      "label": "trivial_start_only",
+      "expected": "unclear",
+      "rationale": "Only a restatement is possible; no meaningful first mathematical step exists from the listed knowledge. Judges should not call this meaningful.",
+      "student_task": "Find the area of a regular hexagon with side 2 cm.",
+      "learning_target": "Compute areas of polygons by decomposition.",
+      "learner_context": {
+        "assumed_prior_knowledge": [
+          {
+            "resource": "Labelling",
+            "taught_as": "Name the sides and angles of a shape."
+          }
+        ]
+      }
+    },
+    {
+      "case_id": "acc_inacc_percent_no_ratio",
+      "label": "inaccessible",
+      "expected": "no",
+      "rationale": "Percent needs ratio or fraction-of-whole reasoning; only whole-number counting is listed.",
+      "student_task": "A jacket costs 80 dollars and is reduced by 25 percent. What is the new price?",
+      "learning_target": "Solve percent change problems.",
+      "learner_context": {
+        "assumed_prior_knowledge": [
+          {
+            "resource": "Counting",
+            "taught_as": "Count whole objects in groups."
+          }
+        ]
+      }
+    }
+  ]
+}

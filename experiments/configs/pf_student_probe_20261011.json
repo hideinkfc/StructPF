@@ -1,0 +1,40 @@
+{
+  "schema_version": "pf-student-probe/v1",
+  "question": "Do prerequisite-only learner prompts elicit different written mathematical approaches than ordinary solvers, without assigned errors or solution exposure?",
+  "hypothesis": "A recent-learning record and one omitted prerequisite may alter the approach distribution, but the LLM may ignore that distinction or retain expert procedures. Both outcomes are findings about the simulator, not human students.",
+  "output": "experiments/results/pf_student_probe_20261011",
+  "task_root": "experiments/results/pf_method_comparison_draft_first_20261011/fresh",
+  "tasks": [
+    {"id": "consistency_direct", "family": "loibl_variance", "path": "loibl_variance/001/direct/result.json"},
+    {"id": "consistency_pipeline", "family": "loibl_variance", "path": "loibl_variance/003/pipeline/result.json"},
+    {"id": "division_direct", "family": "kerrigan_fair_division", "path": "kerrigan_fair_division/001/direct/result.json"},
+    {"id": "division_pipeline", "family": "kerrigan_fair_division", "path": "kerrigan_fair_division/001/pipeline/result.json"}
+  ],
+  "models": ["gpt41mini", "gpt41"],
+  "profiles": [
+    {"id": "ordinary_solver", "condition": "solver"},
+    {"id": "recent_prerequisites", "condition": "learner"},
+    {"id": "one_prerequisite_gap", "condition": "learner", "omit_resources": {"loibl_variance": "Arithmetic mean", "kerrigan_fair_division": "Divider-Chooser method"}}
+  ],
+  "repeats": 2,
+  "seed": 20261011,
+  "settings": {"temperature": 0.7, "max_tokens": 2400, "timeout_seconds": 180, "sdk_retries": 0},
+  "budget": {"calibration_calls": 8, "fresh_calls": 48, "max_calls_total": 56, "max_completion_tokens_total": 134400, "rounds": 1},
+  "calibration": "Two illustrative arithmetic controls, sum 6+4+2 and one-third of 12, per model and ordinary-solver/recent-prerequisite condition. Record answer/parse failures; no prompt tuning or substitution. Not learner-fidelity validation.",
+  "outcomes": [
+    "Request completion and parseable written attempts, with all 48 fresh requests retained.",
+    "Mathematical approach categories coded after generation, with profile/model/generation labels hidden where practical; count reasoning, not representation formats.",
+    "Named untaught procedure use versus construction from prerequisite operations; neither is automatically a profile-fidelity verdict.",
+    "Within-task approach variety, repeats within profiles and between-profile differences; correct and unfinished attempts retained.",
+    "Mathematical support or explicit unknowns in the attempt; no universal correct/incorrect verdict for invented criteria.",
+    "Calls, available token usage and request duration; no monetary estimate without verified prices."
+  ],
+  "decision": "One diagnostic round only. If profiles do not change approaches or all use mature procedures, record that negative result and do not manufacture errors. Any apparent separation is preliminary model behaviour, not simulator validation or a generation-method ranking.",
+  "limitations": [
+    "Four deliberately selected inspected exercises, not a representative or held-out task pool.",
+    "Profiles are hypothetical prerequisites from fixed generation learner records, not individual human histories or measured mastery.",
+    "No desired method, named target, error rule, reference solution or review rating is supplied to the simulator.",
+    "Two repetitions per condition are diagnostic and cannot support population estimates.",
+    "No tutor feedback, knowledge updating, learner study or PF refinement in this round."
+  ]
+}

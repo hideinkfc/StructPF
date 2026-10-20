@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1140" height="480" viewBox="0 0 1140 480" role="img" aria-labelledby="title description">
+  <title id="title">Implemented optional Learning Commons context flow</title>
+  <desc id="description">With the learning-commons flag, one topic query fetches up to ten academic-standard descriptions on a cache miss, without grade or jurisdiction filters. The existing recommendation call receives source labels and descriptions and selects zero to three references. Code checks the labels and forwards the original selected text to design-brief selection, data generation and checking, and fixed-data writing, separately from prior knowledge. Raw records and selected labels are saved without a separate model call. Baseline behavior stays unchanged when the flag is off. Small paired generation runs exist, but a PF-quality benefit or student learning effect is not established.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#55708e"/>
+    </marker>
+    <style>
+      text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; fill: #1b304a; }
+      .title { font-size: 29px; font-weight: 700; }
+      .head { font-size: 20px; font-weight: 700; }
+      .body { font-size: 17px; }
+      .small { font-size: 14px; fill: #51667e; }
+      .box { fill: #fff; stroke: #bccbdc; stroke-width: 1.8; }
+      .flow { fill: none; stroke: #55708e; stroke-width: 2; marker-end: url(#arrow); }
+    </style>
+  </defs>
+  <rect width="1140" height="480" fill="#f7f9fc"/>
+  <text x="36" y="43" class="title">One search. Selection in the existing call.</text>
+  <text x="36" y="73" class="small">IMPLEMENTED / OPT-IN: --learning-commons. Baseline stays unchanged when the flag is off.</text>
+  <rect x="405" y="96" width="350" height="38" rx="10" class="box"/>
+  <text x="580" y="121" class="body" text-anchor="middle">Target + grade + class context</text>
+  <path d="M 580 134 V 158" class="flow"/>
+
+  <rect x="36" y="158" width="280" height="137" rx="16" class="box"/>
+  <text x="56" y="190" class="head">1  Fetch / reuse</text>
+  <text x="56" y="222" class="body">One plain-language query</text>
+  <text x="56" y="247" class="body">Up to 10 descriptions</text>
+  <text x="56" y="274" class="small">No exact-grade filter or skill lookup</text>
+  <path d="M 316 226 H 405" class="flow"/>
+
+  <rect x="405" y="158" width="350" height="137" rx="16" fill="#edf4ff" stroke="#5578b7" stroke-width="1.8"/>
+  <text x="425" y="190" class="head">2  Existing recommendation call</text>
+  <text x="425" y="222" class="body">Read source labels + descriptions</text>
+  <text x="425" y="247" class="body">Return 0-3 selected source labels</text>
+  <text x="425" y="274" class="small">Prior-resource output remains separate</text>
+  <path d="M 755 226 H 836" class="flow"/>
+
+  <rect x="836" y="158" width="268" height="137" rx="16" class="box"/>
+  <text x="856" y="190" class="head">3  Reuse selected text</text>
+  <text x="856" y="222" class="body">Check labels; copy original text</text>
+  <text x="856" y="247" class="body">Brief, data, check, write</text>
+  <text x="856" y="274" class="small">Not students' prior knowledge</text>
+
+  <path d="M 176 295 V 341" class="flow"/>
+  <path d="M 580 295 V 341" class="flow"/>
+  <rect x="36" y="341" width="719" height="88" rx="14" class="box"/>
+  <text x="56" y="371" class="head">Saved evidence - no model call</text>
+  <text x="56" y="398" class="body">Query + time + full response; selected labels map to original IDs and attribution.</text>
+
+  <rect x="836" y="341" width="268" height="88" rx="14" fill="#fff6e9" stroke="#d19b51" stroke-width="1.6"/>
+  <text x="856" y="370" class="head">Selection needs review</text>
+  <text x="856" y="397" class="small">Broad selections can still slip through.</text>
+  <text x="36" y="459" class="small">Software tests verify the wiring. Small paired generation runs exist; a PF-quality benefit or learning effect is not established.</text>
+</svg>

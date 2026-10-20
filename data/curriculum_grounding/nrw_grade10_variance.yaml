@@ -1,0 +1,53 @@
+# Curriculum grounding: Germany (NRW) Grade 10 — Variance / Consistency
+# Grounds: loibl_rummel_2014.yaml (variance/consistency PF tasks)
+id: nrw_grade10_variance
+country: Germany (North Rhine-Westphalia)
+grade: 10
+school_level: "Gymnasium, Sekundarstufe I"
+target_concept: "Variance and standard deviation (measures of spread)"
+expert_tasks_grounded:
+  - loibl2014_invention_1
+  - puech2025_stratl_consistency  # same concept, Singapore context (use MOE for exact placement)
+
+sources:
+  - name: "NRW Kernlehrplan Mathematik — Gymnasium (G9), 2019/2023"
+    file: "documents/nrw_g9_gymnasium_m_klp.pdf"
+    url: "https://lehrplannavigator.nrw.de/system/files/media/document/file/g9_m_klp_3401_2019_06_23_0.pdf"
+    access_date: "2026-08-24"
+    type: official_curriculum
+    note: "Official NRW LehrplanNavigator core curriculum PDF."
+
+prior_resources_taught_before_target:
+  - resource: "Arithmetic mean (arithmetisches Mittel)"
+    taught_at: "Grade 5-6 statistics strand (Daten und Zufall)"
+    source: "NRW Kernlehrplan"
+    section: "Daten und Zufall — Kenngrößen"
+    pages: "p.26"
+    section_text: "Kenngrößen: arithmetisches Mittel, Median, Spannweite, Quartile"
+  - resource: "Range (Spannweite, max - min)"
+    taught_at: "Grade 5-6 statistics strand"
+    source: "NRW Kernlehrplan"
+    section: "Daten und Zufall — Kenngrößen"
+    pages: "p.26"
+    section_text: "Spannweite (range) listed among Kenngrößen (characteristic measures)"
+  - resource: "Median and quartiles"
+    taught_at: "Grade 5-6 statistics strand"
+    source: "NRW Kernlehrplan"
+    section: "Daten und Zufall — Kenngrößen"
+    pages: "p.26"
+  - resource: "Data representation (tables, charts, boxplots)"
+    taught_at: "Grade 5-6 statistics strand"
+    source: "NRW Kernlehrplan"
+    section: "Daten und Zufall — statistische Daten"
+    pages: "p.26"
+    section_text: "Säulen- und Kreisdiagramme, Boxplots (column/bar and pie charts, boxplots)"
+
+target_concept_first_appearance:
+  concept: "Variance / standard deviation"
+  location: "Sekundarstufe II (upper secondary), Stochastik — NOT in Sekundarstufe I Kernlehrplan"
+  page: "p.35 (Stochastik in later section); no Streuungsmaße/variance entries in Sek-I Kerngrößen list"
+  note: "The Kernlehrplan Sek-I Kenngrößen list ends at quartiles; variance/SD are not included. This matches Loibl & Rummel's note that 'German secondary schools have not covered variance by grade 10'."
+
+caveats:
+  - "Kernlehrplan is the NRW core curriculum; the specific school in Loibl & Rummel used a local implementation, but the boundary (no variance before Sek II) holds at the state level."
+  - "Section titles quoted from the official curriculum; competency codes (e.g. Mod-7, Arg-1) refer to the NRW competency framework."

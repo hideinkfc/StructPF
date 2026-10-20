@@ -1,0 +1,81 @@
+# Curriculum grounding: USA undergraduate (Rutgers Math 103) — Fair division / apportionment
+# Grounds: kerrigan_weber_chinn_2021.yaml, StratL fair-division tasks
+id: usa_undergrad_fair_division
+country: USA
+grade: "undergraduate (non-STEM, liberal arts)"
+school_level: "University (Rutgers Math 103, Topics in Mathematics for the Liberal Arts)"
+target_concept: "Fair division methods (Lone Divider, Sealed Bids) and apportionment (Hamilton/largest remainders)"
+expert_tasks_grounded:
+  - kerrigan2021_invention_1          # land division (Lone Divider)
+  - kerrigan2021_invention_2          # furniture (Sealed Bids)
+  - puech2025_stratl_land_sharing
+  - puech2025_stratl_fair_distribution
+  - puech2025_stratl_country          # apportionment
+  - puech2025_stratl_fair_distrubution_time  # Ann/Bob time-sharing
+
+sources:
+  - name: "Kerrigan, J. (2018). Productive failure in the flipped mathematics classroom. Ed.D. dissertation, Rutgers University"
+    url: "https://doi.org/10.7282/T3QV3QX5"
+    repository_url: "https://rucore.libraries.rutgers.edu/rutgers-lib/57269/"
+    access_date: "2026-08-24"
+    type: author_course_documentation
+    note: "The dissertation IS the curriculum record here: it documents the full Math 103 course schedule, the week-by-week invention-task sequence, and the video-tutorial set (13-15 videos between classes). This is stronger than a state curriculum because it is the actual taught sequence for these exact students."
+    key_pages:
+      - "PDF pp. 39-43 (numbered): learning-environment design, PFFC sequence"
+      - "Appendix A (PDF p. 151): Invention Tasks #1-#4 verbatim (country/apportionment, Ann/Bob store, land, furniture)"
+      - "Appendix B-D: in-class problems and posttest aligned to the taught methods"
+
+  - name: "Tannenbaum, P. (2013). Excursions in Modern Mathematics. Pearson"
+    access_date: "2026-08-24"
+    type: textbook_chapter_order
+    status: not_downloaded
+    note: "Kerrigan's Appendix A marks Invention Task #1 (country apportionment) as 'adapted from Tannenbaum (2013)'. The textbook chapter order (apportionment, fair division, fair distribution) is the taught sequence; no local copy."
+
+  - name: "Lippman, D. (2022). Math in Society, version 2.6 — Apportionment and Fair Division"
+    file:
+      - "documents/lippman_apportionment_v2_6.pdf"
+      - "documents/lippman_fair_division_v2_6.pdf"
+      - "documents/lippman_voting_theory_v2_6.pdf"
+    url: "https://www.opentextbookstore.com/mathinsociety/"
+    access_date: "2026-08-24"
+    type: open_textbook
+    license: "CC BY-SA 4.0"
+    key_pages:
+      - "Apportionment PDF pp. 1-4: problem, standard divisor, quotas, Hamilton method"
+      - "Fair Division PDF pp. 1-7: fair shares, divisible goods, Divider-Chooser, Lone Divider"
+      - "Fair Division PDF p. 11: Sealed Bids for discrete goods"
+    note: "Open textbook chapters added to the retrieval corpus as a general U.S. liberal-arts mathematics source."
+
+prior_resources_taught_before_target:
+  # Kerrigan documents the actual course sequence; each invention task precedes its video set.
+  - resource: "Divider-Chooser method (two-player fair division)"
+    taught_at: "Math 103 unit, before multi-player division task"
+    source: "Kerrigan dissertation course sequence; Lippman Math in Society Fair Division"
+    pages: "Fair Division pp. 3-5"
+    applies_to:
+      - kerrigan2021_invention_1
+      - puech2025_stratl_land_sharing
+  - resource: "Basic division and arithmetic; concept of fair share (>= 1/n of total value)"
+    taught_at: "Math 103 and prior schooling"
+    source: "Kerrigan dissertation / YAML; Lippman Math in Society Fair Division"
+    pages: "Fair Division pp. 1-3"
+    applies_to:
+      - kerrigan2021_invention_1
+      - kerrigan2021_invention_2
+      - puech2025_stratl_land_sharing
+      - puech2025_stratl_fair_distribution
+  - resource: "Lone Divider method"
+    taught_at: "Math 103, unit before Sealed Bids task"
+    source: "Kerrigan dissertation course sequence; Lippman Math in Society Fair Division"
+    pages: "Fair Division pp. 5-7"
+    applies_to:
+      - kerrigan2021_invention_2
+      - puech2025_stratl_fair_distribution
+target_concept_first_appearance:
+  concept: "Multi-player fair division with standoff resolution; apportionment with largest remainders"
+  location: "Math 103, weeks 6-9 of the PF-flipped unit"
+  note: "Each invention task is deliberately placed BEFORE its video tutorial set, so students attempt standoff resolution before being taught the canonical method. The dissertation's week-by-week table is the authoritative 'taught-before' record."
+
+caveats:
+  - "This grounding is course-internal: 'prior knowledge' = what Math 103 had already covered, documented by the instructor-researcher's own schedule. Strongest provenance in the set, but not generalizable to other institutions."
+  - "Tannenbaum (2013) would strengthen the apportionment sequence but is not yet downloaded."

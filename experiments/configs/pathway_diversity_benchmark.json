@@ -1,0 +1,736 @@
+{
+  "benchmark_id": "pathway_diversity_judge_v1",
+  "description": "Hand-authored benchmark for judging whether two structured math distractor pathways express the same underlying error mechanism.",
+  "annotation_status": "Single-author draft; independently review the gold labels before reporting benchmark accuracy as validated evidence.",
+  "gold_definition": "same_error is true only when the minimal causal mistake relative to the correct solution is the same. Different wording, representations, or final answers do not by themselves establish a difference; the underlying mechanism does.",
+  "label_balance": {
+    "same_error": 15,
+    "different_error": 15
+  },
+  "split_balance": {
+    "development": 15,
+    "holdout": 15
+  },
+  "pairs": [
+    {
+      "pair_id": "same-01",
+      "split": "development",
+      "topic": "time_conversion",
+      "case_type": "same_mechanism_different_wording",
+      "question_text": "How many hours are in 5 weeks?",
+      "correct_answer": "840 hours",
+      "path_a": {
+        "text": "120 hours",
+        "faulty_step": "Treats each week as one day when converting to hours.",
+        "reasoning_steps": ["There are 5 weeks.", "Use 24 hours for each of the 5 units: 5 x 24 = 120 hours."],
+        "target_misconception": "forgets weeks to days",
+        "error_rationale": "The student applies the daily conversion but skips the week-to-day conversion."
+      },
+      "path_b": {
+        "text": "120",
+        "faulty_step": "Skips the weeks-to-days conversion and applies the daily conversion directly.",
+        "reasoning_steps": ["Convert the 5 units directly to hours: 5 x 24 = 120."],
+        "target_misconception": "uses a daily rate for weeks",
+        "error_rationale": "The student treats the number of weeks as if it were already a number of days."
+      },
+      "gold_same_error": true,
+      "annotation_note": "Both paths omit the same required weeks-to-days factor; the wording differs."
+    },
+    {
+      "pair_id": "same-02",
+      "split": "development",
+      "topic": "fractions",
+      "case_type": "same_mechanism_different_representation",
+      "question_text": "What is 3/4 of 20?",
+      "correct_answer": "15",
+      "path_a": {
+        "text": "8",
+        "faulty_step": "Converts 3/4 to the decimal 0.4 instead of 0.75.",
+        "reasoning_steps": ["Read 3/4 as 0.4.", "20 x 0.4 = 8."],
+        "target_misconception": "incorrect fraction to decimal conversion",
+        "error_rationale": "The student uses an incorrect decimal representation of the fraction."
+      },
+      "path_b": {
+        "text": "8",
+        "faulty_step": "Reads the fraction as 40 percent before multiplying.",
+        "reasoning_steps": ["3/4 means 40%.", "40% of 20 is 8."],
+        "target_misconception": "misreads fraction as percent",
+        "error_rationale": "The student represents the fraction verbally as the wrong percentage."
+      },
+      "gold_same_error": true,
+      "annotation_note": "Both paths make the same fraction-representation error; decimal and percentage wording are not different mechanisms here."
+    },
+    {
+      "pair_id": "same-03",
+      "split": "development",
+      "topic": "ratios",
+      "case_type": "same_mechanism_different_wording",
+      "question_text": "Split 240 euros in the ratio 1:3 between two clubs.",
+      "correct_answer": "60 euros and 180 euros",
+      "path_a": {
+        "text": "120 euros and 120 euros",
+        "faulty_step": "Ignores the ratio and divides the total equally.",
+        "reasoning_steps": ["There are two clubs.", "240 / 2 = 120 euros each."],
+        "target_misconception": "equal split instead of ratio",
+        "error_rationale": "The student treats the task as an equal-sharing problem."
+      },
+      "path_b": {
+        "text": "120 each",
+        "faulty_step": "Assumes two groups must receive equal shares despite the given ratio.",
+        "reasoning_steps": ["Share the money equally between the two clubs.", "240 / 2 = 120 for each club."],
+        "target_misconception": "ratio ignored",
+        "error_rationale": "The student uses equal sharing rather than the stated part-to-part relationship."
+      },
+      "gold_same_error": true,
+      "annotation_note": "Different labels describe the same equal-sharing substitution."
+    },
+    {
+      "pair_id": "same-04",
+      "split": "development",
+      "topic": "perimeter",
+      "case_type": "same_mechanism_different_format",
+      "question_text": "What is the perimeter of a rectangle measuring 6 cm by 4 cm?",
+      "correct_answer": "20 cm",
+      "path_a": {
+        "text": "10 cm",
+        "faulty_step": "Adds one length and one width only.",
+        "reasoning_steps": ["6 + 4 = 10 cm."],
+        "target_misconception": "uses half-perimeter",
+        "error_rationale": "The student stops after calculating one length plus one width."
+      },
+      "path_b": {
+        "text": "10",
+        "faulty_step": "Treats the sum of the two different side lengths as the full perimeter.",
+        "reasoning_steps": ["A rectangle has side lengths 6 and 4.", "6 + 4 = 10."],
+        "target_misconception": "adds each dimension once",
+        "error_rationale": "The student counts each dimension once instead of counting all four sides."
+      },
+      "gold_same_error": true,
+      "annotation_note": "Both paths calculate the semiperimeter and differ only in presentation."
+    },
+    {
+      "pair_id": "same-05",
+      "split": "development",
+      "topic": "linear_equations",
+      "case_type": "same_mechanism_different_wording",
+      "question_text": "Solve x + 7 = 12.",
+      "correct_answer": "x = 5",
+      "path_a": {
+        "text": "x = 19",
+        "faulty_step": "Adds 7 to 12 instead of subtracting 7.",
+        "reasoning_steps": ["Move 7 to the other side as +7.", "x = 12 + 7 = 19."],
+        "target_misconception": "uses the same operation when transposing",
+        "error_rationale": "The student does not use the inverse operation."
+      },
+      "path_b": {
+        "text": "19",
+        "faulty_step": "Keeps the plus sign when moving 7 across the equals sign.",
+        "reasoning_steps": ["Transfer +7 to the right side without changing its sign.", "x = 12 + 7 = 19."],
+        "target_misconception": "incorrect inverse operation",
+        "error_rationale": "The student treats transposition as moving the term without inversion."
+      },
+      "gold_same_error": true,
+      "annotation_note": "Both paths make the same inverse-operation error."
+    },
+    {
+      "pair_id": "same-06",
+      "split": "development",
+      "topic": "percentages",
+      "case_type": "same_mechanism_different_wording",
+      "question_text": "What is 20% of 50?",
+      "correct_answer": "10",
+      "path_a": {
+        "text": "60",
+        "faulty_step": "Interprets 'of' as an increase applied to the original amount.",
+        "reasoning_steps": ["20% of 50 is 10.", "Add that amount to 50: 50 + 10 = 60."],
+        "target_misconception": "of means increase",
+        "error_rationale": "The student answers a 20% increase question instead of a percentage-of question."
+      },
+      "path_b": {
+        "text": "60",
+        "faulty_step": "Adds the calculated percentage to the starting amount rather than reporting the part.",
+        "reasoning_steps": ["Calculate 20% of 50 as 10.", "Combine it with the original 50: 50 + 10 = 60."],
+        "target_misconception": "reports increased amount",
+        "error_rationale": "The student reports the new total rather than the requested percentage part."
+      },
+      "gold_same_error": true,
+      "annotation_note": "Both answer an increase question instead of the requested percentage-part question."
+    },
+    {
+      "pair_id": "same-07",
+      "split": "development",
+      "topic": "area_and_perimeter",
+      "case_type": "same_mechanism_different_representation",
+      "question_text": "What is the perimeter of a 6 cm by 4 cm rectangle?",
+      "correct_answer": "20 cm",
+      "path_a": {
+        "text": "24 cm",
+        "faulty_step": "Uses length times width, the area operation, for a perimeter question.",
+        "reasoning_steps": ["Multiply the dimensions: 6 x 4 = 24 cm."],
+        "target_misconception": "confuses area and perimeter",
+        "error_rationale": "The student selects the area formula for a perimeter task."
+      },
+      "path_b": {
+        "text": "24",
+        "faulty_step": "Treats the rectangle's perimeter as the product of its dimensions.",
+        "reasoning_steps": ["The two dimensions are 6 and 4.", "6 x 4 = 24."],
+        "target_misconception": "perimeter uses multiplication",
+        "error_rationale": "The student applies multiplication rather than adding the boundary lengths."
+      },
+      "gold_same_error": true,
+      "annotation_note": "Both substitute the area operation for the perimeter operation."
+    },
+    {
+      "pair_id": "same-08",
+      "split": "development",
+      "topic": "order_of_operations",
+      "case_type": "same_mechanism_different_wording",
+      "question_text": "Evaluate 6 + 5 x 2.",
+      "correct_answer": "16",
+      "path_a": {
+        "text": "22",
+        "faulty_step": "Evaluates the expression strictly from left to right.",
+        "reasoning_steps": ["6 + 5 = 11.", "11 x 2 = 22."],
+        "target_misconception": "left-to-right arithmetic",
+        "error_rationale": "The student ignores multiplication precedence."
+      },
+      "path_b": {
+        "text": "22",
+        "faulty_step": "Adds before multiplying because addition appears first in the written expression.",
+        "reasoning_steps": ["Combine the first two terms: 6 + 5 = 11.", "Multiply by 2: 11 x 2 = 22."],
+        "target_misconception": "ignores precedence",
+        "error_rationale": "The student gives addition priority over multiplication."
+      },
+      "gold_same_error": true,
+      "annotation_note": "Both use the same left-to-right precedence error."
+    },
+    {
+      "pair_id": "same-09",
+      "split": "holdout",
+      "topic": "means",
+      "case_type": "same_mechanism_different_wording",
+      "question_text": "What is the mean of 4, 6, 8, and 10?",
+      "correct_answer": "7",
+      "path_a": {
+        "text": "9.33",
+        "faulty_step": "Divides the total by 3 instead of by the four data values.",
+        "reasoning_steps": ["4 + 6 + 8 + 10 = 28.", "28 / 3 = 9.33."],
+        "target_misconception": "wrong denominator for mean",
+        "error_rationale": "The student undercounts the number of observations."
+      },
+      "path_b": {
+        "text": "28/3",
+        "faulty_step": "Uses three as the count of values when averaging four observations.",
+        "reasoning_steps": ["Add the values to get 28.", "Count only three values and divide: 28 / 3 = 9.33."],
+        "target_misconception": "counts intervals instead of values",
+        "error_rationale": "The student confuses the number of observations with the number of intervals."
+      },
+      "gold_same_error": true,
+      "annotation_note": "Both use an incorrect denominator based on undercounting the observations."
+    },
+    {
+      "pair_id": "same-10",
+      "split": "holdout",
+      "topic": "negative_numbers",
+      "case_type": "same_mechanism_different_wording",
+      "question_text": "Calculate -3 - 5.",
+      "correct_answer": "-8",
+      "path_a": {
+        "text": "2",
+        "faulty_step": "Subtracts the absolute values and ignores the negative starting value.",
+        "reasoning_steps": ["3 - 5 = -2.", "Use the distance between the numbers, so the answer is 2."],
+        "target_misconception": "absolute difference for signed subtraction",
+        "error_rationale": "The student treats signed subtraction as an unsigned distance."
+      },
+      "path_b": {
+        "text": "2",
+        "faulty_step": "Treats the subtraction as the difference between 3 and 5 without preserving signs.",
+        "reasoning_steps": ["Ignore the minus sign on the first number.", "5 - 3 = 2."],
+        "target_misconception": "drops signs",
+        "error_rationale": "The student reduces the problem to a positive absolute difference."
+      },
+      "gold_same_error": true,
+      "annotation_note": "Both discard signed-number meaning and compute an absolute difference."
+    },
+    {
+      "pair_id": "same-11",
+      "split": "holdout",
+      "topic": "volume",
+      "case_type": "same_mechanism_different_wording",
+      "question_text": "What is the volume of a box measuring 2 cm by 3 cm by 4 cm?",
+      "correct_answer": "24 cm3",
+      "path_a": {
+        "text": "6 cm3",
+        "faulty_step": "Calculates only the base area and omits the height.",
+        "reasoning_steps": ["Base area = 2 x 3 = 6 cm2.", "Use 6 as the volume."],
+        "target_misconception": "volume omits height",
+        "error_rationale": "The student stops after finding the two-dimensional base."
+      },
+      "path_b": {
+        "text": "6",
+        "faulty_step": "Multiplies two dimensions but does not include the third dimension.",
+        "reasoning_steps": ["Multiply length and width: 2 x 3 = 6.", "Report 6 as the box volume."],
+        "target_misconception": "uses area for volume",
+        "error_rationale": "The student applies a rectangular-area calculation to a three-dimensional object."
+      },
+      "gold_same_error": true,
+      "annotation_note": "Both omit the third dimension and report the base area as the volume."
+    },
+    {
+      "pair_id": "same-12",
+      "split": "holdout",
+      "topic": "probability",
+      "case_type": "same_mechanism_different_wording",
+      "question_text": "A bag contains 3 red counters and 2 blue counters. What is the probability of drawing a red counter?",
+      "correct_answer": "3/5",
+      "path_a": {
+        "text": "3",
+        "faulty_step": "Reports the number of favorable outcomes without dividing by all outcomes.",
+        "reasoning_steps": ["There are 3 red counters.", "Therefore the probability is 3."],
+        "target_misconception": "favorable count only",
+        "error_rationale": "The student does not form a favorable-over-total ratio."
+      },
+      "path_b": {
+        "text": "3/1",
+        "faulty_step": "Uses one as the total number of outcomes instead of counting all five counters.",
+        "reasoning_steps": ["There are 3 favorable counters.", "Divide by one event: 3 / 1 = 3."],
+        "target_misconception": "omits probability denominator",
+        "error_rationale": "The student effectively leaves the total-outcome denominator out of the calculation."
+      },
+      "gold_same_error": true,
+      "annotation_note": "Both fail to use the total number of possible outcomes; 3 and 3/1 are equivalent outputs."
+    },
+    {
+      "pair_id": "same-13",
+      "split": "holdout",
+      "topic": "algebraic_distribution",
+      "case_type": "same_mechanism_different_representation",
+      "question_text": "Expand 3(x + 2).",
+      "correct_answer": "3x + 6",
+      "path_a": {
+        "text": "3x + 2",
+        "faulty_step": "Multiplies the coefficient by x but not by the constant term.",
+        "reasoning_steps": ["3 times x gives 3x.", "Keep the +2 unchanged: 3x + 2."],
+        "target_misconception": "partial distribution",
+        "error_rationale": "The student distributes over only one term inside the brackets."
+      },
+      "path_b": {
+        "text": "3x + 2",
+        "faulty_step": "Treats the bracket as if the outside factor applies only to the variable term.",
+        "reasoning_steps": ["Apply 3 to x: 3x.", "Copy the constant from the bracket: +2."],
+        "target_misconception": "does not distribute to constants",
+        "error_rationale": "The student fails to apply the factor to every addend."
+      },
+      "gold_same_error": true,
+      "annotation_note": "Both make the single error of distributing to only one addend."
+    },
+    {
+      "pair_id": "same-14",
+      "split": "holdout",
+      "topic": "unit_conversion",
+      "case_type": "same_mechanism_different_wording",
+      "question_text": "Convert 2.5 metres to centimetres.",
+      "correct_answer": "250 cm",
+      "path_a": {
+        "text": "25 cm",
+        "faulty_step": "Uses a factor of 10 instead of 100 for metres to centimetres.",
+        "reasoning_steps": ["2.5 x 10 = 25 cm."],
+        "target_misconception": "uses one place-value shift",
+        "error_rationale": "The student treats metres to centimetres like a single unit step."
+      },
+      "path_b": {
+        "text": "25",
+        "faulty_step": "Moves the decimal point one place rather than two places.",
+        "reasoning_steps": ["Move the decimal in 2.5 one place to get 25 cm."],
+        "target_misconception": "incorrect metric conversion factor",
+        "error_rationale": "The student applies only one of the two required decimal shifts."
+      },
+      "gold_same_error": true,
+      "annotation_note": "Both use a factor of 10 instead of the required factor of 100."
+    },
+    {
+      "pair_id": "same-15",
+      "split": "holdout",
+      "topic": "triangle_angles",
+      "case_type": "same_mechanism_different_wording",
+      "question_text": "A triangle has angles 50 degrees, 60 degrees, and x degrees. Find x.",
+      "correct_answer": "70 degrees",
+      "path_a": {
+        "text": "130 degrees",
+        "faulty_step": "Subtracts only one known angle from 180 degrees.",
+        "reasoning_steps": ["180 - 50 = 130 degrees."],
+        "target_misconception": "omits one triangle angle",
+        "error_rationale": "The student fails to include both known angles in the angle sum."
+      },
+      "path_b": {
+        "text": "130",
+        "faulty_step": "Uses 180 minus the first listed angle and ignores the second known angle.",
+        "reasoning_steps": ["The remaining angle is 180 - 50 = 130 degrees."],
+        "target_misconception": "uses incomplete angle sum",
+        "error_rationale": "The student leaves one given angle out of the triangle total."
+      },
+      "gold_same_error": true,
+      "annotation_note": "Both omit the 60-degree angle from the triangle-sum calculation."
+    },
+    {
+      "pair_id": "diff-01",
+      "split": "development",
+      "topic": "range",
+      "case_type": "different_mechanisms_same_answer",
+      "question_text": "What is the range of 4, 9, and 13?",
+      "correct_answer": "9",
+      "path_a": {
+        "text": "13",
+        "faulty_step": "Uses the maximum value alone as the range.",
+        "reasoning_steps": ["The largest value is 13.", "Therefore the range is 13."],
+        "target_misconception": "range equals maximum",
+        "error_rationale": "The student identifies the largest value but does not subtract the minimum."
+      },
+      "path_b": {
+        "text": "13",
+        "faulty_step": "Adds the two smaller values and stops.",
+        "reasoning_steps": ["The two smaller values are 4 and 9.", "4 + 9 = 13."],
+        "target_misconception": "adds lower values for range",
+        "error_rationale": "The student uses an addition rule unrelated to maximum-minus-minimum."
+      },
+      "gold_same_error": false,
+      "annotation_note": "The paths converge on 13 but use different causal rules: maximum-only versus addition of the two smaller values."
+    },
+    {
+      "pair_id": "diff-02",
+      "split": "development",
+      "topic": "percentages",
+      "case_type": "different_mechanisms_same_answer",
+      "question_text": "What is 20% of 100?",
+      "correct_answer": "20",
+      "path_a": {
+        "text": "120",
+        "faulty_step": "Interprets 'of' as asking for a 20 percent increase.",
+        "reasoning_steps": ["20% of 100 is 20.", "Increase 100 by 20: 100 + 20 = 120."],
+        "target_misconception": "of means increase",
+        "error_rationale": "The student reports the increased total rather than the percentage part."
+      },
+      "path_b": {
+        "text": "120",
+        "faulty_step": "Treats 20% as the literal number 20 and adds it to 100.",
+        "reasoning_steps": ["20% is 20 in this question.", "100 + 20 = 120."],
+        "target_misconception": "percent symbol means add number",
+        "error_rationale": "The student converts the percent to 20 but uses addition instead of finding a part."
+      },
+      "gold_same_error": false,
+      "annotation_note": "The numerical coincidence is deliberate: one path misreads the relation as an increase, the other treats the percent as an absolute addend."
+    },
+    {
+      "pair_id": "diff-03",
+      "split": "development",
+      "topic": "time_conversion",
+      "case_type": "different_mechanisms_different_answer",
+      "question_text": "How many hours are in 5 weeks?",
+      "correct_answer": "840 hours",
+      "path_a": {
+        "text": "120 hours",
+        "faulty_step": "Omits the conversion from weeks to days and multiplies by 24 directly.",
+        "reasoning_steps": ["5 x 24 = 120 hours."],
+        "target_misconception": "skips week-to-day factor",
+        "error_rationale": "The student applies hours per day to the number of weeks."
+      },
+      "path_b": {
+        "text": "35 days",
+        "faulty_step": "Stops after converting weeks to days and never converts days to hours.",
+        "reasoning_steps": ["5 x 7 = 35 days.", "Use 35 as the requested answer."],
+        "target_misconception": "stops at intermediate unit",
+        "error_rationale": "The student performs only the first conversion in a multi-step unit problem."
+      },
+      "gold_same_error": false,
+      "annotation_note": "Both concern unit conversion, but one omits a factor and the other stops at a different intermediate unit."
+    },
+    {
+      "pair_id": "diff-04",
+      "split": "development",
+      "topic": "ratios",
+      "case_type": "different_mechanisms_different_answer",
+      "question_text": "Split 240 euros in the ratio 1:3 between two clubs.",
+      "correct_answer": "60 euros and 180 euros",
+      "path_a": {
+        "text": "120 euros and 120 euros",
+        "faulty_step": "Divides the total equally between the two clubs.",
+        "reasoning_steps": ["There are two clubs.", "240 / 2 = 120 each."],
+        "target_misconception": "equal sharing",
+        "error_rationale": "The student ignores the ratio entirely."
+      },
+      "path_b": {
+        "text": "80 euros and 160 euros",
+        "faulty_step": "Treats the first ratio number as one third of the total rather than one of four total parts.",
+        "reasoning_steps": ["The first share is 1/3 of 240 = 80.", "Give the remaining 160 to the second club."],
+        "target_misconception": "ratio denominator is the total",
+        "error_rationale": "The student uses the second ratio number as the denominator for the whole."
+      },
+      "gold_same_error": false,
+      "annotation_note": "Equal splitting and treating 1:3 as a one-third/whole relationship are distinct errors."
+    },
+    {
+      "pair_id": "diff-05",
+      "split": "development",
+      "topic": "area_and_perimeter",
+      "case_type": "different_mechanisms_different_answer",
+      "question_text": "What is the perimeter of a 6 cm by 4 cm rectangle?",
+      "correct_answer": "20 cm",
+      "path_a": {
+        "text": "24 cm",
+        "faulty_step": "Uses length times width, the area formula, for perimeter.",
+        "reasoning_steps": ["6 x 4 = 24 cm."],
+        "target_misconception": "area for perimeter",
+        "error_rationale": "The student confuses the area operation with the boundary calculation."
+      },
+      "path_b": {
+        "text": "10 cm",
+        "faulty_step": "Adds one length and one width but calls the semiperimeter the perimeter.",
+        "reasoning_steps": ["6 + 4 = 10 cm."],
+        "target_misconception": "half-perimeter",
+        "error_rationale": "The student counts only one copy of each side length."
+      },
+      "gold_same_error": false,
+      "annotation_note": "Multiplication for area and addition of one length plus one width are distinct substitutions."
+    },
+    {
+      "pair_id": "diff-06",
+      "split": "development",
+      "topic": "fractions",
+      "case_type": "different_mechanisms_same_answer",
+      "question_text": "What is 3/4 of 20?",
+      "correct_answer": "15",
+      "path_a": {
+        "text": "8",
+        "faulty_step": "Converts 3/4 to the incorrect decimal 0.4.",
+        "reasoning_steps": ["3/4 = 0.4.", "20 x 0.4 = 8."],
+        "target_misconception": "fraction decimal conversion",
+        "error_rationale": "The student uses a wrong decimal representation."
+      },
+      "path_b": {
+        "text": "8",
+        "faulty_step": "Divides 20 by 4 and adds 3 instead of multiplying the result by 3.",
+        "reasoning_steps": ["20 / 4 = 5.", "5 + 3 = 8."],
+        "target_misconception": "adds numerator after division",
+        "error_rationale": "The student uses addition where multiplication by the numerator is required."
+      },
+      "gold_same_error": false,
+      "annotation_note": "Both produce 8, but one misrepresents the fraction and the other uses addition instead of multiplication."
+    },
+    {
+      "pair_id": "diff-07",
+      "split": "development",
+      "topic": "linear_equations",
+      "case_type": "different_mechanisms_different_answer",
+      "question_text": "Solve 2x + 3 = 17.",
+      "correct_answer": "x = 7",
+      "path_a": {
+        "text": "x = 14",
+        "faulty_step": "Subtracts 3 from 17 but forgets to divide by the coefficient 2.",
+        "reasoning_steps": ["17 - 3 = 14.", "Therefore x = 14."],
+        "target_misconception": "forgets final division",
+        "error_rationale": "The student isolates 2x but reports it as x."
+      },
+      "path_b": {
+        "text": "x = 10",
+        "faulty_step": "Adds 3 to 17 before dividing by 2.",
+        "reasoning_steps": ["17 + 3 = 20.", "20 / 2 = 10."],
+        "target_misconception": "wrong inverse for constant",
+        "error_rationale": "The student uses addition instead of subtracting the constant."
+      },
+      "gold_same_error": false,
+      "annotation_note": "One error omits division; the other applies the wrong inverse operation to the constant."
+    },
+    {
+      "pair_id": "diff-08",
+      "split": "holdout",
+      "topic": "negative_numbers",
+      "case_type": "different_mechanisms_different_answer",
+      "question_text": "Calculate -3 - 5.",
+      "correct_answer": "-8",
+      "path_a": {
+        "text": "2",
+        "faulty_step": "Computes the absolute difference between 3 and 5.",
+        "reasoning_steps": ["5 - 3 = 2."],
+        "target_misconception": "absolute difference",
+        "error_rationale": "The student ignores the direction and signs."
+      },
+      "path_b": {
+        "text": "8",
+        "faulty_step": "Drops both negative signs and adds the magnitudes.",
+        "reasoning_steps": ["Use the magnitudes 3 and 5.", "3 + 5 = 8."],
+        "target_misconception": "drops signs and adds",
+        "error_rationale": "The student removes sign information before adding."
+      },
+      "gold_same_error": false,
+      "annotation_note": "Both mishandle signs, but one computes a difference and the other adds magnitudes."
+    },
+    {
+      "pair_id": "diff-09",
+      "split": "holdout",
+      "topic": "triangle_area",
+      "case_type": "different_mechanisms_different_answer",
+      "question_text": "What is the area of a triangle with base 6 cm and height 4 cm?",
+      "correct_answer": "12 cm2",
+      "path_a": {
+        "text": "24 cm2",
+        "faulty_step": "Uses base times height but omits the factor of one half.",
+        "reasoning_steps": ["6 x 4 = 24 cm2."],
+        "target_misconception": "omits triangle half",
+        "error_rationale": "The student uses the rectangle area formula for a triangle."
+      },
+      "path_b": {
+        "text": "10 cm2",
+        "faulty_step": "Adds the base and height instead of multiplying them.",
+        "reasoning_steps": ["6 + 4 = 10 cm2."],
+        "target_misconception": "adds dimensions for area",
+        "error_rationale": "The student substitutes addition for the area calculation."
+      },
+      "gold_same_error": false,
+      "annotation_note": "Omitting the triangle half and adding dimensions are different mechanisms."
+    },
+    {
+      "pair_id": "diff-10",
+      "split": "holdout",
+      "topic": "probability",
+      "case_type": "different_mechanisms_different_answer",
+      "question_text": "A bag contains 3 red counters and 2 blue counters. What is the probability of drawing a red counter?",
+      "correct_answer": "3/5",
+      "path_a": {
+        "text": "3/2",
+        "faulty_step": "Divides the favorable count by the number of blue counters.",
+        "reasoning_steps": ["There are 3 red and 2 blue.", "3 / 2 = 3/2."],
+        "target_misconception": "uses unfavorable count as denominator",
+        "error_rationale": "The student uses the wrong group as the denominator."
+      },
+      "path_b": {
+        "text": "3",
+        "faulty_step": "Reports the favorable count without forming a probability ratio.",
+        "reasoning_steps": ["There are 3 red counters.", "The probability is 3."],
+        "target_misconception": "favorable count only",
+        "error_rationale": "The student omits the total-outcome denominator entirely."
+      },
+      "gold_same_error": false,
+      "annotation_note": "Wrong denominator and omitted denominator are distinct probability errors."
+    },
+    {
+      "pair_id": "diff-11",
+      "split": "holdout",
+      "topic": "descriptive_statistics",
+      "case_type": "different_mechanisms_same_broad_category",
+      "question_text": "What is the mean of 4, 6, 8, and 10?",
+      "correct_answer": "7",
+      "path_a": {
+        "text": "28",
+        "faulty_step": "Returns the sum instead of dividing by the number of observations.",
+        "reasoning_steps": ["4 + 6 + 8 + 10 = 28.", "Report 28 as the mean."],
+        "target_misconception": "mean equals sum",
+        "error_rationale": "The student stops after calculating the numerator."
+      },
+      "path_b": {
+        "text": "6",
+        "faulty_step": "Calculates the range, maximum minus minimum, instead of the mean.",
+        "reasoning_steps": ["10 - 4 = 6."],
+        "target_misconception": "range for mean",
+        "error_rationale": "The student substitutes a different descriptive statistic."
+      },
+      "gold_same_error": false,
+      "annotation_note": "Both concern descriptive statistics, but one returns a sum and the other calculates a range."
+    },
+    {
+      "pair_id": "diff-12",
+      "split": "holdout",
+      "topic": "unit_conversion",
+      "case_type": "different_mechanisms_different_answer",
+      "question_text": "Convert 2.5 metres to centimetres.",
+      "correct_answer": "250 cm",
+      "path_a": {
+        "text": "25 cm",
+        "faulty_step": "Uses a factor of 10 for metres to centimetres.",
+        "reasoning_steps": ["2.5 x 10 = 25 cm."],
+        "target_misconception": "one-place conversion",
+        "error_rationale": "The student shifts the decimal one place instead of two."
+      },
+      "path_b": {
+        "text": "2500 cm",
+        "faulty_step": "Uses a factor of 1000 for metres to centimetres.",
+        "reasoning_steps": ["2.5 x 1000 = 2500 cm."],
+        "target_misconception": "uses kilometre factor",
+        "error_rationale": "The student applies a conversion factor that belongs to a different unit relationship."
+      },
+      "gold_same_error": false,
+      "annotation_note": "Both use the wrong metric factor, but the chosen factors and implied unit relationships differ."
+    },
+    {
+      "pair_id": "diff-13",
+      "split": "holdout",
+      "topic": "sequences",
+      "case_type": "different_mechanisms_different_answer",
+      "question_text": "What is the next number in the sequence 2, 4, 8, 16?",
+      "correct_answer": "32",
+      "path_a": {
+        "text": "24",
+        "faulty_step": "Assumes the next increment is the last observed difference of 8.",
+        "reasoning_steps": ["The last difference is 8.", "16 + 8 = 24."],
+        "target_misconception": "uses last difference",
+        "error_rationale": "The student treats a multiplicative sequence as additive."
+      },
+      "path_b": {
+        "text": "18",
+        "faulty_step": "Adds 2 to the last term because the first difference was 2.",
+        "reasoning_steps": ["The sequence starts by adding 2.", "16 + 2 = 18."],
+        "target_misconception": "repeats first difference",
+        "error_rationale": "The student uses an early local pattern rather than the doubling rule."
+      },
+      "gold_same_error": false,
+      "annotation_note": "Both impose an additive pattern, but they use different substituted rules and produce different predictions."
+    },
+    {
+      "pair_id": "diff-14",
+      "split": "holdout",
+      "topic": "direct_proportion",
+      "case_type": "different_mechanisms_different_answer",
+      "question_text": "Three pens cost 6 euros. At the same price, how much do five pens cost?",
+      "correct_answer": "10 euros",
+      "path_a": {
+        "text": "8 euros",
+        "faulty_step": "Adds 2 euros because there are two extra pens.",
+        "reasoning_steps": ["Five pens is two more than three.", "6 + 2 = 8 euros."],
+        "target_misconception": "adds one euro per extra pen",
+        "error_rationale": "The student assumes the total price changes one-for-one with the item count."
+      },
+      "path_b": {
+        "text": "15 euros",
+        "faulty_step": "Multiplies the number of pens by the original total price.",
+        "reasoning_steps": ["There are 3 pens in the original group and 5 in the new group.", "Multiply the counts: 5 x 3 = 15 euros."],
+        "target_misconception": "multiplies totals instead of unit price",
+        "error_rationale": "The student uses the original item count as if it were the unit price."
+      },
+      "gold_same_error": false,
+      "annotation_note": "The first assumes an additive price change; the second multiplies incompatible quantities."
+    },
+    {
+      "pair_id": "diff-15",
+      "split": "holdout",
+      "topic": "discounts",
+      "case_type": "different_mechanisms_different_answer",
+      "question_text": "An item costs 50 euros and is discounted by 20%. What is the sale price?",
+      "correct_answer": "40 euros",
+      "path_a": {
+        "text": "30 euros",
+        "faulty_step": "Subtracts 20 euros from 50 because the discount is 20 percent.",
+        "reasoning_steps": ["50 - 20 = 30 euros."],
+        "target_misconception": "percent as absolute amount",
+        "error_rationale": "The student treats the percentage number as a currency amount."
+      },
+      "path_b": {
+        "text": "60 euros",
+        "faulty_step": "Adds the 20 percent amount to the price instead of subtracting it.",
+        "reasoning_steps": ["20% of 50 is 10.", "50 + 10 = 60 euros."],
+        "target_misconception": "discount as increase",
+        "error_rationale": "The student reverses the direction of the discount."
+      },
+      "gold_same_error": false,
+      "annotation_note": "Treating 20 percent as 20 euros and adding the correct percentage amount are different errors."
+    }
+  ]
+}

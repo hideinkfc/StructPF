@@ -1,0 +1,324 @@
+{
+  "purpose": "Test 1: check whether GPT-4.1 follows an assigned wrong rule when answer options are hidden.",
+  "source_questions": "experiments/configs/functional_diversity_test0_questions.json",
+  "selection_note": "Uses 12 of the 15 Test 0 candidates. Questions with ambiguous error-to-answer explanations are excluded.",
+  "temperature": 0.7,
+  "profiles_per_question": 3,
+  "questions": [
+    {
+      "question_id": 221,
+      "profiles": [
+        {
+          "profile_id": "q221_b",
+          "option": "B",
+          "misconception_id": "1177",
+          "error_rule": "When asked for the range, return the largest number in the list.",
+          "expected_answers": ["19 cm", "19"]
+        },
+        {
+          "profile_id": "q221_c",
+          "option": "C",
+          "misconception_id": "1677",
+          "error_rule": "For the range, take the absolute difference between the first and last numbers as they are written, without ordering the list.",
+          "expected_answers": ["3 cm", "3"]
+        },
+        {
+          "profile_id": "q221_d",
+          "option": "D",
+          "misconception_id": "691",
+          "error_rule": "For the range, add the largest number and the smallest number instead of subtracting them.",
+          "expected_answers": ["21 cm", "21"]
+        }
+      ]
+    },
+    {
+      "question_id": 587,
+      "profiles": [
+        {
+          "profile_id": "q587_a",
+          "option": "A",
+          "misconception_id": "706",
+          "error_rule": "Read each expression from right to left. For Problem P choose 3+5 first, and for Problem Q choose 3 times 5 first.",
+          "expected_parts": ["3+5", "3 times 5"],
+          "expected_answers": ["P: 3+5; Q: 3 times 5", "P: 3+5; Q: 3 x 5", "P: 3+5; Q: 3 * 5"]
+        },
+        {
+          "profile_id": "q587_b",
+          "option": "B",
+          "misconception_id": "15",
+          "error_rule": "Treat addition as higher priority than division. For Problem P choose 3+5 first, and for Problem Q choose 6 divided by 3 first.",
+          "expected_parts": ["3+5", "6 divided by 3"],
+          "expected_answers": ["P: 3+5; Q: 6 divided by 3", "P: 3+5; Q: 6 / 3", "P: 3+5; Q: 6 divided 3"]
+        },
+        {
+          "profile_id": "q587_c",
+          "option": "C",
+          "misconception_id": "2306",
+          "error_rule": "Use a strict operation priority in which multiplication is done before division. For Problem P choose 6 divided by 3 first, and for Problem Q choose 3 times 5 first.",
+          "expected_parts": ["6 divided by 3", "3 times 5"],
+          "expected_answers": ["P: 6 divided by 3; Q: 3 times 5", "P: 6 / 3; Q: 3 x 5", "P: 6 divided by 3; Q: 3 * 5"]
+        }
+      ]
+    },
+    {
+      "question_id": 796,
+      "profiles": [
+        {
+          "profile_id": "q796_a",
+          "option": "A",
+          "misconception_id": "2316",
+          "error_rule": "When asked to square a number, multiply it by 2 instead.",
+          "expected_answers": ["24"]
+        },
+        {
+          "profile_id": "q796_b",
+          "option": "B",
+          "misconception_id": "2352",
+          "error_rule": "When asked to square a number, write the index 2 as a digit at the end of the number.",
+          "expected_answers": ["122"]
+        },
+        {
+          "profile_id": "q796_d",
+          "option": "D",
+          "misconception_id": "446",
+          "error_rule": "When asked to square a number, write the number twice in a row instead of multiplying it by itself.",
+          "expected_answers": ["1212"]
+        }
+      ]
+    },
+    {
+      "question_id": 872,
+      "profiles": [
+        {
+          "profile_id": "q872_a",
+          "option": "A",
+          "misconception_id": "446",
+          "error_rule": "When asked to square a number, write the number twice in a row instead of multiplying it by itself.",
+          "expected_answers": ["1111"]
+        },
+        {
+          "profile_id": "q872_c",
+          "option": "C",
+          "misconception_id": "2316",
+          "error_rule": "When asked to square a number, multiply it by 2 instead.",
+          "expected_answers": ["22"]
+        },
+        {
+          "profile_id": "q872_d",
+          "option": "D",
+          "misconception_id": "2352",
+          "error_rule": "When asked to square a number, write the index 2 as a digit at the end of the number.",
+          "expected_answers": ["112"]
+        }
+      ]
+    },
+    {
+      "question_id": 910,
+      "profiles": [
+        {
+          "profile_id": "q910_b",
+          "option": "B",
+          "misconception_id": "220",
+          "error_rule": "When expanding a bracket, multiply only the first term by the outside number and leave the second term unchanged.",
+          "expected_answers": ["3p-1", "3 p - 1"]
+        },
+        {
+          "profile_id": "q910_c",
+          "option": "C",
+          "misconception_id": "1911",
+          "error_rule": "When expanding a bracket, multiply only the second term by the outside number and leave the first term unchanged.",
+          "expected_answers": ["p-3", "p - 3"]
+        },
+        {
+          "profile_id": "q910_d",
+          "option": "D",
+          "misconception_id": "107",
+          "error_rule": "When expanding 3(p-1), multiply p by 3, but combine the outside 3 and the inside -1 as 3 + (-1) = 2, giving 3p-2.",
+          "expected_answers": ["3p-2", "3 p - 2"]
+        }
+      ]
+    },
+    {
+      "question_id": 1035,
+      "profiles": [
+        {
+          "profile_id": "q1035_a",
+          "option": "A",
+          "misconception_id": "583",
+          "error_rule": "Ignore the negative sign outside the bracket and copy the expression inside unchanged.",
+          "expected_answers": ["2-3p", "2 - 3 p"]
+        },
+        {
+          "profile_id": "q1035_b",
+          "option": "B",
+          "misconception_id": "1597",
+          "error_rule": "When multiplying two negative numbers, keep the result negative. Expand the expression as -2-3p.",
+          "expected_answers": ["-2-3p", "-2 - 3 p"]
+        },
+        {
+          "profile_id": "q1035_c",
+          "option": "C",
+          "misconception_id": "1911",
+          "error_rule": "Apply the outside negative sign only to the second term and leave the first term positive.",
+          "expected_answers": ["2+3p", "2 + 3 p"]
+        }
+      ]
+    },
+    {
+      "question_id": 1048,
+      "profiles": [
+        {
+          "profile_id": "q1048_b",
+          "option": "B",
+          "misconception_id": "220",
+          "error_rule": "Apply the outside negative sign only to the first term and leave the second term unchanged.",
+          "expected_answers": ["-1-2p", "-1 - 2 p"]
+        },
+        {
+          "profile_id": "q1048_c",
+          "option": "C",
+          "misconception_id": "1911",
+          "error_rule": "Apply the outside negative sign only to the second term and leave the first term positive.",
+          "expected_answers": ["1+2p", "1 + 2 p"]
+        },
+        {
+          "profile_id": "q1048_d",
+          "option": "D",
+          "misconception_id": "583",
+          "error_rule": "Ignore the negative sign outside the bracket and copy the expression inside unchanged.",
+          "expected_answers": ["1-2p", "1 - 2 p"]
+        }
+      ]
+    },
+    {
+      "question_id": 1269,
+      "profiles": [
+        {
+          "profile_id": "q1269_a",
+          "option": "A",
+          "misconception_id": "220",
+          "error_rule": "When expanding a bracket, multiply only the first term by the outside number and leave the second term unchanged.",
+          "expected_answers": ["6p-2", "6 p - 2"]
+        },
+        {
+          "profile_id": "q1269_c",
+          "option": "C",
+          "misconception_id": "1911",
+          "error_rule": "When expanding a bracket, multiply only the second term by the outside number and leave the first term unchanged.",
+          "expected_answers": ["p-12", "p - 12"]
+        },
+        {
+          "profile_id": "q1269_d",
+          "option": "D",
+          "misconception_id": "107",
+          "error_rule": "Multiply p by 6, but add the outside 6 to the inside -2 and use the resulting constant 4, giving 6p-4.",
+          "expected_answers": ["6p-4", "6 p - 4"]
+        }
+      ]
+    },
+    {
+      "question_id": 1437,
+      "profiles": [
+        {
+          "profile_id": "q1437_b",
+          "option": "B",
+          "misconception_id": "1177",
+          "error_rule": "When asked for the range, return the largest number in the list.",
+          "expected_answers": ["22 cm", "22"]
+        },
+        {
+          "profile_id": "q1437_c",
+          "option": "C",
+          "misconception_id": "1677",
+          "error_rule": "For the range, take the absolute difference between the first and last numbers as they are written, without ordering the list.",
+          "expected_answers": ["3 cm", "3"]
+        },
+        {
+          "profile_id": "q1437_d",
+          "option": "D",
+          "misconception_id": "691",
+          "error_rule": "For the range, add the largest number and the smallest number instead of subtracting them.",
+          "expected_answers": ["26 cm", "26"]
+        }
+      ]
+    },
+    {
+      "question_id": 1565,
+      "profiles": [
+        {
+          "profile_id": "q1565_a",
+          "option": "A",
+          "misconception_id": "309",
+          "error_rule": "Assume that two adjacent angles on a straight line add to 90 degrees.",
+          "expected_answers": ["90 degrees", "90°", "90"]
+        },
+        {
+          "profile_id": "q1565_b",
+          "option": "B",
+          "misconception_id": "2121",
+          "error_rule": "Assume that two adjacent angles on a straight line add to 100 degrees.",
+          "expected_answers": ["100 degrees", "100°", "100"]
+        },
+        {
+          "profile_id": "q1565_d",
+          "option": "D",
+          "misconception_id": "2362",
+          "error_rule": "Assume that two adjacent angles on a straight line add to 360 degrees.",
+          "expected_answers": ["360 degrees", "360°", "360"]
+        }
+      ]
+    },
+    {
+      "question_id": 1604,
+      "profiles": [
+        {
+          "profile_id": "q1604_b",
+          "option": "B",
+          "misconception_id": "1072",
+          "error_rule": "When asked to square a number, multiply the number by the index 2 instead.",
+          "expected_answers": ["2"]
+        },
+        {
+          "profile_id": "q1604_c",
+          "option": "C",
+          "misconception_id": "952",
+          "error_rule": "When asked to square a number, add the index 2 to the number instead.",
+          "expected_answers": ["3"]
+        },
+        {
+          "profile_id": "q1604_d",
+          "option": "D",
+          "misconception_id": "2352",
+          "error_rule": "When asked to square a number, write the index 2 as a digit at the end of the number.",
+          "expected_answers": ["12"]
+        }
+      ]
+    },
+    {
+      "question_id": 1727,
+      "profiles": [
+        {
+          "profile_id": "q1727_a",
+          "option": "A",
+          "misconception_id": "2143",
+          "error_rule": "When expanding 3(1-2p), add the outside 3 to the first inside number 1 instead of multiplying it, while multiplying the second term correctly.",
+          "expected_answers": ["4-6p", "4 - 6 p"]
+        },
+        {
+          "profile_id": "q1727_c",
+          "option": "C",
+          "misconception_id": "1911",
+          "error_rule": "When expanding a bracket, multiply only the second term by the outside number and leave the first term unchanged.",
+          "expected_answers": ["1-6p", "1 - 6 p"]
+        },
+        {
+          "profile_id": "q1727_d",
+          "option": "D",
+          "misconception_id": "1510",
+          "error_rule": "Treat subtraction as commutative: reverse 1-2p to 2p-1, then multiply by 3.",
+          "expected_answers": ["6p-3", "6 p - 3"]
+        }
+      ]
+    }
+  ]
+}

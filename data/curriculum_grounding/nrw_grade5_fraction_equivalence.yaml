@@ -1,0 +1,46 @@
+# Curriculum grounding: Germany (NRW) Grade 5 — Fraction equivalence / fair comparison
+# Grounds: Mazziotti et al. (2016) pizza task, StratL Pia/Ole fraction-comparison task
+id: nrw_grade5_fraction_equivalence
+country: Germany (North Rhine-Westphalia)
+grade: 5
+school_level: "Gymnasium / Gesamtschule, Sekundarstufe I, start of Grade 5"
+target_concept: "Equivalence of fractions (comparing a/b vs c/d as proportions)"
+expert_tasks_grounded:
+  - puech2025_stratl_fraction_comparison      # Pia/Ole goals task
+  - puech2025_stratl_fraction_comparison_2    # Steven pizza task (Mazziotti 2016)
+
+sources:
+  - name: "NRW Kernlehrplan Mathematik — Gymnasium (G9), 2019/2023"
+    file: "documents/nrw_g9_gymnasium_m_klp.pdf"
+    url: "https://lehrplannavigator.nrw.de/system/files/media/document/file/g9_m_klp_3401_2019_06_23_0.pdf"
+    access_date: "2026-08-24"
+    type: official_curriculum
+
+prior_resources_taught_before_target:
+  - resource: "Concept of a fraction as a part of a whole (Anteil, Bruchteil)"
+    taught_at: "Grade 5 (early), Bruchrechnung unit"
+    source: "NRW Kernlehrplan"
+    section: "Arithmetik/Algebra — Bruchrechnung"
+    pages: "p.15, p.23-24"
+    section_text: "Begriffsbildung: Primfaktorzerlegung, Anteile, Bruchteile von Größen (concept formation: shares, fractions of quantities)"
+  - resource: "Dividing quantities equally (sharing)"
+    taught_at: "Primary / early Grade 5"
+    source: "NRW Kernlehrplan (Arithmetik), Mazziotti task design"
+    section: "Arithmetik — Grundrechenarten"
+    pages: "p.23"
+  - resource: "Representing fractions on a number line and in diagrams"
+    taught_at: "Grade 5"
+    source: "NRW Kernlehrplan"
+    section: "Arithmetik/Algebra — Darstellung"
+    pages: "p.23"
+    section_text: "Darstellung: Stellenwerttafel, Zahlenstrahl, Wortform, Bruch, endliche und periodische Dezimalzahl, Prozentzahl"
+
+target_concept_first_appearance:
+  concept: "Formal equivalence of fractions (Kürzen/Erweitern as formal rules)"
+  location: "Grade 5, Bruchrechnung — but AFTER the basic concept introduction"
+  page: "p.23-24"
+  note: "Mazziotti et al. (2016, ICLS) deliberately placed the PF problem at the start of Grade 5, before formal instruction on fraction equivalence. The Kernlehrplan places 'Kürzen, Erweitern' (reduce, expand — the equivalence operations) inside the Grade 5 Bruchrechnung unit; the task sits at the boundary before those formal rules."
+
+caveats:
+  - "Mazziotti et al. (2016) is the direct task source (ICLS 2016, pp. 926-929); the study itself is the authority for the 'not yet formally introduced' boundary."
+  - "The Pia/Ole task's source_reference to Loibl & Rummel 2014 is unverified for this content (see data audit); its curriculum grounding here is shared with the pizza task since both are Grade 5 NRW fraction comparison."

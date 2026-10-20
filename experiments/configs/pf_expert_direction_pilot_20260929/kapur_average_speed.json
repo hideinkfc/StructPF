@@ -1,0 +1,107 @@
+{
+  "schema_version": "pf-paper-benchmark/v1",
+  "conditions": ["V1", "V2", "V3", "PIPELINE"],
+  "n_per_condition": 1,
+  "model_selector": "luna",
+  "workers": 1,
+  "shuffle_seed": 20260929,
+  "generation_max_tokens": 6000,
+  "inference_max_tokens": 2000,
+  "pipeline": {
+    "k": 6,
+    "max_resources": 5,
+    "evidence_k": 6,
+    "d1_condition": "grounded"
+  },
+  "case": {
+    "id": "expert_kapur_average_speed_g7_singapore",
+    "target_concept": "Average speed as total distance divided by total elapsed time; students have not yet received direct instruction on the target.",
+    "topic": "average speed and rates",
+    "grade": 7,
+    "jurisdiction": "Singapore",
+    "subject": "mathematics",
+    "teacher_recently_taught": [
+      "Calculate speed as distance divided by time and convert units.",
+      "Use ratio and proportion to compare quantities.",
+      "Use lowest common multiples, highest common factors, and trial and error."
+    ],
+    "benchmark_context": {
+      "theme": "a new, realistic movement or travel situation",
+      "setting_rule": "Invent the context, people, and data. Do not reproduce a published task or a familiar published story.",
+      "prior_knowledge_boundary": "Use only the supplied recently taught resources; average speed as total distance divided by total elapsed time has not yet been directly taught.",
+      "task_rule": "Create a new task for exploration before instruction on the target, not a worked example or a lesson teaching the target method."
+    }
+  },
+  "learner_context": {
+    "grade": 7,
+    "subject": "mathematics",
+    "jurisdiction": "Singapore",
+    "assumed_prior_knowledge": [
+      {
+        "resource": "Speed as distance divided by time",
+        "taught_as": "Calculate speed from distance and time, including unit conversion."
+      },
+      {
+        "resource": "Ratio and proportion",
+        "taught_as": "Compare quantities using ratios and proportional reasoning."
+      },
+      {
+        "resource": "LCM/HCF and trial and error",
+        "taught_as": "Use common multiples, common factors, and systematic guesses in problem solving."
+      }
+    ]
+  },
+  "grounding_evidence": [
+    {
+      "standard_id": "SG-MOE-SEC1-RATE-SPEED",
+      "label": "Rate and Speed",
+      "source_url": "https://www.moe.gov.sg/-/media/files/secondary/syllabuses/maths/2020-express_na-maths_syllabuses.pdf",
+      "text": "The Rate and Speed strand includes speed, constant speed, and conversion of units (syllabus pp. 17 and 27).",
+      "retrieved_at": "2026-09-29",
+      "provenance": "official_curriculum"
+    },
+    {
+      "standard_id": "SG-MOE-SEC1-NUMBER-OPERATIONS",
+      "label": "Number and Operations",
+      "source_url": "https://www.moe.gov.sg/-/media/files/secondary/syllabuses/maths/2020-express_na-maths_syllabuses.pdf",
+      "text": "The Number and Operations strand covers lowest common multiples and highest common factors (syllabus pp. 17-18).",
+      "retrieved_at": "2026-09-29",
+      "provenance": "official_curriculum"
+    },
+    {
+      "standard_id": "SG-MOE-SEC1-RATIO-PROPORTION",
+      "label": "Ratio and Proportion",
+      "source_url": "https://www.moe.gov.sg/-/media/files/secondary/syllabuses/maths/2020-express_na-maths_syllabuses.pdf",
+      "text": "The syllabus includes ratio and proportion in the secondary mathematics curriculum (pp. 19 and 29).",
+      "retrieved_at": "2026-09-29",
+      "provenance": "official_curriculum"
+    }
+  ],
+  "misconceptions": [
+    "Treats an overall speed as the unweighted average of segment speeds even when the time spent at each speed differs.",
+    "Treats an overall speed as the unweighted average of segment speeds even when the distances covered at each speed differ.",
+    "Assumes a ratio between two component speeds directly gives the ratio of their contributions to a whole journey.",
+    "Combines component speeds by addition instead of reasoning about total distance and total elapsed time.",
+    "Treats the fastest or slowest segment as representative of the whole journey.",
+    "Confuses the direction or units of a speed ratio when comparing two journeys."
+  ],
+  "misconception_provenance": {
+    "source": "Curator-authored after reviewing the expert exercise's task description and design analysis; these may overlap with expert-anticipated pathways.",
+    "limitation": "Not Eedi labels, not student-validated, and not evidence of observed learner behavior."
+  },
+  "pilot_protocol": {
+    "pilot_id": "pf_expert_direction_pilot_20260929",
+    "reference_exercise": "data/pf_exercises/kapur_bielaczyc_2012.yaml#kapur2012_complex_1",
+    "sampling": "One scheduled attempt in each of V1, V2, V3, and PIPELINE; preserve every blocked or failed attempt.",
+    "holdout_rule": "The exact reference problem statement, names, numbers, and solution are withheld from generation inputs. V2 hypotheses were written after consulting expert design descriptions and may expose overlapping conceptual contrasts; V2 is not a blind held-out condition.",
+    "v2_treatment": "Six curator-authored hypotheses informed by the expert design analysis; exploratory only, not student-validated, and not equivalent to the historically Eedi-labeled V2 condition.",
+    "interpretation": "One attempt per condition is descriptive calibration only; automated ratings are model judgments, not human/student evidence."
+  },
+  "protocol": {
+    "comparison_scope": "Twelve-attempt exploratory pilot across three expert-task directions; one attempt per condition and direction.",
+    "rating_policy": "Use the runner's frozen rubric rating only as a model judgment; inspect task outputs and blocked cases separately.",
+    "failure_policy": "Do not replace blocked, malformed, interrupted, or failed attempts.",
+    "mathematics_policy": "PIPELINE arithmetic/checker outcomes are distinct from PF quality; unsupported or blocked checks are not scored as task defects without case-level evidence.",
+    "limitation": "The V2 hypothesis source differs from the historical Eedi treatment; n=1 per direction-condition does not support causal or statistical claims."
+  }
+}

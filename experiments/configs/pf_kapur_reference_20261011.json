@@ -1,0 +1,70 @@
+{
+  "schema_version": "pf-kapur-reference/v1",
+  "question": "Do independent prerequisite-conditioned LLM attempts on a source-normalized bicycle-handover task include the mathematical pathways documented in real Grade7 group work, without being told those pathways?",
+  "output": "experiments/results/pf_kapur_reference_20261011",
+  "task": {
+    "status": "ready",
+    "title": "Sharing one bicycle on the way to a performance",
+    "body": "Two friends, Mira and Leon, are 5 km from a performance venue. Only one bicycle is usable, and it carries one person at a time. They start this remaining journey together.\n\nMira will ride first, leave the bicycle at a point along the route, and walk from there to the venue. Leon will walk to the bicycle and then ride it to the venue. Neither person turns back, and neither stops to wait. Ignore the time needed to leave or pick up the bicycle. Treat these rates as constant estimates for this task:\n\n| Person | Riding speed | Walking speed |\n|---|---:|---:|\n| Mira | 150 metres per minute | 30 metres per minute |\n| Leon | 200 metres per minute | 50 metres per minute |\n\nThey want to reach the venue at the same time.",
+    "question": "Where should Mira leave the bicycle? Work out a distance from their starting point, show the work you would put on the page, and explain how your proposal fits both journeys. An unfinished attempt is also acceptable."
+  },
+  "learner_context": {
+    "grade": 7,
+    "subject": "mathematics",
+    "jurisdiction": "Singapore",
+    "assumed_prior_knowledge": [
+      {"resource":"Speed as distance divided by time","taught_as":"Calculate speed, distance or time for constant-speed motion and convert units."},
+      {"resource":"Ratio and proportion","taught_as":"Compare quantities and use proportional reasoning."},
+      {"resource":"LCM/HCF and trial and error","taught_as":"Find common multiples/factors and use systematic guesses checked against a problem."}
+    ]
+  },
+  "models": ["gpt41mini","gpt41"],
+  "learner_profiles": [
+    {"id":"recent_prerequisites","condition":"learner"},
+    {"id":"one_prerequisite_gap","condition":"learner","omit_resource":"Ratio and proportion"}
+  ],
+  "repetitions": {"learner":6,"solver":2,"prediction":1},
+  "settings": {"temperature":0.7,"max_tokens":2400,"timeout_seconds":180,"sdk_retries":0},
+  "workers": 4,
+  "budget": {"calibration_calls":4,"learner_calls":24,"solver_calls":4,"prediction_calls":2,"fresh_calls":30,"total_calls":34,"max_completion_tokens":81600,"rounds":1},
+  "prediction_prompt": "Given this task and recently learned resources, anticipate mathematical approaches that Grade7 learners might try. Describe approaches, including plausible incomplete or unsuccessful approaches where justified. Do not solve the task, produce pretend student attempts, or invent frequencies. Return JSON with approaches: a list of objects with description (nonempty text) and possible_limitation (text). Do not assume any predicted pathway was observed.",
+  "source": {
+    "paper":"Kapur and Bielaczyc (2012), Designing for Productive Failure, DOI10.1080/10508406.2011.591717",
+    "pdf":"thesis/otherpapers/Designing for Productive Failure.pdf",
+    "task_location":"AppendixA, journal pp81-82, PDFpages38-39",
+    "method_location":"journal pp58-61, PDFpages15-18",
+    "notes":"docs/pf-generation/KAPUR_BIELACZYC_2012_EVIDENCE.md",
+    "normalized_record":"data/pf_exercises/kapur_bielaczyc_2012.yaml",
+    "adaptation":"New concise paraphrase, changed names and focus on the remaining5km. Published walking estimate450m in13-15min is normalized to30m/min, at the15min endpoint. Earlier shared journey and surrounding dialogue removed, constant-rate/no-wait assumptions explicit. This reduces interpretation and data-extraction demands; not an exact original worksheet.",
+    "reference_type":"Nine categories coded from real group artifacts/discussions, not nine expected methods per individual or empirical category frequencies."
+  },
+  "codebook": {
+    "hady_walks_more":"Explicit correct qualitative conclusion that the faster rider/walker Leon should do more walking (not merely both friends ride/walk).",
+    "complementary_distances":"Explicit shared partition relationship: Mira riding distance equals Leon walking distance, and their remaining distances are complementary. Coding records this insight, not a separate algorithm.",
+    "diagram":"An actual spatial/timeline schematic representing both journeys/partition. Merely saying draw a diagram or listing trial values is not a diagram. Representation coverage reported separately from algorithms.",
+    "lcm_hcf":"Actually calculates/applies common multiples/factors to choose or test the partition; naming LCM/HCF without executing is predicted/mentioned-only.",
+    "ratios":"Actually proposes or computes partition using a speed ratio/proportion. Routine unit conversion, times as distance/speed or an algebraic equality alone is not this heuristic. May succeed/fail depending on application.",
+    "trial_bruteforce":"At least two distinct candidate partition distances checked with times, then refined/compared, without a ratio-derived initial guess. Verifying an already algebraically solved point is not trial-and-error.",
+    "trial_ratio_informed":"Ratio-derived partition guess followed by actual numerical testing/refinement. May overlap ratios but not trial_bruteforce for the same trial sequence.",
+    "algebra_multiple_variables":"Actually uses at least two unknowns and explicit mathematical equations (not merely variable names listed), whether later reduced successfully or left unresolved.",
+    "algebra_single_variable":"Actually forms and manipulates equations in one partition variable. Correct algebra is permitted despite being untaught; successful use is not automatically failure because the paper's Grade7 groups struggled."
+  },
+  "outcomes": [
+    "Actual category coverage/counts by24learner attempts,4solver attempts; predictor categories are anticipated not performed. All failures/partials retained.",
+    "Nine source categories separated into conceptual insights, representation and algorithms; union coverage is not alone an educational diversity score.",
+    "Concrete unsuccessful or abandoned attempts, successful procedures and unknown execution, with source quotes. Source-labelled methods need not fail for every new attempt.",
+    "Per-profile/model paths and completion, not an assumed real classroom distribution. No empirical frequency target or automatic threshold.",
+    "Exact normalized mathematical solution checked independently, not sent to learners."
+  ],
+  "decision":"One bounded diagnostic only. If fewer failed paths appear, possible explanations include model competence, prompt framing, simplified task, individual-vs-group mismatch or insufficient sampling. Do not infer task failure or simulator invalidity from absence alone; even positive category coverage does not validate realistic distributions.",
+  "limits": [
+    "One published, potentially memorized task with normalized wording/rates.",
+    "Individual first written responses compared with real group exploration across a lesson/unit; interaction/time/opportunity differ.",
+    "No real student attempts or category-frequency data available locally.",
+    "Two hypothetical profiles, equal sampling, no measured class mixture.",
+    "Written explanations are observable model outputs, not cognitive processes or proof of actual struggle.",
+    "No assigned mistake, desired path, reference categories or expert solution in learner input.",
+    "No prompt retuning, replacement trials, global generator modification or PF revision."
+  ],
+  "seed":20261011
+}

@@ -1,0 +1,105 @@
+{
+  "schema_version": "pf-paper-benchmark/v1",
+  "conditions": ["V1", "V2", "V3", "PIPELINE"],
+  "n_per_condition": 30,
+  "model_selector": "luna",
+  "workers": 3,
+  "shuffle_seed": 20260923,
+  "generation_max_tokens": 6000,
+  "inference_max_tokens": 2000,
+  "pipeline": {
+    "k": 6,
+    "max_resources": 5,
+    "evidence_k": 6,
+    "d1_condition": "grounded"
+  },
+  "case": {
+    "id": "rahimi_ratio_g7_usa_basketball",
+    "target_concept": "Recognize and represent proportional relationships between quantities (CCSS.Math.Content.7.RP.A.2). Students have not yet received direct instruction on this target.",
+    "topic": "ratios and proportional relationships",
+    "grade": 7,
+    "jurisdiction": "USA",
+    "subject": "mathematics",
+    "teacher_recently_taught": [
+      "Compute unit rates involving fractional quantities (7.RP.A.1).",
+      "Add and subtract rational numbers, using numerical and number-line interpretations (7.NS.A.1)."
+    ],
+    "benchmark_context": {
+      "theme": "sports",
+      "interest": "basketball and Stephen Curry",
+      "setting_rule": "The generated student task must use a basketball situation involving Stephen Curry. Invented practice or camp data are fictional, not claims about real statistics.",
+      "prior_knowledge_boundary": "Treat the two supplied prior standards as the fixed recently taught repertoire. Grounding may unpack these skills, but must not add extra assumed courses, formal proportional-relation methods, variance, fair-division algorithms, or probability instruction.",
+      "task_rule": "Generate a new task for exploration before instruction on the target, not a worked example or a lesson teaching the target method."
+    }
+  },
+  "learner_context": {
+    "grade": 7,
+    "subject": "mathematics",
+    "jurisdiction": "USA",
+    "assumed_prior_knowledge": [
+      {
+        "resource": "Unit rates (7.RP.A.1)",
+        "taught_as": "Compute unit rates involving ratios of fractional quantities, including lengths and areas in like or different units."
+      },
+      {
+        "resource": "Rational-number addition and subtraction (7.NS.A.1)",
+        "taught_as": "Add and subtract rational numbers and interpret these operations numerically and on a number line."
+      }
+    ]
+  },
+  "grounding_evidence": [
+    {
+      "standard_id": "CCSS.Math.Content.7.RP.A.1",
+      "label": "Unit rates",
+      "source_url": "https://www.thecorestandards.org/Math/Content/7/RP/A/1/",
+      "text": "Compute unit rates associated with ratios of fractions, including ratios of lengths, areas and other quantities measured in like or different units.",
+      "retrieved_at": "2026-09-23",
+      "provenance": "official_curriculum"
+    },
+    {
+      "standard_id": "CCSS.Math.Content.7.NS.A.1",
+      "label": "Rational-number addition and subtraction",
+      "source_url": "https://www.thecorestandards.org/Math/Content/7/NS/",
+      "text": "Apply and extend previous understandings of addition and subtraction to add and subtract rational numbers; represent addition and subtraction on a horizontal or vertical number line diagram.",
+      "retrieved_at": "2026-09-23",
+      "provenance": "official_curriculum"
+    }
+  ],
+  "misconceptions": [
+    "Mixes up sides of a ratio",
+    "Divides total amount by each side of the ratio instead of dividing by the sum of the parts",
+    "Thinks the number in the ratio is the total",
+    "Shares equally instead of in given ratio",
+    "Thinks a difference of one part in a ratio means the quantities will differ by one unit",
+    "In ratio question where one side of ratio is given, treats that as the total"
+  ],
+  "misconception_provenance": {
+    "source": "data/eedi/misconception_mapping.csv",
+    "ids_in_order": [105, 2378, 806, 2071, 2356, 624],
+    "selection": "Six exact mapping entries retained from the historical eight-label ratio list; two historical labels without an exact mapping match are not asserted to be verbatim Eedi entries.",
+    "limitation": "Documented misconception labels, not student-response frequencies or validated error pathways for these generated tasks."
+  },
+  "prompt_path": "src/generation/prompts/pf_paper_benchmark.yaml",
+  "protocol": {
+    "primary_comparison": "PIPELINE versus V1",
+    "secondary_comparisons": ["V2 versus V1", "V3 versus V1"],
+    "sampling_unit": "One independent scheduled generation attempt from the common fixed specification; no previous-task memory or seven-brief stratification.",
+    "failure_policy": "Thirty attempts per condition, with current bounded within-pipeline repairs. Do not replace blocked, malformed, interrupted, or failed attempts to obtain thirty successes. Missing scores remain missing, not zero.",
+    "rating_policy": "One frozen rahimi-table1/v1 Luna rating per ready task, in a seeded shuffled order, with identical assumed learner context, no condition labels, no teacher notes, and no proposed student approaches.",
+    "prior_policy": "Fresh mapping and expansion per PIPELINE attempt from the same two official curriculum excerpts. This freezes retrieval to control learner knowledge; it is not an evaluation of retrieval accuracy.",
+    "comparison_scope": "Method-package comparison at a shared base model, not equal-compute isolation of one prompt ingredient. Pipeline selection and verification are part of that method; their costs and blocked runs must be reported.",
+    "mathematics_policy": "Keep deterministic pipeline checks separate from final-rubric ratings. Direct outputs lack equivalent structured plans and remain not deterministically checked, not invalid. Judge mathematical concerns are unverified model claims.",
+    "paper_source": "thesis/otherpapers/paper_135.pdf",
+    "paper_setting": "Rahimi et al. (2025): Grade 7, 7.RP.A.2, prior 7.RP.A.1 and 7.NS.A.1, sports/basketball/Stephen Curry; thirty completed problems per original model.",
+    "departures": [
+      "Luna in all conditions rather than GPT-4o and Phi-3.",
+      "Automated Luna rating rather than two trained independent blinded human raters and third-rater adjudication.",
+      "The paper describes but does not reproduce its exact generation prompt or identify its five example texts. Our six-component direct prompt and five literature adaptations are a reconstruction.",
+      "The paper's prose mentions six rubric criteria, but its published Table 1 contains five; this benchmark uses the five published dimensions consistently.",
+      "The prior standard 7.NS.A.1 specifically covers rational addition/subtraction; the paper's broad phrase 'operations with rational numbers' is not expanded to additional standards.",
+      "Thirty scheduled attempts are not a guarantee of thirty completed problems.",
+      "V1/V2/V3 retain the historical misconception-input distinction but use a new paper-style shared direct prompt, not the historical modified prompt.",
+      "Luna is both generator and evaluator; rubric differences do not establish human agreement, real student approach diversity, or learning."
+    ]
+  }
+}

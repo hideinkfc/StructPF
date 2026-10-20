@@ -1,0 +1,231 @@
+{
+  "schema_version": "pf-grounding-study-config/v1",
+  "seed": 20261012,
+  "model_selector": "luna",
+  "model_id": "gpt-6-luna",
+  "proposal_k": 1,
+  "repeats": 4,
+  "request_cap": 800,
+  "preconsumed_request_reserve": 12,
+  "preconsumed_request_breakdown": {
+    "local_curriculum_query_embeddings": 6,
+    "learning_commons_searches": 6,
+    "source": "experiments/configs/pf_grounding_study_20261013.json and experiments/results/pf_grounding_study_20261013/manifest.json plus its six saved LC responses; conservatively charged although those candidate topics are not used in this comparison."
+  },
+  "max_workers": 3,
+  "local_text_budget": 6500,
+  "lc_text_budget": 2500,
+  "selection_rule": {
+    "local": "One directly relevant official/local curriculum corpus page per case, selected offline by exact frozen chunk ID before generation.",
+    "learning_commons": "Up to three directly relevant attributed records selected by exact source ID from the existing cached response; titles and unrelated records are excluded. Selection is deterministic and frozen before generation.",
+    "arm_assignment": "A has neither evidence array; B has only local_curriculum; C has only learning_commons_standard_descriptions."
+  },
+  "hypothesis": "With an identical stipulated learner-prior packet and identical task request, supplying one source type of mathematical reference evidence may help the generator preserve mathematical meaning and an accessible start without disclosing the target. No change or a regression is a result, not a reason to tune or replace outputs.",
+  "limitations": [
+    "All five topics have prior research or pipeline exposure; task specifications are transfer cases, not untouched validation topics.",
+    "This compares mathematical reference availability during design, not independent D1 prior-resource discovery. D1 is a fixed stipulated learner record shared across all arms and repetitions.",
+    "Local curriculum and Learning Commons sources can differ in jurisdiction, grade band, detail, language and text length; evidence volume is part of each source-type treatment, not token-matched.",
+    "The fraction curriculum excerpt is an existing model-generated English translation of a German source and is identified as such in the frozen inventory.",
+    "Learning Commons standards are reference data, not proof of what any learner knows or what a local class was taught.",
+    "Generation completion and readiness do not establish mathematical validity, task quality, distinct student approaches, productive failure or learning."
+  ],
+  "shared_context": {
+    "subject": "mathematics",
+    "jurisdiction": "Case-specific; set identically across each case's arms and repetitions.",
+    "task_rule": "Generate a student task for exploration before instruction on the target. Preserve the requested task family and leave the central unknown for students. Do not give a worked solution, prescribe a single procedure, or add unrelated prerequisites.",
+    "provenance_rule": "Use fictional task data where needed. Do not claim invented records are observations.",
+    "learner_context": {
+      "grade": 7,
+      "age_range": "Case-appropriate school age",
+      "language": "English",
+      "profile_status": "Hypothetical stipulated learner specification, not observed students.",
+      "prior_boundary": "Only the case-specific resources in the fixed D1 packet are assumed recently taught. Mathematical reference evidence does not expand this repertoire."
+    }
+  },
+  "local_retrieval_provenance": {
+    "method": "Offline exact-chunk selection from the already saved curriculum corpus; no embedding or search API call in this study.",
+    "corpus": "data/curriculum_grounding/corpus_chunks.json",
+    "selected_before_generation": true,
+    "api_requests_for_this_study": 0
+  },
+  "cases": [
+    {
+      "id": "average_speed_reference",
+      "topic": "average speed and rates",
+      "target_concept": "A defensible whole-route average speed when a trip has multiple legs of different lengths and durations.",
+      "task_family": "Help a cycling team compare routes with changing speeds. Students choose what information and representation make a whole-route comparison fair, rather than being told which rates to average.",
+      "grade": 7,
+      "subject": "mathematics",
+      "jurisdiction": "Singapore",
+      "teacher_recently_taught": [
+        "Distance and elapsed time",
+        "Constant speed and unit rates",
+        "Reading numerical tables"
+      ],
+      "topic_role": "transfer_new_task_specification_not_untouched",
+      "history_note": "Average-speed PF tasks and a Learning Commons paired pilot have been inspected previously; this is not an untouched topic or a replication of the expert task.",
+      "local_query": "average speed rate and distance-time relationships",
+      "local_retrieval_result": [
+        {
+          "chunk_id": "moe_sg_2020_secondary_maths.pdf::p17::original"
+        }
+      ],
+      "lc_query": "average speed and rates",
+      "learning_commons_snapshot": "experiments/results/learning_commons_queries/cache/333c1cc241db775eb670b2fb76ac67db933918cbf57329bf1a27bbf62dbf679d/response_20261009T142939563921Z.json",
+      "learning_commons_selected_ids": [
+        "6ba1afb9-d7cc-11e8-824f-0242ac160002",
+        "6b9c3a21-d7cc-11e8-824f-0242ac160002",
+        "6b9f8362-d7cc-11e8-824f-0242ac160002"
+      ]
+    },
+    {
+      "id": "ratio_part_whole_reference",
+      "topic": "ratios and proportional relationships",
+      "target_concept": "Distinguishing a part-to-part ratio from the corresponding part-to-whole fraction when estimating a share.",
+      "task_family": "Compare competing records of a two-colour mixture and decide how to communicate one colour's share of the total. Students choose a convincing representation; no conversion rule is supplied.",
+      "grade": 7,
+      "subject": "mathematics",
+      "jurisdiction": "Singapore",
+      "teacher_recently_taught": [
+        "Ratios in simplest form",
+        "Fractions as parts of a whole",
+        "Unit rates"
+      ],
+      "topic_role": "transfer_new_task_specification_not_untouched",
+      "history_note": "Ratio and proportion work appears in prior MCQ and PF configuration; this task specification is a transfer case, not an untouched topic.",
+      "local_query": "ratio relationship between quantities and fractions",
+      "local_retrieval_result": [
+        {
+          "chunk_id": "moe_sg_2020_secondary_maths.pdf::p17::original"
+        }
+      ],
+      "lc_query": "ratios and proportional relationships",
+      "learning_commons_snapshot": "experiments/results/learning_commons_queries/cache/5410367942262c33b2eac23c158e80ea0c96557bafc6d8bc1b0bf254405ecf9b/response_20261009T143427481447Z.json",
+      "learning_commons_selected_ids": [
+        "6b9d7951-d7cc-11e8-824f-0242ac160002",
+        "6b9e4d0c-d7cc-11e8-824f-0242ac160002",
+        "6ba13e2b-d7cc-11e8-824f-0242ac160002"
+      ]
+    },
+    {
+      "id": "variability_comparison_reference",
+      "topic": "variance, consistency, and descriptive statistics",
+      "target_concept": "A defensible way to compare variability in two small data sets when their centers are similar.",
+      "task_family": "Design a record for comparing the consistency of two players' repeated results. Students decide what comparisons and displays justify their decision; no spread formula is supplied.",
+      "grade": 9,
+      "subject": "mathematics",
+      "jurisdiction": "Singapore",
+      "teacher_recently_taught": [
+        "Mean and median",
+        "Range",
+        "Data tables and dot plots"
+      ],
+      "topic_role": "transfer_new_task_specification_not_untouched",
+      "history_note": "Variance/consistency is represented in prior PF research and curriculum-grounding notes; this is not an untouched topic.",
+      "local_query": "data variability center spread and consistency",
+      "local_retrieval_result": [
+        {
+          "chunk_id": "moe_sg_2020_secondary_maths.pdf::p23::original"
+        }
+      ],
+      "lc_query": "variance, consistency, and descriptive statistics",
+      "learning_commons_snapshot": "experiments/results/learning_commons_queries/cache/800527b0e64c7524e34560c084321c2283c792bdb23bc9ddbf9d580561028e1d/response_20261009T143433856418Z.json",
+      "learning_commons_selected_ids": [
+        "6b9b9d82-d7cc-11e8-824f-0242ac160002",
+        "6ba221e0-d7cc-11e8-824f-0242ac160002",
+        "6b9dc322-d7cc-11e8-824f-0242ac160002"
+      ]
+    },
+    {
+      "id": "stopping_motion_reference",
+      "topic": "motion, speed, and stopping",
+      "target_concept": "How approach speed and net force can affect the motion and stopping of an object.",
+      "task_family": "Plan a fair comparison of how a small cart stops under different approach speeds and surfaces. Students choose which observations to record and how to support a safety recommendation without receiving a motion formula.",
+      "grade": 11,
+      "subject": "physics",
+      "jurisdiction": "India (CBSE)",
+      "teacher_recently_taught": [
+        "Units and dimensional analysis",
+        "Motion in a straight line",
+        "Average speed and velocity",
+        "Forces and friction"
+      ],
+      "topic_role": "transfer_new_task_specification_not_untouched",
+      "history_note": "Kinematics and braking appear in existing curriculum-grounding and PF records; this is a transfer specification, not an untouched topic.",
+      "local_query": "motion and stopping relationships in the physics curriculum",
+      "local_retrieval_result": [
+        {
+          "chunk_id": "cbse_physics_srsec_2025_26.pdf::p3::original"
+        }
+      ],
+      "lc_query": "kinematics and braking",
+      "learning_commons_snapshot": "experiments/results/learning_commons_queries/cache/91a2681995019260130f0d6846b6be638b1246f6c08fd04d54a6c469d4a4ca5f/response_20261009T142952880972Z.json",
+      "learning_commons_selected_ids": [
+        "03e3820c-b2f6-11e9-a86e-0242ac150005",
+        "03e38432-b2f6-11e9-9e63-0242ac150005",
+        "03e2729a-b2f6-11e9-b21e-0242ac150005"
+      ]
+    },
+    {
+      "id": "fraction_equivalence_reference",
+      "topic": "fraction equivalence and fair comparison",
+      "target_concept": "Comparing two fractions with different numerators and denominators to decide which share is larger.",
+      "task_family": "Evaluate two fictional offers that give different fractional parts of differently sized batches. Students choose how to compare actual amounts and justify whether the offer is fair; no common-denominator or scaling procedure is prescribed.",
+      "grade": 5,
+      "subject": "mathematics",
+      "jurisdiction": "Germany (North Rhine-Westphalia)",
+      "teacher_recently_taught": [
+        "Fractions as parts of a whole",
+        "Equal sharing",
+        "Fraction diagrams and number lines"
+      ],
+      "topic_role": "transfer_new_task_specification_not_untouched",
+      "history_note": "Fraction-comparison PF tasks and an LC paired pilot have been inspected previously; this is not an untouched topic or a replication of the expert task.",
+      "local_query": "fraction representations and comparing equivalent fractions",
+      "local_retrieval_result": [
+        {
+          "chunk_id": "nrw_g9_gymnasium_m_klp.pdf::p24::en_translation"
+        }
+      ],
+      "local_source_note": "Existing model-generated English translation of the NRW German curriculum excerpt; not official English text. The source document URL is retained with the record.",
+      "lc_query": "fraction equivalence and fair comparison",
+      "learning_commons_snapshot": "experiments/results/learning_commons_queries/cache/d8cc1f57d590e20d28f4ea084f49af6902d60228f4396cda77682963908e627d/response_20261009T142946694634Z.json",
+      "learning_commons_selected_ids": [
+        "6ba10e51-d7cc-11e8-824f-0242ac160002",
+        "6ba25aa3-d7cc-11e8-824f-0242ac160002",
+        "6b9e210d-d7cc-11e8-824f-0242ac160002"
+      ]
+    }
+  ],
+  "calibration_cases": [
+    {
+      "id": "calibration_average_speed",
+      "topic": "average speed and rates",
+      "target_concept": "A defensible whole-route average speed when a journey contains legs with different distances and durations.",
+      "task_family": "Prepare a compact comparison of two fictional delivery journeys with varying segment speeds. Students choose a fair way to compare the complete journeys without a supplied rule.",
+      "grade": 7,
+      "subject": "mathematics",
+      "jurisdiction": "Singapore",
+      "teacher_recently_taught": [
+        "Distance and elapsed time",
+        "Constant speed and unit rates",
+        "Reading numerical tables"
+      ],
+      "topic_role": "execution_calibration_only",
+      "history_note": "Calibration checks protocol wiring only and does not count as a main topic or quality validation.",
+      "local_query": "average speed rate and distance-time relationships",
+      "local_retrieval_result": [
+        {
+          "chunk_id": "moe_sg_2020_secondary_maths.pdf::p17::original"
+        }
+      ],
+      "lc_query": "average speed and rates",
+      "learning_commons_snapshot": "experiments/results/learning_commons_queries/cache/333c1cc241db775eb670b2fb76ac67db933918cbf57329bf1a27bbf62dbf679d/response_20261009T142939563921Z.json",
+      "learning_commons_selected_ids": [
+        "6ba1afb9-d7cc-11e8-824f-0242ac160002",
+        "6b9c3a21-d7cc-11e8-824f-0242ac160002",
+        "6b9f8362-d7cc-11e8-824f-0242ac160002"
+      ]
+    }
+  ]
+}
