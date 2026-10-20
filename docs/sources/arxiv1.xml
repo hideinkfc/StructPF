@@ -1,0 +1,224 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/" xmlns:arxiv="http://arxiv.org/schemas/atom" xmlns="http://www.w3.org/2005/Atom">
+  <id>https://arxiv.org/api/p+aMtcklTn4omv2OVIa85tu5GZA</id>
+  <title>arXiv Query: search_query=all:"item difficulty" AND all:"large language model"&amp;id_list=&amp;start=0&amp;max_results=8</title>
+  <updated>2026-10-15T15:47:04Z</updated>
+  <link href="https://arxiv.org/api/query?search_query=all:%22item+difficulty%22+AND+all:%22large+language+model%22&amp;start=0&amp;max_results=8&amp;id_list=" type="application/atom+xml"/>
+  <opensearch:itemsPerPage>8</opensearch:itemsPerPage>
+  <opensearch:totalResults>30</opensearch:totalResults>
+  <opensearch:startIndex>0</opensearch:startIndex>
+  <entry>
+    <id>http://arxiv.org/abs/2504.08804v2</id>
+    <title>Estimating Item Difficulty Using Large Language Models and Tree-Based Machine Learning Algorithms</title>
+    <updated>2026-03-09T03:36:58Z</updated>
+    <link href="https://arxiv.org/abs/2504.08804v2" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2504.08804v2" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Estimating item difficulty through field-testing is often resource-intensive and time-consuming. As such, there is strong motivation to develop methods that can predict item difficulty at scale using only the item content. Large Language Models (LLMs) represent a new frontier for this goal. The present research examines the feasibility of using an LLM to predict item difficulty for K-5 mathematics and reading assessment items (N = 5170). Two estimation approaches were implemented: (a) a direct estimation method that prompted the LLM to assign a single difficulty rating to each item, and (b) a feature-based strategy where the LLM extracted multiple cognitive and linguistic features, which were then used in ensemble tree-based models (random forests and gradient boosting) to predict difficulty. Overall, direct LLM estimates showed moderate to strong correlations with true item difficulties. However, their accuracy varied by grade level, often performing worse for early grades. In contrast, the feature-based method yielded stronger predictive accuracy, with correlations as high as r = 0.87 and lower error estimates compared to both direct LLM predictions and baseline regressors. These findings highlight the promise of LLMs in streamlining item development and reducing reliance on extensive field testing and underscore the importance of structured feature extraction. We provide a seven-step workflow for testing professionals who would want to implement a similar item difficulty estimation approach with their item pool.</summary>
+    <category term="cs.CY" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.CL" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.LG" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2025-04-09T00:04:07Z</published>
+    <arxiv:primary_category term="cs.CY"/>
+    <author>
+      <name>Pooya Razavi</name>
+    </author>
+    <author>
+      <name>Sonya Powers</name>
+    </author>
+    <arxiv:doi>10.1016/j.ijaied.2026.100015</arxiv:doi>
+    <link rel="related" href="https://doi.org/10.1016/j.ijaied.2026.100015" title="doi"/>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2605.18562v1</id>
+    <title>Estimating Item Difficulty with Large Language Models as Experts</title>
+    <updated>2026-05-18T15:42:13Z</updated>
+    <link href="https://arxiv.org/abs/2605.18562v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2605.18562v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Accurate estimates of item difficulty are essential for valid assessment and effective adaptive learning. However, for newly created tasks, response data are typically unavailable. Pretesting and expert judgement can be costly and slow, while machine learning methods often require large labelled training datasets. Recent work suggests that large language models (LLMs) may help. However, there is limited evidence on the elicitation procedures and prompt configurations used to emulate experts for difficulty estimation. This study addresses this gap by evaluating three off-the-shelf LLMs as difficulty raters for newly created items without access to response data. Using an item bank from an online learning system, the study examined 6 domains of primary-school mathematics, with empirical difficulty estimates treated as empirical reference. The study used a full factorial design crossing three factors: judgement format (absolute vs pairwise), decision type (hard decisions vs token-probability-based estimates), and prompting strategy (zero-shot vs few-shot). LLM-derived difficulty estimates were compared with empirical difficulties using Spearman rank correlations. Across domains, LLM-based estimates exhibited moderate to strong positive correlations with empirical item difficulties. For simpler arithmetic tasks, some configurations approached the upper end of the accuracy range reported for human experts in previous research. Pairwise comparison consistently outperformed absolute judgement in the absence of additional refinements. However, when token-level probabilities were incorporated and examples of items with known empirical difficulty were provided, the absolute judgement configuration likewise demonstrated moderate-to-high alignment. The study positions LLMs as a promising tool for initial item calibration and offers insights into effective workflow configuration.</summary>
+    <category term="stat.ME" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.AI" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.LG" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="stat.AP" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2026-05-18T15:42:13Z</published>
+    <arxiv:comment>24 pages, 2 figures, 9 tables</arxiv:comment>
+    <arxiv:primary_category term="stat.ME"/>
+    <author>
+      <name>Diana Kolesnikova</name>
+      <arxiv:affiliation>Department of Methodology and Statistics, Tilburg University, Tilburg, Netherlands</arxiv:affiliation>
+    </author>
+    <author>
+      <name>Kirill Fedyanin</name>
+      <arxiv:affiliation>Smart Business Technologies, Belgrade, Serbia</arxiv:affiliation>
+    </author>
+    <author>
+      <name>Abe D. Hofman</name>
+      <arxiv:affiliation>Department of Psychological Methods, University of Amsterdam, Amsterdam, Netherlands</arxiv:affiliation>
+      <arxiv:affiliation>Prowise Learn, Amsterdam, Netherlands</arxiv:affiliation>
+    </author>
+    <author>
+      <name>Matthieu J. S. Brinkhuis</name>
+      <arxiv:affiliation>Department of Information and Computing Sciences, Utrecht University, Utrecht, Netherlands</arxiv:affiliation>
+    </author>
+    <author>
+      <name>Maria Bolsinova</name>
+      <arxiv:affiliation>Department of Methodology and Statistics, Tilburg University, Tilburg, Netherlands</arxiv:affiliation>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2607.28634v1</id>
+    <title>Can LLMs Really Understand Item Difficulty Levels? Implications for Automated Item Generation Using LLMs</title>
+    <updated>2026-05-17T10:17:02Z</updated>
+    <link href="https://arxiv.org/abs/2607.28634v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2607.28634v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>The estimation of item difficulty plays a key role in both formative assessment and large-scale high-stakes summative assessments. This study explores how large language models (LLMs) perform in predicting item difficulty levels using items from a large-scale Reading and Writing test. The study investigated various prompting strategies and parameter settings across multiple LLMs. LLM performance was compared with encoder-only language models and feature-based supervised machine learning models. Zero-shot GPT-4.1 with a temperature of 0 yielded the highest item difficulty level prediction accuracy, with a quadratic weighted kappa (QWK) of 0.578. However, LLMs' prediction accuracy was lower than that of ConvBERT (QWK = 0.625), which outperformed the best feature-based supervised machine learning model. Further analysis showed that all LLMs struggled to label hard items; in particular, the current advanced GPT-5.4 tended to underestimate item difficulty levels. Dimension reduction of embeddings showed that item embeddings from different difficulty levels were mixed together, indicating that semantic information from items alone is likely insufficient for item difficulty level prediction. The findings suggest that if LLMs cannot understand item difficulty levels as evidenced by empirical data and tend to treat most items as easy when their own capabilities increase, caution should be exercised when using LLMs to generate items with targeted difficulty levels.</summary>
+    <category term="cs.CL" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.LG" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2026-05-17T10:17:02Z</published>
+    <arxiv:comment>43 pages, 4 figures</arxiv:comment>
+    <arxiv:primary_category term="cs.CL"/>
+    <author>
+      <name>Xinyi Wang</name>
+    </author>
+    <author>
+      <name>Hong Jiao</name>
+    </author>
+    <author>
+      <name>Ming Li</name>
+    </author>
+    <author>
+      <name>Sydney Peters</name>
+    </author>
+    <author>
+      <name>Hanna Choi</name>
+    </author>
+    <author>
+      <name>Tianyi Zhou</name>
+    </author>
+    <author>
+      <name>Qingshu Xu</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2603.04670v1</id>
+    <title>Using Vision + Language Models to Predict Item Difficulty</title>
+    <updated>2026-03-04T23:26:25Z</updated>
+    <link href="https://arxiv.org/abs/2603.04670v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2603.04670v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>This project investigates the capabilities of large language models (LLMs) to determine the difficulty of data visualization literacy test items. We explore whether features derived from item text (question and answer options), the visualization image, or a combination of both can predict item difficulty (proportion of correct responses) for U.S. adults. We use GPT-4.1-nano to analyze items and generate predictions based on these distinct feature sets. The multimodal approach, using both visual and text features, yields the lowest mean absolute error (MAE) (0.224), outperforming the unimodal vision-only (0.282) and text-only (0.338) approaches. The best-performing multimodal model was applied to a held-out test set for external evaluation and achieved a mean squared error of 0.10805, demonstrating the potential of LLMs for psychometric analysis and automated item development.</summary>
+    <category term="cs.AI" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.CL" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.CV" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2026-03-04T23:26:25Z</published>
+    <arxiv:primary_category term="cs.AI"/>
+    <author>
+      <name>Samin Khan</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2608.04554v1</id>
+    <title>Representing Visual Evidence for Item Difficulty Prediction: Visual Textualization and Image-Native Modeling</title>
+    <updated>2026-08-05T07:47:34Z</updated>
+    <link href="https://arxiv.org/abs/2608.04554v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2608.04554v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Predicting item difficulty from content can provide an initial estimate for newly developed questions before sufficient student responses are available. Existing approaches typically represent the question stem and answer choices as text. When mathematics items contain visual components, a common pipeline first textualizes that evidence and then applies a text predictor. We ask: how should visual evidence be represented for item difficulty prediction? We compare question text alone, visual textualization, which expresses visual evidence in language, and image-native modeling, which retains the original image. Using Eedi items with difficulty calibrated from student responses, we train large language models (LLMs) and vision-language models (VLMs) directly for difficulty regression. Both visual interfaces achieve the lowest point estimates, although the leading systems cannot be reliably ordered. Open-VLM textualization yields lower RMSE point estimates for all evaluated LLMs, while broader adaptation does so for all image-native VLMs. Test-time interventions show dependence on the paired full-item image, but do not isolate the additional visual component. The two visual interfaces also make partially complementary item-level errors and differ substantially in computational workflow. Thus, textualization should not be treated as the only practical interface: image-native modeling is a competitive alternative whose effectiveness depends on how the VLM is adapted.</summary>
+    <category term="cs.CL" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.CV" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2026-08-05T07:47:34Z</published>
+    <arxiv:primary_category term="cs.CL"/>
+    <author>
+      <name>Han Chen</name>
+    </author>
+    <author>
+      <name>Ming Li</name>
+    </author>
+    <author>
+      <name>Hong Jiao</name>
+    </author>
+    <author>
+      <name>Tianyi Zhou</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2404.13343v1</id>
+    <title>UnibucLLM: Harnessing LLMs for Automated Prediction of Item Difficulty and Response Time for Multiple-Choice Questions</title>
+    <updated>2024-04-20T10:41:02Z</updated>
+    <link href="https://arxiv.org/abs/2404.13343v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2404.13343v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>This work explores a novel data augmentation method based on Large Language Models (LLMs) for predicting item difficulty and response time of retired USMLE Multiple-Choice Questions (MCQs) in the BEA 2024 Shared Task. Our approach is based on augmenting the dataset with answers from zero-shot LLMs (Falcon, Meditron, Mistral) and employing transformer-based models based on six alternative feature combinations. The results suggest that predicting the difficulty of questions is more challenging. Notably, our top performing methods consistently include the question text, and benefit from the variability of LLM answers, highlighting the potential of LLMs for improving automated assessment in medical licensing exams. We make our code available https://github.com/ana-rogoz/BEA-2024.</summary>
+    <category term="cs.CL" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.AI" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.LG" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2024-04-20T10:41:02Z</published>
+    <arxiv:comment>Accepted at BEA 2024 (NAACL Workshop)</arxiv:comment>
+    <arxiv:primary_category term="cs.CL"/>
+    <author>
+      <name>Ana-Cristina Rogoz</name>
+    </author>
+    <author>
+      <name>Radu Tudor Ionescu</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2610.19848v1</id>
+    <title>OpenTWBench (Open Taiwan Benchmark): Taiwan-Domain Knowledge Evaluation for Large Language Models, and How the Measurement Apparatus Shapes the Score</title>
+    <updated>2026-10-14T09:18:47Z</updated>
+    <link href="https://arxiv.org/abs/2610.19848v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2610.19848v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>We present OpenTWBench, an open evaluation suite for Taiwan-domain knowledge in large language models, built around two benchmarks. tw-exam-bench contains 255,854 four-option questions across 148 academic subjects, from fifteen years of Taiwan's national examinations published as open data by the Ministry of Examination; answer keys agree across 31,312 duplicated question groups at 99.91%, with all 27 disagreements accounted for. A reviewed second pass withdrew 2,180 items whose stems depend on a figure the text does not carry; all scores use the remaining 253,674. tw-formosa-bench contains 1,696 difficulty-curated questions about everyday and contemporary Taiwan - the Taiwan that licensing examinations never ask about - generated from a community-curated corpus under a discipline in which no model writes a ground truth, and curated against a frozen seven-model pool so that the pool scored at the passing margin (46.9-74.6%, median ~54%); a leave-one-out experiment shows the selection preserves model ranking (near-zero bias). Within six weeks the frontier had cleared that band: of 108 models now on the public board, 22 score above its ceiling, the best 91.6%.
+  We also document how much of a score comes from the apparatus rather than the model. On identical questions, switching answer extraction from pattern matching to an explicit \boxed{} answer moves accuracy from 20.8% to 93.9%; a single placeholder character in a system prompt moved one model from last (58.2%) to first (83.9%) on the same benchmark; doubling the thinking budget from 8k to 16k tokens bought 0.2% while shuffling which questions failed; and a three-judge validation panel proved to be one judge in disguise, two members approving 92-99% of everything shown. We release all datasets, per-item difficulty data, curation manifests and a leaderboard at https://opentwbench.ai</summary>
+    <category term="cs.CL" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2026-10-14T09:18:47Z</published>
+    <arxiv:comment>19 pages, no figures. Datasets, per-item difficulty data and a public leaderboard at https://opentwbench.ai</arxiv:comment>
+    <arxiv:primary_category term="cs.CL"/>
+    <author>
+      <name>Liang-Hsun Huang</name>
+    </author>
+    <author>
+      <name>Min-Yi Chen</name>
+    </author>
+    <author>
+      <name>Chao-Chun Chuang</name>
+    </author>
+    <author>
+      <name>Yu-Wei Liu</name>
+    </author>
+    <author>
+      <name>Che-Yu Wu</name>
+    </author>
+    <author>
+      <name>Po-Feng Lee</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2406.14230v5</id>
+    <title>Raising the Bar: Investigating the Values of Large Language Models via Generative Evolving Testing</title>
+    <updated>2025-06-11T07:47:45Z</updated>
+    <link href="https://arxiv.org/abs/2406.14230v5" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2406.14230v5" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Warning: Contains harmful model outputs. Despite significant advancements, the propensity of Large Language Models (LLMs) to generate harmful and unethical content poses critical challenges. Measuring value alignment of LLMs becomes crucial for their regulation and responsible deployment. Although numerous benchmarks have been constructed to assess social bias, toxicity, and ethical issues in LLMs, those static benchmarks suffer from evaluation chronoeffect, in which, as models rapidly evolve, existing benchmarks may leak into training data or become saturated, overestimating ever-developing LLMs. To tackle this problem, we propose GETA, a novel generative evolving testing approach based on adaptive testing methods in measurement theory. Unlike traditional adaptive testing methods that rely on a static test item pool, GETA probes the underlying moral boundaries of LLMs by dynamically generating test items tailored to model capability. GETA co-evolves with LLMs by learning a joint distribution of item difficulty and model value conformity, thus effectively addressing evaluation chronoeffect. We evaluated various popular LLMs with GETA and demonstrated that 1) GETA can dynamically create difficulty-tailored test items and 2) GETA's evaluation results are more consistent with models' performance on unseen OOD and i.i.d. items, laying the groundwork for future evaluation paradigms.</summary>
+    <category term="cs.CL" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.AI" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.CY" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2024-06-20T11:51:00Z</published>
+    <arxiv:comment>ICML 2025</arxiv:comment>
+    <arxiv:primary_category term="cs.CL"/>
+    <author>
+      <name>Han Jiang</name>
+    </author>
+    <author>
+      <name>Xiaoyuan Yi</name>
+    </author>
+    <author>
+      <name>Zhihua Wei</name>
+    </author>
+    <author>
+      <name>Ziang Xiao</name>
+    </author>
+    <author>
+      <name>Shu Wang</name>
+    </author>
+    <author>
+      <name>Xing Xie</name>
+    </author>
+  </entry>
+</feed>

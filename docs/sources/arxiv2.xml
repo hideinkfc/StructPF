@@ -1,0 +1,222 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/" xmlns:arxiv="http://arxiv.org/schemas/atom" xmlns="http://www.w3.org/2005/Atom">
+  <id>https://arxiv.org/api/ZPvEDf1DTqvzcRR/B0igKK7B5f0</id>
+  <title>arXiv Query: search_query=all:"prerequisite" AND all:"knowledge graph" AND all:"large language model"&amp;id_list=&amp;start=0&amp;max_results=8</title>
+  <updated>2026-10-15T15:47:04Z</updated>
+  <link href="https://arxiv.org/api/query?search_query=all:%22prerequisite%22+AND+(all:%22knowledge+graph%22+AND+all:%22large+language+model%22)&amp;start=0&amp;max_results=8&amp;id_list=" type="application/atom+xml"/>
+  <opensearch:itemsPerPage>8</opensearch:itemsPerPage>
+  <opensearch:totalResults>9</opensearch:totalResults>
+  <opensearch:startIndex>0</opensearch:startIndex>
+  <entry>
+    <id>http://arxiv.org/abs/2401.16960v1</id>
+    <title>Two Heads Are Better Than One: Integrating Knowledge from Knowledge Graphs and Large Language Models for Entity Alignment</title>
+    <updated>2024-01-30T12:41:04Z</updated>
+    <link href="https://arxiv.org/abs/2401.16960v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2401.16960v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Entity alignment, which is a prerequisite for creating a more comprehensive Knowledge Graph (KG), involves pinpointing equivalent entities across disparate KGs. Contemporary methods for entity alignment have predominantly utilized knowledge embedding models to procure entity embeddings that encapsulate various similarities-structural, relational, and attributive. These embeddings are then integrated through attention-based information fusion mechanisms. Despite this progress, effectively harnessing multifaceted information remains challenging due to inherent heterogeneity. Moreover, while Large Language Models (LLMs) have exhibited exceptional performance across diverse downstream tasks by implicitly capturing entity semantics, this implicit knowledge has yet to be exploited for entity alignment. In this study, we propose a Large Language Model-enhanced Entity Alignment framework (LLMEA), integrating structural knowledge from KGs with semantic knowledge from LLMs to enhance entity alignment. Specifically, LLMEA identifies candidate alignments for a given entity by considering both embedding similarities between entities across KGs and edit distances to a virtual equivalent entity. It then engages an LLM iteratively, posing multiple multi-choice questions to draw upon the LLM's inference capability. The final prediction of the equivalent entity is derived from the LLM's output. Experiments conducted on three public datasets reveal that LLMEA surpasses leading baseline models. Additional ablation studies underscore the efficacy of our proposed framework.</summary>
+    <category term="cs.CL" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.AI" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2024-01-30T12:41:04Z</published>
+    <arxiv:primary_category term="cs.CL"/>
+    <author>
+      <name>Linyao Yang</name>
+    </author>
+    <author>
+      <name>Hongyang Chen</name>
+    </author>
+    <author>
+      <name>Xiao Wang</name>
+    </author>
+    <author>
+      <name>Jing Yang</name>
+    </author>
+    <author>
+      <name>Fei-Yue Wang</name>
+    </author>
+    <author>
+      <name>Han Liu</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2508.11892v2</id>
+    <title>RPKT: Learning What You Don't -- Know Recursive Prerequisite Knowledge Tracing in Conversational AI Tutors for Personalized Learning</title>
+    <updated>2025-09-08T18:34:35Z</updated>
+    <link href="https://arxiv.org/abs/2508.11892v2" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2508.11892v2" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Educational systems often assume learners can identify their knowledge gaps, yet research consistently shows that students struggle to recognize what they don't know they need to learn-the "unknown unknowns" problem. This paper presents a novel Recursive Prerequisite Knowledge Tracing (RPKT) system that addresses this challenge through dynamic prerequisite discovery using large language models. Unlike existing adaptive learning systems that rely on pre-defined knowledge graphs, our approach recursively traces prerequisite concepts in real-time until reaching a learner's actual knowledge boundary. The system employs LLMs for intelligent prerequisite extraction, implements binary assessment interfaces for cognitive load reduction, and provides personalized learning paths based on identified knowledge gaps. Demonstration across computer science domains shows the system can discover multiple nested levels of prerequisite dependencies, identify cross-domain mathematical foundations, and generate hierarchical learning sequences without requiring pre-built curricula. Our approach shows great potential for advancing personalized education technology by enabling truly adaptive learning across any academic domain.</summary>
+    <category term="cs.HC" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2025-08-16T03:43:03Z</published>
+    <arxiv:primary_category term="cs.HC"/>
+    <author>
+      <name>Jinwen Tang</name>
+    </author>
+    <author>
+      <name>Qiming Guo</name>
+    </author>
+    <author>
+      <name>Zhicheng Tang</name>
+    </author>
+    <author>
+      <name>Yi Shang</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2511.17041v2</id>
+    <title>CLLMRec: LLM-powered Cognitive-Aware Concept Recommendation via Semantic Alignment and Prerequisite Knowledge Distillation</title>
+    <updated>2025-11-26T10:10:35Z</updated>
+    <link href="https://arxiv.org/abs/2511.17041v2" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2511.17041v2" rel="related" type="application/pdf" title="pdf"/>
+    <summary>The growth of Massive Open Online Courses (MOOCs) presents significant challenges for personalized learning, where concept recommendation is crucial. Existing approaches typically rely on heterogeneous information networks or knowledge graphs to capture conceptual relationships, combined with knowledge tracing models to assess learners' cognitive states. However, these methods face significant limitations due to their dependence on high-quality structured knowledge graphs, which are often scarce in real-world educational scenarios. To address this fundamental challenge, this paper proposes CLLMRec, a novel framework that leverages Large Language Models through two synergistic technical pillars: Semantic Alignment and Prerequisite Knowledge Distillation. The Semantic Alignment component constructs a unified representation space by encoding unstructured textual descriptions of learners and concepts. The Prerequisite Knowledge Distillation paradigm employs a teacher-student architecture, where a large teacher LLM (implemented as the Prior Knowledge Aware Component) extracts conceptual prerequisite relationships from its internalized world knowledge and distills them into soft labels to train an efficient student ranker. Building upon these foundations, our framework incorporates a fine-ranking mechanism that explicitly models learners' real-time cognitive states through deep knowledge tracing, ensuring recommendations are both structurally sound and cognitively appropriate. Extensive experiments on two real-world MOOC datasets demonstrate that CLLMRec significantly outperforms existing baseline methods across multiple evaluation metrics, validating its effectiveness in generating truly cognitive-aware and personalized concept recommendations without relying on explicit structural priors.</summary>
+    <category term="cs.IR" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.AI" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2025-11-21T08:37:39Z</published>
+    <arxiv:primary_category term="cs.IR"/>
+    <author>
+      <name>Xiangrui Xiong</name>
+    </author>
+    <author>
+      <name>Yichuan Lu</name>
+    </author>
+    <author>
+      <name>Zifei Pan</name>
+    </author>
+    <author>
+      <name>Chang Sun</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2605.09635v4</id>
+    <title>K12-KGraph: A Curriculum-Aligned Knowledge Graph for Benchmarking and Training Educational LLMs</title>
+    <updated>2026-10-03T01:55:52Z</updated>
+    <link href="https://arxiv.org/abs/2605.09635v4" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2605.09635v4" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Large language models are increasingly used in K-12 education, but existing benchmarks mainly test exam question answering rather than understanding how curriculum knowledge is structured and visually presented. We call this capability curriculum cognition. It covers prerequisite chains, concept taxonomies, experiment-concept links, pedagogical sequencing, and visual grounding. We introduce K12-KGraph, a curriculum-aligned knowledge graph extracted from official People's Education Press textbooks in mathematics, physics, chemistry, and biology across primary, middle, and high school. It contains nine node types and fourteen relation types covering curriculum structure and visual grounding. From this graph, we derive K12-Bench, a 23,640-question multi-select benchmark with five task families: Ground, Prereq, Neighbor, Evidence, and Locate. We also build K12-Train, a graph-guided supervised fine-tuning corpus of 7,335 samples, including 2,267 text-only QA pairs and 5,068 multimodal VQA pairs. On K12-Bench, Gemini-3-Flash achieves only 57 percent exact match and Gemma-4-31B-IT reaches 46 percent, with Prereq and Neighbor being the hardest tasks. Our training experiments show that domain-specific supervision can reduce this gap. Under a matched 2,300-sample budget, K12-Train-Text consistently outperforms equally sized subsets of eight mainstream instruction-tuning corpora on GaokaoBench and EduEval. For vision-language models, K12-Train-Full achieves the best overall results on Gaokao-MM, MDK12-medium, and K12Vista among all compared training configurations, despite using fewer samples than the full DataFlow and WizardLM baselines. It also surpasses both text-only and multimodal-only variants, showing that textual and visual supervision are complementary. We release the graph, benchmark, training data, and complete construction pipeline.</summary>
+    <category term="cs.CL" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2026-05-10T16:24:26Z</published>
+    <arxiv:primary_category term="cs.CL"/>
+    <author>
+      <name>Hao Liang</name>
+    </author>
+    <author>
+      <name>Qihan Lin</name>
+    </author>
+    <author>
+      <name>Mingrui Chen</name>
+    </author>
+    <author>
+      <name>Hengyi Feng</name>
+    </author>
+    <author>
+      <name>Zhaoyang Han</name>
+    </author>
+    <author>
+      <name>Xiaochen Ma</name>
+    </author>
+    <author>
+      <name>Zhen Hao Wong</name>
+    </author>
+    <author>
+      <name>Meiyi Qiang</name>
+    </author>
+    <author>
+      <name>Linzhuang Sun</name>
+    </author>
+    <author>
+      <name>Wentao Zhang</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2412.03856v1</id>
+    <title>How Good is ChatGPT in Giving Adaptive Guidance Using Knowledge Graphs in E-Learning Environments?</title>
+    <updated>2024-12-05T04:05:43Z</updated>
+    <link href="https://arxiv.org/abs/2412.03856v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2412.03856v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>E-learning environments are increasingly harnessing large language models (LLMs) like GPT-3.5 and GPT-4 for tailored educational support. This study introduces an approach that integrates dynamic knowledge graphs with LLMs to offer nuanced student assistance. By evaluating past and ongoing student interactions, the system identifies and appends the most salient learning context to prompts directed at the LLM. Central to this method is the knowledge graph's role in assessing a student's comprehension of topic prerequisites. Depending on the categorized understanding (good, average, or poor), the LLM adjusts its guidance, offering advanced assistance, foundational reviews, or in-depth prerequisite explanations, respectively. Preliminary findings suggest students could benefit from this tiered support, achieving enhanced comprehension and improved task outcomes. However, several issues related to potential errors arising from LLMs were identified, which can potentially mislead students. This highlights the need for human intervention to mitigate these risks. This research aims to advance AI-driven personalized learning while acknowledging the limitations and potential pitfalls, thus guiding future research in technology and data-driven education.</summary>
+    <category term="cs.AI" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.ET" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2024-12-05T04:05:43Z</published>
+    <arxiv:primary_category term="cs.AI"/>
+    <author>
+      <name>Patrick Ocheja</name>
+    </author>
+    <author>
+      <name>Brendan Flanagan</name>
+    </author>
+    <author>
+      <name>Yiling Dai</name>
+    </author>
+    <author>
+      <name>Hiroaki Ogata</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2602.17111v1</id>
+    <title>Instructor-Aligned Knowledge Graphs for Personalized Learning</title>
+    <updated>2026-02-19T06:15:10Z</updated>
+    <link href="https://arxiv.org/abs/2602.17111v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2602.17111v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Mastering educational concepts requires understanding both their prerequisites (e.g., recursion before merge sort) and sub-concepts (e.g., merge sort as part of sorting algorithms). Capturing these dependencies is critical for identifying students' knowledge gaps and enabling targeted intervention for personalized learning. This is especially challenging in large-scale courses, where instructors cannot feasibly diagnose individual misunderstanding or determine which concepts need reinforcement. While knowledge graphs offer a natural representation for capturing these conceptual relationships at scale, existing approaches are either surface-level (focusing on course-level concepts like "Algorithms" or logistical relationships such as course enrollment), or disregard the rich pedagogical signals embedded in instructional materials. We propose InstructKG, a framework for automatically constructing instructor-aligned knowledge graphs that capture a course's intended learning progression. Given a course's lecture materials (slides, notes, etc.), InstructKG extracts significant concepts as nodes and infers learning dependencies as directed edges (e.g., "part-of" or "depends-on" relationships). The framework synergizes the rich temporal and semantic signals unique to educational materials (e.g., "recursion" is taught before "mergesort"; "recursion" is mentioned in the definition of "merge sort") with the generalizability of large language models. Through experiments on real-world, diverse lecture materials across multiple courses and human-based evaluation, we demonstrate that InstructKG captures rich, instructor-aligned learning progressions.</summary>
+    <category term="cs.AI" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2026-02-19T06:15:10Z</published>
+    <arxiv:primary_category term="cs.AI"/>
+    <author>
+      <name>Abdulrahman AlRabah</name>
+    </author>
+    <author>
+      <name>Priyanka Kargupta</name>
+    </author>
+    <author>
+      <name>Jiawei Han</name>
+    </author>
+    <author>
+      <name>Abdussalam Alawini</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2503.08549v2</id>
+    <title>GoAI: Enhancing AI Students' Learning Paths and Idea Generation via Graph of AI Ideas</title>
+    <updated>2025-08-19T12:21:20Z</updated>
+    <link href="https://arxiv.org/abs/2503.08549v2" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2503.08549v2" rel="related" type="application/pdf" title="pdf"/>
+    <summary>With the rapid advancement of artificial intelligence technology, AI students are confronted with a significant "information-to-innovation" gap: they must navigate through the rapidly expanding body of literature, trace the development of a specific research field, and synthesize various techniques into feasible innovative concepts. An additional critical step for students is to identify the necessary prerequisite knowledge and learning paths. Although many approaches based on large language models (LLMs) can summarize the content of papers and trace the development of a field through citations, these methods often overlook the prerequisite knowledge involved in the papers and the rich semantic information embedded in the citation relationships between papers. Such information reveals how methods are interrelated, built upon, extended, or challenged. To address these limitations, we propose GoAI, a tool for constructing educational knowledge graphs from AI research papers that leverages these graphs to plan personalized learning paths and support creative ideation. The nodes in the knowledge graph we have built include papers and the prerequisite knowledge, such as concepts, skills, and tools, that they involve; the edges record the semantic information of citations. When a student queries a specific paper, a beam search-based path search method can trace the current development trends of the field from the queried paper and plan a learning path toward cutting-edge objectives. The integrated Idea Studio guides students to clarify problem statements, compare alternative designs, and provide formative feedback on novelty, clarity, feasibility, and alignment with learning objectives.</summary>
+    <category term="cs.AI" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.CL" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2025-03-11T15:36:38Z</published>
+    <arxiv:comment>Work in progress</arxiv:comment>
+    <arxiv:primary_category term="cs.AI"/>
+    <author>
+      <name>Xian Gao</name>
+    </author>
+    <author>
+      <name>Zongyun Zhang</name>
+    </author>
+    <author>
+      <name>Ting Liu</name>
+    </author>
+    <author>
+      <name>Yuzhuo Fu</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2606.11744v1</id>
+    <title>Hey Chat, Can You Teach Me? Structuring Socratic Dialogue for Human Learning in the Wild</title>
+    <updated>2026-06-10T07:20:59Z</updated>
+    <link href="https://arxiv.org/abs/2606.11744v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2606.11744v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Large language models are now widely used for everyday learning, but the underlying interactions are typically unstructured chats rather than following a curriculum. Unlike formal online learning systems, these interactions carry no prior record of the student, so any estimate of what the student already knows must be inferred from the dialogue itself. We show that this gap is not closed by scaling models alone. Frontier and education-tuned LLMs perform poorly when asked to tutor a student over an extended session, because doing so requires three things at once. The tutor must sequence a curriculum, conduct Socratic dialogue, and infer the student's knowledge state from that dialogue. We propose separating these responsibilities. Given a student query, our system constructs a prerequisite knowledge graph in which subtopics are nodes and dependencies are edges, and frames tutoring as deciding which node to teach next and how many dialogue turns to spend on it before moving on. A lightweight PPO policy handles this sequencing decision, while an LLM conducts the Socratic exchange at the chosen node and returns a signal of student progress. Across held-out STEM and non-STEM topics, our PPO-paired tutor outperforms heuristic baselines, frontier general-purpose models, and a model specialised for Socratic dialogue: on both the rate at which students reach full curriculum mastery and the number of turns required. Explicit curriculum structure delivers gains that scaling the underlying model does not.</summary>
+    <category term="cs.CL" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.AI" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2026-06-10T07:20:59Z</published>
+    <arxiv:comment>10 Main Body Pages, with Appendices</arxiv:comment>
+    <arxiv:primary_category term="cs.CL"/>
+    <author>
+      <name>Sidney Tio</name>
+    </author>
+    <author>
+      <name>Arunesh Sinha</name>
+    </author>
+    <author>
+      <name>Pradeep Varakantham</name>
+    </author>
+  </entry>
+</feed>
