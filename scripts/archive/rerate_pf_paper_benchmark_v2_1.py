@@ -56,8 +56,7 @@ def _source_files() -> dict[str, Path]:
         "src/evaluation/prompts/pf_rubric_v2.yaml": ROOT
         / "src/evaluation/prompts/pf_rubric_v2.yaml",
         "src/evaluation/pf_rubric.py": ROOT / "src/evaluation/pf_rubric.py",
-        "src/evaluation/prompts/pf_rubric.yaml": ROOT
-        / "src/evaluation/prompts/pf_rubric.yaml",
+        "src/evaluation/prompts/pf_rubric.yaml": ROOT / "src/evaluation/prompts/pf_rubric.yaml",
         "scripts/prior_methods/common.py": ROOT / "scripts/prior_methods/common.py",
         "scripts/run_pf_diagnostic.py": ROOT / "scripts/run_pf_diagnostic.py",
     }
@@ -97,15 +96,20 @@ def main() -> None:
 
     if args.prepare:
         manifest = runner.prepare_run(args.output, protocol_path=PROTOCOL_PATH)
-        print(json.dumps({
-            "status": manifest["status"],
-            "output": str(args.output.resolve()),
-            "scheduled": manifest["case_count"],
-            "ready": manifest["eligible_count"],
-            "calibration_case_ids": manifest["calibration"]["case_ids"],
-            "inputs_sha256": manifest["inputs_sha256"],
-            "prompt_sha256": manifest["prompt_sha256"],
-        }, indent=2))
+        print(
+            json.dumps(
+                {
+                    "status": manifest["status"],
+                    "output": str(args.output.resolve()),
+                    "scheduled": manifest["case_count"],
+                    "ready": manifest["eligible_count"],
+                    "calibration_case_ids": manifest["calibration"]["case_ids"],
+                    "inputs_sha256": manifest["inputs_sha256"],
+                    "prompt_sha256": manifest["prompt_sha256"],
+                },
+                indent=2,
+            )
+        )
         return
     if args.calibrate:
         summary = runner.run_calibration(args.output)
@@ -115,9 +119,10 @@ def main() -> None:
         return
     summary = runner.run_full(args.output, retry_interrupted=args.retry_interrupted)
     print(json.dumps(summary, indent=2))
-    if summary["overall_denominators"]["complete_five_dimension_scores"] < summary[
-        "overall_denominators"
-    ]["ready"]:
+    if (
+        summary["overall_denominators"]["complete_five_dimension_scores"]
+        < summary["overall_denominators"]["ready"]
+    ):
         raise SystemExit(1)
 
 

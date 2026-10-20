@@ -38,8 +38,11 @@ def test_unknowns_are_not_collapsed_into_concerns():
     assert case["both_supported"] == 1
     assert case["unknown_sensitivity_bounds"] == [-0.25, 0.25]
     assert case["arms"]["grounded"] == {
-        "supported": 2, "not_supported": 1, "unknown": 1,
-        "task_unavailable": 0, "audit_unavailable": 0,
+        "supported": 2,
+        "not_supported": 1,
+        "unknown": 1,
+        "task_unavailable": 0,
+        "audit_unavailable": 0,
     }
 
 
@@ -74,16 +77,14 @@ def test_bootstrap_is_reproducible():
 def test_duplicate_or_missing_arm_is_an_error():
     records = rows("a", [(True, False)])
     with pytest.raises(ValueError, match="Duplicate"):
-        paired_block_summary(
-            records + records[:1], treatment="grounded", baseline="none"
-        )
+        paired_block_summary(records + records[:1], treatment="grounded", baseline="none")
     with pytest.raises(ValueError, match="Missing scheduled"):
         paired_block_summary(records[:1], treatment="grounded", baseline="none")
 
 
-@pytest.mark.parametrize("changes", [
-    {"outcome": 0}, {"case_id": ""}, {"repeat": True}, {"repeat": -1}
-])
+@pytest.mark.parametrize(
+    "changes", [{"outcome": 0}, {"case_id": ""}, {"repeat": True}, {"repeat": -1}]
+)
 def test_invalid_outcome_and_slot_metadata_are_rejected(changes):
     records = rows("a", [(True, False)])
     records[0].update(changes)

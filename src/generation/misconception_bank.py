@@ -17,7 +17,6 @@ Usage:
 
 from pathlib import Path
 
-import numpy as np
 import pandas as pd
 
 from src.generation.retriever import EmbeddingIndex
@@ -37,7 +36,7 @@ class MisconceptionBank:
     ):
         self.embed_client = embed_client or LLMClient.from_role("embed")
         self.misconception_cache_key = misconception_cache_key
-        self._misconception_map: dict[int, str] = {}      # id → name
+        self._misconception_map: dict[int, str] = {}  # id → name
         self._questions: pd.DataFrame | None = None
         self._index: EmbeddingIndex | None = None
 
@@ -50,9 +49,7 @@ class MisconceptionBank:
     def _load_misconceptions(self) -> "MisconceptionBank":
         path = DATA_DIR / "misconception_mapping.csv"
         df = pd.read_csv(path)
-        self._misconception_map = dict(
-            zip(df["MisconceptionId"], df["MisconceptionName"])
-        )
+        self._misconception_map = dict(zip(df["MisconceptionId"], df["MisconceptionName"]))
         print(f"  Loaded {len(self._misconception_map)} misconceptions")
         return self
 
@@ -65,8 +62,7 @@ class MisconceptionBank:
     def _build_index(self) -> "MisconceptionBank":
         """Pre-embed all misconception names for fast similarity matching."""
         items = [
-            {"misconception_id": id_, "name": name}
-            for id_, name in self._misconception_map.items()
+            {"misconception_id": id_, "name": name} for id_, name in self._misconception_map.items()
         ]
         self._index = EmbeddingIndex(self.embed_client)
         self._index.add(items, text_field="name", cache_key=self.misconception_cache_key)
@@ -126,12 +122,14 @@ class MisconceptionBank:
             if pd.isna(text) or not str(text).strip():
                 continue
             misconception_id = row.get(f"Misconception{letter}Id", None)
-            options.append({
-                "text": str(text).strip(),
-                "is_correct": letter == correct,
-                "misconception_id": misconception_id,
-                "misconception_name": self.get_misconception_name(misconception_id),
-            })
+            options.append(
+                {
+                    "text": str(text).strip(),
+                    "is_correct": letter == correct,
+                    "misconception_id": misconception_id,
+                    "misconception_name": self.get_misconception_name(misconception_id),
+                }
+            )
 
         return options
 

@@ -124,8 +124,12 @@ def call_api_default(
     except OpenAIError as exc:
         error = f"{type(exc).__name__}: {exc}"
         with trace.open("a", encoding="utf-8") as stream:
-            stream.write(json.dumps({"started_at": started, "finished_at": now(),
-                                     "model": model, "error": error}) + "\n")
+            stream.write(
+                json.dumps(
+                    {"started_at": started, "finished_at": now(), "model": model, "error": error}
+                )
+                + "\n"
+            )
         return None, "", None, error
     raw = response.choices[0].message.content or ""
     metadata = {
@@ -135,8 +139,18 @@ def call_api_default(
         "settings_sent": settings,
     }
     with trace.open("a", encoding="utf-8") as stream:
-        stream.write(json.dumps({"started_at": started, "finished_at": now(), "model": model,
-                                 "raw_text": raw, **metadata}) + "\n")
+        stream.write(
+            json.dumps(
+                {
+                    "started_at": started,
+                    "finished_at": now(),
+                    "model": model,
+                    "raw_text": raw,
+                    **metadata,
+                }
+            )
+            + "\n"
+        )
     return bench._json_payload(raw), raw, metadata, None
 
 
@@ -154,12 +168,15 @@ def run_attempt(
         api, model, system, user, max_tokens, directory / "model_trace.jsonl"
     )
     if error:
-        record: dict[str, Any] = {"status": "api_error", "error": error, "raw_response": raw,
-                                  "task": None}
+        record: dict[str, Any] = {
+            "status": "api_error",
+            "error": error,
+            "raw_response": raw,
+            "task": None,
+        }
     else:
         status, schema_error = bench._validate_task(payload)
-        record = {"status": status, "error": schema_error, "task": payload,
-                  "raw_response": raw}
+        record = {"status": status, "error": schema_error, "task": payload, "raw_response": raw}
     record.update(
         attempt_id=attempt_id,
         model_requested=model,
@@ -185,14 +202,18 @@ def run(output: Path, n: int, workers: int) -> dict[str, Any]:
     if sha256_text(user) != manifest["prompt_user_sha256"]:
         raise ValueError("Frozen user prompt changed since preparation")
     api = client()
-    jobs = [(model, index) for index in range(1, manifest["attempts_per_model"] + 1)
-            for model in MODELS]
+    jobs = [
+        (model, index) for index in range(1, manifest["attempts_per_model"] + 1) for model in MODELS
+    ]
     with ThreadPoolExecutor(max_workers=workers) as pool:
-        results = list(pool.map(
-            lambda job: run_attempt(api, output, job[0], job[1], system, user,
-                                    manifest["max_completion_tokens"]),
-            jobs,
-        ))
+        results = list(
+            pool.map(
+                lambda job: run_attempt(
+                    api, output, job[0], job[1], system, user, manifest["max_completion_tokens"]
+                ),
+                jobs,
+            )
+        )
     summary: dict[str, Any] = {"generated_at": now(), "by_model": {}}
     for model in MODELS:
         rows = [row for row in results if row["model_requested"] == model]
@@ -203,8 +224,9 @@ def run(output: Path, n: int, workers: int) -> dict[str, Any]:
             "attempts": len(rows),
             "status_counts": counts,
             "truncated": sum(bool(row.get("effective_truncation")) for row in rows),
-            "distinct_tasks": len({json.dumps(row["task"], sort_keys=True)
-                                   for row in rows if row["task"]}),
+            "distinct_tasks": len(
+                {json.dumps(row["task"], sort_keys=True) for row in rows if row["task"]}
+            ),
         }
     write_json(output / "summary.json", summary)
     return summary

@@ -187,7 +187,8 @@ def run(case_name: str, output: Path, repeats: int, phase: str) -> dict:
             "pipeline_proposal_k": 2,
             "pipeline_max_calls_per_attempt": (
                 (2 + briefs.MAX_SELECTION_REVISIONS) * (situation.PROPOSAL_RETRY_MAX + 1)
-                + briefs.MAX_SELECTION_REVISIONS + 1
+                + briefs.MAX_SELECTION_REVISIONS
+                + 1
                 + 2 * data_stage.MAX_CALLS
             ),
             "direct_calls_per_attempt": 1,
@@ -276,9 +277,12 @@ def render(output: Path) -> None:
             for method in ("direct", "pipeline"):
                 counts = methods[method]
                 count = (
-                    sum(counts.get(f"disclosure/{kind}", 0)
-                        for kind in ("method", "conclusion", "both"))
-                    if field == "disclosure_count" else counts.get(field, 0)
+                    sum(
+                        counts.get(f"disclosure/{kind}", 0)
+                        for kind in ("method", "conclusion", "both")
+                    )
+                    if field == "disclosure_count"
+                    else counts.get(field, 0)
                 )
                 value = str(count) if raw_count else f"{count}/{counts['attempted']}"
                 summary_table += "<td>" + value + "</td>"
@@ -458,18 +462,21 @@ def prepare_review(output: Path) -> dict:
                 if item["method"] == "direct"
                 else record.get("stages", {}).get("D2_D3", {}).get("task")
             )
-            entries.append((
-                {
-                    "case_name": manifest["case_name"],
-                    "target_concept": manifest["case"]["target_concept"],
-                    "learner_context": manifest["shared_context"]["learner_context"],
-                    "task": (
-                        {key: task.get(key) for key in ("title", "body", "question")}
-                        if isinstance(task, dict) else None
-                    ),
-                },
-                f"{manifest['case_name']}/{item['number']:03d}/{item['method']}",
-            ))
+            entries.append(
+                (
+                    {
+                        "case_name": manifest["case_name"],
+                        "target_concept": manifest["case"]["target_concept"],
+                        "learner_context": manifest["shared_context"]["learner_context"],
+                        "task": (
+                            {key: task.get(key) for key in ("title", "body", "question")}
+                            if isinstance(task, dict)
+                            else None
+                        ),
+                    },
+                    f"{manifest['case_name']}/{item['number']:03d}/{item['method']}",
+                )
+            )
     if not entries:
         raise ValueError("No comparison attempts available for review")
     random.Random(20261011).shuffle(entries)
@@ -528,9 +535,12 @@ def main() -> None:
     parser.add_argument("--summarize-only", action="store_true")
     parser.add_argument("--prepare-review-only", action="store_true")
     args = parser.parse_args()
-    if sum((
-        args.render_only, args.verify_math_only, args.summarize_only, args.prepare_review_only
-    )) > 1:
+    if (
+        sum(
+            (args.render_only, args.verify_math_only, args.summarize_only, args.prepare_review_only)
+        )
+        > 1
+    ):
         parser.error("choose only one reporting operation")
     if args.prepare_review_only:
         prepare_review(args.output)

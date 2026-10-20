@@ -94,7 +94,11 @@ def replay_result(path: Path, *, stress_dir: Path | None = None) -> dict:
         with patch.object(runner, "chat_json", saved_reply):
             try:
                 replay = stage.run_design_data(
-                    None, saved.get("model", "saved"), case, winner, context,
+                    None,
+                    saved.get("model", "saved"),
+                    case,
+                    winner,
+                    context,
                     require_roles=False,
                 )
             except SavedRepliesExhaustedError as exc:
@@ -241,8 +245,7 @@ def main() -> None:
                 (r["recheck"] or {}).get("status") == "accepted" for r in records
             ),
             "accepted_with_warnings": sum(
-                (r["recheck"] or {}).get("accepted", False)
-                and bool(r["recheck"]["warnings"])
+                (r["recheck"] or {}).get("accepted", False) and bool(r["recheck"]["warnings"])
                 for r in records
             ),
             "warning_conditions": sum(

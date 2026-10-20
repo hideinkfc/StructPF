@@ -65,8 +65,7 @@ def _validate_license(record: dict[str, Any], allowed: set[str], record_type: st
 
 def _write_jsonl(path: Path, records: list[dict[str, Any]]) -> None:
     contents = "".join(
-        json.dumps(record, ensure_ascii=False, separators=(",", ":")) + "\n"
-        for record in records
+        json.dumps(record, ensure_ascii=False, separators=(",", ":")) + "\n" for record in records
     )
     path.write_text(contents, encoding="utf-8")
 
@@ -95,11 +94,9 @@ def build_snapshot(
         target = edge.get("target_identifier")
         endpoints = {source, target}
         keep = (
-            label == "supports" and target in standard_ids
-        ) or (
-            label in PROGRESSION_LABELS and bool(endpoints & progression_ids)
-        ) or (
-            label == "hasChild" and bool(endpoints & standard_ids)
+            (label == "supports" and target in standard_ids)
+            or (label in PROGRESSION_LABELS and bool(endpoints & progression_ids))
+            or (label == "hasChild" and bool(endpoints & standard_ids))
         )
         if keep:
             _validate_license(edge, allowed_licenses, "relationship")
@@ -139,13 +136,9 @@ def build_snapshot(
     _write_jsonl(nodes_path, node_records)
     _write_jsonl(relationships_path, relationships)
 
-    node_labels = Counter(
-        label for node in node_records for label in node.get("labels", [])
-    )
+    node_labels = Counter(label for node in node_records for label in node.get("labels", []))
     node_licenses = Counter(node["properties"]["license"] for node in node_records)
-    relationship_licenses = Counter(
-        edge["properties"]["license"] for edge in relationships
-    )
+    relationship_licenses = Counter(edge["properties"]["license"] for edge in relationships)
     relationship_labels = Counter(edge["label"] for edge in relationships)
     manifest = {
         "source_version": selection["source_version"],

@@ -75,14 +75,21 @@ def freeze_benchmark(output: Path, benchmark: Path, config: dict) -> tuple[list[
             raw = source.read_bytes()
             record = json.loads(raw)
             metadata = {
-                "task_id": record["attempt_id"], "number": record["number"],
-                "arm": arm, "status": record["status"],
-                "source_path": path_name(source), "source_sha256": audit.sha256(raw),
+                "task_id": record["attempt_id"],
+                "number": record["number"],
+                "arm": arm,
+                "status": record["status"],
+                "source_path": path_name(source),
+                "source_sha256": audit.sha256(raw),
             }
             records.append(metadata)
-            read_records.append({**metadata, "read_purpose": "Availability and attempt strata only"})
+            read_records.append(
+                {**metadata, "read_purpose": "Availability and attempt strata only"}
+            )
         pool[arm] = records
-    ready = {arm: [row for row in records if row["status"] == "ready"] for arm, records in pool.items()}
+    ready = {
+        arm: [row for row in records if row["status"] == "ready"] for arm, records in pool.items()
+    }
     if any(len(pool[arm]) != 30 for arm in pool) or len(ready["V1"]) != 30:
         raise ValueError("Historical pool does not match the predefined 30-per-arm condition")
     selected = [
@@ -99,8 +106,11 @@ def freeze_benchmark(output: Path, benchmark: Path, config: dict) -> tuple[list[
         "selection_independent_of_old_score_and_faults": True,
         "selection_scope": "Proportional relationships, Grade 7, fictional basketball/Curry; no cross-topic inference",
         "pool": {
-            arm: {"attempts": len(records), "ready": len(ready[arm]),
-                  "status_counts": dict(Counter(row["status"] for row in records))}
+            arm: {
+                "attempts": len(records),
+                "ready": len(ready[arm]),
+                "status_counts": dict(Counter(row["status"] for row in records)),
+            }
             for arm, records in pool.items()
         },
         "selected": selected,
@@ -130,7 +140,8 @@ def freeze_benchmark(output: Path, benchmark: Path, config: dict) -> tuple[list[
             "learning_target": historical_config["case"]["target_concept"],
             "case": historical_config["case"]["id"],
             "original_rating": {
-                **original, "raw_response": judgment["raw_response"],
+                **original,
+                "raw_response": judgment["raw_response"],
                 "source_path": path_name(judgment_path),
                 "source_sha256": audit.sha256(judgment_bytes),
                 "saved_judgment_status": judgment["status"],
@@ -167,8 +178,10 @@ def read_catalog(path: Path) -> list[dict]:
 def control_catalog(config: dict, config_path: Path = DEFAULT_CONFIG) -> list[dict]:
     return [
         {
-            **control, "source_path": path_name(config_path),
-            "source_sha256": audit.sha256(config_path.read_bytes()), "arm": "synthetic_control",
+            **control,
+            "source_path": path_name(config_path),
+            "source_sha256": audit.sha256(config_path.read_bytes()),
+            "arm": "synthetic_control",
         }
         for control in config["controls"]
     ]
@@ -181,7 +194,8 @@ def catalog_source_provenance(catalog: list[dict], output: Path) -> list[dict]:
     for index, entry in enumerate(catalog):
         source = resolve_path(entry["source_path"])
         record = {
-            "task_id": entry["task_id"], "source_path": entry["source_path"],
+            "task_id": entry["task_id"],
+            "source_path": entry["source_path"],
             "declared_sha256": entry["source_sha256"],
         }
         if source.is_file():
@@ -191,7 +205,8 @@ def catalog_source_provenance(catalog: list[dict], output: Path) -> list[dict]:
             destination.write_bytes(raw)
             record.update(
                 status="verified_bytes" if actual == entry["source_sha256"] else "hash_mismatch",
-                actual_sha256=actual, snapshot_path=path_name(destination),
+                actual_sha256=actual,
+                snapshot_path=path_name(destination),
             )
         else:
             record.update(status="unknown_missing_source_path", actual_sha256=None)
@@ -202,8 +217,12 @@ def catalog_source_provenance(catalog: list[dict], output: Path) -> list[dict]:
 
 
 def prepare_run(
-    output: Path, config_path: Path, catalog_path: Path | None, benchmark: Path,
-    judges: list[str], max_calls: int,
+    output: Path,
+    config_path: Path,
+    catalog_path: Path | None,
+    benchmark: Path,
+    judges: list[str],
+    max_calls: int,
 ) -> dict:
     if len(judges) != 2 or set(judges) != {"gpt41", "gpt54"}:
         raise ValueError("This frozen study requires gpt41 and gpt54, two distinct model series")
@@ -227,14 +246,20 @@ def prepare_run(
         controls = control_catalog(config, config_path)
     requested_calls = 2 * (len(catalog) + len(controls))
     if requested_calls > min(max_calls, 200):
-        raise ValueError(f"Requested {requested_calls} calls exceeds fixed cap {min(max_calls, 200)}")
+        raise ValueError(
+            f"Requested {requested_calls} calls exceeds fixed cap {min(max_calls, 200)}"
+        )
     write_json(output / "catalog.json", {"tasks": catalog})
     write_json(output / "controls.json", {"tasks": controls})
     sources = (
-        Path(__file__), ROOT / "scripts/report_pf_measurement_gap_study.py",
-        ROOT / "src/evaluation/pf_evidence_audit.py", audit.PROMPT_PATH,
-        ROOT / "src/evaluation/pf_rubric.py", ROOT / "src/evaluation/prompts/pf_rubric.yaml",
-        ROOT / "scripts/prior_methods/common.py", config_path,
+        Path(__file__),
+        ROOT / "scripts/report_pf_measurement_gap_study.py",
+        ROOT / "src/evaluation/pf_evidence_audit.py",
+        audit.PROMPT_PATH,
+        ROOT / "src/evaluation/pf_rubric.py",
+        ROOT / "src/evaluation/prompts/pf_rubric.yaml",
+        ROOT / "scripts/prior_methods/common.py",
+        config_path,
     )
     hashes = {}
     snapshot = output / "source_snapshot"
@@ -242,7 +267,8 @@ def prepare_run(
         name = path_name(source)
         hashes[name] = audit.sha256(source.read_bytes())
         relative_name = (
-            Path(name) if not Path(name).is_absolute()
+            Path(name)
+            if not Path(name).is_absolute()
             else Path("external") / f"{hashes[name][:12]}-{source.name}"
         )
         destination = snapshot / relative_name
@@ -258,17 +284,26 @@ def prepare_run(
             for index, entry in enumerate(shuffled, 1):
                 blind_id = f"{phase[0]}-{rng.getrandbits(48):012x}"
                 mappings[judge][blind_id] = {
-                    "task_id": entry["task_id"], "phase": phase, "order": index,
+                    "task_id": entry["task_id"],
+                    "phase": phase,
+                    "order": index,
                 }
     write_json(output / "blind_mapping_private.json", mappings)
     manifest = {
         "study_version": config["study_version"],
         "runtime_version": RUNTIME_VERSION,
-        "instrument_version": audit.VERSION, "status": "prepared", "prepared_at": now(),
-        "hypothesis": config["hypothesis"], "null_result": config["null_result"],
-        "claim_policy": config["claim_policy"], "calibration_policy": config["calibration_policy"],
-        "sampling": selection, "judges": judges, "settings": config["settings"],
-        "requested_calls": requested_calls, "max_calls": min(max_calls, 200),
+        "instrument_version": audit.VERSION,
+        "status": "prepared",
+        "prepared_at": now(),
+        "hypothesis": config["hypothesis"],
+        "null_result": config["null_result"],
+        "claim_policy": config["claim_policy"],
+        "calibration_policy": config["calibration_policy"],
+        "sampling": selection,
+        "judges": judges,
+        "settings": config["settings"],
+        "requested_calls": requested_calls,
+        "max_calls": min(max_calls, 200),
         "source_hashes": hashes,
         "catalog_sha256": audit.sha256((output / "catalog.json").read_bytes()),
         "controls_sha256": audit.sha256((output / "controls.json").read_bytes()),
@@ -278,8 +313,7 @@ def prepare_run(
         "old_scores_and_arm_sent_to_judges": False,
         "judge_independence": "Distinct GPT-4.1 / GPT-5.4 series, same OpenAI family, not human or vendor-independent",
         "source_reads": [
-            {"path": entry["source_path"], "sha256": entry["source_sha256"]}
-            for entry in catalog
+            {"path": entry["source_path"], "sha256": entry["source_sha256"]} for entry in catalog
         ],
     }
     write_json(output / "manifest.json", manifest)
@@ -288,7 +322,8 @@ def prepare_run(
 
 def verify_frozen(output: Path, manifest: dict) -> None:
     for filename, field in (
-        ("catalog.json", "catalog_sha256"), ("controls.json", "controls_sha256"),
+        ("catalog.json", "catalog_sha256"),
+        ("controls.json", "controls_sha256"),
         ("blind_mapping_private.json", "blind_mapping_sha256"),
     ):
         if audit.sha256((output / filename).read_bytes()) != manifest[field]:
@@ -298,19 +333,30 @@ def verify_frozen(output: Path, manifest: dict) -> None:
             raise ValueError(f"Instrument source changed after freezing: {source}")
 
 
-def judge_one(entry: dict, judge: str, blind_id: str, manifest: dict, output: Path, client, model: str) -> dict:
+def judge_one(
+    entry: dict, judge: str, blind_id: str, manifest: dict, output: Path, client, model: str
+) -> dict:
     destination = output / "judgments" / judge / f"{blind_id}.json"
     destination.parent.mkdir(parents=True, exist_ok=True)
     record = {
-        "task_id": entry["task_id"], "judge": judge, "blind_id": blind_id,
-        "model_name": model, "started_at": now(), "status": "request_started",
-        "response_id": None, "usage": None, "raw_response": None,
-        "model_calls": 0, "max_retries": 0,
+        "task_id": entry["task_id"],
+        "judge": judge,
+        "blind_id": blind_id,
+        "model_name": model,
+        "started_at": now(),
+        "status": "request_started",
+        "response_id": None,
+        "usage": None,
+        "raw_response": None,
+        "model_calls": 0,
+        "max_retries": 0,
     }
     try:
         user_input = audit.evidence_audit_input(entry)
     except (ValueError, KeyError, TypeError) as error:
-        record.update(status="input_error", error={"type": type(error).__name__, "message": str(error)})
+        record.update(
+            status="input_error", error={"type": type(error).__name__, "message": str(error)}
+        )
         write_json(destination, record)
         return record
     settings = manifest["settings"]
@@ -330,7 +376,8 @@ def judge_one(entry: dict, judge: str, blind_id: str, manifest: dict, output: Pa
         request["max_tokens"] = settings["max_completion_tokens"]
         request["temperature"] = settings["gpt41_temperature"]
     record.update(
-        user_input=user_input, input_sha256=audit.sha256(user_input),
+        user_input=user_input,
+        input_sha256=audit.sha256(user_input),
         request_sha256=audit.sha256(json.dumps(request, sort_keys=True)),
         effective_settings={key: value for key, value in request.items() if key != "messages"},
         model_calls=1,
@@ -347,7 +394,8 @@ def judge_one(entry: dict, judge: str, blind_id: str, manifest: dict, output: Pa
     else:
         raw = response.choices[0].message.content or ""
         record.update(
-            response_id=response.id, returned_model=response.model,
+            response_id=response.id,
+            returned_model=response.model,
             usage=response.usage.model_dump() if response.usage else None,
             finish_reason=response.choices[0].finish_reason,
             raw_response=raw,
@@ -374,23 +422,33 @@ def control_performance(catalog: list[dict], results: list[dict], judges: list[s
                 observed = None
                 field = "mathematics" if name == "math_status" else name
                 validation_error = (result or {}).get("field_errors", {}).get(field)
-                if result and result.get("status") in audit.PARSED_STATUSES and not validation_error:
+                if (
+                    result
+                    and result.get("status") in audit.PARSED_STATUSES
+                    and not validation_error
+                ):
                     observed = (
-                        result["math_status"] if name == "math_status" else result["audit"][name]["status"]
+                        result["math_status"]
+                        if name == "math_status"
+                        else result["audit"][name]["status"]
                     )
-                quote_verified = (
-                    observed == "unknown" or bool(
-                        result and result.get("quote_fidelity", {}).get(field, {}).get("all_verified")
-                    )
+                quote_verified = observed == "unknown" or bool(
+                    result and result.get("quote_fidelity", {}).get(field, {}).get("all_verified")
                 )
-                rows.append({
-                    "task_id": entry["task_id"], "role": entry["role"],
-                    "judge": judge, "property": name, "expected_allowed": allowed,
-                    "observed": observed, "matches": observed in allowed and quote_verified,
-                    "field_validation_error": validation_error,
-                    "quote_fidelity_valid": quote_verified,
-                    "human_gold": False,
-                })
+                rows.append(
+                    {
+                        "task_id": entry["task_id"],
+                        "role": entry["role"],
+                        "judge": judge,
+                        "property": name,
+                        "expected_allowed": allowed,
+                        "observed": observed,
+                        "matches": observed in allowed and quote_verified,
+                        "field_validation_error": validation_error,
+                        "quote_fidelity_valid": quote_verified,
+                        "human_gold": False,
+                    }
+                )
     return {
         "interpretation": (
             "Frozen illustrative controls, not human gold or benchmark tuning. "
@@ -399,10 +457,15 @@ def control_performance(catalog: list[dict], results: list[dict], judges: list[s
         ),
         "by_role_and_judge": {
             f"{role}:{judge}": {
-                "matching_property_checks": sum(row["matches"] for row in rows if row["role"] == role and row["judge"] == judge),
-                "expected_property_checks": sum(row["role"] == role and row["judge"] == judge for row in rows),
+                "matching_property_checks": sum(
+                    row["matches"] for row in rows if row["role"] == role and row["judge"] == judge
+                ),
+                "expected_property_checks": sum(
+                    row["role"] == role and row["judge"] == judge for row in rows
+                ),
             }
-            for role in ("development_control", "holdout_control") for judge in judges
+            for role in ("development_control", "holdout_control")
+            for judge in judges
         },
         "rows": rows,
     }
@@ -420,7 +483,9 @@ def run_prepared(output: Path, phase: str, workers: int) -> dict:
     for judge in manifest["judges"]:
         client, model = load_client(judge)
         clients[judge] = (client.with_options(max_retries=0), model)
-    manifest.update(status="running", model_names={judge: value[1] for judge, value in clients.items()})
+    manifest.update(
+        status="running", model_names={judge: value[1] for judge, value in clients.items()}
+    )
     write_json(output / "manifest.json", manifest)
     phases = ["calibration", "main"] if phase == "all" else [phase]
     for current in phases:
@@ -450,10 +515,14 @@ def run_prepared(output: Path, phase: str, workers: int) -> dict:
             }
             for future in as_completed(futures):
                 result = future.result()
-                print(f"{current} {result['judge']} {result['blind_id']}: {result['status']}", flush=True)
+                print(
+                    f"{current} {result['judge']} {result['blind_id']}: {result['status']}",
+                    flush=True,
+                )
         if current == "calibration":
             results = [
-                read_json(path) for path in (output / "judgments").glob("*/*.json")
+                read_json(path)
+                for path in (output / "judgments").glob("*/*.json")
                 if read_json(path)["task_id"] in indexed
             ]
             performance = control_performance(controls, results, manifest["judges"])
@@ -486,23 +555,35 @@ def run_prepared(output: Path, phase: str, workers: int) -> dict:
         "actual_model_requests": sum(result.get("model_calls", 0) for result in all_results),
         "request_cap": manifest["max_calls"],
         "phase_status": phase,
-        "calibration": read_json(output / "calibration_summary.json") if (output / "calibration_summary.json").exists() else None,
-        "total_prompt_tokens": sum((result.get("usage") or {}).get("prompt_tokens", 0) for result in all_results),
-        "total_completion_tokens": sum((result.get("usage") or {}).get("completion_tokens", 0) for result in all_results),
-        "summed_request_latency_seconds": sum(result.get("latency_seconds", 0) for result in all_results),
+        "calibration": read_json(output / "calibration_summary.json")
+        if (output / "calibration_summary.json").exists()
+        else None,
+        "total_prompt_tokens": sum(
+            (result.get("usage") or {}).get("prompt_tokens", 0) for result in all_results
+        ),
+        "total_completion_tokens": sum(
+            (result.get("usage") or {}).get("completion_tokens", 0) for result in all_results
+        ),
+        "summed_request_latency_seconds": sum(
+            result.get("latency_seconds", 0) for result in all_results
+        ),
     }
     write_json(output / "summary.json", summary)
     manifest.update(
         status=(
-            "partial" if len(results) != len(catalog) * 2
-            else "completed_with_errors" if any(result["status"] != "parsed" for result in all_results)
+            "partial"
+            if len(results) != len(catalog) * 2
+            else "completed_with_errors"
+            if any(result["status"] != "parsed" for result in all_results)
             else "completed"
         ),
-        finished_at=now(), actual_calls=summary["execution"]["actual_model_requests"],
+        finished_at=now(),
+        actual_calls=summary["execution"]["actual_model_requests"],
         source_integrity_unchanged=True,
     )
     write_json(output / "manifest.json", manifest)
     from scripts.report_pf_measurement_gap_study import report_run
+
     report_run(output)
     return summary
 
@@ -526,7 +607,9 @@ def main() -> None:
         manifest = prepare_run(
             args.output, args.config, args.catalog, args.benchmark, args.judges, args.max_calls
         )
-        print(f"Frozen {manifest['requested_calls']} requested judgments in {args.output}", flush=True)
+        print(
+            f"Frozen {manifest['requested_calls']} requested judgments in {args.output}", flush=True
+        )
     if not args.prepare:
         run_prepared(args.output, args.phase, args.workers)
 

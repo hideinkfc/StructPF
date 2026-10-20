@@ -64,14 +64,16 @@ def inputs(config: dict, spec: dict) -> tuple[dict, dict, dict, list[dict]]:
         ):
             continue
         result = records[request["id"]]
-        evidence.append({
-            "written_work": (
-                result["attempt"]["written_work"] if result["attempt"] else result["raw_text"]
-            ),
-            "answer": result["attempt"]["answer"] if result["attempt"] else None,
-            "execution_status": result["status"],
-            "unfinished": result["attempt"]["unfinished"] if result["attempt"] else None,
-        })
+        evidence.append(
+            {
+                "written_work": (
+                    result["attempt"]["written_work"] if result["attempt"] else result["raw_text"]
+                ),
+                "answer": result["attempt"]["answer"] if result["attempt"] else None,
+                "execution_status": result["status"],
+                "unfinished": result["attempt"]["unfinished"] if result["attempt"] else None,
+            }
+        )
     if len(evidence) != 8:
         raise ValueError("Every selected task requires eight saved learner-role outputs")
     return task, prior, manifest["case"], evidence
@@ -91,11 +93,18 @@ def prepare(config: dict, output: Path, phase: str) -> list[dict]:
             user = dict(common)
             if arm == "attempt_revision":
                 user["learner_attempts"] = evidence
-            requests.append({
-                "id": spec["id"], "family": spec["family"], "arm": arm,
-                "system": SYSTEM, "user": json.dumps(user, ensure_ascii=False, indent=2),
-                "source": spec["path"], "prior": prior, "original": task,
-            })
+            requests.append(
+                {
+                    "id": spec["id"],
+                    "family": spec["family"],
+                    "arm": arm,
+                    "system": SYSTEM,
+                    "user": json.dumps(user, ensure_ascii=False, indent=2),
+                    "source": spec["path"],
+                    "prior": prior,
+                    "original": task,
+                }
+            )
     random.Random(config["seed"]).shuffle(requests)
     save(output / "requests.json", requests)
     return requests
@@ -117,8 +126,11 @@ def run(output: Path, phase: str) -> dict:
             if hashlib.sha256((ROOT / relative).read_bytes()).hexdigest() != digest:
                 raise ValueError(f"Revision inputs changed after calibration: {relative}")
     sources = [
-        CONFIG, Path(__file__), ROOT / "scripts/run_pf_paper_benchmark.py",
-        ROOT / "scripts/prior_methods/common.py", ROOT / "src/evaluation/pf_rubric.py",
+        CONFIG,
+        Path(__file__),
+        ROOT / "scripts/run_pf_paper_benchmark.py",
+        ROOT / "scripts/prior_methods/common.py",
+        ROOT / "src/evaluation/pf_rubric.py",
         ROOT / config["previous_attempts"] / "manifest.json",
     ]
     selected = config["calibration_cases" if phase == "calibration" else "cases"]
@@ -129,11 +141,15 @@ def run(output: Path, phase: str) -> dict:
         ]
     old = json.loads((ROOT / config["previous_attempts"] / "manifest.json").read_text())
     relevant = {spec["previous_task_id"] for spec in selected}
-    ids = {request["id"] for request in old["requests"]
-           if request["task_id"] in relevant and request["profile_id"] != "ordinary_solver"}
+    ids = {
+        request["id"]
+        for request in old["requests"]
+        if request["task_id"] in relevant and request["profile_id"] != "ordinary_solver"
+    }
     sources += [
         ROOT / config["previous_attempts"] / item["result_path"]
-        for item in old["attempts"] if item["id"] in ids
+        for item in old["attempts"]
+        if item["id"] in ids
     ]
     hashes = {}
     for source in dict.fromkeys(sources):
@@ -152,35 +168,47 @@ def run(output: Path, phase: str) -> dict:
         attempt_dir = destination / request["id"] / request["arm"]
         attempt_dir.mkdir(parents=True, exist_ok=False)
         payload, raw, metadata, error = benchmark._call_json(
-            client, model, request["system"], request["user"],
-            max_tokens=config["revision"]["max_tokens"], retries=0,
-            trace_path=attempt_dir / "model_calls.jsonl", stage="task.revision",
+            client,
+            model,
+            request["system"],
+            request["user"],
+            max_tokens=config["revision"]["max_tokens"],
+            retries=0,
+            trace_path=attempt_dir / "model_calls.jsonl",
+            stage="task.revision",
             timeout_seconds=config["revision"]["timeout_seconds"],
         )
-        status, schema_error = (
-            ("api_error", error) if error else benchmark._validate_task(payload)
-        )
-        usable = (
-            isinstance(payload, dict) and all(
-                isinstance(payload.get(field), str) and payload[field].strip()
-                for field in ("title", "body", "question")
-            )
+        status, schema_error = ("api_error", error) if error else benchmark._validate_task(payload)
+        usable = isinstance(payload, dict) and all(
+            isinstance(payload.get(field), str) and payload[field].strip()
+            for field in ("title", "body", "question")
         )
         task = (
-            {"status": "ready",
-             **{field: payload[field] for field in ("title", "body", "question")}}
-            if usable else None
+            {
+                "status": "ready",
+                **{field: payload[field] for field in ("title", "body", "question")},
+            }
+            if usable
+            else None
         )
         record = {
-            "status": status, "task": task, "payload": payload, "raw_text": raw,
-            "model_metadata": metadata, "error": schema_error,
+            "status": status,
+            "task": task,
+            "payload": payload,
+            "raw_text": raw,
+            "model_metadata": metadata,
+            "error": schema_error,
             "quality_findings": [schema_error] if usable and schema_error else [],
         }
         save(attempt_dir / "result.json", record)
-        manifest["results"].append({
-            "id": request["id"], "arm": request["arm"], "status": status,
-            "result_path": str((attempt_dir / "result.json").relative_to(destination)),
-        })
+        manifest["results"].append(
+            {
+                "id": request["id"],
+                "arm": request["arm"],
+                "status": status,
+                "result_path": str((attempt_dir / "result.json").relative_to(destination)),
+            }
+        )
         save(destination / "manifest.json", manifest)
         print(phase, request["id"], request["arm"], status, flush=True)
     manifest["status"] = "completed"
@@ -199,15 +227,18 @@ def prepare_evaluation(output: Path) -> dict:
     blind, key = [], []
     for spec in config["cases"]:
         original, prior, case, _ = inputs(config, spec)
-        save(variants / spec["family"] / "manifest.json", {
-            "shared_context": {"learner_context": prior}, "case": case,
-        })
+        save(
+            variants / spec["family"] / "manifest.json",
+            {
+                "shared_context": {"learner_context": prior},
+                "case": case,
+            },
+        )
         for arm in config["arms"]:
             record = (
                 {"task": original, "status": "unchanged_original"}
-                if arm == "original" else json.loads(
-                    (output / "fresh" / spec["id"] / arm / "result.json").read_text()
-                )
+                if arm == "original"
+                else json.loads((output / "fresh" / spec["id"] / arm / "result.json").read_text())
             )
             path = f"{spec['family']}/{spec['id']}/{arm}/result.json"
             save(variants / path, record)
@@ -216,26 +247,36 @@ def prepare_evaluation(output: Path) -> dict:
                 unavailable.append(task_id)
             else:
                 task_specs.append({"id": task_id, "family": spec["family"], "path": path})
-            blind.append({
-                "student_task": record["task"], "learner_context": prior,
-                "target": case["target_concept"],
-            })
+            blind.append(
+                {
+                    "student_task": record["task"],
+                    "learner_context": prior,
+                    "target": case["target_concept"],
+                }
+            )
             key.append({"case_id": spec["id"], "arm": arm, "task_id": task_id})
     shuffled = list(zip(blind, key))
     random.Random(config["seed"] + 1).shuffle(shuffled)
-    save(output / "task_review_packet.json", {
-        f"task_{index:02d}": task for index, (task, _) in enumerate(shuffled, 1)
-    })
-    save(output / "task_review_key.json", {
-        f"task_{index:02d}": item for index, (_, item) in enumerate(shuffled, 1)
-    })
+    save(
+        output / "task_review_packet.json",
+        {f"task_{index:02d}": task for index, (task, _) in enumerate(shuffled, 1)},
+    )
+    save(
+        output / "task_review_key.json",
+        {f"task_{index:02d}": item for index, (_, item) in enumerate(shuffled, 1)},
+    )
     evaluation = config["attempt_evaluation"]
     probe = {
-        "schema_version": "pf-student-probe/v1", "question": config["question"],
-        "task_root": str(variants.relative_to(ROOT)), "tasks": task_specs,
-        "models": evaluation["models"], "profiles": evaluation["profiles"],
-        "repeats": evaluation["repeats"], "workers": evaluation["workers"],
-        "settings": evaluation["settings"], "seed": config["seed"],
+        "schema_version": "pf-student-probe/v1",
+        "question": config["question"],
+        "task_root": str(variants.relative_to(ROOT)),
+        "tasks": task_specs,
+        "models": evaluation["models"],
+        "profiles": evaluation["profiles"],
+        "repeats": evaluation["repeats"],
+        "workers": evaluation["workers"],
+        "settings": evaluation["settings"],
+        "seed": config["seed"],
         "budget": {
             "calibration_calls": 8,
             "fresh_calls": len(task_specs) * 12,
@@ -252,7 +293,9 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument(
-        "--phase", choices=("calibration", "fresh", "prepare_evaluation"), required=True,
+        "--phase",
+        choices=("calibration", "fresh", "prepare_evaluation"),
+        required=True,
     )
     args = parser.parse_args()
     output = args.output.resolve()

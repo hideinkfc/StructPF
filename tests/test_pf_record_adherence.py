@@ -5,16 +5,24 @@ from src.evaluation.pf_record_adherence import FLAGS, parse_coding
 
 
 def packet():
-    return {"a1": {"attempt": {
-        "written_work": "Mean = (2 + 4) / 2 = 3.", "answer": "3", "unfinished": False,
-    }, "unparsed_raw_text": None}}
+    return {
+        "a1": {
+            "attempt": {
+                "written_work": "Mean = (2 + 4) / 2 = 3.",
+                "answer": "3",
+                "unfinished": False,
+            },
+            "unparsed_raw_text": None,
+        }
+    }
 
 
 def coding():
     row = {
         **{flag: "no" for flag in FLAGS},
         "evidence": {flag: [] for flag in FLAGS},
-        "mathematics_status": "supported", "rationale": "A mean was calculated.",
+        "mathematics_status": "supported",
+        "rationale": "A mean was calculated.",
     }
     row["prerequisite_applied"] = "yes"
     row["evidence"]["prerequisite_applied"] = ["Mean = (2 + 4) / 2 = 3."]
@@ -51,7 +59,8 @@ def test_partial_work_can_have_unknown_resource_use_without_a_false_negative():
     row = {
         **{flag: "unknown" for flag in FLAGS},
         "evidence": {flag: [] for flag in FLAGS},
-        "mathematics_status": "unknown", "rationale": "The response is cut off.",
+        "mathematics_status": "unknown",
+        "rationale": "The response is cut off.",
     }
     payload = {"provenance": "Illustrative incomplete output.", "attempts": {"a1": row}}
     assert parse_coding(payload, partial) == payload
@@ -65,11 +74,14 @@ def test_render_displays_actual_use_not_keywords_and_keeps_unknown(tmp_path):
     for family in ("loibl_variance", "kerrigan_fair_division"):
         for profile in report.PROFILES:
             groups[f"{family}/{profile}"] = {
-                "attempted": 12, "advanced_applied/yes": 2,
-                "advanced_applied/unknown": 1, "advanced_mentioned_only/yes": 4,
+                "attempted": 12,
+                "advanced_applied/yes": 2,
+                "advanced_applied/unknown": 1,
+                "advanced_mentioned_only/yes": 4,
             }
     summary = {
-        "attempts": {}, "family_groups": groups,
+        "attempts": {},
+        "family_groups": groups,
         "execution": {"fresh": {"attempted": 96, "parsed": 94}},
     }
     report.render(tmp_path, summary)

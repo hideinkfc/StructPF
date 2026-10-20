@@ -26,8 +26,12 @@ def test_render_body_preserves_data_and_escapes_html():
 
 def test_task_panel_displays_draft_and_escapes_unresolved_findings(tmp_path):
     task = {
-        "status": "ready", "title": "Explore", "body": "Given data.", "question": "Explain.",
-        "quality_status": "review_needed", "quality_findings": ["Unverified <condition>"],
+        "status": "ready",
+        "title": "Explore",
+        "body": "Given data.",
+        "question": "Explain.",
+        "quality_status": "review_needed",
+        "quality_findings": ["Unverified <condition>"],
     }
     rendered = task_panel(task, "Draft", tmp_path / "result.json")
     assert "Given data." in rendered

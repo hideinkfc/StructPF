@@ -47,11 +47,7 @@ def render_body(text: str) -> str:
     blocks = []
     for block in text.split("\n\n"):
         lines = block.splitlines()
-        if (
-            len(lines) >= 2
-            and lines[0].startswith("|")
-            and re.fullmatch(r"[\s|:\-]+", lines[1])
-        ):
+        if len(lines) >= 2 and lines[0].startswith("|") and re.fullmatch(r"[\s|:\-]+", lines[1]):
             rows = []
             for index, line in enumerate(lines):
                 if index == 1:
@@ -86,16 +82,14 @@ def render_card(case_id: str, condition: str, label: str) -> str:
         + render_body(task["body"])
         + f'<div class="question"><strong>Student challenge</strong><p>{html.escape(task["question"])}</p></div>'
         if task["status"] == "ready"
-        else "<p>Blocked: "
-        + html.escape("; ".join(task.get("blocking_issues", [])))
-        + "</p>"
+        else "<p>Blocked: " + html.escape("; ".join(task.get("blocking_issues", []))) + "</p>"
     )
     source = f"{case_id}/attempts/{condition}/001/attempt.json"
     return (
         f'<article><div class="card-head"><span class="condition">{html.escape(label)}</span>'
         f'<span class="rating">{html.escape(rating)}</span></div>'
         f'<span class="status">{html.escape(attempt["status"])}</span>'
-        f"{task_content}<a href=\"{html.escape(source, quote=True)}\">Saved attempt JSON</a></article>"
+        f'{task_content}<a href="{html.escape(source, quote=True)}">Saved attempt JSON</a></article>'
     )
 
 
@@ -114,9 +108,7 @@ def load_stratl_exercises() -> tuple[dict, dict[str, dict]]:
     return document["metadata"], by_id
 
 
-def render_human_reference(
-    case: dict[str, str], metadata: dict, exercises: dict[str, dict]
-) -> str:
+def render_human_reference(case: dict[str, str], metadata: dict, exercises: dict[str, dict]) -> str:
     exercise = exercises.get(case["exercise_id"])
     if not isinstance(exercise, dict) or not isinstance(exercise.get("problem"), str):
         raise ValueError(f"Missing exercise text for {case['exercise_id']}")
@@ -130,7 +122,7 @@ def render_human_reference(
         f'<p class="exercise-id">Exercise ID: <code>{html.escape(case["exercise_id"])}</code></p>'
         f'<div class="human-task">{problem}</div>'
         f'<p class="source-note">Source task attribution: {html.escape(str(original_source))}. '
-        f'{html.escape(str(metadata["source"]))}. '
+        f"{html.escape(str(metadata['source']))}. "
         f'License: <a href="https://creativecommons.org/licenses/by/4.0/" '
         f'target="_blank" rel="noopener noreferrer">{html.escape(str(metadata["license"]))}</a>.'
         " Task text reproduced from the licensed dataset.</p>"
@@ -148,7 +140,7 @@ def render() -> str:
             render_card(case["id"], condition, label) for condition, label in CONDITIONS
         )
         sections.append(
-            f'<section><header><p>{html.escape(case["subtitle"])}</p>'
+            f"<section><header><p>{html.escape(case['subtitle'])}</p>"
             f'<h2>{html.escape(case["title"])}</h2></header><div class="grid">'
             + render_human_reference(case, metadata, exercises)
             + cards

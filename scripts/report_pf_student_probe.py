@@ -91,8 +91,10 @@ def summarize(output: Path) -> dict:
                     record["attempt"]["answer"].strip() == request["expected_answer"]
                 )
         phases[phase] = {
-            **dict(counts), "by_model": {key: dict(value) for key, value in by_model.items()},
-            "usage": dict(usage), "summed_request_seconds": round(elapsed, 3),
+            **dict(counts),
+            "by_model": {key: dict(value) for key, value in by_model.items()},
+            "usage": dict(usage),
+            "summed_request_seconds": round(elapsed, 3),
         }
     report = {
         "phases": phases,
@@ -109,9 +111,7 @@ def summarize(output: Path) -> dict:
         family_groups = {}
         model_groups = {}
         totals = Counter()
-        families = {
-            task["id"]: task["family"] for task in manifest["protocol"].get("tasks", [])
-        }
+        families = {task["id"]: task["family"] for task in manifest["protocol"].get("tasks", [])}
         for label, row in coding["attempts"].items():
             if row["mathematics_status"] not in {"supported", "invalid", "unknown"}:
                 raise ValueError(f"Unknown mathematics classification: {label}")
@@ -134,9 +134,7 @@ def summarize(output: Path) -> dict:
                     group[f"approach/{approach}"] += 1
         report["coding_provenance"] = coding["provenance"]
         report["task_profile_groups"] = {key: dict(value) for key, value in groups.items()}
-        report["family_profile_groups"] = {
-            key: dict(value) for key, value in family_groups.items()
-        }
+        report["family_profile_groups"] = {key: dict(value) for key, value in family_groups.items()}
         report["task_profile_model_groups"] = {
             key: dict(value) for key, value in model_groups.items()
         }
@@ -152,7 +150,8 @@ def render(output: Path) -> None:
     coding = json.loads(coding_path.read_text()) if coding_path.exists() else None
     reverse_key = (
         {value: key for key, value in json.loads((output / "review_key.json").read_text()).items()}
-        if coding else {}
+        if coding
+        else {}
     )
     panels = []
     findings = ""
@@ -172,10 +171,10 @@ def render(output: Path) -> None:
             width = 440 * value / total
             y = 35 + index * 48
             bars.append(
-                f"<text x='12' y='{y+18}'>{html.escape(label)}</text>"
+                f"<text x='12' y='{y + 18}'>{html.escape(label)}</text>"
                 f"<rect x='250' y='{y}' width='440' height='26' fill='#e1e7ee'/>"
                 f"<rect x='250' y='{y}' width='{width}' height='26' fill='#3175a9'/>"
-                f"<text x='705' y='{y+18}'>{value}/{total} attempts</text>"
+                f"<text x='705' y='{y + 18}'>{value}/{total} attempts</text>"
             )
         findings = (
             "<h2>The profile changes the written approach</h2>"
@@ -202,15 +201,21 @@ def render(output: Path) -> None:
         attempt = record["attempt"]
         text = (
             attempt["written_work"] + "\n\nAnswer: " + attempt["answer"]
-            if attempt else record["raw_text"]
+            if attempt
+            else record["raw_text"]
         )
         source = f"fresh/{request['id']}/result.json"
         panel = (
-            "<details><summary>" + html.escape(
+            "<details><summary>"
+            + html.escape(
                 f"{request['task_id']} / {request['profile_id']} / "
                 f"{request['model']} / repeat {request['repeat']} / {record['status']}"
-            ) + "</summary><h3>Exercise</h3><pre>" + html.escape(task)
-            + "</pre><h3>Written attempt</h3><pre>" + html.escape(text) + "</pre>"
+            )
+            + "</summary><h3>Exercise</h3><pre>"
+            + html.escape(task)
+            + "</pre><h3>Written attempt</h3><pre>"
+            + html.escape(text)
+            + "</pre>"
         )
         if coding:
             row = coding["attempts"][reverse_key[request["id"]]]
@@ -243,7 +248,9 @@ def render(output: Path) -> None:
         "regenerated to obtain a desired approach.</p>"
         "<p><a href='summary.json'>Separate counts and usage</a> &middot; "
         "<a href='manifest.json'>Frozen inputs and request provenance</a></p>"
-        + findings + "".join(panels) + "</html>"
+        + findings
+        + "".join(panels)
+        + "</html>"
     )
     (output / "attempts.html").write_text(page, encoding="utf-8")
 

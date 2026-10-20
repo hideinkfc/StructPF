@@ -21,8 +21,12 @@ def parse_coding(payload: object, packet: dict) -> dict:
     if not isinstance(rows, dict) or set(rows) != set(packet):
         raise ValueError("Record coding must cover every attempted response")
     for label, row in rows.items():
-        if not isinstance(row, dict) or set(row) != {*FLAGS, "evidence", "mathematics_status",
-                                                     "rationale"}:
+        if not isinstance(row, dict) or set(row) != {
+            *FLAGS,
+            "evidence",
+            "mathematics_status",
+            "rationale",
+        }:
             raise ValueError(f"Invalid record coding fields: {label}")
         if any(row[flag] not in {"yes", "no", "unknown"} for flag in FLAGS):
             raise ValueError(f"Unknown record-use classification: {label}")
@@ -39,7 +43,8 @@ def parse_coding(payload: object, packet: dict) -> dict:
         attempt = packet[label]["attempt"]
         text = (
             attempt["written_work"] + "\n" + attempt["answer"]
-            if attempt is not None else packet[label]["unparsed_raw_text"] or ""
+            if attempt is not None
+            else packet[label]["unparsed_raw_text"] or ""
         )
         for flag, quotes in evidence.items():
             if not isinstance(quotes, list) or (row[flag] == "yes" and not quotes):

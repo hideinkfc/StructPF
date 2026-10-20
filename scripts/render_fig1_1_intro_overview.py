@@ -8,6 +8,7 @@ Styled in the exact JupyRecSys / Figure 3.1 visual language:
 """
 
 from pathlib import Path
+
 import matplotlib.pyplot as plt
 from matplotlib.patches import Rectangle
 
@@ -79,9 +80,9 @@ def main():
     # Monochrome / JupyRecSys palette (matching Figure 3.1)
     c_black = "#000000"
     c_dark = "#222222"
-    c_proc = "#CFCFCF"   # JupyRecSys process block gray
+    c_proc = "#CFCFCF"  # JupyRecSys process block gray
     c_group = "#F2F2F2"  # Outer container light gray
-    c_sub = "#E6E6E6"    # Header strip gray
+    c_sub = "#E6E6E6"  # Header strip gray
     c_white = "#FFFFFF"
 
     # ==========================================================================
@@ -91,8 +92,20 @@ def main():
     in_y, in_h = 1.62, 3.96
     in_hdr_h = 0.50
 
-    draw_rect(ax, in_x, in_y, in_w, in_h, facecolor=c_white, edgecolor=c_black, linewidth=0.95, zorder=3)
-    draw_rect(ax, in_x, in_y + in_h - in_hdr_h, in_w, in_hdr_h, facecolor=c_sub, edgecolor=c_black, linewidth=0.85, zorder=3)
+    draw_rect(
+        ax, in_x, in_y, in_w, in_h, facecolor=c_white, edgecolor=c_black, linewidth=0.95, zorder=3
+    )
+    draw_rect(
+        ax,
+        in_x,
+        in_y + in_h - in_hdr_h,
+        in_w,
+        in_hdr_h,
+        facecolor=c_sub,
+        edgecolor=c_black,
+        linewidth=0.85,
+        zorder=3,
+    )
     ax.text(
         in_x + in_w / 2,
         in_y + in_h - in_hdr_h / 2,
@@ -124,8 +137,28 @@ def main():
     bot_y, bot_h = 0.18, 3.24
 
     # Outer containers
-    draw_rect(ax, grp_x, top_y, grp_w, top_h, facecolor=c_group, edgecolor=c_black, linewidth=0.95, zorder=1)
-    draw_rect(ax, grp_x, bot_y, grp_w, bot_h, facecolor=c_group, edgecolor=c_black, linewidth=0.95, zorder=1)
+    draw_rect(
+        ax,
+        grp_x,
+        top_y,
+        grp_w,
+        top_h,
+        facecolor=c_group,
+        edgecolor=c_black,
+        linewidth=0.95,
+        zorder=1,
+    )
+    draw_rect(
+        ax,
+        grp_x,
+        bot_y,
+        grp_w,
+        bot_h,
+        facecolor=c_group,
+        edgecolor=c_black,
+        linewidth=0.95,
+        zorder=1,
+    )
 
     # Titles for (a) and (b)
     ax.text(
@@ -151,9 +184,15 @@ def main():
 
     # Legend in top-right of Row (a)
     leg_y = top_y + top_h - 0.42
-    draw_rect(ax, 9.52, leg_y, 0.26, 0.20, facecolor=c_white, edgecolor=c_black, linewidth=0.85, zorder=3)
-    ax.text(9.84, leg_y + 0.10, "= Input / Artifact", fontsize=8.3, color=c_dark, ha="left", va="center")
-    draw_rect(ax, 11.24, leg_y, 0.26, 0.20, facecolor=c_proc, edgecolor=c_black, linewidth=0.85, zorder=3)
+    draw_rect(
+        ax, 9.52, leg_y, 0.26, 0.20, facecolor=c_white, edgecolor=c_black, linewidth=0.85, zorder=3
+    )
+    ax.text(
+        9.84, leg_y + 0.10, "= Input / Artifact", fontsize=8.3, color=c_dark, ha="left", va="center"
+    )
+    draw_rect(
+        ax, 11.24, leg_y, 0.26, 0.20, facecolor=c_proc, edgecolor=c_black, linewidth=0.85, zorder=3
+    )
     ax.text(11.56, leg_y + 0.10, "= Process", fontsize=8.3, color=c_dark, ha="left", va="center")
 
     # Shared 3-column geometry inside (a) and (b)
@@ -194,11 +233,19 @@ def main():
     ]
 
     for bx, bfill, btitle, bbody in a_blocks:
-        draw_rect(ax, bx, a_y, b_w, box_h, facecolor=bfill, edgecolor=c_black, linewidth=0.95, zorder=3)
         draw_rect(
-            ax, bx, a_y + box_h - hdr_h, b_w, hdr_h,
+            ax, bx, a_y, b_w, box_h, facecolor=bfill, edgecolor=c_black, linewidth=0.95, zorder=3
+        )
+        draw_rect(
+            ax,
+            bx,
+            a_y + box_h - hdr_h,
+            b_w,
+            hdr_h,
             facecolor=c_sub if bfill == c_white else c_proc,
-            edgecolor=c_black, linewidth=0.85, zorder=3
+            edgecolor=c_black,
+            linewidth=0.85,
+            zorder=3,
         )
         ax.text(
             bx + b_w / 2,
@@ -254,11 +301,19 @@ def main():
     ]
 
     for bx, bfill, btitle, bbody in b_blocks:
-        draw_rect(ax, bx, b_y, b_w, box_h, facecolor=bfill, edgecolor=c_black, linewidth=0.95, zorder=3)
         draw_rect(
-            ax, bx, b_y + box_h - hdr_h, b_w, hdr_h,
+            ax, bx, b_y, b_w, box_h, facecolor=bfill, edgecolor=c_black, linewidth=0.95, zorder=3
+        )
+        draw_rect(
+            ax,
+            bx,
+            b_y + box_h - hdr_h,
+            b_w,
+            hdr_h,
             facecolor=c_sub if bfill == c_white else c_proc,
-            edgecolor=c_black, linewidth=0.85, zorder=3
+            edgecolor=c_black,
+            linewidth=0.85,
+            zorder=3,
         )
         ax.text(
             bx + b_w / 2,
@@ -293,7 +348,9 @@ def main():
     out_dir = Path("thesis/figures")
     out_dir.mkdir(parents=True, exist_ok=True)
     fig.savefig(out_dir / "fig1_1_intro_overview.pdf", bbox_inches="tight", pad_inches=0.04)
-    fig.savefig(out_dir / "fig1_1_intro_overview.png", dpi=300, bbox_inches="tight", pad_inches=0.04)
+    fig.savefig(
+        out_dir / "fig1_1_intro_overview.png", dpi=300, bbox_inches="tight", pad_inches=0.04
+    )
     plt.close(fig)
     print("Saved thesis/figures/fig1_1_intro_overview.{pdf,png}")
 

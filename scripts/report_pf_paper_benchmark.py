@@ -214,7 +214,7 @@ Thirty scheduled attempts per method; no replacements for failures.</p>
 Means include only complete ratings of ready tasks, not blocked or failed attempts.</p>
 <h2>What the judge rewarded</h2><table><tr><th>Method</th><th>Prior knowledge</th>
 <th>Difficulty fit</th><th>Engagement</th><th>Approach variety</th><th>Openness</th></tr>
-{''.join(dimensions)}</table>
+{"".join(dimensions)}</table>
 <p>Each dimension runs from 1 (low) to 3 (high). These are model judgments of the text,
 not observed student engagement or approaches.</p>
 <h2>Difference from direct generation without misconceptions</h2>

@@ -14,8 +14,15 @@ if str(ROOT) not in sys.path:
 from scripts import run_pf_grounding_study as study  # noqa: E402
 
 CATALOG_FIELDS = (
-    "task_id", "task", "learner_context", "learning_target",
-    "source_path", "source_sha256", "arm", "case_id", "repeat",
+    "task_id",
+    "task",
+    "learner_context",
+    "learning_target",
+    "source_path",
+    "source_sha256",
+    "arm",
+    "case_id",
+    "repeat",
 )
 EVALUATOR_FIELDS = ("task_id", "task", "learner_context", "learning_target")
 REPORTING_BOUNDARY = {
@@ -47,7 +54,8 @@ def catalog_record(output: Path, item: dict, cases: dict) -> dict:
         produced = study.task_produced(candidate)
         task = (
             {field: candidate[field] for field in ("title", "body", "question")}
-            if produced else None
+            if produced
+            else None
         )
         error = result.get("error")
         source_sha256 = study.digest(source)
@@ -55,9 +63,7 @@ def catalog_record(output: Path, item: dict, cases: dict) -> dict:
         status = "running" if directory.exists() else "not_run"
         task, produced, source_sha256 = None, False, None
         error = None
-    shared = study.read_json(
-        output / "inputs" / item["case_id"] / f"context_{item['arm']}.json"
-    )
+    shared = study.read_json(output / "inputs" / item["case_id"] / f"context_{item['arm']}.json")
     return {
         "task_id": item["task_id"],
         "task": task,
@@ -94,13 +100,14 @@ def export_catalog(output: Path) -> dict:
     manifest = study.read_json(manifest_path)
     study.verify_inputs(output, manifest)
     cases = {
-        case["id"]: case for case in
-        manifest["config"]["cases"] + manifest["config"]["calibration_cases"]
+        case["id"]: case
+        for case in manifest["config"]["cases"] + manifest["config"]["calibration_cases"]
     }
     by_phase = {
         phase: [
             catalog_record(output, item, cases)
-            for item in manifest["schedule"] if item["phase"] == phase
+            for item in manifest["schedule"]
+            if item["phase"] == phase
         ]
         for phase in ("main", "calibration")
     }
@@ -109,7 +116,8 @@ def export_catalog(output: Path) -> dict:
     study.save_json(output / "calibration_tasks.json", {"tasks": by_phase["calibration"]})
     evaluator = [
         {field: record[field] for field in EVALUATOR_FIELDS}
-        for record in by_phase["main"] if record["produced"]
+        for record in by_phase["main"]
+        if record["produced"]
     ]
     study.save_json(output / "evaluator_input.json", {"tasks": evaluator})
     source = Path(__file__).resolve()

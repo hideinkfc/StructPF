@@ -69,12 +69,14 @@ def report(output: Path) -> dict:
                 raise ValueError(f"Unexpected or repeated review: {source}")
             record = expected[source]
             task = (
-                record.get("task") if source.endswith("/direct")
+                record.get("task")
+                if source.endswith("/direct")
                 else record.get("stages", {}).get("D2_D3", {}).get("task")
             )
             text = (
                 {field: task.get(field) for field in ("title", "body", "question")}
-                if isinstance(task, dict) else None
+                if isinstance(task, dict)
+                else None
             )
             if packet[anonymous_id]["task"] != text:
                 raise ValueError(f"Task changed after anonymous review: {source}")
@@ -122,9 +124,9 @@ def report(output: Path) -> dict:
             "recorded_usage": dict(usage) if usage is not None else None,
         }
         for family in comparison.CASES:
-            families.setdefault(family, {})[method] = outcome_counts({
-                key: task for key, task in rows.items() if key.startswith(f"{family}/")
-            })
+            families.setdefault(family, {})[method] = outcome_counts(
+                {key: task for key, task in rows.items() if key.startswith(f"{family}/")}
+            )
     direct = methods["direct"]["supported_undisclosed_choice"]
     pipeline = methods["pipeline"]["supported_undisclosed_choice"]
     conclusion = (
@@ -135,7 +137,8 @@ def report(output: Path) -> dict:
         f"choices: direct {direct}, pipeline {pipeline}. "
         + (
             "The pipeline has a descriptive advantage on this count, not a general quality claim."
-            if pipeline > direct else "No general pipeline advantage is established."
+            if pipeline > direct
+            else "No general pipeline advantage is established."
         )
         + " Speed remains fixed calculation; consistency supports measure invention; "
         "fair division varies in feasibility and need for new reasoning. "

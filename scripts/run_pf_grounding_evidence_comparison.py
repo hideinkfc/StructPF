@@ -87,9 +87,10 @@ def validate_config(config: dict) -> None:
     ):
         raise ValueError("Invalid preconsumed request reserve")
     breakdown = config.get("preconsumed_request_breakdown", {})
-    if sum(
-        value for key, value in breakdown.items() if key != "source"
-    ) != config["preconsumed_request_reserve"]:
+    if (
+        sum(value for key, value in breakdown.items() if key != "source")
+        != config["preconsumed_request_reserve"]
+    ):
         raise ValueError("Preconsumed requests must sum to the frozen reserve")
     for key in ("local_text_budget", "lc_text_budget"):
         if not isinstance(config.get(key), int) or config[key] < 1:
@@ -100,9 +101,18 @@ def validate_config(config: dict) -> None:
         raise ValueError("Case identifiers must be unique and nonempty")
     for case in cases:
         for key in (
-            "topic", "target_concept", "task_family", "grade", "subject", "jurisdiction",
-            "teacher_recently_taught", "topic_role", "history_note", "local_query",
-            "lc_query", "learning_commons_snapshot",
+            "topic",
+            "target_concept",
+            "task_family",
+            "grade",
+            "subject",
+            "jurisdiction",
+            "teacher_recently_taught",
+            "topic_role",
+            "history_note",
+            "local_query",
+            "lc_query",
+            "learning_commons_snapshot",
         ):
             if not case.get(key):
                 raise ValueError(f"{case['id']} missing {key}")
@@ -119,7 +129,8 @@ def validate_config(config: dict) -> None:
 def max_calls_per_attempt() -> int:
     return (
         (1 + design_brief_stage.MAX_SELECTION_REVISIONS) * (stages.PROPOSAL_RETRY_MAX + 1)
-        + design_brief_stage.MAX_SELECTION_REVISIONS + 1
+        + design_brief_stage.MAX_SELECTION_REVISIONS
+        + 1
         + 2 * design_data_stage.MAX_CALLS
     )
 
@@ -127,7 +138,8 @@ def max_calls_per_attempt() -> int:
 def source_hashes(config_path: Path) -> dict[str, str]:
     hashes = diagnostic.compute_source_hashes()
     extra = [
-        config_path, Path(__file__),
+        config_path,
+        Path(__file__),
         ROOT / "tests/test_pf_grounding_evidence_comparison.py",
         ROOT / "scripts/retrieve_prior_knowledge.py",
         ROOT / "src/generation/retriever.py",
@@ -141,11 +153,13 @@ def source_hashes(config_path: Path) -> dict[str, str]:
         for case in read_json(config_path)["cases"] + read_json(config_path)["calibration_cases"]
     )
     prior_preflight = ROOT / "experiments/results/pf_grounding_study_20261013"
-    extra.extend([
-        ROOT / "experiments/configs/pf_grounding_study_20261013.json",
-        prior_preflight / "manifest.json",
-        *sorted((prior_preflight / "inputs").glob("*/learning_commons.json")),
-    ])
+    extra.extend(
+        [
+            ROOT / "experiments/configs/pf_grounding_study_20261013.json",
+            prior_preflight / "manifest.json",
+            *sorted((prior_preflight / "inputs").glob("*/learning_commons.json")),
+        ]
+    )
     for path in extra:
         if path.is_file():
             hashes[relative(path)] = digest(path)
@@ -169,26 +183,31 @@ def fixed_d1(case: dict) -> dict:
     return {
         "schema_version": "pf-fixed-learner-context/v1",
         "origin": "fixed_stipulated_context_not_generated_D1",
-        "records": [{
-            "case_id": case["id"],
-            # The D1 reader's schema tag is not an experimental arm label.
-            "condition": "grounded",
-            "result": {
-                "schema_version": "pf-fixed-learner-context/v1",
+        "records": [
+            {
+                "case_id": case["id"],
+                # The D1 reader's schema tag is not an experimental arm label.
                 "condition": "grounded",
-                "recommendations": [{
-                    "resource": resource,
-                    "taught_as": "Stipulated as recently taught in the frozen learner request.",
-                    "student_move": "",
-                    "falls_short_because": "",
-                    "evidence_ids": [],
-                    "provenance": {
-                        "type": "teacher",
-                        "source": "Study learner specification, not retrieved evidence",
-                    },
-                } for resource in case["teacher_recently_taught"]],
-            },
-        }],
+                "result": {
+                    "schema_version": "pf-fixed-learner-context/v1",
+                    "condition": "grounded",
+                    "recommendations": [
+                        {
+                            "resource": resource,
+                            "taught_as": "Stipulated as recently taught in the frozen learner request.",
+                            "student_move": "",
+                            "falls_short_because": "",
+                            "evidence_ids": [],
+                            "provenance": {
+                                "type": "teacher",
+                                "source": "Study learner specification, not retrieved evidence",
+                            },
+                        }
+                        for resource in case["teacher_recently_taught"]
+                    ],
+                },
+            }
+        ],
     }
 
 
@@ -200,15 +219,17 @@ def limited_records(records: list[dict], text_key: str, budget: int) -> list[dic
             break
         text = record[text_key]
         shown = text[:remaining]
-        limited.append({
-            **record,
-            text_key: shown,
-            "source_text_sha256": hashlib.sha256(text.encode()).hexdigest(),
-            "presented_text_sha256": hashlib.sha256(shown.encode()).hexdigest(),
-            "source_characters": len(text),
-            "presented_characters": len(shown),
-            "text_truncated": len(shown) != len(text),
-        })
+        limited.append(
+            {
+                **record,
+                text_key: shown,
+                "source_text_sha256": hashlib.sha256(text.encode()).hexdigest(),
+                "presented_text_sha256": hashlib.sha256(shown.encode()).hexdigest(),
+                "source_characters": len(text),
+                "presented_characters": len(shown),
+                "text_truncated": len(shown) != len(text),
+            }
+        )
         remaining -= len(shown)
     return limited
 
@@ -278,28 +299,31 @@ def learning_commons_retrieval(case: dict, config: dict) -> dict:
 
 
 def inventories(local: dict, context: dict, config: dict) -> dict:
-    local_records = [{
-        "source_id": record["chunk_id"],
-        "source_url": record["source_url"],
-        "document": record["doc_title"],
-        "jurisdiction": record["jurisdiction"],
-        "grades": record["grades"],
-        "page": record["page"],
-        "language": record["language"],
-        "text": record["text"],
-    } for record in local["records"]]
+    local_records = [
+        {
+            "source_id": record["chunk_id"],
+            "source_url": record["source_url"],
+            "document": record["doc_title"],
+            "jurisdiction": record["jurisdiction"],
+            "grades": record["grades"],
+            "page": record["page"],
+            "language": record["language"],
+            "text": record["text"],
+        }
+        for record in local["records"]
+    ]
     local_records = limited_records(local_records, "text", config["local_text_budget"])
     lc.selected_references(context)
-    selected_ids = {
-        context["source_label_to_id"][label] for label in context["selected_sources"]
-    }
-    lc_records = [{
-        **record,
-        "source_id": record["caseIdentifierUUID"],
-        "source_url": (
-            f"{lc.BASE_URL}/academic-standards/{record['caseIdentifierUUID']}"
-        ),
-    } for record in context["response"] if record["caseIdentifierUUID"] in selected_ids]
+    selected_ids = {context["source_label_to_id"][label] for label in context["selected_sources"]}
+    lc_records = [
+        {
+            **record,
+            "source_id": record["caseIdentifierUUID"],
+            "source_url": (f"{lc.BASE_URL}/academic-standards/{record['caseIdentifierUUID']}"),
+        }
+        for record in context["response"]
+        if record["caseIdentifierUUID"] in selected_ids
+    ]
     lc_records = limited_records(lc_records, "description", config["lc_text_budget"])
     return {
         arm: {
@@ -341,11 +365,13 @@ def topic_history() -> list[dict]:
     def walk(value, source):
         if isinstance(value, dict):
             if isinstance(value.get("topic"), str):
-                rows.append({
-                    "source": source,
-                    "id": value.get("id", value.get("case_id")),
-                    "topic": value["topic"],
-                })
+                rows.append(
+                    {
+                        "source": source,
+                        "id": value.get("id", value.get("case_id")),
+                        "topic": value["topic"],
+                    }
+                )
             for child in value.values():
                 walk(child, source)
         elif isinstance(value, list):
@@ -367,7 +393,9 @@ def schedule(config: dict) -> list[dict]:
     ):
         block = [
             {"phase": phase, "case_id": case["id"], "repeat": number, "arm": arm}
-            for case in cases for number in range(1, repeats + 1) for arm in ARMS
+            for case in cases
+            for number in range(1, repeats + 1)
+            for arm in ARMS
         ]
         rng.shuffle(block)
         for index, item in enumerate(block, 1):
@@ -498,12 +526,14 @@ def prepare(config_path: Path, output: Path) -> dict:
             case["id"]: {
                 arm: {
                     "local_characters": sum(
-                        len(record["text"]) for record in read_json(
+                        len(record["text"])
+                        for record in read_json(
                             output / "inputs" / case["id"] / f"context_{arm}.json"
                         )[INVENTORY_KEY]["local_curriculum"]
                     ),
                     "lc_characters": sum(
-                        len(record["description"]) for record in read_json(
+                        len(record["description"])
+                        for record in read_json(
                             output / "inputs" / case["id"] / f"context_{arm}.json"
                         )[INVENTORY_KEY]["learning_commons_standard_descriptions"]
                     ),
@@ -526,15 +556,12 @@ def effective_settings(model: str, requested: dict) -> dict:
     if model.startswith(("gpt-5", "gpt-6", "o1", "o3")):
         limit = requested.get("max_completion_tokens", requested.get("max_tokens"))
         return {} if limit is None else {"max_completion_tokens": limit}
-    return {
-        key: requested[key]
-        for key in ("temperature", "max_tokens")
-        if key in requested
-    }
+    return {key: requested[key] for key in ("temperature", "max_tokens") if key in requested}
 
 
-def gpt6_chat_json(client, model: str, system: str, user: str,
-                   temperature: float, max_tokens: int) -> tuple[dict | None, str]:
+def gpt6_chat_json(
+    client, model: str, system: str, user: str, temperature: float, max_tokens: int
+) -> tuple[dict | None, str]:
     if model != STUDY_MODEL_ID:
         raise ValueError(f"Unexpected model for this study: {model}")
     response = client.chat.completions.create(
@@ -554,7 +581,7 @@ def gpt6_chat_json(client, model: str, system: str, user: str,
         start, end = text.find("{"), text.rfind("}")
         if 0 <= start < end:
             try:
-                payload = json.loads(text[start:end + 1])
+                payload = json.loads(text[start : end + 1])
             except json.JSONDecodeError:
                 payload = None
         else:
@@ -591,26 +618,38 @@ class ObservedClient:
             self.counter.value += 1
             self.attempt_calls += 1
             request_number = self.counter.value
-        self.emit({
-            "event": "request_started", "request_number": request_number,
-            "attempt_request_number": self.attempt_calls, "at_utc": diagnostic._now(),
-            "model_requested": kwargs["model"],
-        })
+        self.emit(
+            {
+                "event": "request_started",
+                "request_number": request_number,
+                "attempt_request_number": self.attempt_calls,
+                "at_utc": diagnostic._now(),
+                "model_requested": kwargs["model"],
+            }
+        )
         try:
             response = self.client.chat.completions.create(**kwargs)
         except Exception as exc:
-            self.emit({
-                "event": "request_finished", "request_number": request_number,
-                "at_utc": diagnostic._now(), "error_type": type(exc).__name__,
-            })
+            self.emit(
+                {
+                    "event": "request_finished",
+                    "request_number": request_number,
+                    "at_utc": diagnostic._now(),
+                    "error_type": type(exc).__name__,
+                }
+            )
             raise
-        self.emit({
-            "event": "request_finished", "request_number": request_number,
-            "at_utc": diagnostic._now(), "response_id": response.id,
-            "model_returned": response.model,
-            "usage": response.usage.model_dump(mode="json") if response.usage else None,
-            "finish_reasons": [choice.finish_reason for choice in response.choices],
-        })
+        self.emit(
+            {
+                "event": "request_finished",
+                "request_number": request_number,
+                "at_utc": diagnostic._now(),
+                "response_id": response.id,
+                "model_returned": response.model,
+                "usage": response.usage.model_dump(mode="json") if response.usage else None,
+                "finish_reasons": [choice.finish_reason for choice in response.choices],
+            }
+        )
         return response
 
 
@@ -631,7 +670,8 @@ def complete_receipt(directory: Path) -> dict:
         "status": result["status"],
         "hashes": {
             str(path.relative_to(directory)): digest(path)
-            for path in files if path.name != "completed.json"
+            for path in files
+            if path.name != "completed.json"
         },
     }
     save_json(directory / "completed.json", receipt)
@@ -647,7 +687,8 @@ def existing_result(directory: Path) -> dict | None:
     receipt = read_json(receipt_path)
     actual = {
         str(path.relative_to(directory)): digest(path)
-        for path in directory.rglob("*") if path.is_file() and path != receipt_path
+        for path in directory.rglob("*")
+        if path.is_file() and path != receipt_path
     }
     if actual != receipt["hashes"]:
         raise ValueError(f"Completed immutable attempt was changed: {directory}")
@@ -669,8 +710,12 @@ def attempt_worker(output_str: str, item: dict, counter, lock, cap: int) -> dict
     def observed_load(which):
         client, _ = load_client(which)
         return ObservedClient(
-            client.with_options(max_retries=0), directory / "request_usage.jsonl",
-            counter, lock, cap, max_calls_per_attempt(),
+            client.with_options(max_retries=0),
+            directory / "request_usage.jsonl",
+            counter,
+            lock,
+            cap,
+            max_calls_per_attempt(),
         ), config["model_id"]
 
     diagnostic.load_client = observed_load
@@ -678,7 +723,10 @@ def attempt_worker(output_str: str, item: dict, counter, lock, cap: int) -> dict
     stages.chat_json = gpt6_chat_json
     try:
         result = diagnostic.run_case_worker(
-            item["case_id"], str(directory), "luna", 1,
+            item["case_id"],
+            str(directory),
+            "luna",
+            1,
             reused_d1_path_str=str(inputs / "fixed_d1.json"),
             case_override=read_json(inputs / "case.json"),
             shared_context=read_json(inputs / f"context_{item['arm']}.json"),
@@ -702,9 +750,11 @@ def wiring_check(output: Path, manifest: dict, item: dict) -> dict:
     inputs = output / "inputs" / item["case_id"]
     expected = read_json(inputs / f"context_{item['arm']}.json")
     trace = directory / "model_calls.jsonl"
-    records = [
-        json.loads(line) for line in trace.read_text().splitlines() if line.strip()
-    ] if trace.is_file() else []
+    records = (
+        [json.loads(line) for line in trace.read_text().splitlines() if line.strip()]
+        if trace.is_file()
+        else []
+    )
     starts = [record for record in records if record["event"] == "model_call_started"]
     parsed_contexts = []
     for record in starts:
@@ -712,10 +762,7 @@ def wiring_check(output: Path, manifest: dict, item: dict) -> dict:
         if len(suffix) != 2:
             raise ValueError("Missing or duplicated shared evidence wrapper")
         parsed_contexts.append(json.loads(suffix[1]))
-    arm_contexts = {
-        arm: read_json(inputs / f"context_{arm}.json")
-        for arm in ARMS
-    }
+    arm_contexts = {arm: read_json(inputs / f"context_{arm}.json") for arm in ARMS}
     inventories_by_arm = {
         arm: context.get(INVENTORY_KEY, {}) for arm, context in arm_contexts.items()
     }
@@ -727,12 +774,9 @@ def wiring_check(output: Path, manifest: dict, item: dict) -> dict:
         inventory["learning_commons_standard_descriptions"] = []
         return normalized
 
-    normalized_contexts = [
-        without_evidence_arrays(context) for context in arm_contexts.values()
-    ]
+    normalized_contexts = [without_evidence_arrays(context) for context in arm_contexts.values()]
     common_inventory_wrapper = {
-        inventory.get("instruction")
-        for inventory in inventories_by_arm.values()
+        inventory.get("instruction") for inventory in inventories_by_arm.values()
     }
     isolated_arrays = (
         inventories_by_arm["A"].get("local_curriculum") == []
@@ -747,9 +791,7 @@ def wiring_check(output: Path, manifest: dict, item: dict) -> dict:
     same_d1 = packet is not None and packet["records"] == frozen_packet["records"]
     task = result.get("stages", {}).get("D2_D3", {}).get("task")
     usable = task_produced(task)
-    transport_errors = [
-        record for record in usage_records(directory) if record.get("error_type")
-    ]
+    transport_errors = [record for record in usage_records(directory) if record.get("error_type")]
     check = {
         "task_id": item["task_id"],
         "terminal_status": result["status"],
@@ -769,41 +811,43 @@ def wiring_check(output: Path, manifest: dict, item: dict) -> dict:
         "quality_findings_not_used_for_gate": True,
     }
     check["passed"] = (
-        check["shared_context_exact_in_all_requests"] and same_d1
+        check["shared_context_exact_in_all_requests"]
+        and same_d1
         and check["common_context_equal_across_arms"]
-        and check["common_inventory_instruction_equal"] and isolated_arrays
-        and check["case_request_unchanged"] and usable and not transport_errors
+        and check["common_inventory_instruction_equal"]
+        and isolated_arrays
+        and check["case_request_unchanged"]
+        and usable
+        and not transport_errors
     )
     return check
 
 
 def task_produced(task) -> bool:
     return (
-        isinstance(task, dict) and task.get("status") == "ready"
-        and all(isinstance(task.get(key), str) and task[key].strip()
-                for key in ("title", "body", "question"))
+        isinstance(task, dict)
+        and task.get("status") == "ready"
+        and all(
+            isinstance(task.get(key), str) and task[key].strip()
+            for key in ("title", "body", "question")
+        )
     )
 
 
 def export(output: Path) -> dict:
     manifest = read_json(output / "manifest.json")
     cases = {
-        case["id"]: case for case in
-        manifest["config"]["cases"] + manifest["config"]["calibration_cases"]
+        case["id"]: case
+        for case in manifest["config"]["cases"] + manifest["config"]["calibration_cases"]
     }
     tasks, calibration_tasks, attempts, sections = [], [], [], []
     totals = Counter()
     statuses = {phase: Counter() for phase in ("calibration", "main")}
     arm_totals = {arm: Counter() for arm in ARMS}
-    topic_arm_totals = {
-        case_id: {arm: Counter() for arm in ARMS}
-        for case_id in cases
-    }
+    topic_arm_totals = {case_id: {arm: Counter() for arm in ARMS} for case_id in cases}
     for item in manifest["schedule"]:
         directory = output / item["attempt_path"]
-        result = (
-            existing_result(directory) if (directory / "completed.json").is_file() else None
-        )
+        result = existing_result(directory) if (directory / "completed.json").is_file() else None
         task = result.get("stages", {}).get("D2_D3", {}).get("task") if result else None
         produced = task_produced(task)
         status = result["status"] if result else "running" if directory.exists() else "not_run"
@@ -829,7 +873,9 @@ def export(output: Path) -> dict:
             topic_arm_totals[item["case_id"]][item["arm"]]["not_ready"] += not produced
             topic_arm_totals[item["case_id"]][item["arm"]]["generation_requests"] += started
         attempt = {
-            **item, "status": status, "produced": produced,
+            **item,
+            "status": status,
+            "produced": produced,
             "error": result.get("error") if result else None,
             "generation_requests": started,
             "diagnostic_call_count": result.get("model_call_count") if result else None,
@@ -858,20 +904,24 @@ def export(output: Path) -> dict:
             f"<h3>{html.escape(task['title'])}</h3>"
             f"<div class='prose'>{html.escape(task['body'])}</div>"
             f"<div class='question'>{html.escape(task['question'])}</div>"
-            if produced else f"<p>No usable student task. {html.escape(str(attempt['error']))}</p>"
+            if produced
+            else f"<p>No usable student task. {html.escape(str(attempt['error']))}</p>"
         )
-        sections.append((
-            (item["phase"], item["case_id"], item["repeat"], item["arm"]),
-            f"<section><h2>{html.escape(item['case_id'])} / repeat {item['repeat']} / "
-            f"arm {item['arm']}</h2><p>{item['phase']} - {status} - "
-            f"{started} generation requests - {item['task_id']}</p>{body}</section>",
-        ))
+        sections.append(
+            (
+                (item["phase"], item["case_id"], item["repeat"], item["arm"]),
+                f"<section><h2>{html.escape(item['case_id'])} / repeat {item['repeat']} / "
+                f"arm {item['arm']}</h2><p>{item['phase']} - {status} - "
+                f"{started} generation requests - {item['task_id']}</p>{body}</section>",
+            )
+        )
     save_json(output / "all_tasks.json", tasks)
     save_json(output / "calibration_tasks.json", calibration_tasks)
     evaluator_fields = ("task_id", "student_task", "learner_context", "learning_target")
-    save_json(output / "evaluator_input.json", [
-        {key: record[key] for key in evaluator_fields} for record in tasks
-    ])
+    save_json(
+        output / "evaluator_input.json",
+        [{key: record[key] for key in evaluator_fields} for record in tasks],
+    )
     save_json(output / "all_attempts.json", attempts)
     summary = {
         "updated_at_utc": diagnostic._now(),
@@ -900,8 +950,10 @@ def export(output: Path) -> dict:
             <= manifest["config"]["request_cap"]
         ),
         "source_integrity_unchanged": (
-            all(digest(ROOT / path) == expected
-                for path, expected in manifest["source_hashes"].items())
+            all(
+                digest(ROOT / path) == expected
+                for path, expected in manifest["source_hashes"].items()
+            )
         ),
         "outcome_boundary": (
             "Produced means usable task text, not mathematical or educational validation. "
@@ -922,7 +974,8 @@ def export(output: Path) -> dict:
         "B: local curriculum/reference evidence only; C: Learning Commons reference evidence "
         "only. Calibration is separate. "
         "Produced is not validated, and no learner experiment was run.</p>"
-        + "".join(section for _, section in sorted(sections)) + "</html>"
+        + "".join(section for _, section in sorted(sections))
+        + "</html>"
     )
     (output / "tasks.html").write_text(page, encoding="utf-8")
     return summary
@@ -931,9 +984,9 @@ def export(output: Path) -> dict:
 def run_phase(output: Path, manifest: dict, phase: str, workers: int) -> None:
     verify_inputs(output, manifest)
     pending = [
-        item for item in manifest["schedule"]
-        if item["phase"] == phase
-        and existing_result(output / item["attempt_path"]) is None
+        item
+        for item in manifest["schedule"]
+        if item["phase"] == phase and existing_result(output / item["attempt_path"]) is None
     ]
     used = manifest["config"]["preconsumed_request_reserve"] + sum(
         record["event"] == "request_started"
@@ -945,7 +998,11 @@ def run_phase(output: Path, manifest: dict, phase: str, workers: int) -> None:
         with concurrent.futures.ProcessPoolExecutor(max_workers=workers) as executor:
             futures = {
                 executor.submit(
-                    attempt_worker, str(output.resolve()), item, counter, lock,
+                    attempt_worker,
+                    str(output.resolve()),
+                    item,
+                    counter,
+                    lock,
                     manifest["config"]["request_cap"],
                 ): item
                 for item in pending
@@ -970,7 +1027,8 @@ def run(output: Path, workers: int, phase: str = "all") -> dict:
         run_phase(output, manifest, "calibration", workers)
     checks = [
         wiring_check(output, manifest, item)
-        for item in manifest["schedule"] if item["phase"] == "calibration"
+        for item in manifest["schedule"]
+        if item["phase"] == "calibration"
     ]
     gate = {
         "checked_at_utc": diagnostic._now(),

@@ -324,9 +324,7 @@ CASE_SPECS: list[dict[str, Any]] = [
             "weighted average of speeds",
         ],
         "bridge_rubric_anchor": {
-            "s_prior_summary": (
-                "Understand simple unit rate a/b for a single ratio (6.RP.A.2)."
-            ),
+            "s_prior_summary": ("Understand simple unit rate a/b for a single ratio (6.RP.A.2)."),
             "s_target_summary": (
                 "Compute unit rates across fractional or composite quantities (7.RP.A.1)."
             ),
@@ -528,8 +526,7 @@ CASE_SPECS: list[dict[str, Any]] = [
                 "includes no chance mechanism."
             ),
             "score_1_loose_match": (
-                "Observed frequencies in the small sample already match the theoretical "
-                "ranking."
+                "Observed frequencies in the small sample already match the theoretical ranking."
             ),
             "score_2_exact_bridge": (
                 "Students can compute observed relative frequencies (7.SP.C.6) or count "
@@ -648,8 +645,7 @@ CASE_SPECS: list[dict[str, Any]] = [
                 "imposes a single linear constraint."
             ),
             "score_1_loose_match": (
-                "One constraint alone determines the answer without needing the second "
-                "constraint."
+                "One constraint alone determines the answer without needing the second constraint."
             ),
             "score_2_exact_bridge": (
                 "Students can satisfy the first constraint using 7.EE.B.4.a or trial "
@@ -841,8 +837,7 @@ CASE_SPECS: list[dict[str, Any]] = [
                 "multiplicative comparison (4.OA.A.1, 4.OA.A.2)."
             ),
             "s_target_summary": (
-                "Interpret non-integer quotients a / b as exact fractional shares a/b "
-                "(5.NF.B.3)."
+                "Interpret non-integer quotients a / b as exact fractional shares a/b (5.NF.B.3)."
             ),
             "score_0_boundary_miss": (
                 "D1/D3 states the a/b = a divided by b rule directly, or uses dividends "
@@ -929,8 +924,7 @@ CASE_SPECS: list[dict[str, Any]] = [
                 "whole-number edge lengths."
             ),
             "score_1_loose_match": (
-                "Comparing a single edge or whole-number unit cubes already settles the "
-                "question."
+                "Comparing a single edge or whole-number unit cubes already settles the question."
             ),
             "score_2_exact_bridge": (
                 "Students can apply whole-number prism volume (5.MD.C.5), hit a discrepancy "
@@ -1023,8 +1017,7 @@ CASE_SPECS: list[dict[str, Any]] = [
         "subject": "mathematics",
         "domain": "Statistics and Probability",
         "topic": (
-            "using a linear model for bivariate measurement data to interpret "
-            "slope and intercept"
+            "using a linear model for bivariate measurement data to interpret slope and intercept"
         ),
         "target_concept": (
             "Using a linear model to solve problems in the context of bivariate "
@@ -1064,8 +1057,7 @@ CASE_SPECS: list[dict[str, Any]] = [
         "subject": "mathematics",
         "domain": "Functions - Interpreting Functions",
         "topic": (
-            "calculating and interpreting the average rate of change of a "
-            "function over an interval"
+            "calculating and interpreting the average rate of change of a function over an interval"
         ),
         "target_concept": (
             "Calculating and interpreting the average rate of change of a function "
@@ -1399,15 +1391,13 @@ def build_dataset(
     sorted_edges = [kept_edges[k] for k in sorted(kept_edges)]
     (slice_dir / "nodes.jsonl").write_text(
         "".join(
-            json.dumps(n, ensure_ascii=False, separators=(",", ":")) + "\n"
-            for n in sorted_nodes
+            json.dumps(n, ensure_ascii=False, separators=(",", ":")) + "\n" for n in sorted_nodes
         ),
         encoding="utf-8",
     )
     (slice_dir / "relationships.jsonl").write_text(
         "".join(
-            json.dumps(e, ensure_ascii=False, separators=(",", ":")) + "\n"
-            for e in sorted_edges
+            json.dumps(e, ensure_ascii=False, separators=(",", ":")) + "\n" for e in sorted_edges
         ),
         encoding="utf-8",
     )

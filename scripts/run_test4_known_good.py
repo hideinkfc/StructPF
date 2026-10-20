@@ -102,8 +102,7 @@ def summarize_model(
     matrices = {}
     for question_id, question_rows in sorted(by_question.items()):
         pairs = [
-            (row["profile_id"], row["selected_option"] or "UNPARSEABLE")
-            for row in question_rows
+            (row["profile_id"], row["selected_option"] or "UNPARSEABLE") for row in question_rows
         ]
         nmi = normalized_mutual_information(pairs)
         question_scores.append(nmi) if nmi is not None else None
@@ -150,9 +149,7 @@ def summarize_model(
         )
         if rows
         else None,
-        "answer_rule_following_rate": round(len(answer_matches) / len(rows), 3)
-        if rows
-        else None,
+        "answer_rule_following_rate": round(len(answer_matches) / len(rows), 3) if rows else None,
         "target_option_recovery": (
             round(target_recovery, 3) if target_recovery is not None else None
         ),
@@ -165,9 +162,7 @@ def summarize_model(
         if target_recovery is not None and target_recovery >= 0.60
         else "stop",
         "wall_seconds": round(wall_seconds, 3),
-        "effective_calls_per_second": round(len(rows) / wall_seconds, 3)
-        if wall_seconds
-        else None,
+        "effective_calls_per_second": round(len(rows) / wall_seconds, 3) if wall_seconds else None,
         "mean_latency_seconds": round(
             sum(row["elapsed_seconds"] for row in successful) / len(successful),
             3,
@@ -201,8 +196,7 @@ def main() -> None:
     tasks = load_tasks()
     model_names = {label: models[label] for label in args.models}
     clients = {
-        label: OpenAI(base_url=base_url, api_key=api_key, max_retries=0)
-        for label in args.models
+        label: OpenAI(base_url=base_url, api_key=api_key, max_retries=0) for label in args.models
     }
     scheduled = [
         (label, task, repeat)

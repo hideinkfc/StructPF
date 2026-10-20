@@ -21,7 +21,9 @@ from scripts.run_basic_glm_correctness_pilot import (  # noqa: E402
     plausibility_prompt,
 )
 
-OUTPUT_PATH = PROJECT_ROOT / "experiments" / "results" / "phase1_mcq" / "saved_pilot_plausibility_judges.json"
+OUTPUT_PATH = (
+    PROJECT_ROOT / "experiments" / "results" / "phase1_mcq" / "saved_pilot_plausibility_judges.json"
+)
 GLM_JUDGE_MODEL = "zai-org/GLM-4.7-Flash"
 JUDGES = {
     "gpt41mini": JUDGE_MODEL,
@@ -50,7 +52,9 @@ def write_payload(payload: dict[str, Any]) -> None:
     OUTPUT_PATH.write_text(json.dumps(payload, indent=2))
 
 
-def judge_one(task: tuple[str, str, dict[str, Any], int, dict[str, Any]], client: Any) -> dict[str, Any]:
+def judge_one(
+    task: tuple[str, str, dict[str, Any], int, dict[str, Any]], client: Any
+) -> dict[str, Any]:
     judge_name, model, record, distractor_index, distractor = task
     try:
         result, cache_hit = cached_judge_json(
@@ -108,10 +112,14 @@ def summarize(rows: list[dict[str, Any]], judge_name: str) -> dict[str, Any]:
         "judge": judge_name,
         "model": JUDGES[judge_name],
         "distractors_judged": len(scores),
-        "valid_score_rate": round(len(scores) / sum(row["judge"] == judge_name for row in rows), 3) if rows else None,
+        "valid_score_rate": round(len(scores) / sum(row["judge"] == judge_name for row in rows), 3)
+        if rows
+        else None,
         "mean_score": round(mean(scores), 3) if scores else None,
         "median_score": median(scores) if scores else None,
-        "screen_rate_score_at_least_1": round(sum(score >= 1 for score in scores) / len(scores), 3) if scores else None,
+        "screen_rate_score_at_least_1": round(sum(score >= 1 for score in scores) / len(scores), 3)
+        if scores
+        else None,
         "score_counts": {str(score): scores.count(score) for score in (0, 1, 2)},
     }
 
@@ -121,18 +129,30 @@ def compare_judges(rows: list[dict[str, Any]]) -> dict[str, Any]:
     for row in rows:
         key = (row["question_id"], row["distractor_index"])
         paired.setdefault(key, {})[row["judge"]] = row["score"]
-    pairs = [pair for pair in paired.values() if pair.get("gpt41mini") is not None and pair.get("glm") is not None]
+    pairs = [
+        pair
+        for pair in paired.values()
+        if pair.get("gpt41mini") is not None and pair.get("glm") is not None
+    ]
     valid_by_judge = {
         judge_name: sum(row["judge"] == judge_name and row["score"] is not None for row in rows)
         for judge_name in JUDGES
     }
     total_by_judge = {
-        judge_name: sum(row["judge"] == judge_name for row in rows)
-        for judge_name in JUDGES
+        judge_name: sum(row["judge"] == judge_name for row in rows) for judge_name in JUDGES
     }
-    complete = all(valid_by_judge[judge_name] == total_by_judge[judge_name] for judge_name in JUDGES)
+    complete = all(
+        valid_by_judge[judge_name] == total_by_judge[judge_name] for judge_name in JUDGES
+    )
     if not pairs:
-        return {"paired_distractors": 0, "complete_judgments": complete, "comparison_status": "inconclusive", "exact_score_agreement": None, "screen_agreement": None, "mean_absolute_score_difference": None}
+        return {
+            "paired_distractors": 0,
+            "complete_judgments": complete,
+            "comparison_status": "inconclusive",
+            "exact_score_agreement": None,
+            "screen_agreement": None,
+            "mean_absolute_score_difference": None,
+        }
     exact = sum(pair["gpt41mini"] == pair["glm"] for pair in pairs)
     screen = sum((pair["gpt41mini"] >= 1) == (pair["glm"] >= 1) for pair in pairs)
     distance = mean(abs(pair["gpt41mini"] - pair["glm"]) for pair in pairs)
@@ -158,7 +178,9 @@ def main() -> None:
         "source": str(RESULTS_PATH.relative_to(PROJECT_ROOT)),
         "questions_seen": len(records),
         "questions_with_distractors": len(available_questions),
-        "questions_without_distractors": [record["question_id"] for record in records if not record.get("distractors")],
+        "questions_without_distractors": [
+            record["question_id"] for record in records if not record.get("distractors")
+        ],
         "available_distractors": available_distractors,
         "judges": JUDGES,
     }

@@ -44,7 +44,8 @@ def feedback_text(config: dict, spec: dict, arm: str, coverage: dict) -> str:
     if arm == "coverage_feedback":
         # Case identifiers in a retrospective audit are metadata, never learner input.
         matches = [
-            task for task in coverage["tasks"].values()
+            task
+            for task in coverage["tasks"].values()
             if f"{spec['family']}/{spec['number']}/pipeline/result.json" in task["source"]
         ]
         if len(matches) != 1:
@@ -53,17 +54,25 @@ def feedback_text(config: dict, spec: dict, arm: str, coverage: dict) -> str:
         value["coverage_instruction"] = config["coverage_instruction"]
         value["path_diagnosis"] = {
             "denominator": audit["denominator"],
-            "paths": [{
-                "design_quote": path["design_quote"],
-                "kind": path["kind"],
-                "operational_definition": path["operational_definition"],
-                "reached_count": path["reached_count"],
-                "not_observed_count": path["not_observed_count"],
-                "unknown_count": path["unknown_count"],
-                "observations": [{
-                    "status": row["status"], "evidence": row["evidence"], "reason": row["reasons"],
-                } for row in path["attempts"].values()],
-            } for path in audit["paths"]],
+            "paths": [
+                {
+                    "design_quote": path["design_quote"],
+                    "kind": path["kind"],
+                    "operational_definition": path["operational_definition"],
+                    "reached_count": path["reached_count"],
+                    "not_observed_count": path["not_observed_count"],
+                    "unknown_count": path["unknown_count"],
+                    "observations": [
+                        {
+                            "status": row["status"],
+                            "evidence": row["evidence"],
+                            "reason": row["reasons"],
+                        }
+                        for row in path["attempts"].values()
+                    ],
+                }
+                for path in audit["paths"]
+            ],
             "diagnosis": audit["diagnosis"],
         }
     return json.dumps(value, ensure_ascii=False, indent=2)
@@ -99,8 +108,11 @@ def run(output: Path, phase: str) -> dict:
         if prior["status"] != "completed" or prior["source_hashes"] != hashes:
             raise ValueError("Source/protocol must remain frozen after calibration")
     manifest = {
-        "status": "running", "protocol": config, "source_hashes": hashes,
-        "schedule": [{"id": spec["id"], "arm": arm} for spec, arm in schedule], "results": [],
+        "status": "running",
+        "protocol": config,
+        "source_hashes": hashes,
+        "schedule": [{"id": spec["id"], "arm": arm} for spec, arm in schedule],
+        "results": [],
     }
     benchmark._write_json(directory / "manifest.json", manifest)
     for spec, arm in schedule:
@@ -108,23 +120,36 @@ def run(output: Path, phase: str) -> dict:
         source_d1 = ROOT / config["source_root"] / spec["family"] / "fixed_d1.json"
         feedback = feedback_text(config, spec, arm, coverage)
         attempt_dir = directory / spec["id"] / arm
-        benchmark._write_json(attempt_dir.parent / f"{arm}_input.json", {
-            "design_feedback": feedback, "case": original["case"],
-            "shared_context": original["shared_context"],
-            "source_d1": str(source_d1.relative_to(ROOT)),
-        })
+        benchmark._write_json(
+            attempt_dir.parent / f"{arm}_input.json",
+            {
+                "design_feedback": feedback,
+                "case": original["case"],
+                "shared_context": original["shared_context"],
+                "source_d1": str(source_d1.relative_to(ROOT)),
+            },
+        )
         result = diagnostic.run_case_worker(
-            original["case"]["id"], str(attempt_dir), config["generation"]["model"],
-            1, str(source_d1), case_override=original["case"],
-            shared_context=original["shared_context"], design_feedback=feedback,
+            original["case"]["id"],
+            str(attempt_dir),
+            config["generation"]["model"],
+            1,
+            str(source_d1),
+            case_override=original["case"],
+            shared_context=original["shared_context"],
+            design_feedback=feedback,
         )
         if result["model_call_count"] > config["generation"]["per_attempt_max_calls"]:
             raise ValueError("Pipeline exceeded its derived bounded stage-request count")
-        manifest["results"].append({
-            "id": spec["id"], "arm": arm, "status": result["status"],
-            "model_calls": result["model_call_count"],
-            "result_path": str((attempt_dir / "result.json").relative_to(directory)),
-        })
+        manifest["results"].append(
+            {
+                "id": spec["id"],
+                "arm": arm,
+                "status": result["status"],
+                "model_calls": result["model_call_count"],
+                "result_path": str((attempt_dir / "result.json").relative_to(directory)),
+            }
+        )
         benchmark._write_json(directory / "manifest.json", manifest)
         print(phase, spec["id"], arm, result["status"], result["model_call_count"], flush=True)
     manifest["status"] = "completed"
@@ -145,8 +170,10 @@ def prepare_evaluation(output: Path) -> dict:
         manifest, original, brief = source_input(config, spec)
         benchmark._write_json(variants / spec["family"] / "manifest.json", manifest)
         for arm in config["arms"]:
-            record = original if arm == "original" else json.loads(
-                (output / "fresh" / spec["id"] / arm / "result.json").read_text()
+            record = (
+                original
+                if arm == "original"
+                else json.loads((output / "fresh" / spec["id"] / arm / "result.json").read_text())
             )
             stage = record.get("stages", {}).get("D2_D3", {})
             task = stage.get("task")
@@ -158,12 +185,21 @@ def prepare_evaluation(output: Path) -> dict:
                 tasks.append({"id": identifier, "family": spec["family"], "path": path})
             else:
                 unavailable.append(identifier)
-            entries.append((identifier, {
-                "student_task": ({field: task[field] for field in ("title", "body", "question")}
-                                 if isinstance(task, dict) else None),
-                "target": manifest["case"]["target_concept"],
-                "learner_context": manifest["shared_context"]["learner_context"],
-            }, design))
+            entries.append(
+                (
+                    identifier,
+                    {
+                        "student_task": (
+                            {field: task[field] for field in ("title", "body", "question")}
+                            if isinstance(task, dict)
+                            else None
+                        ),
+                        "target": manifest["case"]["target_concept"],
+                        "learner_context": manifest["shared_context"]["learner_context"],
+                    },
+                    design,
+                )
+            )
     random.Random(config["seed"]).shuffle(entries)
     for index, (identifier, value, design) in enumerate(entries, 1):
         label = f"task_{index:02d}"
@@ -172,7 +208,7 @@ def prepare_evaluation(output: Path) -> dict:
             **value,
             "design_brief": design,
             "path_freeze_rule": "Define exact mathematical actions before opening attempts. "
-                                "Do not count diagram/ratio displays as different algorithms.",
+            "Do not count diagram/ratio displays as different algorithms.",
         }
         keys[label] = identifier
     benchmark._write_json(output / "task_review_packet.json", review)
@@ -181,13 +217,25 @@ def prepare_evaluation(output: Path) -> dict:
     evaluation = config["evaluation"]
     probe = {
         "schema_version": "pf-student-probe/v1",
-        "question": config["question"], "task_root": str(variants.relative_to(ROOT)),
-        "tasks": tasks, "models": evaluation["models"], "profiles": evaluation["profiles"],
-        "repeats": 2, "workers": 4, "seed": config["seed"],
-        "settings": {"temperature": 0.7, "max_tokens": 2400, "timeout_seconds": 180,
-                     "sdk_retries": 0},
-        "budget": {"calibration_calls": 12, "fresh_calls": len(tasks) * 18,
-                   "max_calls_total": 12 + len(tasks) * 18},
+        "question": config["question"],
+        "task_root": str(variants.relative_to(ROOT)),
+        "tasks": tasks,
+        "models": evaluation["models"],
+        "profiles": evaluation["profiles"],
+        "repeats": 2,
+        "workers": 4,
+        "seed": config["seed"],
+        "settings": {
+            "temperature": 0.7,
+            "max_tokens": 2400,
+            "timeout_seconds": 180,
+            "sdk_retries": 0,
+        },
+        "budget": {
+            "calibration_calls": 12,
+            "fresh_calls": len(tasks) * 18,
+            "max_calls_total": 12 + len(tasks) * 18,
+        },
         "limitations": config["limits"],
     }
     benchmark._write_json(output / "evaluation_config.json", probe)
@@ -220,22 +268,27 @@ def freeze_codebook(output: Path) -> dict:
         "sha256": hashlib.sha256(codebook_path.read_bytes()).hexdigest(),
     }
     benchmark._write_json(config_path, config)
-    benchmark._write_json(output / "codebook_freeze.json", {
-        "phase": "before_student_requests",
-        "codebook": config["path_codebook"],
-        "design_packet_sha256": hashlib.sha256(
-            (output / "design_codebook_packet.json").read_bytes()
-        ).hexdigest(),
-    })
+    benchmark._write_json(
+        output / "codebook_freeze.json",
+        {
+            "phase": "before_student_requests",
+            "codebook": config["path_codebook"],
+            "design_packet_sha256": hashlib.sha256(
+                (output / "design_codebook_packet.json").read_bytes()
+            ).hexdigest(),
+        },
+    )
     return config
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output", type=Path, required=True)
-    parser.add_argument("--phase", choices=("calibration", "fresh", "prepare_evaluation",
-                                           "freeze_codebook"),
-                        required=True)
+    parser.add_argument(
+        "--phase",
+        choices=("calibration", "fresh", "prepare_evaluation", "freeze_codebook"),
+        required=True,
+    )
     args = parser.parse_args()
     output = args.output.resolve()
     if args.phase == "prepare_evaluation":

@@ -30,11 +30,10 @@ def numeric_coverage(
     """Check numeral multiplicity, not unit meaning or value-to-row associations."""
     if task["status"] != "ready":
         return {"status": "unavailable", "reason": "Writer did not produce a ready task."}
-    withheld = {
-        item["source"] for item in task.get("withheld", []) if item["kind"] == "quantity"
-    }
+    withheld = {item["source"] for item in task.get("withheld", []) if item["kind"] == "quantity"}
     declared_retained = [
-        name for name in proposal["values"]
+        name
+        for name in proposal["values"]
         if f"proposal.quantities.{name}.description" not in withheld
         and proposal.get("quantities", {}).get(name, {}).get("role") != "teacher_example"
     ]
@@ -51,8 +50,11 @@ def numeric_coverage(
     )
     return {
         "status": (
-            "missing_numerals" if missing else
-            "quantity_selection_mismatch" if selection_matches is False else "covered"
+            "missing_numerals"
+            if missing
+            else "quantity_selection_mismatch"
+            if selection_matches is False
+            else "covered"
         ),
         "retained_quantities": retained,
         "withheld_quantities": [
@@ -61,7 +63,8 @@ def numeric_coverage(
         "quantity_selection_matches_expected": selection_matches,
         "expectation_source": (
             "writer_declaration_only"
-            if raw_quantities is None else "external_raw_quantity_manifest"
+            if raw_quantities is None
+            else "external_raw_quantity_manifest"
         ),
         "missing": {str(number): count for number, count in sorted(missing.items())},
         "limitation": (
@@ -70,8 +73,15 @@ def numeric_coverage(
     }
 
 
-def replay(source_path: Path, output_dir: Path, *, client=None, model=None,
-           prepare_only: bool = False, raw_quantities: list[str] | None = None) -> dict:
+def replay(
+    source_path: Path,
+    output_dir: Path,
+    *,
+    client=None,
+    model=None,
+    prepare_only: bool = False,
+    raw_quantities: list[str] | None = None,
+) -> dict:
     source_path = source_path.resolve()
     source_bytes = source_path.read_bytes()
     saved = json.loads(source_bytes)
@@ -114,8 +124,10 @@ def replay(source_path: Path, output_dir: Path, *, client=None, model=None,
             source_hashes=stage._source_hashes(),
             writer_request=request,
             frozen_inputs={
-                "case_input": case, "prior_context": prior_context,
-                "winner": winner.to_dict(), "design_data": data_run,
+                "case_input": case,
+                "prior_context": prior_context,
+                "winner": winner.to_dict(),
+                "design_data": data_run,
             },
             historical_numeric_coverage=numeric_coverage(
                 source["task"], proposal, raw_quantities=raw_quantities
@@ -130,7 +142,9 @@ def replay(source_path: Path, output_dir: Path, *, client=None, model=None,
                 client, model, case, winner, data_run, prior_context
             )
             record.update(
-                status=task["status"], task=task, raw_text=raw,
+                status=task["status"],
+                task=task,
+                raw_text=raw,
                 model_calls=len(task.get("writer_attempts", [None])),
                 numeric_coverage=numeric_coverage(task, proposal, raw_quantities=raw_quantities),
                 source_hashes_after=stage._source_hashes(),
@@ -158,17 +172,20 @@ def render_results(output_dir: Path) -> None:
             continue
         task = record["task"]
         withheld = "".join(
-            f"<li><q>{html.escape(item['quote'])}</q> &mdash; "
-            f"{html.escape(item['reason'])}</li>"
+            f"<li><q>{html.escape(item['quote'])}</q> &mdash; {html.escape(item['reason'])}</li>"
             for item in task["withheld"]
         )
         sections.append(
             f"<section><h2>{title}</h2><div class='pair'>"
-            + task_panel(record["historical_task"], "Before: saved writer output",
-                         ROOT / record["source_result"])
+            + task_panel(
+                record["historical_task"],
+                "Before: saved writer output",
+                ROOT / record["source_result"],
+            )
             + task_panel(task, "After: discovery-preserving writer", path.resolve())
             + "</div><details><summary>Teacher-only withheld material</summary><ul>"
-            + withheld + "</ul></details>"
+            + withheld
+            + "</ul></details>"
             + f"<p>Numeral coverage: {html.escape(record['numeric_coverage']['status'])}. "
             "Value-to-row associations and meaning still require reading.</p></section>"
         )
@@ -214,8 +231,12 @@ def main() -> None:
             ):
                 raise ValueError(f"Raw-quantity expectations must be a list of names: {key}")
         replay(
-            source, args.output_dir, client=client, model=model,
-            prepare_only=args.prepare_only, raw_quantities=raw_quantities,
+            source,
+            args.output_dir,
+            client=client,
+            model=model,
+            prepare_only=args.prepare_only,
+            raw_quantities=raw_quantities,
         )
     render_results(args.output_dir)
 

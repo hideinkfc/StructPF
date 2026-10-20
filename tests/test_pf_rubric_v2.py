@@ -13,12 +13,14 @@ def test_v2_retains_the_five_v1_anchors_and_discloses_adaptation():
     assert v2["version"] == "rahimi-table1/v2"
     assert "explicitly adapted operational interpretation" in v2["source"]
     assert "not represented as the paper's exact wording" in v2["source"]
+
     def anchors(prompt):
         return [
             line.strip()
             for line in prompt["system"].splitlines()
             if line.strip().startswith(("1 (Low):", "2 (Moderate):", "3 (High):"))
         ]
+
     assert anchors(v2) == anchors(v1)
     assert len(anchors(v2)) == 15
 
@@ -46,12 +48,14 @@ def test_v2_blind_input_includes_one_fixed_target_and_prior_context():
             "target_concept": "SECRET_TARGET",
             "condition": "PIPELINE",
             "teacher_notes": "SECRET_TEACHER",
-            "assumed_prior_knowledge": [{
-                "resource": "Unit rates",
-                "taught_as": "Compute rates.",
-                "student_move": "SECRET_MOVE",
-                "falls_short_because": "SECRET_ANALYSIS",
-            }],
+            "assumed_prior_knowledge": [
+                {
+                    "resource": "Unit rates",
+                    "taught_as": "Compute rates.",
+                    "student_move": "SECRET_MOVE",
+                    "falls_short_because": "SECRET_ANALYSIS",
+                }
+            ],
         },
         "Recognize proportional relationships.",
     )
@@ -60,10 +64,12 @@ def test_v2_blind_input_includes_one_fixed_target_and_prior_context():
         "grade": 7,
         "subject": "mathematics",
         "jurisdiction": "USA",
-        "assumed_prior_knowledge": [{
-            "resource": "Unit rates",
-            "taught_as": "Compute rates.",
-        }],
+        "assumed_prior_knowledge": [
+            {
+                "resource": "Unit rates",
+                "taught_as": "Compute rates.",
+            }
+        ],
         "learning_target": "Recognize proportional relationships.",
     }
     assert payload["student_task"] == "Compare the two groups."
@@ -72,11 +78,12 @@ def test_v2_blind_input_includes_one_fixed_target_and_prior_context():
 
 
 def test_v2_reuses_same_strict_five_dimension_schema():
-    raw = json.dumps({
-        **{key: {"evidence": "Task evidence.", "score": 2}
-           for key in pf_rubric_v2.DIMENSIONS},
-        "mathematical_concerns": [],
-    })
+    raw = json.dumps(
+        {
+            **{key: {"evidence": "Task evidence.", "score": 2} for key in pf_rubric_v2.DIMENSIONS},
+            "mathematical_concerns": [],
+        }
+    )
     assert pf_rubric_v2.parse_rating(raw)["scores"]["TOTAL"] == 10
     with pytest.raises(ValidationError):
         pf_rubric_v2.parse_rating(raw.replace('"score": 2', '"score": 4', 1))
@@ -86,6 +93,4 @@ def test_v2_rejects_missing_target_and_invalid_prior_context():
     with pytest.raises(ValueError, match="target_concept"):
         pf_rubric_v2.judge_input("Task", {"grade": 7}, "")
     with pytest.raises(ValueError, match="prior-knowledge resource"):
-        pf_rubric_v2.judge_input(
-            "Task", {"assumed_prior_knowledge": ["invalid"]}, "Target"
-        )
+        pf_rubric_v2.judge_input("Task", {"assumed_prior_knowledge": ["invalid"]}, "Target")

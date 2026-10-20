@@ -12,8 +12,12 @@ Usage:
     [--start 0] [--max 30]
 """
 
-import argparse, json, time, sys, re
+import argparse
+import json
+import re
+import time
 from pathlib import Path
+
 from playwright.sync_api import sync_playwright
 
 
@@ -35,8 +39,6 @@ def extract_quiz_metadata(page):
     except Exception:
         heading = "unknown"
     try:
-        topic_el = page.locator("h1").locator("..")
-        topic = topic_el.locator("+ p, + div").first
         # fallback: find text right after h1
         topic_text = ""
         for el in page.locator("h1 ~ *").all():
@@ -98,7 +100,7 @@ def click_question_tab(page, q_num: int):
 
 def click_answer_choice(page, label: str) -> dict:
     """Click answer A/B/C/D and extract its explanation info.
-    
+
     Returns dict with: heading, explanation, pct, is_correct
     """
     # Answer buttons are div.sc-jivDif with text matching the label
@@ -154,7 +156,7 @@ def scrape_quiz(page, quiz_id: str) -> dict:
         page.goto(url, timeout=30000, wait_until="domcontentloaded")
     except Exception as e:
         return {"error": f"Navigation failed: {e}"}
-    
+
     time.sleep(2)
     accept_cookies(page)
 
@@ -199,14 +201,18 @@ def scrape_quiz(page, quiz_id: str) -> dict:
             q_data["answers"][label] = ans_data
 
         result["questions"].append(q_data)
-        print(f"done ({sum(1 for a in q_data['answers'].values() if a.get('is_correct'))} correct identified)")
+        print(
+            f"done ({sum(1 for a in q_data['answers'].values() if a.get('is_correct'))} correct identified)"
+        )
 
     return result
 
 
 def main():
     parser = argparse.ArgumentParser(description="Scrape Eedi quiz pages")
-    parser.add_argument("--ids-file", required=True, help="TSV file: quiz_id\\tsubject\\ttopic\\tname")
+    parser.add_argument(
+        "--ids-file", required=True, help="TSV file: quiz_id\\tsubject\\ttopic\\tname"
+    )
     parser.add_argument("--out-dir", default="data/eedi_scraped")
     parser.add_argument("--start", type=int, default=0, help="Start index (0-based)")
     parser.add_argument("--max", type=int, default=30, help="Max quizzes to scrape")
@@ -218,12 +224,14 @@ def main():
         for line in f:
             parts = line.strip().split("\t")
             if len(parts) >= 4:
-                targets.append({
-                    "quiz_id": parts[0],
-                    "subject": parts[1],
-                    "topic": parts[2],
-                    "quiz_name_csv": parts[3],
-                })
+                targets.append(
+                    {
+                        "quiz_id": parts[0],
+                        "subject": parts[1],
+                        "topic": parts[2],
+                        "quiz_name_csv": parts[3],
+                    }
+                )
 
     targets = targets[args.start : args.start + args.max]
     out_dir = Path(args.out_dir)
@@ -236,14 +244,14 @@ def main():
         browser = p.chromium.launch(headless=True)
         context = browser.new_context(
             viewport={"width": 1280, "height": 900},
-            user_agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36"
+            user_agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36",
         )
         page = context.new_page()
 
         success_count = 0
         for i, target in enumerate(targets):
             qid = target["quiz_id"]
-            print(f"\n[{i+1}/{len(targets)}] {qid}: {target['quiz_name_csv']}")
+            print(f"\n[{i + 1}/{len(targets)}] {qid}: {target['quiz_name_csv']}")
 
             try:
                 data = scrape_quiz(page, qid)

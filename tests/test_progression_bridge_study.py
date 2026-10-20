@@ -204,4 +204,3 @@ def test_direct_worker_and_two_gate_evaluator(tmp_path: Path) -> None:
         g1 = evaluate_gate1_prior_set(None, "luna", case, k_prior[:1], task)
         assert g1["gate1_passed"] is False
         assert g1["any_spoiler"] is True
-

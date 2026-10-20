@@ -57,10 +57,11 @@ def _append(path: Path, value: dict) -> None:
 
 
 def _rows(path: Path) -> list[dict]:
-    return [
-        json.loads(line) for line in path.read_text(encoding="utf-8").splitlines()
-        if line.strip()
-    ] if path.exists() else []
+    return (
+        [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line.strip()]
+        if path.exists()
+        else []
+    )
 
 
 def _sha(path: Path) -> str:
@@ -75,8 +76,11 @@ def _path(value: str | Path) -> Path:
 def source_hashes(config_path: Path, baseline_prompts: Path) -> dict[str, str]:
     """Freeze the transitive local Python imports and all stage prompt files."""
     sources = {
-        Path(__file__).resolve(), config_path.resolve(), baseline_prompts.resolve(),
-        brief_stage.PROMPTS_PATH.resolve(), data_stage.PROMPTS_PATH.resolve(),
+        Path(__file__).resolve(),
+        config_path.resolve(),
+        baseline_prompts.resolve(),
+        brief_stage.PROMPTS_PATH.resolve(),
+        data_stage.PROMPTS_PATH.resolve(),
         runner.PROMPTS_PATH.resolve(),
     }
     pending = [
@@ -124,7 +128,9 @@ def _runtime() -> dict:
 
 def _integer(value: object, name: str, *, minimum: int, maximum: int | None = None) -> int:
     if (
-        isinstance(value, bool) or not isinstance(value, int) or value < minimum
+        isinstance(value, bool)
+        or not isinstance(value, int)
+        or value < minimum
         or (maximum is not None and value > maximum)
     ):
         raise ValueError(f"{name} must be an integer in [{minimum}, {maximum}]")
@@ -143,15 +149,20 @@ def _validate(config: dict) -> dict:
     _integer(config["repeats"], "repeats", minimum=1)
     ids = [case["id"] for case in config["cases"]]
     if (
-        not ids or len(ids) != len(set(ids))
-        or any(not isinstance(case_id, str) or not re.fullmatch(r"[A-Za-z0-9_-]+", case_id)
-               for case_id in ids)
+        not ids
+        or len(ids) != len(set(ids))
+        or any(
+            not isinstance(case_id, str) or not re.fullmatch(r"[A-Za-z0-9_-]+", case_id)
+            for case_id in ids
+        )
     ):
         raise ValueError("Case IDs must be nonempty, unique safe directory names")
     calibration = config["calibration_cases"]
     if (
-        not isinstance(calibration, list) or not calibration
-        or len(calibration) != len(set(calibration)) or set(calibration) - set(ids)
+        not isinstance(calibration, list)
+        or not calibration
+        or len(calibration) != len(set(calibration))
+        or set(calibration) - set(ids)
     ):
         raise ValueError("calibration_cases must be unique members of cases")
     protocol = config["protocol"]
@@ -163,8 +174,10 @@ def _validate(config: dict) -> dict:
         ),
         "max_calls_total": _integer(protocol["max_calls_total"], "max_calls_total", minimum=0),
         "max_completion_tokens_per_call": _integer(
-            protocol["max_completion_tokens_per_call"], "max_completion_tokens_per_call",
-            minimum=1, maximum=6000,
+            protocol["max_completion_tokens_per_call"],
+            "max_completion_tokens_per_call",
+            minimum=1,
+            maximum=6000,
         ),
         "timeout_seconds": _integer(
             protocol.get("timeout_seconds", 120), "timeout_seconds", minimum=1, maximum=120
@@ -178,7 +191,8 @@ def make_schedule(config: dict) -> list[dict]:
     schedule = []
     for phase in PHASES:
         ids = (
-            list(config["calibration_cases"]) if phase == "calibration"
+            list(config["calibration_cases"])
+            if phase == "calibration"
             else [case["id"] for case in config["cases"]]
         )
         repeats = 1 if phase == "calibration" else config["repeats"]
@@ -188,10 +202,15 @@ def make_schedule(config: dict) -> list[dict]:
                 arms = list(ARMS)
                 rng.shuffle(arms)
                 for arm in arms:
-                    schedule.append({
-                        "attempt_id": f"{phase}--{case_id}--{arm}--{repeat}",
-                        "phase": phase, "case_id": case_id, "arm": arm, "repeat": repeat,
-                    })
+                    schedule.append(
+                        {
+                            "attempt_id": f"{phase}--{case_id}--{arm}--{repeat}",
+                            "phase": phase,
+                            "case_id": case_id,
+                            "arm": arm,
+                            "repeat": repeat,
+                        }
+                    )
     return schedule
 
 
@@ -217,15 +236,22 @@ def prepare(config_path: Path, output: Path) -> dict:
             raise ValueError(f"{case_id} requires a saved model")
         models.add(saved["model"])
         inputs[case_id] = {
-            "source": str(source), "sha256": _sha(source),
-            "case_input": case, "prior_context": context,
+            "source": str(source),
+            "sha256": _sha(source),
+            "case_input": case,
+            "prior_context": context,
         }
     if len(models) != 1:
         raise ValueError("Saved inputs must use one frozen model")
     frozen = {
-        "config": config, "inputs": inputs, "model": models.pop(),
-        "source_hashes": hashes, "runtime": _runtime(), "limits": limits,
-        "seed": SEED, "schedule": make_schedule(config),
+        "config": config,
+        "inputs": inputs,
+        "model": models.pop(),
+        "source_hashes": hashes,
+        "runtime": _runtime(),
+        "limits": limits,
+        "seed": SEED,
+        "schedule": make_schedule(config),
         "baseline_prompts_sha256": _sha(baseline),
     }
     path = output / "manifest.json"
@@ -254,9 +280,12 @@ def prepare(config_path: Path, output: Path) -> dict:
     baseline_snapshot = output / "baseline_prompts.yaml"
     baseline_snapshot.write_bytes(baseline.read_bytes())
     manifest = {
-        "schema_version": "pf-d2a-comparison-run/v1", **frozen,
-        "created_at": diagnostic._now(), "snapshots": snapshots,
-        "baseline_prompts_snapshot": baseline_snapshot.name, "attempts": {},
+        "schema_version": "pf-d2a-comparison-run/v1",
+        **frozen,
+        "created_at": diagnostic._now(),
+        "snapshots": snapshots,
+        "baseline_prompts_snapshot": baseline_snapshot.name,
+        "attempts": {},
         "evidence_kind": "generated_tasks_not_student_or_human_rating_evidence",
     }
     _write_json(path, manifest)
@@ -275,9 +304,11 @@ def usage_summary(rows: list[dict], attempt_id: str | None = None) -> dict:
         tokens[name] = sum(available) if available else None
         tokens[f"{name}_available_calls"] = len(available)
     return {
-        "attempted_calls": len(started), "completed_calls": len(finished),
+        "attempted_calls": len(started),
+        "completed_calls": len(finished),
         "error_calls": sum(row.get("error") is not None for row in finished),
-        "unfinished_calls": len(started) - len(finished), **tokens,
+        "unfinished_calls": len(started) - len(finished),
+        **tokens,
     }
 
 
@@ -302,7 +333,8 @@ class RequestBudget:
         starts = [row["call_id"] for row in self.rows if row["event"] == "api_request_started"]
         finishes = [row["call_id"] for row in self.rows if row["event"] == "api_request_finished"]
         if (
-            len(starts) != len(set(starts)) or len(finishes) != len(set(finishes))
+            len(starts) != len(set(starts))
+            or len(finishes) != len(set(finishes))
             or set(finishes) - set(starts)
         ):
             raise ValueError("Invalid request ledger")
@@ -319,12 +351,16 @@ class RequestBudget:
             limits = self.limits
             effective_tokens = min(max_tokens, limits["max_completion_tokens_per_call"])
             metadata = {
-                **attempt, "module": module,
+                **attempt,
+                "module": module,
                 "stage": diagnostic._stage_from_prompt(system, d1_prompt=False),
-                "model": model, "system_prompt": system, "user_prompt": user,
+                "model": model,
+                "system_prompt": system,
+                "user_prompt": user,
                 "requested_settings": {"temperature": temperature, "max_tokens": max_tokens},
                 "runtime_overrides": {
-                    "max_tokens": effective_tokens, "timeout_seconds": limits["timeout_seconds"],
+                    "max_tokens": effective_tokens,
+                    "timeout_seconds": limits["timeout_seconds"],
                     "sdk_max_retries": 0,
                 },
             }
@@ -334,13 +370,19 @@ class RequestBudget:
                 count = usage_summary(self.rows, attempt["attempt_id"])["attempted_calls"]
                 if total >= limits["max_calls_total"] or count >= limits["max_calls_per_attempt"]:
                     reason = (
-                        "max_calls_total" if total >= limits["max_calls_total"]
+                        "max_calls_total"
+                        if total >= limits["max_calls_total"]
                         else "max_calls_per_attempt"
                     )
-                    _append(trace, {
-                        **metadata, "event": "budget_stopped", "reason": reason,
-                        "at": diagnostic._now(),
-                    })
+                    _append(
+                        trace,
+                        {
+                            **metadata,
+                            "event": "budget_stopped",
+                            "reason": reason,
+                            "at": diagnostic._now(),
+                        },
+                    )
                     raise BudgetStoppedError(reason)
                 kwargs["timeout"] = limits["timeout_seconds"]
                 for key in ("max_tokens", "max_completion_tokens"):
@@ -348,18 +390,28 @@ class RequestBudget:
                         kwargs[key] = min(kwargs[key], limits["max_completion_tokens_per_call"])
                 call_id = f"request-{total + 1:06d}"
                 effective = {
-                    key: kwargs[key] for key in
-                    (
-                        "temperature", "max_tokens", "max_completion_tokens",
-                        "timeout", "response_format",
+                    key: kwargs[key]
+                    for key in (
+                        "temperature",
+                        "max_tokens",
+                        "max_completion_tokens",
+                        "timeout",
+                        "response_format",
                     )
                     if key in kwargs
                 }
-                self._event(trace, {
-                    **metadata, "event": "api_request_started", "call_id": call_id,
-                    "started_at": diagnostic._now(), "attempted_count_total": total + 1,
-                    "attempted_count_attempt": count + 1, "effective_settings": effective,
-                })
+                self._event(
+                    trace,
+                    {
+                        **metadata,
+                        "event": "api_request_started",
+                        "call_id": call_id,
+                        "started_at": diagnostic._now(),
+                        "attempted_count_total": total + 1,
+                        "attempted_count_attempt": count + 1,
+                        "effective_settings": effective,
+                    },
+                )
                 response = None
                 started = time.monotonic()
                 try:
@@ -370,13 +422,21 @@ class RequestBudget:
                     return response
                 finally:
                     error = sys.exc_info()[1]
-                    self._event(trace, {
-                        **attempt, "module": module, "event": "api_request_finished",
-                        "call_id": call_id, "finished_at": diagnostic._now(),
-                        "elapsed_seconds": round(time.monotonic() - started, 3),
-                        "usage": _usage(response),
-                        "error": f"{type(error).__name__}: {error}" if error is not None else None,
-                    })
+                    self._event(
+                        trace,
+                        {
+                            **attempt,
+                            "module": module,
+                            "event": "api_request_finished",
+                            "call_id": call_id,
+                            "finished_at": diagnostic._now(),
+                            "elapsed_seconds": round(time.monotonic() - started, 3),
+                            "usage": _usage(response),
+                            "error": f"{type(error).__name__}: {error}"
+                            if error is not None
+                            else None,
+                        },
+                    )
 
             proxy = SimpleNamespace(
                 chat=SimpleNamespace(completions=SimpleNamespace(create=create))
@@ -384,10 +444,16 @@ class RequestBudget:
             payload, raw = common.chat_json(
                 proxy, model, system, user, temperature, effective_tokens
             )
-            _append(trace, {
-                **metadata, "event": "stage_response", "payload": payload,
-                "raw_text": raw, "at": diagnostic._now(),
-            })
+            _append(
+                trace,
+                {
+                    **metadata,
+                    "event": "stage_response",
+                    "payload": payload,
+                    "raw_text": raw,
+                    "at": diagnostic._now(),
+                },
+            )
             return payload, raw
 
         return traced
@@ -406,26 +472,41 @@ def run_attempt(
     case = json.loads(json.dumps(frozen["case_input"]))
     context = json.loads(json.dumps(frozen["prior_context"]))
     record = {
-        "schema_version": "pf-d2a-comparison-attempt/v1", **attempt, "model": model,
-        "status": "running", "started_at": diagnostic._now(), "error": None,
-        "source_result": frozen["source"], "source_sha256": frozen["sha256"],
-        "case_input": case, "prior_context": context, "d1_reused": True,
-        "search": None, "winner": None, "design_data": None, "task": None,
-        "writer_request": None, "traces": [],
+        "schema_version": "pf-d2a-comparison-attempt/v1",
+        **attempt,
+        "model": model,
+        "status": "running",
+        "started_at": diagnostic._now(),
+        "error": None,
+        "source_result": frozen["source"],
+        "source_sha256": frozen["sha256"],
+        "case_input": case,
+        "prior_context": context,
+        "d1_reused": True,
+        "search": None,
+        "winner": None,
+        "design_data": None,
+        "task": None,
+        "writer_request": None,
+        "traces": [],
         "brief_schema_version": (
             "design-brief/v1" if attempt["arm"] == "baseline" else "design-brief/v2"
         ),
     }
     _write_json(destination, record)
     try:
-        with patch.object(
-            runner, "chat_json", budget.traced_chat(client, attempt, trace, "D2a")
-        ):
+        with patch.object(runner, "chat_json", budget.traced_chat(client, attempt, trace, "D2a")):
             search = brief_stage.run_design_brief_search(
-                client, model, case, context, k=2, translate=False,
+                client,
+                model,
+                case,
+                context,
+                k=2,
+                translate=False,
                 prompts_path=(
                     _path(manifest["config"]["baseline_prompts"])
-                    if attempt["arm"] == "baseline" else None
+                    if attempt["arm"] == "baseline"
+                    else None
                 ),
                 brief_schema_version=record["brief_schema_version"],
             )
@@ -470,7 +551,8 @@ def run_attempt(
                 error=f"{type(error).__name__}: {error}",
             )
         record.update(
-            finished_at=diagnostic._now(), traces=_rows(trace),
+            finished_at=diagnostic._now(),
+            traces=_rows(trace),
             usage=usage_summary(budget.rows, attempt["attempt_id"]),
             source_artifact_unchanged=(
                 Path(frozen["source"]).is_file()
@@ -523,7 +605,8 @@ def run(config_path: Path, output: Path, phase: str, *, limit: int | None = None
         saved = _saved_attempts(output, manifest)
         budget = RequestBudget(output, manifest["limits"])
         selected = [
-            attempt for attempt in manifest["schedule"]
+            attempt
+            for attempt in manifest["schedule"]
             if attempt["phase"] == phase and attempt["attempt_id"] not in saved
         ]
         if limit is not None:
@@ -552,7 +635,8 @@ def run(config_path: Path, output: Path, phase: str, *, limit: int | None = None
                     raise ValueError(record["error"])
                 print(
                     f"{attempt['attempt_id']}: {record['status']} "
-                    f"({record['usage']['attempted_calls']} requests)", flush=True,
+                    f"({record['usage']['attempted_calls']} requests)",
+                    flush=True,
                 )
     finally:
         saved = {
@@ -567,8 +651,7 @@ def run(config_path: Path, output: Path, phase: str, *, limit: int | None = None
         rows = budget.rows if budget is not None else _rows(output / "ledger.jsonl")
         manifest["usage"] = usage_summary(rows)
         manifest["phase_usage"] = {
-            label: usage_summary([row for row in rows if row["phase"] == label])
-            for label in PHASES
+            label: usage_summary([row for row in rows if row["phase"] == label]) for label in PHASES
         }
         manifest["updated_at"] = diagnostic._now()
         _write_json(output / "manifest.json", manifest)
@@ -586,27 +669,41 @@ def render(output: Path, phase: str) -> None:
     random.Random(SEED + 1).shuffle(attempts)
     review, mapping, sections = [], [], []
     for item in attempts:
-        opaque = "task-" + hashlib.sha256(
-            f"{SEED}:reading:{item['attempt_id']}".encode()
-        ).hexdigest()[:16]
+        opaque = (
+            "task-"
+            + hashlib.sha256(f"{SEED}:reading:{item['attempt_id']}".encode()).hexdigest()[:16]
+        )
         path = output / "attempts" / item["attempt_id"] / "result.json"
         record = json.loads(path.read_text(encoding="utf-8")) if path.exists() else {}
         task = record.get("task")
-        text = {
-            field: task[field] for field in ("title", "body", "question")
-            if isinstance(task.get(field), str)
-        } if isinstance(task, dict) else None
+        text = (
+            {
+                field: task[field]
+                for field in ("title", "body", "question")
+                if isinstance(task.get(field), str)
+            }
+            if isinstance(task, dict)
+            else None
+        )
         text = text or None
         target = manifest["inputs"][item["case_id"]]["case_input"]["target_concept"]
         review.append({"task_id": opaque, "target_concept": target, "task": text})
-        mapping.append({
-            "task_id": opaque, **item, "model": manifest["model"],
-            "status": record.get("status", "not_run"), "source_result": str(path),
-        })
+        mapping.append(
+            {
+                "task_id": opaque,
+                **item,
+                "model": manifest["model"],
+                "status": record.get("status", "not_run"),
+                "source_result": str(path),
+            }
+        )
         content = (
-            "".join(f"<p>{html.escape(text.get(field, ''))}</p>" for field in
-                    ("title", "body", "question"))
-            if text is not None else "<p>No task text available.</p>"
+            "".join(
+                f"<p>{html.escape(text.get(field, ''))}</p>"
+                for field in ("title", "body", "question")
+            )
+            if text is not None
+            else "<p>No task text available.</p>"
         )
         sections.append(
             f"<section><h2>{opaque}</h2><p>Target: {html.escape(target)}</p>{content}</section>"
@@ -622,8 +719,7 @@ def render(output: Path, phase: str) -> None:
         "section{border-top:1px solid #ccc;padding:1em}p{white-space:pre-wrap}</style>"
         "<h1>Anonymized task reading</h1><p>Task text and supplied target only; "
         "absent tasks are retained. "
-        "No human ratings or student-outcome evidence.</p>"
-        + "".join(sections) + "</html>"
+        "No human ratings or student-outcome evidence.</p>" + "".join(sections) + "</html>"
     )
     (gallery / "tasks.html").write_text(page, encoding="utf-8")
 

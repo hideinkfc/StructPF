@@ -60,23 +60,38 @@ def reparse_run(source: Path, output: Path) -> dict:
     entries = {entry["task_id"]: entry for entry in [*catalog, *controls]}
     source_hashes = {
         name: audit.sha256((source / name).read_bytes())
-        for name in ("manifest.json", "catalog.json", "controls.json", "judgments.jsonl", "summary.json")
+        for name in (
+            "manifest.json",
+            "catalog.json",
+            "controls.json",
+            "judgments.jsonl",
+            "summary.json",
+        )
     }
     original_prompt_hash = manifest["source_hashes"].get(
         "src/evaluation/prompts/pf_evidence_audit_v1.yaml"
     )
     if audit.sha256(audit.PROMPT_PATH.read_bytes()) != original_prompt_hash:
-        raise ValueError("The frozen judge prompt changed; mechanical reparse requires identical prompt")
+        raise ValueError(
+            "The frozen judge prompt changed; mechanical reparse requires identical prompt"
+        )
     previous = output / "previous_analysis_v1_2"
     previous.mkdir()
     previous_files = {
-        path for path in source.iterdir() if path.is_file()
+        path
+        for path in source.iterdir()
+        if path.is_file()
         and (
             path.suffix in (".md", ".html")
-            or path.name in {
-                "summary.json", "calibration_summary.json", "arm_descriptive_rates.json",
-                "gallery_index.json", "disagreement_gallery_index.json",
-                "review_pack_labels_hidden.json", "review_pack_mapping_private.json",
+            or path.name
+            in {
+                "summary.json",
+                "calibration_summary.json",
+                "arm_descriptive_rates.json",
+                "gallery_index.json",
+                "disagreement_gallery_index.json",
+                "review_pack_labels_hidden.json",
+                "review_pack_mapping_private.json",
             }
         )
     }
@@ -109,7 +124,8 @@ def reparse_run(source: Path, output: Path) -> dict:
     calibration = control_performance(controls, control_results, manifest["judges"])
     write(output / "calibration_summary.json", calibration)
     summary["execution"] = {
-        **old_summary["execution"], "calibration": calibration,
+        **old_summary["execution"],
+        "calibration": calibration,
         "phase_status": "mechanical_parser_sidecar",
         "new_model_requests": 0,
     }
@@ -141,7 +157,8 @@ def reparse_run(source: Path, output: Path) -> dict:
     summary["parser_correction"] = correction
     new_manifest = {
         **manifest,
-        "status": "completed_parser_reanalysis", "analysis_only": True,
+        "status": "completed_parser_reanalysis",
+        "analysis_only": True,
         "parser_correction": correction,
     }
     write(output / "manifest.json", new_manifest)
@@ -176,12 +193,15 @@ def reparse_run(source: Path, output: Path) -> dict:
     for name, expected in source_hashes.items():
         if audit.sha256((source / name).read_bytes()) != expected:
             raise AssertionError(f"Original source changed during parsing: {name}")
-    write(output / "verification.json", {
-        "original_source_files_unchanged": True,
-        "raw_response_identity_checks": len(records),
-        "new_model_requests": 0,
-        "previous_reports_archived": sorted(path.name for path in previous_files),
-    })
+    write(
+        output / "verification.json",
+        {
+            "original_source_files_unchanged": True,
+            "raw_response_identity_checks": len(records),
+            "new_model_requests": 0,
+            "previous_reports_archived": sorted(path.name for path in previous_files),
+        },
+    )
     return comparison
 
 

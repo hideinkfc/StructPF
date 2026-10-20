@@ -82,9 +82,7 @@ def proposal_from_payload(
         raise ValueError("conditions must be a non-empty list")
     covered = set()
     for condition in conditions:
-        required = {
-            "statement", "requirement_indices", "essential", "calculation", "reasoning"
-        }
+        required = {"statement", "requirement_indices", "essential", "calculation", "reasoning"}
         if (
             not isinstance(condition, dict)
             or not required.issubset(condition)
@@ -101,9 +99,7 @@ def proposal_from_payload(
             type(index) is not int or not 0 <= index < len(requirements) for index in indices
         ):
             raise ValueError("requirement_indices must reference the supplied requirements")
-        if not isinstance(condition["essential"], bool) or (
-            indices and not condition["essential"]
-        ):
+        if not isinstance(condition["essential"], bool) or (indices and not condition["essential"]):
             raise ValueError("conditions linked to original requirements must be essential")
         covered.update(indices)
         calculation = condition["calculation"]
@@ -151,7 +147,8 @@ def check_proposal(proposal: dict) -> dict:
             }
         else:
             result = calculate_condition(
-                calculation, proposal["values"],
+                calculation,
+                proposal["values"],
                 units={name: metadata["unit"] for name, metadata in proposal["quantities"].items()},
             )
         evidence.append({"index": index, **condition, **result})

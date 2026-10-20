@@ -25,44 +25,72 @@ CONFIG = ROOT / "experiments/configs/pf_kapur_reference_20261011.json"
 def schedule(config: dict) -> list[dict]:
     rows = []
     for model in config["models"]:
-        for profile in ({"id": "ordinary_solver", "condition": "solver"},
-                        config["learner_profiles"][0]):
+        for profile in (
+            {"id": "ordinary_solver", "condition": "solver"},
+            config["learner_profiles"][0],
+        ):
             task = {
-                "status": "ready", "title": "Execution check",
+                "status": "ready",
+                "title": "Execution check",
                 "body": "Travel at a constant speed.",
                 "question": "A walker covers 300 metres at 50 metres per minute. How long is this?",
             }
-            context = {"assumed_prior_knowledge": [
-                {"resource": "Speed and division", "taught_as": "Divide distance by speed."},
-            ]}
-            rows.append({
-                "id": f"calibration-{model}-{profile['id']}", "phase": "calibration",
-                "kind": "calibration", "model": model, "profile": profile["id"],
-                "repeat": 1, "expected_answer": "6",
-                "prompt": attempt_prompt(task, context, profile),
-            })
+            context = {
+                "assumed_prior_knowledge": [
+                    {"resource": "Speed and division", "taught_as": "Divide distance by speed."},
+                ]
+            }
+            rows.append(
+                {
+                    "id": f"calibration-{model}-{profile['id']}",
+                    "phase": "calibration",
+                    "kind": "calibration",
+                    "model": model,
+                    "profile": profile["id"],
+                    "repeat": 1,
+                    "expected_answer": "6",
+                    "prompt": attempt_prompt(task, context, profile),
+                }
+            )
         profiles = config["learner_profiles"] + [{"id": "ordinary_solver", "condition": "solver"}]
         for profile in profiles:
             kind = "solver" if profile["condition"] == "solver" else "learner"
             for repeat in range(1, config["repetitions"][kind] + 1):
-                rows.append({
-                    "id": f"fresh-{model}-{profile['id']}-{repeat}", "phase": "fresh",
-                    "kind": kind, "model": model, "profile": profile["id"], "repeat": repeat,
-                    "prompt": attempt_prompt(config["task"], config["learner_context"], profile),
-                })
-        rows.append({
-            "id": f"prediction-{model}", "phase": "fresh", "kind": "prediction",
-            "model": model, "profile": "prediction_only", "repeat": 1,
-            "prompt": {
-                "system": config["prediction_prompt"],
-                "user": json.dumps({
-                    "student_task": {
-                        key: config["task"][key] for key in ("title", "body", "question")
-                    },
-                    "learner_record": config["learner_context"],
-                }, indent=2),
-            },
-        })
+                rows.append(
+                    {
+                        "id": f"fresh-{model}-{profile['id']}-{repeat}",
+                        "phase": "fresh",
+                        "kind": kind,
+                        "model": model,
+                        "profile": profile["id"],
+                        "repeat": repeat,
+                        "prompt": attempt_prompt(
+                            config["task"], config["learner_context"], profile
+                        ),
+                    }
+                )
+        rows.append(
+            {
+                "id": f"prediction-{model}",
+                "phase": "fresh",
+                "kind": "prediction",
+                "model": model,
+                "profile": "prediction_only",
+                "repeat": 1,
+                "prompt": {
+                    "system": config["prediction_prompt"],
+                    "user": json.dumps(
+                        {
+                            "student_task": {
+                                key: config["task"][key] for key in ("title", "body", "question")
+                            },
+                            "learner_record": config["learner_context"],
+                        },
+                        indent=2,
+                    ),
+                },
+            }
+        )
     random.Random(config["seed"]).shuffle(rows)
     if len(rows) != config["budget"]["total_calls"]:
         raise ValueError("Reference schedule exceeds or misses its frozen budget")
@@ -74,10 +102,16 @@ def prediction_call(row: dict, output: Path, clients: dict, settings: dict) -> d
     directory = output / "fresh" / row["id"]
     directory.mkdir(parents=True, exist_ok=False)
     payload, raw, metadata, error = benchmark._call_json(
-        client, model, row["prompt"]["system"], row["prompt"]["user"],
-        max_tokens=settings["max_tokens"], temperature=settings["temperature"],
-        timeout_seconds=settings["timeout_seconds"], retries=0,
-        trace_path=directory / "model_calls.jsonl", stage="pathway.prediction",
+        client,
+        model,
+        row["prompt"]["system"],
+        row["prompt"]["user"],
+        max_tokens=settings["max_tokens"],
+        temperature=settings["temperature"],
+        timeout_seconds=settings["timeout_seconds"],
+        retries=0,
+        trace_path=directory / "model_calls.jsonl",
+        stage="pathway.prediction",
     )
     status = "api_error" if error else "parsed"
     if error is None:
@@ -91,12 +125,20 @@ def prediction_call(row: dict, output: Path, clients: dict, settings: dict) -> d
             for item in payload["approaches"]
         ):
             status, error = "invalid_response", "Prediction approaches require text fields"
-    benchmark._write_json(directory / "result.json", {
-        "status": status, "payload": payload, "raw_text": raw, "error": error,
-        "model_metadata": metadata,
-    })
+    benchmark._write_json(
+        directory / "result.json",
+        {
+            "status": status,
+            "payload": payload,
+            "raw_text": raw,
+            "error": error,
+            "model_metadata": metadata,
+        },
+    )
     return {
-        "id": row["id"], "phase": row["phase"], "status": status,
+        "id": row["id"],
+        "phase": row["phase"],
+        "status": status,
         "result_path": str((directory / "result.json").relative_to(output)),
     }
 
@@ -107,10 +149,15 @@ def run(output: Path, phase: str) -> dict:
     if phase == "calibration":
         output.mkdir(parents=True, exist_ok=False)
         sources = [
-            CONFIG, Path(__file__), ROOT / "scripts/run_pf_student_probe.py",
-            ROOT / "scripts/run_pf_paper_benchmark.py", ROOT / "src/simulation/pf_student.py",
-            ROOT / "src/evaluation/pf_rubric.py", ROOT / "scripts/prior_methods/common.py",
-            ROOT / config["source"]["pdf"], ROOT / config["source"]["notes"],
+            CONFIG,
+            Path(__file__),
+            ROOT / "scripts/run_pf_student_probe.py",
+            ROOT / "scripts/run_pf_paper_benchmark.py",
+            ROOT / "src/simulation/pf_student.py",
+            ROOT / "src/evaluation/pf_rubric.py",
+            ROOT / "scripts/prior_methods/common.py",
+            ROOT / config["source"]["pdf"],
+            ROOT / config["source"]["notes"],
             ROOT / config["source"]["normalized_record"],
         ]
         hashes = {}
@@ -122,8 +169,11 @@ def run(output: Path, phase: str) -> dict:
             snapshot.parent.mkdir(parents=True, exist_ok=True)
             snapshot.write_bytes(data)
         manifest = {
-            "status": "running", "protocol": config, "source_hashes": hashes,
-            "requests": rows, "results": [],
+            "status": "running",
+            "protocol": config,
+            "source_hashes": hashes,
+            "requests": rows,
+            "results": [],
         }
     else:
         manifest = json.loads((output / "manifest.json").read_text())
@@ -185,7 +235,9 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument(
-        "--phase", choices=("calibration", "fresh", "prepare_review"), required=True,
+        "--phase",
+        choices=("calibration", "fresh", "prepare_review"),
+        required=True,
     )
     args = parser.parse_args()
     if args.phase == "prepare_review":

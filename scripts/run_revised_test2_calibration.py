@@ -138,11 +138,15 @@ def parse_output(raw: str, task: dict[str, Any]) -> dict[str, Any]:
         task.get("expected_parts"),
     )
     option_text = task["options"].get(selected_option, "")
-    option_result = parse_task_response(
-        option_text,
-        task["expected_answers"],
-        task.get("expected_parts"),
-    ) if option_text else {"rule_followed": False}
+    option_result = (
+        parse_task_response(
+            option_text,
+            task["expected_answers"],
+            task.get("expected_parts"),
+        )
+        if option_text
+        else {"rule_followed": False}
+    )
     return {
         "simulated_answer": simulated_answer,
         "selected_option": selected_option,
@@ -279,12 +283,8 @@ def summarize(rows: list[dict[str, Any]], wall_seconds: float, workers: int) -> 
         ),
         "selected_option_expected_rate": rate("selected_option_matches_expected"),
         "wall_seconds": round(wall_seconds, 3),
-        "effective_calls_per_second": round(len(rows) / wall_seconds, 3)
-        if wall_seconds
-        else None,
-        "mean_latency_seconds": round(sum(latencies) / len(latencies), 3)
-        if latencies
-        else None,
+        "effective_calls_per_second": round(len(rows) / wall_seconds, 3) if wall_seconds else None,
+        "mean_latency_seconds": round(sum(latencies) / len(latencies), 3) if latencies else None,
         "questions": {str(key): group_summary(value) for key, value in sorted(by_question.items())},
     }
 

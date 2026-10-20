@@ -39,6 +39,9 @@ target-version = "py310"
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "N", "W"]
+# N806: uppercase names such as N and P are standard mathematical notation.
+# E501: long prompt strings and comments are kept as written; ruff format handles code wrapping.
+ignore = ["N806", "E501"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

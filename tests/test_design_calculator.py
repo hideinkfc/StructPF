@@ -696,9 +696,7 @@ def test_nested_list_length_and_cycles_are_bounded():
     cyclic = []
     cyclic.append(cyclic)
     for value, reason in (([[1] * 129], "length limit"), (cyclic, "nesting limit")):
-        result = calculate_condition(
-            {"expressions": {}, "predicate": "1 == 1"}, {"matrix": value}
-        )
+        result = calculate_condition({"expressions": {}, "predicate": "1 == 1"}, {"matrix": value})
         assert result["status"] == "unsupported"
         assert reason in result["reason"]
 
@@ -717,9 +715,7 @@ def test_nested_numeric_domain_errors_remain_repairable_failures(formula, reason
 
 def test_missing_value_and_forward_reference_are_not_false():
     for expressions in ({"answer": "missing+1"}, {"answer": "later+1", "later": "1"}):
-        result = calculate_condition(
-            {"expressions": expressions, "predicate": "answer > 0"}, {}
-        )
+        result = calculate_condition({"expressions": expressions, "predicate": "answer > 0"}, {})
         assert result["status"] == "unknown"
         assert "not bound" in result["reason"]
     ordered = calculate_condition(

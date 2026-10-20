@@ -13,9 +13,9 @@ Follows the monochrome JupyRecSys style used across Chapters 3 and 4:
 from __future__ import annotations
 
 from pathlib import Path
+
 import matplotlib.pyplot as plt
 from matplotlib.patches import FancyBboxPatch, Rectangle
-
 
 OUT_DIR = Path(__file__).resolve().parents[1] / "thesis" / "figures"
 
@@ -131,14 +131,56 @@ def render_fig4_4() -> None:
     # Panel (a): Stage 3 Information Barrier & Task Writer
     # ==========================================================================
     p1_x, p1_y, p1_w, p1_h = 0.08, 0.10, 4.45, 3.40
-    draw_rect(ax, p1_x, p1_y, p1_w, p1_h, facecolor=C_GROUP, edgecolor=C_BLACK, linewidth=0.95, zorder=1)
-    draw_rect(ax, p1_x, p1_y + p1_h - 0.42, p1_w, 0.42, facecolor=C_SUB, edgecolor=C_BLACK, linewidth=0.85, zorder=2)
-    ax.text(p1_x + p1_w / 2, p1_y + p1_h - 0.21, "(a) Stage 3 Information Barrier & Writer", fontsize=9.1, fontweight="bold", ha="center", va="center")
+    draw_rect(
+        ax, p1_x, p1_y, p1_w, p1_h, facecolor=C_GROUP, edgecolor=C_BLACK, linewidth=0.95, zorder=1
+    )
+    draw_rect(
+        ax,
+        p1_x,
+        p1_y + p1_h - 0.42,
+        p1_w,
+        0.42,
+        facecolor=C_SUB,
+        edgecolor=C_BLACK,
+        linewidth=0.85,
+        zorder=2,
+    )
+    ax.text(
+        p1_x + p1_w / 2,
+        p1_y + p1_h - 0.21,
+        "(a) Stage 3 Information Barrier & Writer",
+        fontsize=9.1,
+        fontweight="bold",
+        ha="center",
+        va="center",
+    )
 
     # Box 1 (Top): Withheld Across Information Barrier
-    draw_rect(ax, 0.24, 2.04, 4.13, 0.90, facecolor=C_WHITE, edgecolor=C_BLACK, linewidth=0.85, linestyle="--", zorder=2)
-    draw_rect(ax, 0.24, 2.62, 4.13, 0.32, facecolor=C_PROC, edgecolor=C_BLACK, linewidth=0.8, zorder=3)
-    ax.text(2.305, 2.78, "Withheld Across Information Barrier", fontsize=7.8, fontweight="bold", ha="center", va="center", zorder=4)
+    draw_rect(
+        ax,
+        0.24,
+        2.04,
+        4.13,
+        0.90,
+        facecolor=C_WHITE,
+        edgecolor=C_BLACK,
+        linewidth=0.85,
+        linestyle="--",
+        zorder=2,
+    )
+    draw_rect(
+        ax, 0.24, 2.62, 4.13, 0.32, facecolor=C_PROC, edgecolor=C_BLACK, linewidth=0.8, zorder=3
+    )
+    ax.text(
+        2.305,
+        2.78,
+        "Withheld Across Information Barrier",
+        fontsize=7.8,
+        fontweight="bold",
+        ha="center",
+        va="center",
+        zorder=4,
+    )
     ax.text(
         0.34,
         2.33,
@@ -154,9 +196,22 @@ def render_fig4_4() -> None:
     )
 
     # Box 2 (Middle): Passed to Task Writer
-    draw_rect(ax, 0.24, 0.96, 4.13, 0.94, facecolor=C_WHITE, edgecolor=C_BLACK, linewidth=0.85, zorder=2)
-    draw_rect(ax, 0.24, 1.58, 4.13, 0.32, facecolor=C_SUB, edgecolor=C_BLACK, linewidth=0.8, zorder=3)
-    ax.text(2.305, 1.74, "Passed to Stage 3 Task Writer", fontsize=7.8, fontweight="bold", ha="center", va="center", zorder=4)
+    draw_rect(
+        ax, 0.24, 0.96, 4.13, 0.94, facecolor=C_WHITE, edgecolor=C_BLACK, linewidth=0.85, zorder=2
+    )
+    draw_rect(
+        ax, 0.24, 1.58, 4.13, 0.32, facecolor=C_SUB, edgecolor=C_BLACK, linewidth=0.8, zorder=3
+    )
+    ax.text(
+        2.305,
+        1.74,
+        "Passed to Stage 3 Task Writer",
+        fontsize=7.8,
+        fontweight="bold",
+        ha="center",
+        va="center",
+        zorder=4,
+    )
     ax.text(
         0.34,
         1.27,
@@ -175,7 +230,9 @@ def render_fig4_4() -> None:
     draw_arrow(ax, 2.305, 0.96, 2.305, 0.74, lw=1.0)
 
     # Stage 3 LLM Process Box at bottom of Panel (a)
-    draw_round_box(ax, 0.24, 0.22, 4.13, 0.52, facecolor=C_PROC, edgecolor=C_BLACK, linewidth=0.95, zorder=3)
+    draw_round_box(
+        ax, 0.24, 0.22, 4.13, 0.52, facecolor=C_PROC, edgecolor=C_BLACK, linewidth=0.95, zorder=3
+    )
     ax.text(
         2.305,
         0.48,
@@ -195,12 +252,24 @@ def render_fig4_4() -> None:
     # Panel (b): Resulting Student-Facing Task ("Two Play-Area Floor Designs")
     # ==========================================================================
     p2_x, p2_y, p2_w, p2_h = 4.88, 0.10, 7.44, 3.40
-    draw_rect(ax, p2_x, p2_y, p2_w, p2_h, facecolor=C_GROUP, edgecolor=C_BLACK, linewidth=0.95, zorder=1)
-    draw_rect(ax, p2_x, p2_y + p2_h - 0.42, p2_w, 0.42, facecolor=C_SUB, edgecolor=C_BLACK, linewidth=0.85, zorder=2)
+    draw_rect(
+        ax, p2_x, p2_y, p2_w, p2_h, facecolor=C_GROUP, edgecolor=C_BLACK, linewidth=0.95, zorder=1
+    )
+    draw_rect(
+        ax,
+        p2_x,
+        p2_y + p2_h - 0.42,
+        p2_w,
+        0.42,
+        facecolor=C_SUB,
+        edgecolor=C_BLACK,
+        linewidth=0.85,
+        zorder=2,
+    )
     ax.text(
         p2_x + p2_w / 2,
         p2_y + p2_h - 0.21,
-        "(b) Generated Student PF Task for 6.G.A.1: \"Two Play-Area Floor Designs\" (158 Words)",
+        '(b) Generated Student PF Task for 6.G.A.1: "Two Play-Area Floor Designs" (158 Words)',
         fontsize=9.0,
         fontweight="bold",
         ha="center",
@@ -212,15 +281,25 @@ def render_fig4_4() -> None:
     draw_rect(ax, tx, ty, tw, th, facecolor=C_WHITE, edgecolor=C_BLACK, linewidth=0.85, zorder=2)
 
     # Paragraph 1: Given Geometry
-    draw_rect(ax, tx + 0.10, ty + 1.24, tw - 0.20, 0.84, facecolor=C_GROUP, edgecolor=C_BLACK, linewidth=0.75, zorder=3)
+    draw_rect(
+        ax,
+        tx + 0.10,
+        ty + 1.24,
+        tw - 0.20,
+        0.84,
+        facecolor=C_GROUP,
+        edgecolor=C_BLACK,
+        linewidth=0.75,
+        zorder=3,
+    )
     ax.text(
         tx + 0.18,
         ty + 1.66,
         "Problem Setup & Given Dimensions:\n"
-        "\"Both designs fit inside an outer rectangle that is 12 units long and\n"
+        '"Both designs fit inside an outer rectangle that is 12 units long and\n'
         "8 units wide. In Design A, a corner is removed... bounded by perpendicular\n"
         "sides of lengths 4 units and 3 units and a slanted side of length 5 units.\n"
-        "In Design B, a rectangular corner of 4 units by 3 units is removed.\"",
+        'In Design B, a rectangular corner of 4 units by 3 units is removed."',
         fontsize=7.05,
         color=C_BLACK,
         ha="left",
@@ -230,15 +309,25 @@ def render_fig4_4() -> None:
     )
 
     # Paragraph 2: Volunteer Conjecture & Open Question
-    draw_rect(ax, tx + 0.10, ty + 0.10, tw - 0.20, 1.04, facecolor=C_PROC, edgecolor=C_BLACK, linewidth=0.85, zorder=3)
+    draw_rect(
+        ax,
+        tx + 0.10,
+        ty + 0.10,
+        tw - 0.20,
+        1.04,
+        facecolor=C_PROC,
+        edgecolor=C_BLACK,
+        linewidth=0.85,
+        zorder=3,
+    )
     ax.text(
         tx + 0.18,
         ty + 0.62,
         "Shortcut Conjecture & Single Open Question:\n"
-        "\"A volunteer conjectures that the designs have the same usable area\n"
+        '"A volunteer conjectures that the designs have the same usable area\n'
         "because their outer rectangles match.\n"
         "Question: Which design should the parks team choose for more usable\n"
-        "floor space, and what is each usable area? Show your reasoning.\"",
+        'floor space, and what is each usable area? Show your reasoning."',
         fontsize=6.95,
         fontweight="bold",
         color=C_BLACK,
@@ -251,7 +340,9 @@ def render_fig4_4() -> None:
     # Right annotations inside Panel (b): Why Each Part Preserves PF
     rx, rw = 10.02, 2.14
     draw_arrow(ax, tx + tw, ty + 1.66, rx, ty + 1.66, lw=1.0)
-    draw_rect(ax, rx, ty + 1.24, rw, 0.84, facecolor=C_WHITE, edgecolor=C_BLACK, linewidth=0.85, zorder=2)
+    draw_rect(
+        ax, rx, ty + 1.24, rw, 0.84, facecolor=C_WHITE, edgecolor=C_BLACK, linewidth=0.85, zorder=2
+    )
     ax.text(
         rx + rw / 2,
         ty + 1.66,
@@ -265,7 +356,9 @@ def render_fig4_4() -> None:
     )
 
     draw_arrow(ax, tx + tw, ty + 0.62, rx, ty + 0.62, lw=1.0)
-    draw_rect(ax, rx, ty + 0.10, rw, 1.04, facecolor=C_WHITE, edgecolor=C_BLACK, linewidth=0.85, zorder=2)
+    draw_rect(
+        ax, rx, ty + 0.10, rw, 1.04, facecolor=C_WHITE, edgecolor=C_BLACK, linewidth=0.85, zorder=2
+    )
     ax.text(
         rx + rw / 2,
         ty + 0.62,
@@ -279,7 +372,9 @@ def render_fig4_4() -> None:
     )
 
     # Bottom banner inside Panel (b)
-    draw_rect(ax, 5.04, 0.22, 7.12, 0.44, facecolor=C_MID, edgecolor=C_BLACK, linewidth=0.85, zorder=3)
+    draw_rect(
+        ax, 5.04, 0.22, 7.12, 0.44, facecolor=C_MID, edgecolor=C_BLACK, linewidth=0.85, zorder=3
+    )
     ax.text(
         8.60,
         0.44,

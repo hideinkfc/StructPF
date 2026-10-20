@@ -38,8 +38,9 @@ def baseline_report(output: Path) -> dict:
     for task_id, task in audit["tasks"].items():
         source = json.loads((ROOT / task["source"]).read_text())
         brief = source["stages"]["D2_D3"]["brief_selection"]["selected_brief"]
-        text = "\n".join([a["first_action"] for a in brief["approaches"]]
-                         + [brief["successful_route"]])
+        text = "\n".join(
+            [a["first_action"] for a in brief["approaches"]] + [brief["successful_route"]]
+        )
         attempts = {label: records[label] for label in task["learner_attempt_ids"]}
         paths = []
         for path in task["paths"]:
@@ -53,19 +54,38 @@ def baseline_report(output: Path) -> dict:
                 raise ValueError("Cached path counts do not match actual classifications")
             profiles = {label: requests[label]["profile_id"] for label in attempts}
             sensitivity = [
-                weighted_path_rate(path["attempts"], profiles, {
-                    "recent_prerequisites": weight, "one_prerequisite_gap": 1 - weight,
-                })
+                weighted_path_rate(
+                    path["attempts"],
+                    profiles,
+                    {
+                        "recent_prerequisites": weight,
+                        "one_prerequisite_gap": 1 - weight,
+                    },
+                )
                 for weight in (0.25, 0.5, 0.75)
             ]
-            paths.append({
-                **{key: path[key] for key in ("id", "kind", "design_quote",
-                                              "operational_definition", "same_idea_as")},
-                "counts": counts, "assumed_mix_sensitivity": sensitivity,
-            })
+            paths.append(
+                {
+                    **{
+                        key: path[key]
+                        for key in (
+                            "id",
+                            "kind",
+                            "design_quote",
+                            "operational_definition",
+                            "same_idea_as",
+                        )
+                    },
+                    "counts": counts,
+                    "assumed_mix_sensitivity": sensitivity,
+                }
+            )
         report["tasks"][task_id] = {
-            "source": task["source"], "denominator": len(attempts), "paths": paths,
-            "diagnosis": task["diagnosis"], "unexpected": task["new_paths"],
+            "source": task["source"],
+            "denominator": len(attempts),
+            "paths": paths,
+            "diagnosis": task["diagnosis"],
+            "unexpected": task["new_paths"],
         }
     benchmark._write_json(output / "baseline_report.json", report)
     return report
@@ -82,8 +102,9 @@ def prepare_attempt_panels(output: Path) -> dict:
     specs = {row["id"]: row for row in manifest["protocol"]["tasks"]}
     panels, panel_keys = {}, {}
     for label, identifier in keys.items():
-        requests = [r for r in manifest["requests"]
-                    if r["phase"] == "fresh" and r["task_id"] == identifier]
+        requests = [
+            r for r in manifest["requests"] if r["phase"] == "fresh" and r["task_id"] == identifier
+        ]
         if len(requests) != 18:
             raise ValueError("Available final variant requires eighteen scheduled attempts")
         random.Random(20261014).shuffle(requests)
@@ -99,15 +120,21 @@ def prepare_attempt_panels(output: Path) -> dict:
             }
             mapping[attempt_label] = request["id"]
         panels[label] = {
-            "student_task": text, "paths": codebook["tasks"][label]["paths"], "attempts": entries,
+            "student_task": text,
+            "paths": codebook["tasks"][label]["paths"],
+            "attempts": entries,
         }
         panel_keys[label] = {"identifier": identifier, "attempts": mapping}
     benchmark._write_json(output / "attempt_panel_key.json", panel_keys)
     for family in {spec["family"] for spec in specs.values()}:
-        benchmark._write_json(output / f"attempt_packet_{family}.json", {
-            label: panel for label, panel in panels.items()
-            if specs[keys[label]]["family"] == family
-        })
+        benchmark._write_json(
+            output / f"attempt_packet_{family}.json",
+            {
+                label: panel
+                for label, panel in panels.items()
+                if specs[keys[label]]["family"] == family
+            },
+        )
     return panels
 
 
@@ -122,7 +149,8 @@ def validate_panel_coding(coding: dict, packet: dict) -> dict:
         for path_id, row in task["paths"].items():
             validate_path(
                 {**definitions[path_id], "attempts": row["attempts"]},
-                original["attempts"], definitions[path_id]["design_quote"],
+                original["attempts"],
+                definitions[path_id]["design_quote"],
             )
         if set(task["attempts"]) != set(original["attempts"]):
             raise ValueError("Final attempt coding must keep every outcome")
@@ -132,8 +160,10 @@ def validate_panel_coding(coding: dict, packet: dict) -> dict:
             if row["initial_access"] not in {"yes", "no", "unknown"}:
                 raise ValueError("Unknown access status in final attempt coding")
             for quote in row["evidence"]:
-                if not isinstance(quote, str) or not quote.strip() or quote not in source_text(
-                    original["attempts"][attempt_id]
+                if (
+                    not isinstance(quote, str)
+                    or not quote.strip()
+                    or quote not in source_text(original["attempts"][attempt_id])
                 ):
                     raise ValueError("Final attempt evidence does not match its response")
         for unexpected in task["unexpected_paths"]:
@@ -169,7 +199,8 @@ def final_report(output: Path) -> dict:
     for family in {spec["family"] for spec in config["cases"]}:
         packet = json.loads((output / f"attempt_packet_{family}.json").read_text())
         coding = validate_panel_coding(
-            json.loads((output / f"path_coding_{family}.json").read_text()), packet,
+            json.loads((output / f"path_coding_{family}.json").read_text()),
+            packet,
         )
         coding_by_label.update(coding["tasks"])
     arm_counts = {arm: Counter() for arm in config["arms"]}
@@ -189,7 +220,8 @@ def final_report(output: Path) -> dict:
             groups = {}
             for condition in ("learner_gpt41", "learner_gpt54", "solver"):
                 selected = {
-                    aid: value for aid, value in row["attempts"].items()
+                    aid: value
+                    for aid, value in row["attempts"].items()
                     if request_group(requests[panel_keys[label]["attempts"][aid]]) == condition
                 }
                 groups[condition] = path_counts({"attempts": selected})
@@ -201,9 +233,15 @@ def final_report(output: Path) -> dict:
             attempts[f"{group}/attempted"] += 1
             attempts[f"{group}/mathematics/{value['mathematics']}"] += 1
         tasks[identifier] = {
-            "case_id": case_id, "arm": arm, "label": label, "task_review": review,
-            "path_denominator": len(paths), "paths": paths, "attempt_counts": dict(attempts),
-            "unexpected_paths": coding["unexpected_paths"], "diagnosis": coding["diagnosis"],
+            "case_id": case_id,
+            "arm": arm,
+            "label": label,
+            "task_review": review,
+            "path_denominator": len(paths),
+            "paths": paths,
+            "attempt_counts": dict(attempts),
+            "unexpected_paths": coding["unexpected_paths"],
+            "diagnosis": coding["diagnosis"],
         }
     stage_calls = 0
     stage_usage = {}
@@ -263,8 +301,11 @@ def render(output: Path, result: dict) -> None:
             learner = path["groups"]["learner_gpt41"]
             transfer = path["groups"]["learner_gpt54"]
             rows.append(
-                "<tr><td>" + html.escape(path["operational_definition"]) + "</td><td>"
-                + html.escape(path["kind"]) + f"</td><td>{learner['reached']}/"
+                "<tr><td>"
+                + html.escape(path["operational_definition"])
+                + "</td><td>"
+                + html.escape(path["kind"])
+                + f"</td><td>{learner['reached']}/"
                 f"{learner['attempted']} ({learner['unknown']} unknown)</td>"
                 f"<td>{transfer['reached']}/{transfer['attempted']} "
                 f"({transfer['unknown']} unknown)</td></tr>"
@@ -272,47 +313,64 @@ def render(output: Path, result: dict) -> None:
         student_task = task_packet[task["label"]]["student_task"]
         text = (
             "<h3>Student exercise</h3><pre>"
-            + html.escape(student_task["title"] + "\n\n" + student_task["body"] + "\n\n"
-                          + student_task["question"])
+            + html.escape(
+                student_task["title"]
+                + "\n\n"
+                + student_task["body"]
+                + "\n\n"
+                + student_task["question"]
+            )
             + "</pre>"
-            if student_task is not None else "<p>No usable student task was produced.</p>"
+            if student_task is not None
+            else "<p>No usable student task was produced.</p>"
         )
         cards.append(
-            "<details><summary>" + html.escape(identifier) + "</summary><p>"
-            + html.escape(task["task_review"]["rationale"]) + "</p>" + text + "<p>"
-            + html.escape(task["diagnosis"]) + "</p><table>"
+            "<details><summary>"
+            + html.escape(identifier)
+            + "</summary><p>"
+            + html.escape(task["task_review"]["rationale"])
+            + "</p>"
+            + text
+            + "<p>"
+            + html.escape(task["diagnosis"])
+            + "</p><table>"
             "<tr><th>Intended mathematical action</th><th>Kind</th>"
             "<th>GPT-4.1 learner attempts</th><th>GPT-5.4 learner attempts</th></tr>"
-            + "".join(rows) + "</table></details>"
+            + "".join(rows)
+            + "</table></details>"
         )
     totals = []
     chart = ""
     original_division = result["tasks"].get("division_original")
     if original_division:
         trimming = next(
-            (path for path in original_division["paths"] if path["id"] == "p03"), None,
+            (path for path in original_division["paths"] if path["id"] == "p03"),
+            None,
         )
         if trimming:
             bars = []
-            for index, (group_id, label) in enumerate((
-                ("learner_gpt41", "GPT-4.1 learner conditions"),
-                ("learner_gpt54", "GPT-5.4 learner conditions"),
-            )):
+            for index, (group_id, label) in enumerate(
+                (
+                    ("learner_gpt41", "GPT-4.1 learner conditions"),
+                    ("learner_gpt54", "GPT-5.4 learner conditions"),
+                )
+            ):
                 counts = trimming["groups"][group_id]
                 y = 20 + index * 52
                 width = 390 * counts["reached"] / counts["attempted"]
                 bars.append(
-                    f"<text x='10' y='{y+18}'>{label}</text>"
+                    f"<text x='10' y='{y + 18}'>{label}</text>"
                     f"<rect x='290' y='{y}' width='390' height='28' fill='#dfe7ee'/>"
                     f"<rect x='290' y='{y}' width='{width}' height='28' fill='#3176a5'/>"
-                    f"<text x='700' y='{y+18}'>{counts['reached']}/"
+                    f"<text x='700' y='{y + 18}'>{counts['reached']}/"
                     f"{counts['attempted']} attempts</text>"
                 )
             chart = (
                 "<h2>Same original task, different observed path coverage</h2>"
                 "<svg viewBox='0 0 950 140' role='img' style='width:100%;font:16px system-ui' "
                 "aria-label='Original division intended-trimming reach by model series'>"
-                + "".join(bars) + "</svg>"
+                + "".join(bars)
+                + "</svg>"
                 "<p>Measured model replies under hypothetical learner records. Reaching "
                 "the structure does not prove correct execution or human realism.</p>"
             )
@@ -323,10 +381,16 @@ def render(output: Path, result: dict) -> None:
         ("disclosure/none", "Central discovery not supplied"),
         ("design_requirements", "All predefined design requirements"),
     ):
-        totals.append("<tr><td>" + label + "</td>" + "".join(
-            f"<td>{result['arms'][arm].get(metric, 0)}/3</td>"
-            for arm in ("original", "design_review", "coverage_feedback")
-        ) + "</tr>")
+        totals.append(
+            "<tr><td>"
+            + label
+            + "</td>"
+            + "".join(
+                f"<td>{result['arms'][arm].get(metric, 0)}/3</td>"
+                for arm in ("original", "design_review", "coverage_feedback")
+            )
+            + "</tr>"
+        )
     page = (
         "<!doctype html><html lang='en'><meta charset='utf-8'>"
         "<meta name='viewport' content='width=device-width,initial-scale=1'>"
@@ -363,7 +427,8 @@ def render(output: Path, result: dict) -> None:
         + chart
         + "<h2>Task design review, three cases per arm</h2><table><tr><th>Outcome</th>"
         "<th>Original</th><th>Specific design review</th><th>Review + path coverage</th></tr>"
-        + "".join(totals) + "</table>"
+        + "".join(totals)
+        + "</table>"
         "<p>Assistant label-hidden review, not human ratings. Intended-path sets "
         "can change during redesign; their denominators are displayed and are not "
         "an improvement score. A path missing from these samples is not impossible "
@@ -376,7 +441,8 @@ def render(output: Path, result: dict) -> None:
         "<p><a href='summary.json'>Final synthesis and all path counts</a> &middot; "
         "<a href='baseline_report.json'>All nine original task audits and assumed mixes</a>"
         " &middot; <a href='attempts/attempts.html'>All fresh written attempts</a></p>"
-        + "".join(cards) + "</html>"
+        + "".join(cards)
+        + "</html>"
     )
     (output / "final_report.html").write_text(page, encoding="utf-8")
 
@@ -394,5 +460,12 @@ if __name__ == "__main__":
         print(f"Prepared {len(result)} prospective-path evaluation panels")
     else:
         result = final_report(args.output)
-        print(json.dumps({key: result[key] for key in ("arms", "design_gain_margin",
-                                                      "actual_total_requests")}, indent=2))
+        print(
+            json.dumps(
+                {
+                    key: result[key]
+                    for key in ("arms", "design_gain_margin", "actual_total_requests")
+                },
+                indent=2,
+            )
+        )

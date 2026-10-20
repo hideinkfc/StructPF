@@ -60,8 +60,10 @@ def test_discovery_notes_round_trip_without_becoming_student_question():
 @pytest.mark.parametrize("value", [None, "", [], 7])
 def test_v2_requires_substantive_discovery_notes(field, value):
     payload = {
-        **brief_payload(), "schema_version": "design-brief/v2",
-        "key_idea": "Amounts matter.", "naive_answer": "Use equal amounts.",
+        **brief_payload(),
+        "schema_version": "design-brief/v2",
+        "key_idea": "Amounts matter.",
+        "naive_answer": "Use equal amounts.",
     }
     payload[field] = value
     with pytest.raises(ValueError, match=field):
@@ -103,7 +105,8 @@ def test_explicit_v1_search_keeps_baseline_brief_shape(monkeypatch):
     assert len(result["winners"]) == 1
     assert result["brief_schema_version"] == "design-brief/v1"
     assert result["winners"][0].design_brief.to_dict() == {
-        "schema_version": "design-brief/v1", **payload,
+        "schema_version": "design-brief/v1",
+        **payload,
     }
 
 
@@ -113,6 +116,7 @@ def test_prompt_checks_discoveries_and_not_only_named_methods():
     assert "not observed student behaviour" in prompts["PROPOSE_BRIEF_SYSTEM"]
     assert "If all candidates disclose the idea" in prompts["SELECT_BRIEF_SYSTEM"]
     assert "both accepting and rejecting it remain open" in prompts["SELECT_BRIEF_SYSTEM"]
+
 
 @pytest.mark.parametrize(
     "key",
@@ -350,8 +354,12 @@ def test_no_valid_brief_is_explicit_and_repeated_rejection_returns_flagged_brief
     assert result["judge_error"] == "no valid design briefs to select"
     assert len(result["proposals"][0]["attempts"]) == 2
     rejected = {
-        "recommended_id": None, "approaches": [], "reason": "The goal is not attainable.",
-        "main_concern": "Feasibility", "number_requirements": [], "prior_contrast": None,
+        "recommended_id": None,
+        "approaches": [],
+        "reason": "The goal is not attainable.",
+        "main_concern": "Feasibility",
+        "number_requirements": [],
+        "prior_contrast": None,
     }
     responses = iter([brief_payload(), rejected] * 3)
     monkeypatch.setattr(runner, "chat_json", lambda *args, **kwargs: (next(responses), "raw"))
@@ -369,9 +377,14 @@ def test_no_valid_brief_is_explicit_and_repeated_rejection_returns_flagged_brief
 def test_selection_concern_is_revised_and_kept_in_history(monkeypatch):
     concern = {**selection_payload(), "main_concern": "Student question reveals the method."}
     revised = {**brief_payload(), "student_question": "What stock amounts would you choose?"}
-    responses = iter([
-        brief_payload(), concern, revised, {**selection_payload(), "recommended_id": 1},
-    ])
+    responses = iter(
+        [
+            brief_payload(),
+            concern,
+            revised,
+            {**selection_payload(), "recommended_id": 1},
+        ]
+    )
     requests = []
 
     def chat(*args, **kwargs):
@@ -424,7 +437,12 @@ def test_external_feedback_stays_paired_with_the_selected_design(monkeypatch):
     monkeypatch.setattr(runner, "chat_json", chat)
     case, context = search_inputs()
     result = stage.run_design_brief_search(
-        None, "test", case, context, k=2, design_feedback="Frozen coverage evidence",
+        None,
+        "test",
+        case,
+        context,
+        k=2,
+        design_feedback="Frozen coverage evidence",
     )
     assert "Frozen coverage evidence" in requests[0]
     assert "Frozen coverage evidence" in requests[1]

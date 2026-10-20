@@ -9,10 +9,15 @@ from src.simulation.pf_student import attempt_prompt, parse_attempt
 
 def context():
     return {
-        "grade": 10, "subject": "mathematics", "target": "PRIVATE_TARGET",
+        "grade": 10,
+        "subject": "mathematics",
+        "target": "PRIVATE_TARGET",
         "assumed_prior_knowledge": [
-            {"resource": "Arithmetic mean", "taught_as": "Calculate an average.",
-             "student_move": "PRIVATE_ERROR"},
+            {
+                "resource": "Arithmetic mean",
+                "taught_as": "Calculate an average.",
+                "student_move": "PRIVATE_ERROR",
+            },
             {"resource": "Basic arithmetic", "taught_as": "Add and divide."},
         ],
     }
@@ -20,9 +25,13 @@ def context():
 
 def task():
     return {
-        "status": "ready", "title": "Compare readings", "body": "A: 1, 2; B: 1, 3.",
-        "question": "Invent a comparison.", "quality_findings": ["PRIVATE_FINDING"],
-        "teacher_example": "PRIVATE_SOLUTION", "approaches": ["PRIVATE_METHOD"],
+        "status": "ready",
+        "title": "Compare readings",
+        "body": "A: 1, 2; B: 1, 3.",
+        "question": "Invent a comparison.",
+        "quality_findings": ["PRIVATE_FINDING"],
+        "teacher_example": "PRIVATE_SOLUTION",
+        "approaches": ["PRIVATE_METHOD"],
     }
 
 
@@ -34,9 +43,14 @@ def test_student_prompt_excludes_target_solution_method_and_feedback():
 
 
 def test_prerequisite_omission_does_not_inject_a_wrong_method():
-    prompt = attempt_prompt(task(), context(), {
-        "condition": "learner", "omit_resource": "Arithmetic mean",
-    })
+    prompt = attempt_prompt(
+        task(),
+        context(),
+        {
+            "condition": "learner",
+            "omit_resource": "Arithmetic mean",
+        },
+    )
     assert "Arithmetic mean" not in prompt["user"]
     assert "Basic arithmetic" in prompt["user"]
     with pytest.raises(ValueError, match="exactly one resource"):
@@ -56,26 +70,39 @@ def test_solver_receives_task_only_and_response_preserves_unfinished():
 
 def test_added_learned_resource_changes_record_not_student_instruction_or_task():
     base = attempt_prompt(task(), context(), {"condition": "learner"})
-    added = attempt_prompt(task(), context(), {
-        "condition": "learner",
-        "add_resources": [
-            {"resource": "Standard deviation", "taught_as": "Used a spread measure."},
-        ],
-    })
+    added = attempt_prompt(
+        task(),
+        context(),
+        {
+            "condition": "learner",
+            "add_resources": [
+                {"resource": "Standard deviation", "taught_as": "Used a spread measure."},
+            ],
+        },
+    )
     assert base["system"] == added["system"]
     assert json.loads(base["user"])["student_task"] == json.loads(added["user"])["student_task"]
     resources = json.loads(added["user"])["learner_record"]["assumed_prior_knowledge"]
     assert resources[-1]["resource"] == "Standard deviation"
     assert len(context()["assumed_prior_knowledge"]) == 2
     with pytest.raises(ValueError, match="duplicates"):
-        attempt_prompt(task(), context(), {
-            "condition": "learner",
-            "add_resources": [{"resource": "Arithmetic mean", "taught_as": "Already listed."}],
-        })
+        attempt_prompt(
+            task(),
+            context(),
+            {
+                "condition": "learner",
+                "add_resources": [{"resource": "Arithmetic mean", "taught_as": "Already listed."}],
+            },
+        )
     with pytest.raises(ValueError, match="nonempty"):
-        attempt_prompt(task(), context(), {
-            "condition": "learner", "add_resources": [{"resource": "Incomplete"}],
-        })
+        attempt_prompt(
+            task(),
+            context(),
+            {
+                "condition": "learner",
+                "add_resources": [{"resource": "Incomplete"}],
+            },
+        )
 
 
 def test_frozen_schedule_has_matched_inputs_and_fixed_budget():
@@ -112,10 +139,13 @@ def test_learning_record_study_manipulates_only_resource_records():
         assert len(prior["assumed_prior_knowledge"]) == 4
 
 
-@pytest.mark.parametrize("config_path", [
-    probe.DEFAULT_CONFIG,
-    probe.ROOT / "experiments/configs/pf_student_diagnosis_20261011.json",
-])
+@pytest.mark.parametrize(
+    "config_path",
+    [
+        probe.DEFAULT_CONFIG,
+        probe.ROOT / "experiments/configs/pf_student_diagnosis_20261011.json",
+    ],
+)
 def test_run_retains_invalid_attempts_without_replacements(tmp_path, monkeypatch, config_path):
     config = json.loads(config_path.read_text())
     requests = probe.build_requests(config)[:2]
@@ -149,12 +179,28 @@ def test_run_retains_invalid_attempts_without_replacements(tmp_path, monkeypatch
 def completed_probe(tmp_path):
     output = tmp_path / "completed"
     requests = [
-        {"id": "control", "phase": "calibration", "expected_answer": "12",
-         "model": "test-model", "profile_id": "learner", "task_id": "control"},
-        {"id": "first", "phase": "fresh", "model": "test-model",
-         "profile_id": "learner", "task_id": "comparison"},
-        {"id": "second", "phase": "fresh", "model": "test-model",
-         "profile_id": "solver", "task_id": "comparison"},
+        {
+            "id": "control",
+            "phase": "calibration",
+            "expected_answer": "12",
+            "model": "test-model",
+            "profile_id": "learner",
+            "task_id": "control",
+        },
+        {
+            "id": "first",
+            "phase": "fresh",
+            "model": "test-model",
+            "profile_id": "learner",
+            "task_id": "comparison",
+        },
+        {
+            "id": "second",
+            "phase": "fresh",
+            "model": "test-model",
+            "profile_id": "solver",
+            "task_id": "comparison",
+        },
     ]
     attempts = []
     for request in requests:
@@ -165,25 +211,44 @@ def completed_probe(tmp_path):
         relative = f"{request['phase']}/{request['id']}/result.json"
         invalid = request["id"] == "second"
         result = {
-            "id": request["id"], "status": "invalid_response" if invalid else "parsed",
-            "attempt": None if invalid else {
-                "written_work": "6 + 4 + 2 = 12", "answer": "12", "unfinished": False,
+            "id": request["id"],
+            "status": "invalid_response" if invalid else "parsed",
+            "attempt": None
+            if invalid
+            else {
+                "written_work": "6 + 4 + 2 = 12",
+                "answer": "12",
+                "unfinished": False,
             },
             "raw_text": "Partial response <retained>" if invalid else "original reply",
             "model_metadata": {"finish_reason": "length" if invalid else "stop"},
         }
         probe.benchmark._write_json(output / relative, result)
         trace = output / relative.replace("result.json", "model_calls.jsonl")
-        trace.write_text("\n".join(json.dumps(row) for row in (
-            {"event": "model_call_started", "call_id": request["id"]},
-            {"event": "model_call_finished", "call_id": request["id"], "elapsed_seconds": 1,
-             "usage": {"prompt_tokens": 10, "completion_tokens": 20, "total_tokens": 30}},
-        )))
+        trace.write_text(
+            "\n".join(
+                json.dumps(row)
+                for row in (
+                    {"event": "model_call_started", "call_id": request["id"]},
+                    {
+                        "event": "model_call_finished",
+                        "call_id": request["id"],
+                        "elapsed_seconds": 1,
+                        "usage": {"prompt_tokens": 10, "completion_tokens": 20, "total_tokens": 30},
+                    },
+                )
+            )
+        )
         attempts.append({"id": request["id"], "result_path": relative})
-    probe.benchmark._write_json(output / "manifest.json", {
-        "status": "completed", "requests": requests, "attempts": attempts,
-        "protocol": {"limitations": ["Illustrative software test, not observed learners"]},
-    })
+    probe.benchmark._write_json(
+        output / "manifest.json",
+        {
+            "status": "completed",
+            "requests": requests,
+            "attempts": attempts,
+            "protocol": {"limitations": ["Illustrative software test, not observed learners"]},
+        },
+    )
     return output
 
 
@@ -208,21 +273,23 @@ def test_report_keeps_truncation_separate_and_anonymizes_metadata(tmp_path):
 def test_report_rejects_duplicate_attempts_and_keeps_unknown_math(tmp_path):
     output = completed_probe(tmp_path)
     packet = report.prepare_review(output)
-    probe.benchmark._write_json(output / "review_coding.json", {
-        "provenance": "Illustrative software test",
-        "attempts": {
-            label: {
-                "mathematics_status": "unknown", "named_advanced_procedure": False,
-                "approaches": ["unknown"], "rationale": "Not evaluated in this software test.",
-            }
-            for label in packet
+    probe.benchmark._write_json(
+        output / "review_coding.json",
+        {
+            "provenance": "Illustrative software test",
+            "attempts": {
+                label: {
+                    "mathematics_status": "unknown",
+                    "named_advanced_procedure": False,
+                    "approaches": ["unknown"],
+                    "rationale": "Not evaluated in this software test.",
+                }
+                for label in packet
+            },
         },
-    })
-    summary = report.summarize(output)
-    assert all(
-        counts["math/unknown"] == 1
-        for counts in summary["task_profile_groups"].values()
     )
+    summary = report.summarize(output)
+    assert all(counts["math/unknown"] == 1 for counts in summary["task_profile_groups"].values())
     manifest = json.loads((output / "manifest.json").read_text())
     manifest["attempts"].append(manifest["attempts"][0])
     probe.benchmark._write_json(output / "manifest.json", manifest)
@@ -239,10 +306,16 @@ def test_fresh_phase_requires_unchanged_completed_calibration(tmp_path, monkeypa
             return self
 
     monkeypatch.setattr(probe, "load_client", lambda _: (Client(), "test-model"))
-    monkeypatch.setattr(probe.benchmark, "_call_json", lambda *args, **kwargs: (
-        {"written_work": "6 + 4 + 2 = 12", "answer": "12", "unfinished": False},
-        "original", {"model": "test-model"}, None,
-    ))
+    monkeypatch.setattr(
+        probe.benchmark,
+        "_call_json",
+        lambda *args, **kwargs: (
+            {"written_work": "6 + 4 + 2 = 12", "answer": "12", "unfinished": False},
+            "original",
+            {"model": "test-model"},
+            None,
+        ),
+    )
     output = tmp_path / "resume"
     probe.run(probe.DEFAULT_CONFIG, output)
     manifest_path = output / "manifest.json"
@@ -251,9 +324,13 @@ def test_fresh_phase_requires_unchanged_completed_calibration(tmp_path, monkeypa
     probe.benchmark._write_json(manifest_path, changed)
     with pytest.raises(ValueError, match="protocol or task inputs changed"):
         probe.run(probe.DEFAULT_CONFIG, output, phase="fresh")
-    changed = {**original, "source_hashes": {
-        **original["source_hashes"], "src/simulation/pf_student.py": "wrong-hash",
-    }}
+    changed = {
+        **original,
+        "source_hashes": {
+            **original["source_hashes"],
+            "src/simulation/pf_student.py": "wrong-hash",
+        },
+    }
     probe.benchmark._write_json(manifest_path, changed)
     with pytest.raises(ValueError, match="Source changed"):
         probe.run(probe.DEFAULT_CONFIG, output, phase="fresh")

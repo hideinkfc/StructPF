@@ -98,7 +98,9 @@ def test_plausibility_and_diversity_use_cached_judge_results(monkeypatch):
     _, plausibility = pilot.evaluate_plausibility([record], repeats=1)
     assert plausibility["plausible"].tolist() == [True, True, True]
 
-    diversity, summary = pilot.evaluate_diversity([record], plausibility, repeats=1, use_derivation=True)
+    diversity, summary = pilot.evaluate_diversity(
+        [record], plausibility, repeats=1, use_derivation=True
+    )
     assert diversity.loc[0, "diversity"] == 1.0
     assert summary.loc[0, "questions_measured"] == 1
 
@@ -137,10 +139,12 @@ def test_diversity_normalizes_two_valid_distractors(monkeypatch):
             {"text": "9"},
         ],
     }
-    plausibility = pd.DataFrame([
-        {"question_id": 1, "distractor_index": 1, "plausible": True},
-        {"question_id": 1, "distractor_index": 2, "plausible": True},
-    ])
+    plausibility = pd.DataFrame(
+        [
+            {"question_id": 1, "distractor_index": 1, "plausible": True},
+            {"question_id": 1, "distractor_index": 2, "plausible": True},
+        ]
+    )
 
     def fake_judge(prompt, client=None, model=None):
         return {"same_error": False, "shared_faulty_step": "", "reason": "different"}, True

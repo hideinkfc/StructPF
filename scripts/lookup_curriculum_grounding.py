@@ -30,7 +30,9 @@ def load_cells() -> list[dict]:
     return cells
 
 
-def find(cells: list[dict], exercise: str | None, grade: int | None, topic: str | None) -> list[dict]:
+def find(
+    cells: list[dict], exercise: str | None, grade: int | None, topic: str | None
+) -> list[dict]:
     hits = []
     for cell in cells:
         if exercise and exercise in cell.get("expert_tasks_grounded", []):
@@ -38,7 +40,11 @@ def find(cells: list[dict], exercise: str | None, grade: int | None, topic: str 
             continue
         if grade is not None and str(cell.get("grade")) != str(grade):
             continue
-        if topic and topic.lower() not in (cell.get("target_concept", "") + " " + cell.get("id", "")).lower():
+        if (
+            topic
+            and topic.lower()
+            not in (cell.get("target_concept", "") + " " + cell.get("id", "")).lower()
+        ):
             continue
         if exercise is None:
             hits.append(cell)

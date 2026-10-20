@@ -24,7 +24,9 @@ from scripts.run_basic_glm_correctness_pilot import (  # noqa: E402
     load_questions,
 )
 
-OUTPUT_PATH = PROJECT_ROOT / "experiments" / "results" / "phase1_mcq" / "mcq_20_two_judge_plausibility.json"
+OUTPUT_PATH = (
+    PROJECT_ROOT / "experiments" / "results" / "phase1_mcq" / "mcq_20_two_judge_plausibility.json"
+)
 RECOVERY_TIMEOUT = 180.0
 RECOVERY_WORKERS = 1
 
@@ -33,13 +35,23 @@ def main() -> None:
     payload = json.loads(OUTPUT_PATH.read_text())
     question_map = {question["QuestionId"]: question for question in load_questions()}
     records = payload["generated_records"]
-    failed = [record for record in records if record.get("parse_error") or len(record.get("distractors", [])) != 3]
+    failed = [
+        record
+        for record in records
+        if record.get("parse_error") or len(record.get("distractors", [])) != 3
+    ]
     print("failed generations before recovery:", [record["question_id"] for record in failed])
 
     generator_client = get_client()
     with ThreadPoolExecutor(max_workers=min(RECOVERY_WORKERS, max(1, len(failed)))) as pool:
         futures = [
-            pool.submit(generate_distractors, question_map[record["question_id"]], generator_client, timeout=RECOVERY_TIMEOUT, structured_paths=False)
+            pool.submit(
+                generate_distractors,
+                question_map[record["question_id"]],
+                generator_client,
+                timeout=RECOVERY_TIMEOUT,
+                structured_paths=False,
+            )
             for record in failed
         ]
         recovered = [future.result() for future in futures]
@@ -58,14 +70,23 @@ def main() -> None:
                 "attempted_question_ids": [record["question_id"] for record in failed],
                 "timeout_seconds": RECOVERY_TIMEOUT,
                 "workers": RECOVERY_WORKERS,
-                "remaining_failed_question_ids": [record["question_id"] for record in merged_records if record.get("parse_error") or len(record.get("distractors", [])) != 3],
+                "remaining_failed_question_ids": [
+                    record["question_id"]
+                    for record in merged_records
+                    if record.get("parse_error") or len(record.get("distractors", [])) != 3
+                ],
             },
             "generated_records": merged_records,
             "generation_summary": {
                 "questions_generated": len(merged_records),
-                "complete_three_distractor_sets": sum(len(record.get("distractors", [])) == 3 and not record.get("parse_error") for record in merged_records),
+                "complete_three_distractor_sets": sum(
+                    len(record.get("distractors", [])) == 3 and not record.get("parse_error")
+                    for record in merged_records
+                ),
                 "parse_failures": sum(bool(record.get("parse_error")) for record in merged_records),
-                "distractors_parsed": sum(len(record.get("distractors", [])) for record in merged_records),
+                "distractors_parsed": sum(
+                    len(record.get("distractors", [])) for record in merged_records
+                ),
             },
             "correctness_summary": correctness_summary,
             "plausibility_judgments": judge_rows,

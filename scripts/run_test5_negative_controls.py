@@ -154,8 +154,7 @@ def summarize_model(
     scores: dict[str, list[dict[str, float | None]]] = defaultdict(list)
     for (condition, question_id), question_rows in sorted(by_condition_question.items()):
         pairs = [
-            (row["profile_id"], row["selected_option"] or "UNPARSEABLE")
-            for row in question_rows
+            (row["profile_id"], row["selected_option"] or "UNPARSEABLE") for row in question_rows
         ]
         score = permutation_nmi(pairs, permutations, seed=42 + question_id)
         scores[condition].append(score)
@@ -176,14 +175,10 @@ def summarize_model(
     condition_summary = {}
     for condition, condition_scores in scores.items():
         observed = [
-            score["observed"]
-            for score in condition_scores
-            if score["observed"] is not None
+            score["observed"] for score in condition_scores if score["observed"] is not None
         ]
         adjusted = [
-            score["adjusted"]
-            for score in condition_scores
-            if score["adjusted"] is not None
+            score["adjusted"] for score in condition_scores if score["adjusted"] is not None
         ]
         mean_observed = sum(observed) / len(observed) if observed else None
         mean_adjusted = sum(adjusted) / len(adjusted) if adjusted else None
@@ -222,12 +217,8 @@ def summarize_model(
         else None,
         "conditions": condition_summary,
         "wall_seconds": round(wall_seconds, 3),
-        "effective_calls_per_second": round(len(rows) / wall_seconds, 3)
-        if wall_seconds
-        else None,
-        "mean_latency_seconds": round(sum(latencies) / len(latencies), 3)
-        if latencies
-        else None,
+        "effective_calls_per_second": round(len(rows) / wall_seconds, 3) if wall_seconds else None,
+        "mean_latency_seconds": round(sum(latencies) / len(latencies), 3) if latencies else None,
         "matrices": matrices,
     }
 
@@ -262,8 +253,7 @@ def main() -> None:
     tasks = build_tasks()
     model_names = {label: models[label] for label in args.models}
     clients = {
-        label: OpenAI(base_url=base_url, api_key=api_key, max_retries=0)
-        for label in args.models
+        label: OpenAI(base_url=base_url, api_key=api_key, max_retries=0) for label in args.models
     }
     scheduled = [
         (label, task, repeat)
@@ -340,10 +330,7 @@ def main() -> None:
                 "Three surface variants of one wrong answer with the same repeated "
                 "profile procedure."
             ),
-            "nonsense": (
-                "Three unrelated wrong options with the same repeated profile "
-                "procedure."
-            ),
+            "nonsense": ("Three unrelated wrong options with the same repeated profile procedure."),
         },
         "parameters": {
             "temperature": args.temperature,

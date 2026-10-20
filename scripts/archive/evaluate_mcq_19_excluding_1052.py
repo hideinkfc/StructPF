@@ -18,18 +18,32 @@ from scripts.compare_saved_pilot_plausibility_judges import (  # noqa: E402
 )
 from scripts.run_basic_glm_correctness_pilot import evaluate_records, get_judge_client  # noqa: E402
 
-INPUT_PATH = PROJECT_ROOT / "experiments" / "results" / "phase1_mcq" / "mcq_20_two_judge_plausibility.json"
-OUTPUT_PATH = PROJECT_ROOT / "experiments" / "results" / "phase1_mcq" / "mcq_19_two_judge_plausibility_final.json"
+INPUT_PATH = (
+    PROJECT_ROOT / "experiments" / "results" / "phase1_mcq" / "mcq_20_two_judge_plausibility.json"
+)
+OUTPUT_PATH = (
+    PROJECT_ROOT
+    / "experiments"
+    / "results"
+    / "phase1_mcq"
+    / "mcq_19_two_judge_plausibility_final.json"
+)
 EXCLUDED_QUESTION_ID = 1052
 
 
 def main() -> None:
     payload = json.loads(INPUT_PATH.read_text())
-    records = [record for record in payload["generated_records"] if record["question_id"] != EXCLUDED_QUESTION_ID]
+    records = [
+        record
+        for record in payload["generated_records"]
+        if record["question_id"] != EXCLUDED_QUESTION_ID
+    ]
     records.sort(key=lambda record: record["question_id"])
     if len(records) != 19:
         raise ValueError(f"Expected 19 records after exclusion, found {len(records)}")
-    if any(len(record.get("distractors", [])) != 3 or record.get("parse_error") for record in records):
+    if any(
+        len(record.get("distractors", [])) != 3 or record.get("parse_error") for record in records
+    ):
         raise ValueError("The retained records are not all complete three-distractor sets")
 
     rows = run_judges(records, client=get_judge_client())
@@ -42,9 +56,13 @@ def main() -> None:
             scores = [
                 row["score"]
                 for row in rows
-                if row["judge"] == judge_name and row["question_id"] == record["question_id"] and row["score"] is not None
+                if row["judge"] == judge_name
+                and row["question_id"] == record["question_id"]
+                and row["score"] is not None
             ]
-            question_means[str(record["question_id"])][judge_name] = round(sum(scores) / len(scores), 3) if scores else None
+            question_means[str(record["question_id"])][judge_name] = (
+                round(sum(scores) / len(scores), 3) if scores else None
+            )
 
     final = {
         "status": "complete",
@@ -69,7 +87,19 @@ def main() -> None:
     OUTPUT_PATH.write_text(json.dumps(final, indent=2))
     print(f"Saved: {OUTPUT_PATH}")
     print("questions", len(records), "distractors", len(records) * 3)
-    print("correctness", {key: correctness_summary.get(key) for key in ("incorrect_distractors", "accidentally_correct", "unknown_equivalence", "incorrectness_rate", "duplicate_distractors")})
+    print(
+        "correctness",
+        {
+            key: correctness_summary.get(key)
+            for key in (
+                "incorrect_distractors",
+                "accidentally_correct",
+                "unknown_equivalence",
+                "incorrectness_rate",
+                "duplicate_distractors",
+            )
+        },
+    )
     for judge_name in JUDGES:
         print(judge_name, summaries[judge_name])
     print("comparison", final["judge_comparison"])

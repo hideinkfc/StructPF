@@ -26,9 +26,14 @@ def _execute_request(request: dict, output: Path, clients: dict, settings: dict)
     attempt_dir = output / request["phase"] / request["id"]
     attempt_dir.mkdir(parents=True, exist_ok=False)
     payload, raw, metadata, api_error = benchmark._call_json(
-        client, model, request["prompt"]["system"], request["prompt"]["user"],
-        max_tokens=settings["max_tokens"], retries=0,
-        trace_path=attempt_dir / "model_calls.jsonl", stage="student.attempt",
+        client,
+        model,
+        request["prompt"]["system"],
+        request["prompt"]["user"],
+        max_tokens=settings["max_tokens"],
+        retries=0,
+        trace_path=attempt_dir / "model_calls.jsonl",
+        stage="student.attempt",
         temperature=settings["temperature"],
         timeout_seconds=settings["timeout_seconds"],
     )
@@ -39,12 +44,22 @@ def _execute_request(request: dict, output: Path, clients: dict, settings: dict)
             attempt = parse_attempt(payload)
         except ValueError as exc:
             status, error = "invalid_response", str(exc)
-    benchmark._write_json(attempt_dir / "result.json", {
-        "id": request["id"], "status": status, "error": error,
-        "attempt": attempt, "payload": payload, "raw_text": raw, "model_metadata": metadata,
-    })
+    benchmark._write_json(
+        attempt_dir / "result.json",
+        {
+            "id": request["id"],
+            "status": status,
+            "error": error,
+            "attempt": attempt,
+            "payload": payload,
+            "raw_text": raw,
+            "model_metadata": metadata,
+        },
+    )
     return {
-        "id": request["id"], "status": status, "phase": request["phase"],
+        "id": request["id"],
+        "status": status,
+        "phase": request["phase"],
         "result_path": str((attempt_dir / "result.json").relative_to(output)),
     }
 
@@ -69,15 +84,23 @@ def build_requests(config: dict) -> list[dict]:
         for control_id, question, answer in controls:
             for profile in config["profiles"][:2]:
                 task = {
-                    "status": "ready", "title": "Arithmetic check",
-                    "body": "Work independently.", "question": question,
+                    "status": "ready",
+                    "title": "Arithmetic check",
+                    "body": "Work independently.",
+                    "question": question,
                 }
-                requests.append({
-                    "id": f"calibration-{model}-{control_id}-{profile['id']}",
-                    "phase": "calibration", "model": model, "task_id": control_id,
-                    "profile_id": profile["id"], "repeat": 1, "expected_answer": answer,
-                    "prompt": attempt_prompt(task, basic_context, profile),
-                })
+                requests.append(
+                    {
+                        "id": f"calibration-{model}-{control_id}-{profile['id']}",
+                        "phase": "calibration",
+                        "model": model,
+                        "task_id": control_id,
+                        "profile_id": profile["id"],
+                        "repeat": 1,
+                        "expected_answer": answer,
+                        "prompt": attempt_prompt(task, basic_context, profile),
+                    }
+                )
     for spec in config["tasks"]:
         path = ROOT / config["task_root"] / spec["path"]
         record = json.loads(path.read_text())
@@ -91,23 +114,28 @@ def build_requests(config: dict) -> list[dict]:
                 if profile.get("omit_resources"):
                     effective_profile["omit_resource"] = profile["omit_resources"][spec["family"]]
                 if profile.get("add_resources_by_family"):
-                    effective_profile["add_resources"] = (
-                        profile["add_resources_by_family"][spec["family"]]
-                    )
+                    effective_profile["add_resources"] = profile["add_resources_by_family"][
+                        spec["family"]
+                    ]
                 prompt = attempt_prompt(task, context, effective_profile)
                 for repeat in range(1, config["repeats"] + 1):
-                    requests.append({
-                        "id": f"fresh-{spec['id']}-{model}-{profile['id']}-{repeat}",
-                        "phase": "fresh", "model": model, "task_id": spec["id"],
-                        "profile_id": profile["id"], "repeat": repeat,
-                        "source": str(path.relative_to(ROOT)),
-                        "source_sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
-                        "learner_manifest": str(manifest_path.relative_to(ROOT)),
-                        "learner_manifest_sha256": hashlib.sha256(
-                            manifest_path.read_bytes()
-                        ).hexdigest(),
-                        "prompt": prompt,
-                    })
+                    requests.append(
+                        {
+                            "id": f"fresh-{spec['id']}-{model}-{profile['id']}-{repeat}",
+                            "phase": "fresh",
+                            "model": model,
+                            "task_id": spec["id"],
+                            "profile_id": profile["id"],
+                            "repeat": repeat,
+                            "source": str(path.relative_to(ROOT)),
+                            "source_sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
+                            "learner_manifest": str(manifest_path.relative_to(ROOT)),
+                            "learner_manifest_sha256": hashlib.sha256(
+                                manifest_path.read_bytes()
+                            ).hexdigest(),
+                            "prompt": prompt,
+                        }
+                    )
     rng = random.Random(config["seed"])
     calibration = [item for item in requests if item["phase"] == "calibration"]
     fresh = [item for item in requests if item["phase"] == "fresh"]
@@ -143,8 +171,11 @@ def run(
     else:
         output.mkdir(parents=True, exist_ok=False)
     sources = [
-        config_path, Path(__file__), ROOT / "src/simulation/pf_student.py",
-        ROOT / "src/evaluation/pf_rubric.py", ROOT / "scripts/run_pf_paper_benchmark.py",
+        config_path,
+        Path(__file__),
+        ROOT / "src/simulation/pf_student.py",
+        ROOT / "src/evaluation/pf_rubric.py",
+        ROOT / "scripts/run_pf_paper_benchmark.py",
         ROOT / "scripts/prior_methods/common.py",
     ]
     sources.extend(ROOT / item["source"] for item in requests if "source" in item)
@@ -165,7 +196,10 @@ def run(
         manifest = {
             "schema_version": "pf-student-probe-run/v1",
             "status": "dry_run" if dry_run else "running",
-            "protocol": config, "source_hashes": hashes, "requests": requests, "attempts": [],
+            "protocol": config,
+            "source_hashes": hashes,
+            "requests": requests,
+            "attempts": [],
         }
     manifest["status"] = "dry_run" if dry_run else f"{phase}_running"
     benchmark._write_json(output / "manifest.json", manifest)
@@ -184,8 +218,7 @@ def run(
             clients[model_selector] = (client.with_options(max_retries=0), model)
     with concurrent.futures.ThreadPoolExecutor(max_workers=workers) as pool:
         futures = [
-            pool.submit(_execute_request, request, output, clients, settings)
-            for request in active
+            pool.submit(_execute_request, request, output, clients, settings) for request in active
         ]
         for future in concurrent.futures.as_completed(futures):
             item = future.result()

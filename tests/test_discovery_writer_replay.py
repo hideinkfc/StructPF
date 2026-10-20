@@ -9,7 +9,10 @@ from scripts.replay_pf_discovery_writer import numeric_coverage
 
 def task(body, withheld=None, status="ready"):
     return {
-        "status": status, "title": "Records", "body": body, "question": "Explain.",
+        "status": status,
+        "title": "Records",
+        "body": body,
+        "question": "Explain.",
         "withheld": [] if withheld is None else withheld,
     }
 
@@ -69,8 +72,10 @@ def test_external_expectations_flag_relabelled_teacher_results():
 def test_replay_preserves_frozen_inputs_and_refuses_overwrite(tmp_path, monkeypatch):
     source = tmp_path / "source.json"
     saved = {
-        "case": "example", "case_input": {"id": "example", "grade": 7},
-        "prior_context": {"case_id": "example"}, "model": "test",
+        "case": "example",
+        "case_input": {"id": "example", "grade": 7},
+        "prior_context": {"case_id": "example"},
+        "model": "test",
         "task": task("12"),
         "design_data": {"accepted": True, "payload": {"values": {"raw": [12]}}},
     }
@@ -78,7 +83,8 @@ def test_replay_preserves_frozen_inputs_and_refuses_overwrite(tmp_path, monkeypa
     source.write_text(original)
     monkeypatch.setattr(replay_stage, "ROOT", tmp_path)
     monkeypatch.setattr(
-        replay_stage.runner, "_winner_from_result",
+        replay_stage.runner,
+        "_winner_from_result",
         lambda *args: SimpleNamespace(to_dict=lambda: {"frozen": True}),
     )
     monkeypatch.setattr(
@@ -105,13 +111,20 @@ def test_replay_preserves_frozen_inputs_and_refuses_overwrite(tmp_path, monkeypa
 
 def test_replay_does_not_write_unaccepted_data(tmp_path, monkeypatch):
     source = tmp_path / "source.json"
-    source.write_text(json.dumps({
-        "case": "example", "case_input": {"id": "example"},
-        "prior_context": {}, "design_data": {"accepted": False},
-    }))
+    source.write_text(
+        json.dumps(
+            {
+                "case": "example",
+                "case_input": {"id": "example"},
+                "prior_context": {},
+                "design_data": {"accepted": False},
+            }
+        )
+    )
     monkeypatch.setattr(replay_stage, "ROOT", tmp_path)
     monkeypatch.setattr(
-        replay_stage.stage, "write_design_data_task",
+        replay_stage.stage,
+        "write_design_data_task",
         lambda *args: pytest.fail("Writer must not repair D2b or write unaccepted data"),
     )
     result = replay_stage.replay(source, tmp_path / "outputs")

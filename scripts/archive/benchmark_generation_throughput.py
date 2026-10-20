@@ -188,11 +188,7 @@ def run_model(
             )
         )
 
-    tasks = [
-        (question, repeat)
-        for repeat in range(1, repeats + 1)
-        for question in questions
-    ]
+    tasks = [(question, repeat) for repeat in range(1, repeats + 1) for question in questions]
     started = time.perf_counter()
     rows: list[dict[str, Any]] = []
     with ThreadPoolExecutor(max_workers=min(workers, len(tasks))) as pool:
@@ -223,9 +219,7 @@ def run_model(
     successful = [row for row in rows if row["success"]]
     latencies = [row["elapsed_seconds"] for row in successful]
     completion_tokens = [
-        row["completion_tokens"]
-        for row in successful
-        if row["completion_tokens"] is not None
+        row["completion_tokens"] for row in successful if row["completion_tokens"] is not None
     ]
     prompt_tokens = [row["prompt_tokens"] for row in successful if row["prompt_tokens"] is not None]
     total_tokens = [row["total_tokens"] for row in successful if row["total_tokens"] is not None]
@@ -245,9 +239,7 @@ def run_model(
         "effective_calls_per_second": round(len(successful) / wall_seconds, 3)
         if wall_seconds
         else None,
-        "mean_latency_seconds": round(sum(latencies) / len(latencies), 3)
-        if latencies
-        else None,
+        "mean_latency_seconds": round(sum(latencies) / len(latencies), 3) if latencies else None,
         "p50_latency_seconds": percentile(latencies, 50),
         "p95_latency_seconds": percentile(latencies, 95),
         "prompt_tokens": sum(prompt_tokens) if prompt_tokens else None,

@@ -14,7 +14,6 @@ Family 2 (misconception-grounded, hybrid LLM+computed):
 import re
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass, field
-from pathlib import Path
 from typing import Any
 
 import numpy as np
@@ -72,7 +71,6 @@ _LATEX_COMMANDS = {
     r"\delta": "δ",
     r"\alpha": "α",
     r"\beta": "β",
-    r"\Leftarrow": "←",
     # formatting / spacing commands (dropped)
     r"\mathrm": "",
     r"\mathbf": "",
@@ -161,18 +159,20 @@ def normalize_expression(text: str | None) -> str:
 
 # ── Per-question metrics ─────────────────────────────────────────────────────
 
+
 @dataclass
 class PFRubricScores:
     """Rahimi et al. (2025) PF rubric adapted for distractor evaluation (Family 3).
 
     Each dimension scored 1 (Low) – 3 (High). Final = sum across dimensions (5–15).
     """
+
     activation_prior_knowledge: float = 0.0  # APK
-    sweet_spot_calibration: float = 0.0       # SSC
-    affective_engagement: float = 0.0         # AE
-    multiple_representations: float = 0.0     # MR
-    open_endedness: float = 0.0               # OE
-    final_score: float = 0.0                  # sum 5–15
+    sweet_spot_calibration: float = 0.0  # SSC
+    affective_engagement: float = 0.0  # AE
+    multiple_representations: float = 0.0  # MR
+    open_endedness: float = 0.0  # OE
+    final_score: float = 0.0  # sum 5–15
 
     def to_dict(self) -> dict[str, float]:
         return {
@@ -188,20 +188,21 @@ class PFRubricScores:
 @dataclass
 class QuestionMetrics:
     """Metrics for a single question."""
+
     question_id: int
     n_generated: int = 0
     n_human: int = 0
 
     # Family 1
-    pm: float = 0.0                # Proportional Match (normalized)
+    pm: float = 0.0  # Proportional Match (normalized)
     text_similarity: float = 0.0  # Mean ROUGE-L across distractor pairs
-    embed_similarity: float = 0.0 # Mean cosine sim across distractor pairs
+    embed_similarity: float = 0.0  # Mean cosine sim across distractor pairs
 
     # Family 2
-    self_label_fidelity: float = 0.0   # Agreement between generator's self-label
-                                       # and independent classifier
-    diversity: float = 0.0             # Mean pairwise distance across generated distractors
-    validity: float = 0.0              # Fraction of distractors that are wrong but on-pathway
+    self_label_fidelity: float = 0.0  # Agreement between generator's self-label
+    # and independent classifier
+    diversity: float = 0.0  # Mean pairwise distance across generated distractors
+    validity: float = 0.0  # Fraction of distractors that are wrong but on-pathway
 
     # Family 3 — Rahimi et al. (2025) PF rubric
     pf_rubric: PFRubricScores | None = None
@@ -210,6 +211,7 @@ class QuestionMetrics:
 @dataclass
 class ConditionResults:
     """Aggregated metrics for one experimental condition."""
+
     condition_name: str
     n_questions: int = 0
     metrics: list[QuestionMetrics] = field(default_factory=list)
@@ -249,11 +251,19 @@ class ConditionResults:
     # Family 3 — PF rubric aggregates
     @property
     def avg_pf_final(self) -> float:
-        return np.mean([m.pf_rubric.final_score for m in self.metrics if m.pf_rubric]) if self.metrics else 0.0
+        return (
+            np.mean([m.pf_rubric.final_score for m in self.metrics if m.pf_rubric])
+            if self.metrics
+            else 0.0
+        )
 
     @property
     def std_pf_final(self) -> float:
-        return np.std([m.pf_rubric.final_score for m in self.metrics if m.pf_rubric]) if self.metrics else 0.0
+        return (
+            np.std([m.pf_rubric.final_score for m in self.metrics if m.pf_rubric])
+            if self.metrics
+            else 0.0
+        )
 
     def summary(self) -> dict[str, Any]:
         s = {
@@ -275,6 +285,7 @@ class ConditionResults:
 
 
 # ── Evaluator ────────────────────────────────────────────────────────────────
+
 
 class MCQEvaluator:
     """Evaluates generated distractors against ground truth."""
@@ -324,10 +335,7 @@ class MCQEvaluator:
         scores = []
         for g in generated:
             g_norm = normalize_expression(g)
-            best = max(
-                self._rouge_l_f1(g_norm, normalize_expression(h))
-                for h in human
-            )
+            best = max(self._rouge_l_f1(g_norm, normalize_expression(h)) for h in human)
             scores.append(best)
         return float(np.mean(scores)) if scores else 0.0
 
@@ -346,8 +354,8 @@ class MCQEvaluator:
 
         all_texts = gen_norm + human_norm
         vectors = self.embed.embed(all_texts)
-        gen_vecs = np.array(vectors[:len(generated)])
-        human_vecs = np.array(vectors[len(generated):])
+        gen_vecs = np.array(vectors[: len(generated)])
+        human_vecs = np.array(vectors[len(generated) :])
 
         # For each generated, find max similarity to any human
         norms_gen = np.linalg.norm(gen_vecs, axis=1, keepdims=True)
@@ -436,7 +444,7 @@ class MCQEvaluator:
 
         return valid_count / len(gen_texts)
 
-    def  compute_diversity(
+    def compute_diversity(
         self,
         texts: list[str],
         question_text: str = "",
@@ -514,11 +522,12 @@ class MCQEvaluator:
         # Median across 3 calls for each dimension
         apk_vals = sorted(s["APK"] for s in raw_scores)
         ssc_vals = sorted(s["SSC"] for s in raw_scores)
-        ae_vals  = sorted(s["AE"] for s in raw_scores)
-        mr_vals  = sorted(s["MR"] for s in raw_scores)
-        oe_vals  = sorted(s["OE"] for s in raw_scores)
+        ae_vals = sorted(s["AE"] for s in raw_scores)
+        mr_vals = sorted(s["MR"] for s in raw_scores)
+        oe_vals = sorted(s["OE"] for s in raw_scores)
 
-        def _med(vals): return vals[len(vals) // 2]
+        def _med(vals):
+            return vals[len(vals) // 2]
 
         pf = PFRubricScores(
             activation_prior_knowledge=_med(apk_vals),
@@ -527,9 +536,13 @@ class MCQEvaluator:
             multiple_representations=_med(mr_vals),
             open_endedness=_med(oe_vals),
         )
-        pf.final_score = (pf.activation_prior_knowledge + pf.sweet_spot_calibration
-                          + pf.affective_engagement + pf.multiple_representations
-                          + pf.open_endedness)
+        pf.final_score = (
+            pf.activation_prior_knowledge
+            + pf.sweet_spot_calibration
+            + pf.affective_engagement
+            + pf.multiple_representations
+            + pf.open_endedness
+        )
         return pf
 
     def _judge_pf_rubric_batch(
@@ -544,15 +557,13 @@ class MCQEvaluator:
         class PFRubricOutput(BaseModel):
             APK: int  # 1-3
             SSC: int  # 1-3
-            AE: int   # 1-3
-            MR: int   # 1-3
-            OE: int   # 1-3
+            AE: int  # 1-3
+            MR: int  # 1-3
+            OE: int  # 1-3
             reasoning: str
 
         labels = ["A", "B", "C"]
-        distractor_lines = "\n".join(
-            f'  {labels[i]}: "{t}"' for i, t in enumerate(gen_texts[:3])
-        )
+        distractor_lines = "\n".join(f'  {labels[i]}: "{t}"' for i, t in enumerate(gen_texts[:3]))
 
         prompt = (
             "You are an experienced math teacher evaluating the quality of "
@@ -575,8 +586,8 @@ class MCQEvaluator:
             f"concept would plausibly pick it.\n\n"
             f"3. Affective Engagement (AE): How authentic do these distractors "
             f"feel? 1=obviously machine-generated or nonsensical, 2=somewhat "
-            f"plausible but feels artificial, 3=\"I have seen real students "
-            f"make exactly these mistakes.\"\n\n"
+            f'plausible but feels artificial, 3="I have seen real students '
+            f'make exactly these mistakes."\n\n'
             f"4. Multiple Representations (MR): Do the 3 distractors "
             f"collectively span different representational forms? 1=all same "
             f"type (all numeric, or all algebraic), 2=two different forms, "
@@ -631,10 +642,6 @@ class MCQEvaluator:
         human_texts = [d["text"] for d in gt if not d["is_correct"]]
 
         gen_texts = [d.get("text", "") for d in generated_distractors]
-        gen_mc = [
-            d.get("target_misconception", "")
-            for d in generated_distractors
-        ]
 
         # Compute metrics
         pm = self.compute_pm(gen_texts, human_texts)
@@ -658,12 +665,8 @@ class MCQEvaluator:
             val_future = ex.submit(
                 self.compute_validity, gen_texts, q_text, correct, human_texts, ex
             )
-            div_future = ex.submit(
-                self.compute_diversity, gen_texts, q_text, correct, ex
-            )
-            pf_future = ex.submit(
-                self.compute_pf_rubric, gen_texts, q_text, correct, ex
-            )
+            div_future = ex.submit(self.compute_diversity, gen_texts, q_text, correct, ex)
+            pf_future = ex.submit(self.compute_pf_rubric, gen_texts, q_text, correct, ex)
             validity = val_future.result()
             diversity = div_future.result()
             pf_rubric = pf_future.result()
@@ -700,15 +703,17 @@ class MCQEvaluator:
             context = f"Question: {question_text}\n" if question_text else ""
             context += f"Correct answer: {correct_answer}\n" if correct_answer else ""
             result = self.judge.generate_structured(
-                messages=[{
-                    "role": "user",
-                    "content": (
-                        f"{context}"
-                        f"A student picks the wrong answer '{distractor_text}'.\n"
-                        f"What misconception does this distractor target? "
-                        f"Name the misconception (1-5 words) and give a confidence score (0-1)."
-                    )
-                }],
+                messages=[
+                    {
+                        "role": "user",
+                        "content": (
+                            f"{context}"
+                            f"A student picks the wrong answer '{distractor_text}'.\n"
+                            f"What misconception does this distractor target? "
+                            f"Name the misconception (1-5 words) and give a confidence score (0-1)."
+                        ),
+                    }
+                ],
                 schema=Classification,
                 temperature=0.0,
                 max_tokens=100,
@@ -745,9 +750,7 @@ class MCQEvaluator:
 
         # Build labeled distractor list (A, B, C)
         labels = ["A", "B", "C"]
-        distractor_lines = "\n".join(
-            f'  {labels[i]}: "{t}"' for i, t in enumerate(gen_texts[:3])
-        )
+        distractor_lines = "\n".join(f'  {labels[i]}: "{t}"' for i, t in enumerate(gen_texts[:3]))
 
         prompt = (
             "You are an experienced math teacher who has graded thousands of "
@@ -805,9 +808,7 @@ class MCQEvaluator:
             reasoning: str
 
         labels = ["A", "B", "C"]
-        distractor_lines = "\n".join(
-            f'  {labels[i]}: "{t}"' for i, t in enumerate(gen_texts[:3])
-        )
+        distractor_lines = "\n".join(f'  {labels[i]}: "{t}"' for i, t in enumerate(gen_texts[:3]))
 
         prompt = (
             "You are an experienced math teacher.\n\n"
@@ -856,18 +857,90 @@ class MCQEvaluator:
             return True
 
         # Significant word overlap
-        stop_words = {"the", "a", "an", "of", "in", "to", "and", "or", "is",
-                      "are", "was", "were", "be", "been", "being", "have",
-                      "has", "had", "do", "does", "did", "will", "would",
-                      "could", "should", "may", "might", "can", "shall",
-                      "not", "no", "nor", "with", "for", "on", "at", "by",
-                      "from", "as", "into", "through", "during", "before",
-                      "after", "above", "below", "between", "out", "off",
-                      "over", "under", "again", "further", "then", "once",
-                      "here", "there", "when", "where", "why", "how",
-                      "all", "each", "every", "both", "few", "more", "most",
-                      "other", "some", "such", "only", "own", "same", "so",
-                      "than", "too", "very", "just", "because", "as", "if"}
+        stop_words = {
+            "the",
+            "a",
+            "an",
+            "of",
+            "in",
+            "to",
+            "and",
+            "or",
+            "is",
+            "are",
+            "was",
+            "were",
+            "be",
+            "been",
+            "being",
+            "have",
+            "has",
+            "had",
+            "do",
+            "does",
+            "did",
+            "will",
+            "would",
+            "could",
+            "should",
+            "may",
+            "might",
+            "can",
+            "shall",
+            "not",
+            "no",
+            "nor",
+            "with",
+            "for",
+            "on",
+            "at",
+            "by",
+            "from",
+            "as",
+            "into",
+            "through",
+            "during",
+            "before",
+            "after",
+            "above",
+            "below",
+            "between",
+            "out",
+            "off",
+            "over",
+            "under",
+            "again",
+            "further",
+            "then",
+            "once",
+            "here",
+            "there",
+            "when",
+            "where",
+            "why",
+            "how",
+            "all",
+            "each",
+            "every",
+            "both",
+            "few",
+            "more",
+            "most",
+            "other",
+            "some",
+            "such",
+            "only",
+            "own",
+            "same",
+            "so",
+            "than",
+            "too",
+            "very",
+            "just",
+            "because",
+            "as",
+            "if",
+        }
 
         words1 = {w for w in norm1.split() if w not in stop_words and len(w) > 2}
         words2 = {w for w in norm2.split() if w not in stop_words and len(w) > 2}

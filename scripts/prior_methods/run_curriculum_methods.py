@@ -39,12 +39,16 @@ def render(tmpl: str, values: dict) -> str:
         out = out.replace(token, value)
     return out
 
+
 def run_step1(client, model, sys1, user1_tmpl, package):
-    user = render(user1_tmpl, {
-        "{grade}": str(package["grade"]),
-        "{topic}": package["anchor"]["topic"],
-        "{concept_text}": package["concept_text"],
-    })
+    user = render(
+        user1_tmpl,
+        {
+            "{grade}": str(package["grade"]),
+            "{topic}": package["anchor"]["topic"],
+            "{concept_text}": package["concept_text"],
+        },
+    )
     payload, raw = chat_json(client, model, sys1, user, temperature=0.7, max_tokens=1500)
     if payload is None or not isinstance(payload.get("tools"), list):
         return {"ok": False, "tools": [], "raw": raw[:200]}
@@ -53,12 +57,13 @@ def run_step1(client, model, sys1, user1_tmpl, package):
 
 
 def run_step2(client, model, user2_tmpl, package, tool):
-    user = (user2_tmpl
-            .replace("{grade}", str(package["grade"]))
-            .replace("{topic}", package["anchor"]["topic"])
-            .replace("{concept_text}", package["concept_text"])
-            .replace("{tool}", tool.get("tool", ""))
-            .replace("{taught_as}", tool.get("taught_as", "")))
+    user = (
+        user2_tmpl.replace("{grade}", str(package["grade"]))
+        .replace("{topic}", package["anchor"]["topic"])
+        .replace("{concept_text}", package["concept_text"])
+        .replace("{tool}", tool.get("tool", ""))
+        .replace("{taught_as}", tool.get("taught_as", ""))
+    )
     max_tokens = 1200 if model.startswith("gpt-5") else 600
     payload, raw = chat_json(client, model, "", user, temperature=0.7, max_tokens=max_tokens)
     if payload is None or not payload.get("what_student_does"):
@@ -99,8 +104,9 @@ def main():
 
     packages = load_packages()
     # validate against the expert-anchored concepts only
-    expert_path = (ROOT / "experiments" / "data" / "prior_methods_benchmark"
-                   / "expert_anticipated.json")
+    expert_path = (
+        ROOT / "experiments" / "data" / "prior_methods_benchmark" / "expert_anticipated.json"
+    )
     expert = json.loads(expert_path.read_text())
     target_concepts = sorted({c for e in expert for c in e["closest_benchmark_concepts"]})
     if args.all_concepts:
@@ -114,8 +120,9 @@ def main():
 
     all_results = {}
     with ThreadPoolExecutor(max_workers=min(4, len(concepts))) as pool:
-        step1_futs = {pool.submit(run_step1, client, model, sys1, user1, packages[c]): c
-                      for c in concepts}
+        step1_futs = {
+            pool.submit(run_step1, client, model, sys1, user1, packages[c]): c for c in concepts
+        }
         step1 = {cid: fut.result() for fut, cid in step1_futs.items()}
 
         step2_futs = {}
@@ -123,9 +130,10 @@ def main():
             print(f"\n=== {cid}: step1 tools ({len(s1['tools'])}) ===")
             for tool in s1["tools"]:
                 print(f"  - {tool.get('tool')}")
-                step2_futs[pool.submit(
-                    run_step2, client, model, user2, packages[cid], tool
-                )] = (cid, tool)
+                step2_futs[pool.submit(run_step2, client, model, user2, packages[cid], tool)] = (
+                    cid,
+                    tool,
+                )
 
         methods_by_concept = {cid: [] for cid in concepts}
         failures_by_concept = {cid: [] for cid in concepts}
@@ -137,10 +145,12 @@ def main():
                 short = str(method.get("falls_short_because", ""))[:70]
                 print(f"    {cid:16s} {name:40s} -> {short}")
             else:
-                failures_by_concept[cid].append({
-                    "tool": tool.get("tool", ""),
-                    "error": method.get("raw", ""),
-                })
+                failures_by_concept[cid].append(
+                    {
+                        "tool": tool.get("tool", ""),
+                        "error": method.get("raw", ""),
+                    }
+                )
                 print(f"    {cid:16s} [step2 failed for {tool.get('tool')}]")
 
         for cid in concepts:
@@ -151,7 +161,8 @@ def main():
                 "step2_failures": failures_by_concept[cid],
                 "expert_expected": [
                     {"exercise": e["exercise"], "methods": [m["name"] for m in e["methods"]]}
-                    for e in expert if cid in e["closest_benchmark_concepts"]
+                    for e in expert
+                    if cid in e["closest_benchmark_concepts"]
                 ],
             }
 
@@ -166,7 +177,7 @@ def main():
     # qualitative comparison to expert lists
     print("\n=== coverage vs expert lists ===")
     for cid, data in all_results.items():
-        gen = {m.get("prior_method","").lower() for m in data["prior_methods"]}
+        gen = {m.get("prior_method", "").lower() for m in data["prior_methods"]}
         print(f"{cid}: generated {len(gen)} prior methods")
         for ex in data["expert_expected"]:
             print(f"   expert {ex['exercise']}: {ex['methods']}")

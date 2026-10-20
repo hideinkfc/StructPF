@@ -53,7 +53,8 @@ def screen(panel: Path) -> dict:
         attempt = record["attempt"]
         text = (
             attempt["written_work"] + " " + attempt["answer"]
-            if attempt else record["raw_text"] or ""
+            if attempt
+            else record["raw_text"] or ""
         )
         family = families[request["task_id"]]
         group = counts.setdefault(f"{family}/{request['profile_id']}", Counter())
@@ -64,9 +65,12 @@ def screen(panel: Path) -> dict:
         if match:
             group["record_statement"] += 1
             start = max(0, match.start() - 160)
-            record_statements.append({
-                "id": request["id"], "excerpt": text[start:match.end() + 120],
-            })
+            record_statements.append(
+                {
+                    "id": request["id"],
+                    "excerpt": text[start : match.end() + 120],
+                }
+            )
     return {
         "method": (
             "Post-hoc keyword screen of saved attempts; flags for reading, not a coding "

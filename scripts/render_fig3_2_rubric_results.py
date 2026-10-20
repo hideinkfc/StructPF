@@ -8,8 +8,8 @@ Panel (b): Mean total rubric score across the four Grade 7 curriculum topic cell
 from __future__ import annotations
 
 from pathlib import Path
+
 import matplotlib.pyplot as plt
-import matplotlib.patches as mpatches
 import numpy as np
 
 
@@ -24,16 +24,20 @@ def main() -> None:
     )
 
     fig, (ax1, ax2) = plt.subplots(
-        1, 2, figsize=(12.6, 4.7), dpi=300, gridspec_kw={"width_ratios": [1.12, 1.0], "wspace": 0.24}
+        1,
+        2,
+        figsize=(12.6, 4.7),
+        dpi=300,
+        gridspec_kw={"width_ratios": [1.12, 1.0], "wspace": 0.24},
     )
     fig.patch.set_facecolor("white")
 
     # Monochrome JupyRecSys / Fig 3.1 palette
-    c_mini = "#4D4D4D"   # Dark neutral gray for GPT-5 mini
-    c_41 = "#CFCFCF"     # Medium-light gray (matches Fig 3.1 process gray) for GPT-4.1
-    c_edge = "#111111"   # Crisp black borders
-    c_grid = "#D8D8D8"   # Subtle horizontal grid
-    c_box = "#F2F2F2"    # Matches Fig 3.1 container gray
+    c_mini = "#4D4D4D"  # Dark neutral gray for GPT-5 mini
+    c_41 = "#CFCFCF"  # Medium-light gray (matches Fig 3.1 process gray) for GPT-4.1
+    c_edge = "#111111"  # Crisp black borders
+    c_grid = "#D8D8D8"  # Subtle horizontal grid
+    c_box = "#F2F2F2"  # Matches Fig 3.1 container gray
 
     # ==========================================================================
     # Panel (a): Per-Dimension Scores (1-3 Scale)
@@ -105,7 +109,12 @@ def main() -> None:
             fontsize=7.9,
             fontweight="bold",
             color=c_edge,
-            bbox={"boxstyle": "square,pad=0.22", "facecolor": c_box, "edgecolor": c_edge, "linewidth": 0.75},
+            bbox={
+                "boxstyle": "square,pad=0.22",
+                "facecolor": c_box,
+                "edgecolor": c_edge,
+                "linewidth": 0.75,
+            },
             zorder=4,
         )
 
@@ -114,8 +123,16 @@ def main() -> None:
     ax1.set_ylim(0, 3.62)
     ax1.set_yticks([0.0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0])
     ax1.tick_params(axis="y", labelsize=8.8, colors=c_edge)
-    ax1.set_ylabel("Mean Dimension Score (1–3 Scale)", fontsize=9.8, fontweight="bold", color=c_edge)
-    ax1.set_title("(a) Mean Score by Rubric Dimension (4 Topics Combined)", fontsize=10.4, fontweight="bold", pad=12, color=c_edge)
+    ax1.set_ylabel(
+        "Mean Dimension Score (1–3 Scale)", fontsize=9.8, fontweight="bold", color=c_edge
+    )
+    ax1.set_title(
+        "(a) Mean Score by Rubric Dimension (4 Topics Combined)",
+        fontsize=10.4,
+        fontweight="bold",
+        pad=12,
+        color=c_edge,
+    )
     ax1.spines["top"].set_visible(False)
     ax1.spines["right"].set_visible(False)
 
@@ -189,7 +206,12 @@ def main() -> None:
             fontsize=7.9,
             fontweight="bold",
             color=c_edge,
-            bbox={"boxstyle": "square,pad=0.22", "facecolor": c_box, "edgecolor": c_edge, "linewidth": 0.75},
+            bbox={
+                "boxstyle": "square,pad=0.22",
+                "facecolor": c_box,
+                "edgecolor": c_edge,
+                "linewidth": 0.75,
+            },
             zorder=4,
         )
 
@@ -199,7 +221,13 @@ def main() -> None:
     ax2.set_yticks([0, 3, 6, 9, 12, 15])
     ax2.tick_params(axis="y", labelsize=8.8, colors=c_edge)
     ax2.set_ylabel("Mean Total Score (5–15 Scale)", fontsize=9.8, fontweight="bold", color=c_edge)
-    ax2.set_title("(b) Mean Total Score by Topic Cell (5–15 Scale)", fontsize=10.4, fontweight="bold", pad=12, color=c_edge)
+    ax2.set_title(
+        "(b) Mean Total Score by Topic Cell (5–15 Scale)",
+        fontsize=10.4,
+        fontweight="bold",
+        pad=12,
+        color=c_edge,
+    )
     ax2.spines["top"].set_visible(False)
     ax2.spines["right"].set_visible(False)
 
@@ -222,7 +250,9 @@ def main() -> None:
     out_dir = Path("thesis/figures")
     out_dir.mkdir(parents=True, exist_ok=True)
     fig.savefig(out_dir / "fig3_2_rubric_comparison.pdf", bbox_inches="tight", pad_inches=0.06)
-    fig.savefig(out_dir / "fig3_2_rubric_comparison.png", dpi=300, bbox_inches="tight", pad_inches=0.06)
+    fig.savefig(
+        out_dir / "fig3_2_rubric_comparison.png", dpi=300, bbox_inches="tight", pad_inches=0.06
+    )
     plt.close(fig)
     print("Saved thesis/figures/fig3_2_rubric_comparison.{pdf,png}")
 

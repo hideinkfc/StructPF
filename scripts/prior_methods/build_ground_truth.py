@@ -47,9 +47,7 @@ CONCEPTS = [
     },
     {
         "concept_id": "x_estimation",
-        "concept_text": (
-            "Overestimating requires rounding at least one number up and none down."
-        ),
+        "concept_text": ("Overestimating requires rounding at least one number up and none down."),
         "grade": 7,
         "quiz": "emnt",
         "questions": [1, 2, 3, 4, 5],
@@ -139,7 +137,7 @@ def clean_explanation(raw: str) -> str | None:
     text = raw or ""
     for prefix in HEADING_PREFIXES:
         if text.startswith(prefix):
-            text = text[len(prefix):]
+            text = text[len(prefix) :]
     text = PCT_SUFFIX.sub("", text).strip()
     if not text or text.startswith(NO_EXPL):
         return None

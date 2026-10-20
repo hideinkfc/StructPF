@@ -276,12 +276,8 @@ def summarize(rows: list[dict[str, Any]], wall_seconds: float, workers: int) -> 
         if rows
         else "not_measurable",
         "wall_seconds": round(wall_seconds, 3),
-        "effective_calls_per_second": round(len(rows) / wall_seconds, 3)
-        if wall_seconds
-        else None,
-        "mean_latency_seconds": round(sum(latencies) / len(latencies), 3)
-        if latencies
-        else None,
+        "effective_calls_per_second": round(len(rows) / wall_seconds, 3) if wall_seconds else None,
+        "mean_latency_seconds": round(sum(latencies) / len(latencies), 3) if latencies else None,
         "p50_latency_seconds": percentile(latencies, 50),
         "p95_latency_seconds": percentile(latencies, 95),
         "profiles": {key: group_summary(value) for key, value in sorted(by_profile.items())},

@@ -7,14 +7,20 @@ from src.evaluation.pf_evidence_audit import evidence_audit_input
 
 
 def catalog():
-    return {"tasks": [
-        {
-            "task_id": arm, "arm": arm, "case_id": "one", "repeat": 1,
-            "task": {"title": "Ratios", "body": "Compare two quantities.", "question": "Why?"},
-            "learning_target": "Proportional relationships",
-            "learner_context": {"grade": 8, "recently_taught": ["Unit rates", "Fractions"]},
-        } for arm in ("A", "B", "C")
-    ]}
+    return {
+        "tasks": [
+            {
+                "task_id": arm,
+                "arm": arm,
+                "case_id": "one",
+                "repeat": 1,
+                "task": {"title": "Ratios", "body": "Compare two quantities.", "question": "Why?"},
+                "learning_target": "Proportional relationships",
+                "learner_context": {"grade": 8, "recently_taught": ["Unit rates", "Fractions"]},
+            }
+            for arm in ("A", "B", "C")
+        ]
+    }
 
 
 def test_frozen_history_reaches_the_actual_auditor_input_in_all_arms():
@@ -24,9 +30,9 @@ def test_frozen_history_reaches_the_actual_auditor_input_in_all_arms():
     adapted, receipt = adapt_catalog(original)
     for before, after in zip(original["tasks"], adapted["tasks"]):
         sent = json.loads(evidence_audit_input(after))
-        assert [resource["resource"] for resource in sent["learner_context"][
-            "assumed_prior_knowledge"
-        ]] == before["learner_context"]["recently_taught"]
+        assert [
+            resource["resource"] for resource in sent["learner_context"]["assumed_prior_knowledge"]
+        ] == before["learner_context"]["recently_taught"]
         assert after["task"] == before["task"]
         assert "assumed_prior_knowledge" not in before["learner_context"]
         assert "arm" not in sent

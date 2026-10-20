@@ -61,7 +61,7 @@ def ground_truth_list(package: dict) -> str:
     for i, e in enumerate(package["all_errors"]):
         expl = e["explanation"] or "(no explanation available)"
         lines.append(
-            f"[{i}] {e['pct_students']}% of students chose \"{e['option_text']}\" "
+            f'[{i}] {e["pct_students"]}% of students chose "{e["option_text"]}" '
             f"on: {e['question_stem'][:120]} | teacher note: {expl[:220]}"
         )
     return "\n".join(lines)
@@ -75,10 +75,13 @@ CASES = [
         "note": "Eedi Q3D: 'forgot to multiply BOTH terms' (14%)",
         "method": {
             "method_name": "Multiply Only the First Number",
-            "general_procedure": ("Multiply the outside number by the first number inside, "
-                "and leave the rest as they are."),
+            "general_procedure": (
+                "Multiply the outside number by the first number inside, "
+                "and leave the rest as they are."
+            ),
             "student_thinking": (
-                "You start with the first part, so just use that for multiplication."),
+                "You start with the first part, so just use that for multiplication."
+            ),
         },
     },
     {
@@ -89,7 +92,8 @@ CASES = [
             "method_name": "Forget to flip the second sign",
             "general_procedure": (
                 "When subtracting a group, change the sign of the first term inside but forget to "
-                "change the sign of the second term."),
+                "change the sign of the second term."
+            ),
             "student_thinking": "I flip the sign on the first thing but the rest stays the same.",
         },
     },
@@ -101,9 +105,11 @@ CASES = [
             "method_name": "Concatenate Terms",
             "general_procedure": (
                 "Write the outside number and the inside numbers next to each other as one "
-                "combined number without multiplying."),
+                "combined number without multiplying."
+            ),
             "student_thinking": (
-                "Brackets just mean to list the terms together with the outside number."),
+                "Brackets just mean to list the terms together with the outside number."
+            ),
         },
     },
     {
@@ -114,9 +120,11 @@ CASES = [
             "method_name": "Multiply each term and add one extra",
             "general_procedure": (
                 "Multiply the outside number by each number inside, then add one more to the "
-                "total at the end."),
+                "total at the end."
+            ),
             "student_thinking": (
-                "I know multiplication sometimes needs an extra step, so I add one at the end."),
+                "I know multiplication sometimes needs an extra step, so I add one at the end."
+            ),
         },
     },
     {
@@ -126,8 +134,8 @@ CASES = [
         "method": {
             "method_name": "Multiply every inside term",
             "general_procedure": (
-                "Multiply the outside number by every term inside the brackets and add the "
-                "results."),
+                "Multiply the outside number by every term inside the brackets and add the results."
+            ),
             "student_thinking": "The outside number belongs to every term inside.",
         },
     },
@@ -138,8 +146,7 @@ def load_client(which: str = "mini") -> tuple[OpenAI, str]:
     load_dotenv(ROOT / ".env.local", override=False)
     base_url = os.environ.get("AZURE_OPENAI_BASE_URL", "").strip()
     api_key = os.environ.get("AZURE_OPENAI_API_KEY", "").strip()
-    env = ("AZURE_OPENAI_GPT41_MODEL" if which == "full"
-           else "AZURE_OPENAI_GPT41_MINI_MODEL")
+    env = "AZURE_OPENAI_GPT41_MODEL" if which == "full" else "AZURE_OPENAI_GPT41_MINI_MODEL"
     default = "gpt-4.1" if which == "full" else "gpt-4.1-mini"
     model = os.environ.get(env, default).strip()
     if not base_url or not api_key:
@@ -172,17 +179,25 @@ def match_one(client: OpenAI, model: str, package: dict, gt_list: str, case: dic
         idx = payload.get("matched_error_index")
         ok = (idx is None) or isinstance(idx, int)
         return {
-            "case": case["case"], "expected": case["expected"], "note": case["note"],
+            "case": case["case"],
+            "expected": case["expected"],
+            "note": case["note"],
             "matched_error_index": idx,
             "confidence": payload.get("confidence"),
             "reason": payload.get("reason", ""),
-            "parse_ok": ok, "raw": payload,
+            "parse_ok": ok,
+            "raw": payload,
         }
     except json.JSONDecodeError:
         return {
-            "case": case["case"], "expected": case["expected"], "note": case["note"],
-            "matched_error_index": None, "confidence": None,
-            "reason": f"parse failure: {text[:200]}", "parse_ok": False, "raw": text,
+            "case": case["case"],
+            "expected": case["expected"],
+            "note": case["note"],
+            "matched_error_index": None,
+            "confidence": None,
+            "reason": f"parse failure: {text[:200]}",
+            "parse_ok": False,
+            "raw": text,
         }
 
 
@@ -201,6 +216,7 @@ def main() -> None:
         if exp == "MATCH":
             return r["parse_ok"] and idx is not None
         return r["parse_ok"] and idx is None  # expected None -> no match
+
     hits = sum(_hit(r) for r in results)
     for r in results:
         mark = "HIT " if _hit(r) else "MISS"
@@ -210,13 +226,21 @@ def main() -> None:
 
     out_path = OUT if which == "mini" else OUT.with_name("smoke_matching_gpt41.json")
     out_path.parent.mkdir(parents=True, exist_ok=True)
-    out_path.write_text(json.dumps({
-        "matcher_model": model,
-        "prompt_version": "matcher_v1",
-        "concept": package["concept_id"],
-        "hits": hits, "total": len(results),
-        "results": results,
-    }, indent=2, ensure_ascii=False) + "\n")
+    out_path.write_text(
+        json.dumps(
+            {
+                "matcher_model": model,
+                "prompt_version": "matcher_v1",
+                "concept": package["concept_id"],
+                "hits": hits,
+                "total": len(results),
+                "results": results,
+            },
+            indent=2,
+            ensure_ascii=False,
+        )
+        + "\n"
+    )
     print(f"\n{hits}/{len(results)} hit; saved -> {out_path.relative_to(ROOT)}")
 
 

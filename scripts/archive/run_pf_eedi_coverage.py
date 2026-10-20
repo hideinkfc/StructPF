@@ -16,8 +16,7 @@ import argparse
 import copy
 import hashlib
 import json
-import re
-from collections import Counter, defaultdict
+from collections import defaultdict
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timezone
 from pathlib import Path
@@ -25,9 +24,9 @@ from pathlib import Path
 import yaml
 
 from scripts.run_pf_accessibility_sensitivity import build_chats
+from src.evaluation import pf_three_role_v30 as v30
 from src.evaluation.frozen import pf_three_role_v22 as v22
 from src.evaluation.frozen import pf_three_role_v25 as v25
-from src.evaluation import pf_three_role_v30 as v30
 from src.utils.llm_client import LLMResponse
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -96,10 +95,18 @@ def run_direct(case: dict, chat, profiles: dict, out: Path) -> dict:
         {"role": "system", "content": DIRECT_SYSTEM},
         {
             "role": "user",
-            "content": json.dumps({"student_task": case["stem"], "learner_context": ctx}, ensure_ascii=False),
+            "content": json.dumps(
+                {"student_task": case["stem"], "learner_context": ctx}, ensure_ascii=False
+            ),
         },
     ]
-    record = {"case_id": case["case_id"], "started_at": now(), "status": "completed", "raw": None, "approaches": []}
+    record = {
+        "case_id": case["case_id"],
+        "started_at": now(),
+        "status": "completed",
+        "raw": None,
+        "approaches": [],
+    }
     try:
         response = chat(messages)
         record["raw"] = response.text
@@ -127,9 +134,7 @@ def solver_items(record: dict) -> list[dict]:
     run = record["run"]
     if run["status"] != "completed":
         return []
-    return [
-        {"idea": a["idea"], "work": a["work"]} for a in run["output"]["attempts"]
-    ]
+    return [{"idea": a["idea"], "work": a["work"]} for a in run["output"]["attempts"]]
 
 
 def judge_prompt_text(case: dict) -> str:
@@ -146,11 +151,18 @@ def judge_prompt_text(case: dict) -> str:
     return json.dumps({"question": case["stem"], "options": options}, ensure_ascii=False)
 
 
-def run_judge(case: dict, system_name: str, items: list[dict], chat, judge_system: str, out: Path) -> dict:
+def run_judge(
+    case: dict, system_name: str, items: list[dict], chat, judge_system: str, out: Path
+) -> dict:
     path = out / "judge" / f"{case['case_id']}__{system_name}.json"
     if path.exists():
         return json.loads(path.read_text())
-    record = {"case_id": case["case_id"], "system": system_name, "started_at": now(), "items": items}
+    record = {
+        "case_id": case["case_id"],
+        "system": system_name,
+        "started_at": now(),
+        "items": items,
+    }
     if not items:
         record.update({"status": "no_approaches", "matches": []})
         save(path, record)
@@ -168,14 +180,18 @@ def run_judge(case: dict, system_name: str, items: list[dict], chat, judge_syste
         raw = json.loads(response.text)
         matches = raw.get("matches")
         if not isinstance(matches, list) or len(matches) != len(items):
-            raise ValueError(f"expected {len(items)} matches, got {len(matches) if isinstance(matches, list) else 'non-list'}")
+            raise ValueError(
+                f"expected {len(items)} matches, got {len(matches) if isinstance(matches, list) else 'non-list'}"
+            )
         for m, item in zip(matches, items):
             for field, text in (("answer_quote", item["work"]), ("reasoning_quote", item["work"])):
                 quote = m.get(field)
                 m[f"{field}_in_work"] = bool(quote) and quote in text
         record.update({"status": "completed", "matches": matches})
     except Exception as exc:
-        record.update({"status": "invalid_response", "error": f"{type(exc).__name__}: {exc}", "matches": []})
+        record.update(
+            {"status": "invalid_response", "error": f"{type(exc).__name__}: {exc}", "matches": []}
+        )
     record["finished_at"] = now()
     save(path, record)
     return record
@@ -214,9 +230,11 @@ def coverage(case: dict, match_records: list[dict]) -> dict:
         "wrong_pct_total": total,
         "approaches": approaches,
         "failed_systems": failed,
-        "value_weighted": sum(pct[l] for l in value_hit) / total if total else None,
-        "misconception_weighted": sum(pct[l] for l in mis_yes) / total if total else None,
-        "misconception_partly_weighted": sum(pct[l] for l in mis_any) / total if total else None,
+        "value_weighted": sum(pct[label] for label in value_hit) / total if total else None,
+        "misconception_weighted": sum(pct[label] for label in mis_yes) / total if total else None,
+        "misconception_partly_weighted": sum(pct[label] for label in mis_any) / total
+        if total
+        else None,
         "misconception_unweighted": len(mis_yes) / n if n else None,
         "oracle_top_k_weighted": sum(top_k) / total if total and k else None,
         "random_k_fraction": k / n if n else None,
@@ -247,7 +265,10 @@ def summarise(rows: list[dict]) -> dict:
         "mean_approaches_per_case": mean([r["approaches"] for r in rows]),
         "cases_with_no_approaches": sum(1 for r in rows if r["approaches"] == 0),
         "by_topic": {
-            t: {"cases": len(v), "misconception_weighted": mean([r["misconception_weighted"] for r in v])}
+            t: {
+                "cases": len(v),
+                "misconception_weighted": mean([r["misconception_weighted"] for r in v]),
+            }
             for t, v in sorted(by_topic.items())
         },
     }
@@ -263,13 +284,19 @@ def select(cases: list[dict], limit: int | None) -> list[dict]:
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output", type=Path, default=OUTPUT)
-    parser.add_argument("--limit", type=int, default=None, help="evenly spaced subset for calibration")
+    parser.add_argument(
+        "--limit", type=int, default=None, help="evenly spaced subset for calibration"
+    )
     parser.add_argument("--workers", type=int, default=6)
     args = parser.parse_args()
 
     cases = select(json.loads(CASES.read_text())["cases"], args.limit)
     profiles = load_profiles()
-    judge_system = yaml.safe_load(JUDGE.read_text())["system"] + "\n" + yaml.safe_load(JUDGE.read_text())["contract"]
+    judge_system = (
+        yaml.safe_load(JUDGE.read_text())["system"]
+        + "\n"
+        + yaml.safe_load(JUDGE.read_text())["contract"]
+    )
     out = args.output.resolve()
     manifest = {
         "version": "pf-eedi-coverage/v1",
@@ -290,18 +317,27 @@ def main() -> None:
         futs = []
         for case in cases:
             for solver_id in SOLVERS:
-                futs.append(pool.submit(run_solver, case, solver_id, chats[solver_id], profiles, out))
+                futs.append(
+                    pool.submit(run_solver, case, solver_id, chats[solver_id], profiles, out)
+                )
             futs.append(pool.submit(run_direct, case, chats["luna"], profiles, out))
         for fut in as_completed(futs):
             fut.result()
 
     jobs = []
     for case in cases:
-        solver_recs = {s: json.loads((out / "solver" / f"{case['case_id']}__{s}.json").read_text()) for s in SOLVERS}
+        solver_recs = {
+            s: json.loads((out / "solver" / f"{case['case_id']}__{s}.json").read_text())
+            for s in SOLVERS
+        }
         direct = json.loads((out / "direct" / f"{case['case_id']}.json").read_text())
         systems = {
-            "solver_luna": [{**i, "source": "solver_luna"} for i in solver_items(solver_recs["luna"])],
-            "solver_gpt41": [{**i, "source": "solver_gpt41"} for i in solver_items(solver_recs["gpt41"])],
+            "solver_luna": [
+                {**i, "source": "solver_luna"} for i in solver_items(solver_recs["luna"])
+            ],
+            "solver_gpt41": [
+                {**i, "source": "solver_gpt41"} for i in solver_items(solver_recs["gpt41"])
+            ],
             "direct": [
                 {"idea": a["idea"], "work": a["work"], "source": "direct"}
                 for a in direct.get("approaches", [])
@@ -313,7 +349,10 @@ def main() -> None:
     judged: dict[tuple[str, str], dict] = {}
     with ThreadPoolExecutor(max_workers=args.workers) as pool:
         futs = {
-            pool.submit(run_judge, case, name, items, chats["luna"], judge_system, out): (case["case_id"], name)
+            pool.submit(run_judge, case, name, items, chats["luna"], judge_system, out): (
+                case["case_id"],
+                name,
+            )
             for case, name, items in jobs
         }
         for fut in as_completed(futs):

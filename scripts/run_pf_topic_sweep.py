@@ -38,9 +38,7 @@ def source_hashes(config_path: Path, grounding_path: Path | None = None) -> dict
     return hashes
 
 
-def prepare(
-    config_path: Path, output: Path, grounding_path: Path | None = None
-) -> dict:
+def prepare(config_path: Path, output: Path, grounding_path: Path | None = None) -> dict:
     config = json.loads(config_path.read_text(encoding="utf-8"))
     cases = config["cases"]
     ids = [case["id"] for case in cases]
@@ -159,8 +157,8 @@ def run(
             }
             _write_json(output / "manifest.json", manifest)
             print(f"{case_id}: {result['status']} ({result['model_call_count']} calls)", flush=True)
-    manifest["source_integrity_unchanged"] = (
-        manifest["source_hashes"] == source_hashes(config_path, grounding_path)
+    manifest["source_integrity_unchanged"] = manifest["source_hashes"] == source_hashes(
+        config_path, grounding_path
     )
     manifest["status_counts"] = dict(
         Counter(item["status"] for item in manifest["attempts"].values())

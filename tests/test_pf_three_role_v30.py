@@ -92,7 +92,9 @@ def test_unstated_choice_maps_no_and_yes_to_unclear():
             "reason": "Ambiguous scope.",
         },
     }
-    rows = v30.parse_task_v30(raw, {"student_task": TASK, "learning_target": TARGET, "learner_context": CONTEXT})
+    rows = v30.parse_task_v30(
+        raw, {"student_task": TASK, "learning_target": TARGET, "learner_context": CONTEXT}
+    )
     assert rows["mathematical_validity"]["value"] == "unclear"
     assert rows["mathematical_validity"]["evidence"]["raw_verdict"] == "no"
 

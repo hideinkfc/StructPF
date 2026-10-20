@@ -28,9 +28,9 @@ from typing import Any
 import yaml
 
 from scripts.run_pf_accessibility_sensitivity import build_chats
+from src.evaluation import pf_three_role_v30 as v30
 from src.evaluation.frozen import pf_three_role_v22 as v22
 from src.evaluation.frozen import pf_three_role_v25 as v25
-from src.evaluation import pf_three_role_v30 as v30
 
 ROOT = Path(__file__).resolve().parents[1]
 BENCHMARK_PATH = ROOT / "experiments/configs/pf_solver_recall_benchmark_20261016.json"
@@ -65,12 +65,18 @@ def parse_json_text(text: str) -> dict[str, Any]:
     return json.loads(s)
 
 
-def run_or_load_solver_case(case: dict[str, Any], chats: dict[str, Any], out_dir: Path) -> dict[str, Any]:
+def run_or_load_solver_case(
+    case: dict[str, Any], chats: dict[str, Any], out_dir: Path
+) -> dict[str, Any]:
     cid = case["case_id"]
     out_path = out_dir / "solver" / f"{cid}.json"
     if out_path.exists():
         saved = json.loads(out_path.read_text(encoding="utf-8"))
-        if saved.get("status") == "completed" and saved.get("luna_attempts") and saved.get("gpt41_attempts"):
+        if (
+            saved.get("status") == "completed"
+            and saved.get("luna_attempts")
+            and saved.get("gpt41_attempts")
+        ):
             return saved
 
     # Check if cached v3.0 evaluation exists
@@ -79,7 +85,9 @@ def run_or_load_solver_case(case: dict[str, Any], chats: dict[str, Any], out_dir
         cached_file = ROOT / cached_rel
         if cached_file.exists():
             d = json.loads(cached_file.read_text(encoding="utf-8"))
-            atts = ((d.get("result") or {}).get("attempt_judge") or {}).get("input", {}).get("attempts") or []
+            atts = ((d.get("result") or {}).get("attempt_judge") or {}).get("input", {}).get(
+                "attempts"
+            ) or []
             luna_atts = [a for a in atts if a.get("solver") == "luna"]
             gpt41_atts = [a for a in atts if a.get("solver") == "gpt41"]
             if luna_atts and gpt41_atts:
@@ -107,7 +115,9 @@ def run_or_load_solver_case(case: dict[str, Any], chats: dict[str, Any], out_dir
 
     runs = {}
     for solver_id in ("luna", "gpt41"):
-        runs[solver_id] = v30.run_solver_v30(payload, chats[solver_id], solver_id=solver_id, toolkit=True)
+        runs[solver_id] = v30.run_solver_v30(
+            payload, chats[solver_id], solver_id=solver_id, toolkit=True
+        )
 
     combined = v25.combine_attempts(runs)
     luna_atts = [a for a in combined if a.get("solver") == "luna"]
@@ -117,9 +127,7 @@ def run_or_load_solver_case(case: dict[str, Any], chats: dict[str, Any], out_dir
         "case_id": cid,
         "status": status,
         "source": "fresh_v30_solver",
-        "solver_meta": {
-            s: {k: v for k, v in r.items() if k != "calls"} for s, r in runs.items()
-        },
+        "solver_meta": {s: {k: v for k, v in r.items() if k != "calls"} for s, r in runs.items()},
         "luna_attempts": luna_atts,
         "gpt41_attempts": gpt41_atts,
         "finished_at": now(),
@@ -213,11 +221,15 @@ def run_judge_case(
                         "approach_id": aid,
                         "luna_coverage": lc,
                         "luna_attempt_indices": [
-                            int(i) for i in (m.get("luna_attempt_indices") or []) if isinstance(i, int)
+                            int(i)
+                            for i in (m.get("luna_attempt_indices") or [])
+                            if isinstance(i, int)
                         ],
                         "gpt41_coverage": gc,
                         "gpt41_attempt_indices": [
-                            int(i) for i in (m.get("gpt41_attempt_indices") or []) if isinstance(i, int)
+                            int(i)
+                            for i in (m.get("gpt41_attempt_indices") or [])
+                            if isinstance(i, int)
                         ],
                         "combined_coverage": (
                             "yes"
@@ -235,7 +247,9 @@ def run_judge_case(
             break
         except Exception as exc:
             last_error = f"{type(exc).__name__}: {exc}"
-            messages.append({"role": "assistant", "content": calls[-1]["response_text"] if calls else ""})
+            messages.append(
+                {"role": "assistant", "content": calls[-1]["response_text"] if calls else ""}
+            )
             messages.append(
                 {
                     "role": "user",
@@ -271,12 +285,8 @@ def summarize_results(
     }
 
     # Approach-level tallies by role and by cohort
-    by_role: dict[str, dict[str, Counter]] = {
-        sys: defaultdict(Counter) for sys in systems
-    }
-    by_cohort: dict[str, dict[str, Counter]] = {
-        sys: defaultdict(Counter) for sys in systems
-    }
+    by_role: dict[str, dict[str, Counter]] = {sys: defaultdict(Counter) for sys in systems}
+    by_cohort: dict[str, dict[str, Counter]] = {sys: defaultdict(Counter) for sys in systems}
 
     # Task-level objectivity tallies
     pf_task_counts = {
@@ -323,8 +333,7 @@ def summarize_results(
         approach_counts_per_solver["combined"].append(n_luna + n_gpt41)
 
         matches_by_id = {
-            m["approach_id"]: m
-            for m in ((jrec.get("parsed") or {}).get("matches") or [])
+            m["approach_id"]: m for m in ((jrec.get("parsed") or {}).get("matches") or [])
         }
 
         for ref in case["reference_approaches"]:
@@ -436,12 +445,10 @@ def summarize_results(
             for sys in systems
         },
         "recall_by_role": {
-            sys: {role: _fmt_counter(cnt) for role, cnt in by_role[sys].items()}
-            for sys in systems
+            sys: {role: _fmt_counter(cnt) for role, cnt in by_role[sys].items()} for sys in systems
         },
         "recall_by_cohort_primary_complete": {
-            sys: {coh: _fmt_counter(cnt) for coh, cnt in by_cohort[sys].items()}
-            for sys in systems
+            sys: {coh: _fmt_counter(cnt) for coh, cnt in by_cohort[sys].items()} for sys in systems
         },
         "task_level_pf_coverage": {
             sys: {
@@ -525,13 +532,14 @@ def main() -> None:
     solver_records: dict[str, dict[str, Any]] = {}
     with ThreadPoolExecutor(max_workers=args.workers) as pool:
         futs = {
-            pool.submit(run_or_load_solver_case, c, chats, out_dir): c["case_id"]
-            for c in cases
+            pool.submit(run_or_load_solver_case, c, chats, out_dir): c["case_id"] for c in cases
         }
         for fut in as_completed(futs):
             rec = fut.result()
             solver_records[rec["case_id"]] = rec
-            print(f"[solver] {rec['case_id']} ({rec['source']}): status={rec['status']}", flush=True)
+            print(
+                f"[solver] {rec['case_id']} ({rec['source']}): status={rec['status']}", flush=True
+            )
 
     # Stage 2: Matching Judge
     judge_records: dict[str, dict[str, Any]] = {}

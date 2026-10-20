@@ -24,11 +24,11 @@ OUT_DIR = ROOT / "docs" / "status" / "figures" / "eth_samples"
 
 # Academic Multi-Hue Palette (used across MathDial 2023 & StratL 2025)
 # 1. Quantitative plot colors (Seaborn Deep / Academic Publication Standard)
-CLR_BLUE = "#4C72B0"      # Primary / Model A / Grounded
-CLR_ORANGE = "#DD8452"    # Secondary / Model B / Partial-Bypass
-CLR_GREEN = "#55A868"     # Positive / Productive Trap / Combined Union
-CLR_RED = "#C44E52"       # Negative / Spoiler Leak / Failure
-CLR_PURPLE = "#8172B3"    # Tertiary accent
+CLR_BLUE = "#4C72B0"  # Primary / Model A / Grounded
+CLR_ORANGE = "#DD8452"  # Secondary / Model B / Partial-Bypass
+CLR_GREEN = "#55A868"  # Positive / Productive Trap / Combined Union
+CLR_RED = "#C44E52"  # Negative / Spoiler Leak / Failure
+CLR_PURPLE = "#8172B3"  # Tertiary accent
 CLR_GREY_DARK = "#2B2B2B"
 CLR_GREY = "#666666"
 
@@ -219,7 +219,7 @@ def make_sample_1_diagram() -> None:
         1.45,
         2.35,
         0.72,
-        "✓ Valid Prior Skill (K_prior):\n\"Unit rate y / x from origin\"",
+        '✓ Valid Prior Skill (K_prior):\n"Unit rate y / x from origin"',
         facecolor=DIAG_GREEN_FILL,
         edgecolor=DIAG_GREEN_EDGE,
         fontsize=7.7,
@@ -230,7 +230,7 @@ def make_sample_1_diagram() -> None:
         0.68,
         2.35,
         0.60,
-        "✗ Blocked Spoiler:\n\"Slope (y2 - y1) / (x2 - x1)\"",
+        '✗ Blocked Spoiler:\n"Slope (y2 - y1) / (x2 - x1)"',
         facecolor=DIAG_RED_FILL,
         edgecolor=DIAG_RED_EDGE,
         fontsize=7.4,
@@ -297,7 +297,7 @@ def make_sample_1_diagram() -> None:
         0.75,
         2.30,
         1.42,
-        "Student PF Task T\n\n\"Compare three ramps\nusing the measurements.\nInvent a steepness rule\nthat works for all ramps.\"",
+        'Student PF Task T\n\n"Compare three ramps\nusing the measurements.\nInvent a steepness rule\nthat works for all ramps."',
         facecolor="#FFFFFF",
         edgecolor=DIAG_BLUE_EDGE,
         fontsize=7.7,
@@ -337,9 +337,7 @@ def make_sample_1_diagram() -> None:
 
     fig.tight_layout(pad=0.15)
     fig.savefig(OUT_DIR / "eth_sample_1_structpf_diagram.pdf", bbox_inches="tight")
-    fig.savefig(
-        OUT_DIR / "eth_sample_1_structpf_diagram.png", dpi=300, bbox_inches="tight"
-    )
+    fig.savefig(OUT_DIR / "eth_sample_1_structpf_diagram.png", dpi=300, bbox_inches="tight")
     plt.close(fig)
 
 
@@ -359,9 +357,7 @@ def make_sample_2_grounding_3arms() -> None:
     arms = list(reversed(arms))
 
     s0 = [data[k]["score_counts"]["score_0_invalid_prior_set"] for k, _ in arms]
-    s1 = [
-        data[k]["score_counts"]["score_1_trap_bypassed_or_off_target"] for k, _ in arms
-    ]
+    s1 = [data[k]["score_counts"]["score_1_trap_bypassed_or_off_target"] for k, _ in arms]
     s2 = [data[k]["score_counts"]["score_2_productive_trap"] for k, _ in arms]
     means = [data[k]["two_gate_score_mean"] for k, _ in arms]
     labels = [lbl for _, lbl in arms]
@@ -408,7 +404,7 @@ def make_sample_2_grounding_3arms() -> None:
             ax.text(
                 s0[i] / 2,
                 i,
-                f"{s0[i]}/30 ({round(s0[i]*100/30):.0f}%)",
+                f"{s0[i]}/30 ({round(s0[i] * 100 / 30):.0f}%)",
                 ha="center",
                 va="center",
                 color="#FFFFFF",
@@ -420,7 +416,7 @@ def make_sample_2_grounding_3arms() -> None:
             ax.text(
                 s0[i] + s1[i] / 2,
                 i,
-                f"{s1[i]}/30 ({round(s1[i]*100/30):.0f}%)",
+                f"{s1[i]}/30 ({round(s1[i] * 100 / 30):.0f}%)",
                 ha="center",
                 va="center",
                 color="#FFFFFF",
@@ -432,7 +428,7 @@ def make_sample_2_grounding_3arms() -> None:
             ax.text(
                 s0[i] + s1[i] + s2[i] / 2,
                 i,
-                f"{s2[i]}/30 ({round(s2[i]*100/30):.0f}%)",
+                f"{s2[i]}/30 ({round(s2[i] * 100 / 30):.0f}%)",
                 ha="center",
                 va="center",
                 color="#FFFFFF",
@@ -474,9 +470,7 @@ def make_sample_2_grounding_3arms() -> None:
 
     fig.tight_layout()
     fig.savefig(OUT_DIR / "eth_sample_2_grounding_3arms.pdf", bbox_inches="tight")
-    fig.savefig(
-        OUT_DIR / "eth_sample_2_grounding_3arms.png", dpi=300, bbox_inches="tight"
-    )
+    fig.savefig(OUT_DIR / "eth_sample_2_grounding_3arms.png", dpi=300, bbox_inches="tight")
     plt.close(fig)
 
 
@@ -488,11 +482,36 @@ def make_sample_3_solver_recall() -> None:
     by_cohort = summary["recall_by_cohort_primary_complete"]
 
     categories = [
-        ("All Reference\nApproaches (n=256)", by_role["gpt41"]["primary_complete"], by_role["luna"]["primary_complete"], by_role["combined"]["primary_complete"]),
-        ("Prior-Skill Trap\nRoutes (n=173)", by_role["gpt41"]["baseline_trap"], by_role["luna"]["baseline_trap"], by_role["combined"]["baseline_trap"]),
-        ("Resolving Target\nRoutes (n=64)", by_role["gpt41"]["resolving_route"], by_role["luna"]["resolving_route"], by_role["combined"]["resolving_route"]),
-        ("Expert PF\nCohort (n=28)", by_cohort["gpt41"]["expert_pf"], by_cohort["luna"]["expert_pf"], by_cohort["combined"]["expert_pf"]),
-        ("StructPF Sweep\nCohort (n=75)", by_cohort["gpt41"]["pipeline_topic_sweep"], by_cohort["luna"]["pipeline_topic_sweep"], by_cohort["combined"]["pipeline_topic_sweep"]),
+        (
+            "All Reference\nApproaches (n=256)",
+            by_role["gpt41"]["primary_complete"],
+            by_role["luna"]["primary_complete"],
+            by_role["combined"]["primary_complete"],
+        ),
+        (
+            "Prior-Skill Trap\nRoutes (n=173)",
+            by_role["gpt41"]["baseline_trap"],
+            by_role["luna"]["baseline_trap"],
+            by_role["combined"]["baseline_trap"],
+        ),
+        (
+            "Resolving Target\nRoutes (n=64)",
+            by_role["gpt41"]["resolving_route"],
+            by_role["luna"]["resolving_route"],
+            by_role["combined"]["resolving_route"],
+        ),
+        (
+            "Expert PF\nCohort (n=28)",
+            by_cohort["gpt41"]["expert_pf"],
+            by_cohort["luna"]["expert_pf"],
+            by_cohort["combined"]["expert_pf"],
+        ),
+        (
+            "StructPF Sweep\nCohort (n=75)",
+            by_cohort["gpt41"]["pipeline_topic_sweep"],
+            by_cohort["luna"]["pipeline_topic_sweep"],
+            by_cohort["combined"]["pipeline_topic_sweep"],
+        ),
     ]
 
     labels = [c[0] for c in categories]
@@ -573,9 +592,7 @@ def make_sample_3_solver_recall() -> None:
 
     fig.tight_layout()
     fig.savefig(OUT_DIR / "eth_sample_3_solver_recall.pdf", bbox_inches="tight")
-    fig.savefig(
-        OUT_DIR / "eth_sample_3_solver_recall.png", dpi=300, bbox_inches="tight"
-    )
+    fig.savefig(OUT_DIR / "eth_sample_3_solver_recall.png", dpi=300, bbox_inches="tight")
     plt.close(fig)
 
 

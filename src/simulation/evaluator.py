@@ -8,6 +8,7 @@ from src.simulation.student_profiles import StudentProfile
 @dataclass
 class SimulationResult:
     """Result of a simulated student attempting a PF exercise."""
+
     profile: StudentProfile
     response: str
     rsm_category: str

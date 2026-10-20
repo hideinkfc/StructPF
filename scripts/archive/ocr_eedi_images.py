@@ -7,10 +7,14 @@ Usage:
   python scripts/ocr_eedi_images.py --dir data/eedi_scraped
 """
 
-import argparse, json, time, sys, requests
+import argparse
+import json
+import time
 from pathlib import Path
-from PIL import Image
+
 import pytesseract
+import requests
+from PIL import Image
 
 
 def ocr_image(url: str, cache_dir: Path, max_retries: int = 2) -> str:
@@ -43,7 +47,9 @@ def ocr_image(url: str, cache_dir: Path, max_retries: int = 2) -> str:
 
 def main():
     parser = argparse.ArgumentParser(description="OCR Eedi question images")
-    parser.add_argument("--dir", default="data/eedi_scraped", help="Directory with scraped JSON files")
+    parser.add_argument(
+        "--dir", default="data/eedi_scraped", help="Directory with scraped JSON files"
+    )
     args = parser.parse_args()
 
     data_dir = Path(args.dir)
@@ -77,7 +83,9 @@ def main():
         if modified:
             with open(fpath, "w") as f:
                 json.dump(quiz, f, indent=2, ensure_ascii=False)
-            print(f"  [{i+1}/{len(json_files)}] {quiz.get('quiz_id', '?')}: OCR'd {sum(1 for q in quiz['questions'] if q.get('question_text'))} questions")
+            print(
+                f"  [{i + 1}/{len(json_files)}] {quiz.get('quiz_id', '?')}: OCR'd {sum(1 for q in quiz['questions'] if q.get('question_text'))} questions"
+            )
 
     print("Done!")
 

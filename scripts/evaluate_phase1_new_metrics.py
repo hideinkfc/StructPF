@@ -18,8 +18,8 @@ from scripts.run_basic_glm_correctness_pilot import (
     _same_error_prompt,
     cached_judge_json,
     classify_correctness,
-    compute_pm,
     coherence_prompt,
+    compute_pm,
     get_judge_client,
     get_judge_model,
     plausibility_prompt,
@@ -27,7 +27,9 @@ from scripts.run_basic_glm_correctness_pilot import (
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 SOURCE_DIR = PROJECT_ROOT / "experiments" / "results" / "phase1_mcq" / "full_v3_20260810"
-DEFAULT_OUTPUT_DIR = PROJECT_ROOT / "experiments" / "results" / "phase1_mcq" / "full_v3_new_metrics_20260810"
+DEFAULT_OUTPUT_DIR = (
+    PROJECT_ROOT / "experiments" / "results" / "phase1_mcq" / "full_v3_new_metrics_20260810"
+)
 TEST_SET_PATH = PROJECT_ROOT / "data" / "eedi" / "test_set_200.json"
 DEFAULT_WORKERS = 8
 JUDGE_TIMEOUT_S = 60.0
@@ -188,12 +190,15 @@ def _pathway_diversity_one(
         and coherence.get(index, {}).get("status") == "pass"
     ]
     if len(valid_indices) < 2:
-        return ({
-            "status": "not_measurable",
-            "value": None,
-            "valid_distractors": len(valid_indices),
-            "reason": "fewer than two incorrect, plausible, coherent distractors",
-        }, [])
+        return (
+            {
+                "status": "not_measurable",
+                "value": None,
+                "valid_distractors": len(valid_indices),
+                "reason": "fewer than two incorrect, plausible, coherent distractors",
+            },
+            [],
+        )
 
     options = {index: record["distractors"][index - 1] for index in valid_indices}
     edges: list[tuple[int, int, bool]] = []
@@ -211,31 +216,35 @@ def _pathway_diversity_one(
             if same_error not in (True, False):
                 raise ValueError("same_error must be boolean")
             edges.append((left, right, same_error))
-            judgments.append({
-                "condition": record["condition"],
-                "question_id": record["question_id"],
-                "run": record["run"],
-                "left_index": left,
-                "right_index": right,
-                "same_error": same_error,
-                "shared_faulty_step": result.get("shared_faulty_step", ""),
-                "reason": str(result.get("reason", "")),
-                "cache_hit": cache_hit,
-                "error": "",
-            })
+            judgments.append(
+                {
+                    "condition": record["condition"],
+                    "question_id": record["question_id"],
+                    "run": record["run"],
+                    "left_index": left,
+                    "right_index": right,
+                    "same_error": same_error,
+                    "shared_faulty_step": result.get("shared_faulty_step", ""),
+                    "reason": str(result.get("reason", "")),
+                    "cache_hit": cache_hit,
+                    "error": "",
+                }
+            )
         except Exception as error:
-            judgments.append({
-                "condition": record["condition"],
-                "question_id": record["question_id"],
-                "run": record["run"],
-                "left_index": left,
-                "right_index": right,
-                "same_error": None,
-                "shared_faulty_step": "",
-                "reason": "",
-                "cache_hit": False,
-                "error": f"{type(error).__name__}: {error}",
-            })
+            judgments.append(
+                {
+                    "condition": record["condition"],
+                    "question_id": record["question_id"],
+                    "run": record["run"],
+                    "left_index": left,
+                    "right_index": right,
+                    "same_error": None,
+                    "shared_faulty_step": "",
+                    "reason": "",
+                    "cache_hit": False,
+                    "error": f"{type(error).__name__}: {error}",
+                }
+            )
 
     parent = {index: index for index in valid_indices}
 
@@ -251,13 +260,18 @@ def _pathway_diversity_one(
             if left_root != right_root:
                 parent[right_root] = left_root
     classes = len({find(index) for index in valid_indices})
-    return ({
-        "status": "measured" if len(edges) == len(list(itertools.combinations(valid_indices, 2))) else "partial",
-        "value": (classes - 1) / (len(valid_indices) - 1),
-        "valid_distractors": len(valid_indices),
-        "error_classes": classes,
-        "reason": "pairwise faulty-step judgments",
-    }, judgments)
+    return (
+        {
+            "status": "measured"
+            if len(edges) == len(list(itertools.combinations(valid_indices, 2)))
+            else "partial",
+            "value": (classes - 1) / (len(valid_indices) - 1),
+            "valid_distractors": len(valid_indices),
+            "error_classes": classes,
+            "reason": "pairwise faulty-step judgments",
+        },
+        judgments,
+    )
 
 
 def evaluate_records(
@@ -284,7 +298,9 @@ def evaluate_records(
         futures = [pool.submit(_judge_one, task, client, model) for task in tasks]
         for future in as_completed(futures):
             judgments.append(future.result())
-    judgments.sort(key=lambda row: (row["condition"], row["question_id"], row["run"], row["distractor_index"]))
+    judgments.sort(
+        key=lambda row: (row["condition"], row["question_id"], row["run"], row["distractor_index"])
+    )
 
     coherence_rows: list[dict[str, Any]] = []
     if measure_paths:
@@ -297,12 +313,22 @@ def evaluate_records(
             futures = [pool.submit(_coherence_one, task, client, model) for task in coherence_tasks]
             for future in as_completed(futures):
                 coherence_rows.append(future.result())
-        coherence_rows.sort(key=lambda row: (row["condition"], row["question_id"], row["run"], row["distractor_index"]))
+        coherence_rows.sort(
+            key=lambda row: (
+                row["condition"],
+                row["question_id"],
+                row["run"],
+                row["distractor_index"],
+            )
+        )
 
     llm_pm_rows: list[dict[str, Any]] = []
     llm_pm_by_key: dict[tuple[str, int, int], dict[str, Any]] = {}
     if llm_verify_pm:
-        def _compute_llm_pm(item: tuple[str, dict[str, Any]]) -> tuple[tuple[str, int, int], dict[str, Any]]:
+
+        def _compute_llm_pm(
+            item: tuple[str, dict[str, Any]],
+        ) -> tuple[tuple[str, int, int], dict[str, Any]]:
             condition, record = item
             question = questions[record["question_id"]]
             result = compute_pm(
@@ -319,14 +345,16 @@ def evaluate_records(
             for future in as_completed(futures):
                 key, result = future.result()
                 llm_pm_by_key[key] = result
-                llm_pm_rows.append({
-                    "condition": key[0],
-                    "question_id": key[1],
-                    "run": key[2],
-                    "pm_llm": result.get("pm_llm"),
-                    "llm_unknown_pairs": result.get("llm_unknown_pairs", 0),
-                    "matches_llm": result.get("matches_llm", []),
-                })
+                llm_pm_rows.append(
+                    {
+                        "condition": key[0],
+                        "question_id": key[1],
+                        "run": key[2],
+                        "pm_llm": result.get("pm_llm"),
+                        "llm_unknown_pairs": result.get("llm_unknown_pairs", 0),
+                        "matches_llm": result.get("matches_llm", []),
+                    }
+                )
 
     judgment_by_key = {
         (row["condition"], row["question_id"], row["run"], row["distractor_index"]): row
@@ -402,55 +430,64 @@ def evaluate_records(
                 correctness,
                 plausibility_by_record.get(record_key, {}),
                 {
-                    index: coherence_by_key.get((condition, record["question_id"], record["run"], index), {})
+                    index: coherence_by_key.get(
+                        (condition, record["question_id"], record["run"], index), {}
+                    )
                     for index in range(1, len(record["distractors"]) + 1)
                 },
                 client,
                 model,
             )
         else:
-            path_diversity, path_judgments = ({
-                "status": "not_measurable",
-                "value": None,
-                "valid_distractors": 0,
-                "reason": "No structured pathway evaluation requested or fields are absent.",
-            }, [])
+            path_diversity, path_judgments = (
+                {
+                    "status": "not_measurable",
+                    "value": None,
+                    "valid_distractors": 0,
+                    "reason": "No structured pathway evaluation requested or fields are absent.",
+                },
+                [],
+            )
         pathway_rows.extend(path_judgments)
         llm_pm = llm_pm_by_key.get(record_key, {})
-        per_record.append({
-            "condition": condition,
-            "question_id": record["question_id"],
-            "run": record["run"],
-            "subject": record["subject"],
-            "n_distractors": len(record["distractors"]),
-            "raw_distractor_count": record["raw_distractor_count"],
-            "output_contract_valid": record["output_contract_valid"],
-            "incorrectness": {
-                "status_counts": {status: correctness.count(status) for status in sorted(set(correctness))},
-                "incorrect": incorrect,
-                "decisive": len(decisive),
-                "unknown": correctness.count("unknown"),
-                "unusable": correctness.count("unusable"),
-                "rate": incorrect / len(decisive) if decisive else None,
-            },
-            "student_plausibility": {
-                "scores": scores,
-                "mean_score_0_to_2": _mean([float(score) for score in scores]),
-                "screening_rate_ge_1": _mean([float(value) for value in screens]),
-                "judged": len(scores),
-                "failures": sum(row["score"] is None for row in judged),
-                "cache_hits": sum(bool(row["cache_hit"]) for row in judged),
-            },
-            "path_coherence": path_coherence,
-            "pathway_diversity": path_diversity,
-            "pm": {
-                "raw": pm.get("pm_raw"),
-                "normalized": pm.get("pm_normalized"),
-                "typed": pm.get("pm_typed"),
-                "llm": llm_pm.get("pm_llm"),
-                "llm_unknown_pairs": llm_pm.get("llm_unknown_pairs"),
-            },
-        })
+        per_record.append(
+            {
+                "condition": condition,
+                "question_id": record["question_id"],
+                "run": record["run"],
+                "subject": record["subject"],
+                "n_distractors": len(record["distractors"]),
+                "raw_distractor_count": record["raw_distractor_count"],
+                "output_contract_valid": record["output_contract_valid"],
+                "incorrectness": {
+                    "status_counts": {
+                        status: correctness.count(status) for status in sorted(set(correctness))
+                    },
+                    "incorrect": incorrect,
+                    "decisive": len(decisive),
+                    "unknown": correctness.count("unknown"),
+                    "unusable": correctness.count("unusable"),
+                    "rate": incorrect / len(decisive) if decisive else None,
+                },
+                "student_plausibility": {
+                    "scores": scores,
+                    "mean_score_0_to_2": _mean([float(score) for score in scores]),
+                    "screening_rate_ge_1": _mean([float(value) for value in screens]),
+                    "judged": len(scores),
+                    "failures": sum(row["score"] is None for row in judged),
+                    "cache_hits": sum(bool(row["cache_hit"]) for row in judged),
+                },
+                "path_coherence": path_coherence,
+                "pathway_diversity": path_diversity,
+                "pm": {
+                    "raw": pm.get("pm_raw"),
+                    "normalized": pm.get("pm_normalized"),
+                    "typed": pm.get("pm_typed"),
+                    "llm": llm_pm.get("pm_llm"),
+                    "llm_unknown_pairs": llm_pm.get("llm_unknown_pairs"),
+                },
+            }
+        )
     return per_record, {
         "plausibility": judgments,
         "coherence": coherence_rows,
@@ -473,24 +510,41 @@ def summarize(
             "question_runs": len(rows),
             "complete_three_distractor_sets": sum(row["n_distractors"] == 3 for row in rows),
             "output_contract_violations": sum(not row["output_contract_valid"] for row in rows),
-            "raw_extra_distractors": sum(
-                max(0, row["raw_distractor_count"] - 3) for row in rows
+            "raw_extra_distractors": sum(max(0, row["raw_distractor_count"] - 3) for row in rows),
+            "incorrectness_rate": _mean(
+                [
+                    row["incorrectness"]["rate"]
+                    for row in rows
+                    if row["incorrectness"]["rate"] is not None
+                ]
             ),
-            "incorrectness_rate": _mean([row["incorrectness"]["rate"] for row in rows if row["incorrectness"]["rate"] is not None]),
-            "incorrectness_measured_question_runs": sum(row["incorrectness"]["rate"] is not None for row in rows),
-            "unknown_distractor_rate": _mean([
-                row["incorrectness"]["unknown"] / row["n_distractors"]
-                for row in rows if row["n_distractors"]
-            ]),
-            "student_plausibility_mean_0_to_2": _mean([
-                row["student_plausibility"]["mean_score_0_to_2"]
-                for row in rows if row["student_plausibility"]["mean_score_0_to_2"] is not None
-            ]),
-            "student_plausibility_screening_rate_ge_1": _mean([
-                row["student_plausibility"]["screening_rate_ge_1"]
-                for row in rows if row["student_plausibility"]["screening_rate_ge_1"] is not None
-            ]),
-            "plausibility_judged_distractors": sum(row["score"] is not None for row in condition_judgments),
+            "incorrectness_measured_question_runs": sum(
+                row["incorrectness"]["rate"] is not None for row in rows
+            ),
+            "unknown_distractor_rate": _mean(
+                [
+                    row["incorrectness"]["unknown"] / row["n_distractors"]
+                    for row in rows
+                    if row["n_distractors"]
+                ]
+            ),
+            "student_plausibility_mean_0_to_2": _mean(
+                [
+                    row["student_plausibility"]["mean_score_0_to_2"]
+                    for row in rows
+                    if row["student_plausibility"]["mean_score_0_to_2"] is not None
+                ]
+            ),
+            "student_plausibility_screening_rate_ge_1": _mean(
+                [
+                    row["student_plausibility"]["screening_rate_ge_1"]
+                    for row in rows
+                    if row["student_plausibility"]["screening_rate_ge_1"] is not None
+                ]
+            ),
+            "plausibility_judged_distractors": sum(
+                row["score"] is not None for row in condition_judgments
+            ),
             "plausibility_judge_failures": sum(row["score"] is None for row in condition_judgments),
             "path_coherence": (
                 "measured"
@@ -499,34 +553,40 @@ def summarize(
             ),
             "pathway_diversity": (
                 "measured"
-                if any(row["pathway_diversity"]["status"] in {"measured", "partial"} for row in rows)
+                if any(
+                    row["pathway_diversity"]["status"] in {"measured", "partial"} for row in rows
+                )
                 else "not_measurable"
             ),
             "path_coherence_measured_question_runs": sum(
                 row["path_coherence"]["status"] == "measured" for row in rows
             ),
-            "path_coherence_rate": _mean([
-                row["path_coherence"]["rate"]
-                for row in rows
-                if row["path_coherence"]["rate"] is not None
-            ]),
+            "path_coherence_rate": _mean(
+                [
+                    row["path_coherence"]["rate"]
+                    for row in rows
+                    if row["path_coherence"]["rate"] is not None
+                ]
+            ),
             "pathway_diversity_measured_question_runs": sum(
-                row["pathway_diversity"]["status"] in {"measured", "partial"}
-                for row in rows
+                row["pathway_diversity"]["status"] in {"measured", "partial"} for row in rows
             ),
-            "pathway_diversity_mean": _mean([
-                row["pathway_diversity"]["value"]
-                for row in rows
-                if row["pathway_diversity"]["value"] is not None
-            ]),
+            "pathway_diversity_mean": _mean(
+                [
+                    row["pathway_diversity"]["value"]
+                    for row in rows
+                    if row["pathway_diversity"]["value"] is not None
+                ]
+            ),
             "PM_raw": _mean([row["pm"]["raw"] for row in rows if row["pm"]["raw"] is not None]),
-            "PM_normalized": _mean([row["pm"]["normalized"] for row in rows if row["pm"]["normalized"] is not None]),
-            "PM_typed": _mean([row["pm"]["typed"] for row in rows if row["pm"]["typed"] is not None]),
-            "PM_llm": _mean([row["pm"]["llm"] for row in rows if row["pm"]["llm"] is not None]),
-            "PM_llm_unknown_pairs": sum(
-                row["pm"]["llm_unknown_pairs"] or 0
-                for row in rows
+            "PM_normalized": _mean(
+                [row["pm"]["normalized"] for row in rows if row["pm"]["normalized"] is not None]
             ),
+            "PM_typed": _mean(
+                [row["pm"]["typed"] for row in rows if row["pm"]["typed"] is not None]
+            ),
+            "PM_llm": _mean([row["pm"]["llm"] for row in rows if row["pm"]["llm"] is not None]),
+            "PM_llm_unknown_pairs": sum(row["pm"]["llm_unknown_pairs"] or 0 for row in rows),
         }
     return summary
 

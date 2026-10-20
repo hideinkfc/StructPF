@@ -82,8 +82,11 @@ def summarize(catalog: list[dict], audit_summary: dict) -> dict:
             if not selected:
                 raise ValueError(f"No scheduled records in arm {arm}")
             counts = Counter(
-                "supported" if record["outcome"] is True
-                else "concern" if record["outcome"] is False else "unknown"
+                "supported"
+                if record["outcome"] is True
+                else "concern"
+                if record["outcome"] is False
+                else "unknown"
                 for record in selected
             )
             rates[property_name][arm] = {
@@ -107,7 +110,8 @@ def summarize(catalog: list[dict], audit_summary: dict) -> dict:
         "delivered": {
             arm: sum(
                 bool(task.get("produced")) and isinstance(task.get("task"), dict)
-                for task in catalog if task["arm"] == arm
+                for task in catalog
+                if task["arm"] == arm
             )
             for arm in ARMS
         },
@@ -150,7 +154,9 @@ def render(summary: dict, task_gallery: str, audit_report: str) -> str:
         x = 250.0
         segments = []
         for state, color in (
-            ("supported", "#447fa7"), ("concern", "#b46456"), ("unknown", "#ced7df")
+            ("supported", "#447fa7"),
+            ("concern", "#b46456"),
+            ("unknown", "#ced7df"),
         ):
             width = 300 * counts[state] / counts["scheduled"]
             segments.append(
@@ -175,9 +181,9 @@ def render(summary: dict, task_gallery: str, audit_report: str) -> str:
         for arm in ARMS:
             count = summary["rates"][property_name][arm]
             cells.append(
-                f'<td><strong>{count["supported"]}/{count["scheduled"]}</strong>'
-                f'<br><small>{count["concern"]} concerns; '
-                f'{count["unknown"]} unknown/disputed</small></td>'
+                f"<td><strong>{count['supported']}/{count['scheduled']}</strong>"
+                f"<br><small>{count['concern']} concerns; "
+                f"{count['unknown']} unknown/disputed</small></td>"
             )
         table_rows.append(f"<tr><th>{html.escape(LABELS[property_name])}</th>{''.join(cells)}</tr>")
     primary = summary["comparisons"]["fixed_checklist"]
@@ -186,19 +192,16 @@ def render(summary: dict, task_gallery: str, audit_report: str) -> str:
     for block in blocks:
         case = block["case_id"]
         values = [
-            next(
-                entry for entry in primary[name]["per_case"] if entry["case_id"] == case
-            )
+            next(entry for entry in primary[name]["per_case"] if entry["case_id"] == case)
             for name in ("curriculum_vs_none", "lc_incremental")
         ]
-        counts = [
-            values[0]["arms"]["A"], values[0]["arms"]["B"], values[1]["arms"]["C"]
-        ]
+        counts = [values[0]["arms"]["A"], values[0]["arms"]["B"], values[1]["arms"]["C"]]
         block_rows.append(
             f"<tr><th>{html.escape(case.replace('_', ' '))}</th>"
             + "".join(
-                f'<td>{count["supported"]}/{block["scheduled_pairs"]}; '
-                f'{count["unknown"]} unknown</td>' for count in counts
+                f"<td>{count['supported']}/{block['scheduled_pairs']}; "
+                f"{count['unknown']} unknown</td>"
+                for count in counts
             )
             + "</tr>"
         )
@@ -211,8 +214,7 @@ def render(summary: dict, task_gallery: str, audit_report: str) -> str:
         difference = comparison["equal_case_weighted_supported_rate_difference"] * 100
         interval = [value * 100 for value in comparison["target_block_bootstrap"]["interval_95"]]
         bounds = [
-            value * 100
-            for value in comparison["equal_case_weighted_unknown_sensitivity_bounds"]
+            value * 100 for value in comparison["equal_case_weighted_unknown_sensitivity_bounds"]
         ]
         effects.append(
             f"<h3>{title}</h3><p>Supported-output difference: <strong>{difference:+.1f} "
@@ -238,26 +240,30 @@ def render(summary: dict, task_gallery: str, audit_report: str) -> str:
         "the model independently discovers the class's prior knowledge.</p>"
         "<h2>Separate educational properties</h2>"
         f"<p><strong>{primary_heading}</strong> "
-        f'{primary_counts["supported"]}/{summary["scheduled"]} tasks have all five '
-        f'properties supported; {primary_counts["concern"]} have agreed concerns and '
-        f'{primary_counts["unknown"]} are unresolved. Component differences '
+        f"{primary_counts['supported']}/{summary['scheduled']} tasks have all five "
+        f"properties supported; {primary_counts['concern']} have agreed concerns and "
+        f"{primary_counts['unknown']} are unresolved. Component differences "
         "must not be promoted to a general quality advantage. The earlier audit lost "
         "the prior-learning input; this page uses the repaired-input run.</p>"
         + chart
         + "<p>The chart shows the measured five-property conjunction. A grey segment is "
         "unresolved evidence, not a failed exercise. These are model-supported outcomes, "
         "not an educational-quality scale.</p>"
-        +
-        "<p>Each bold number counts supported tasks out of all scheduled tasks. Higher "
+        + "<p>Each bold number counts supported tasks out of all scheduled tasks. Higher "
         "support is favorable for that property only. The full conjunction is not a "
         "complete or validated PF score.</p>"
         "<table><tr><th>Property</th>"
         + "".join(f"<th>{html.escape(label)}</th>" for label in ARMS.values())
-        + "</tr>" + "".join(table_rows) + "</table>"
+        + "</tr>"
+        + "".join(table_rows)
+        + "</table>"
         "<h2>Primary outcome by task specification</h2><table><tr><th>Specification</th>"
         + "".join(f"<th>{html.escape(label)}</th>" for label in ARMS.values())
-        + "</tr>" + "".join(block_rows) + "</table>"
-        "<h2>Paired comparisons</h2>" + "".join(effects)
+        + "</tr>"
+        + "".join(block_rows)
+        + "</table>"
+        "<h2>Paired comparisons</h2>"
+        + "".join(effects)
         + "<p>Repeats are nested in task specifications. Five blocks make uncertainty "
         "fragile; these are descriptive pilot comparisons, not a generalization test "
         "across curricula. Unknown sensitivity can be wider than the bootstrap interval.</p>"

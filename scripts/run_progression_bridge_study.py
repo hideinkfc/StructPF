@@ -625,9 +625,7 @@ def evaluate_gate1_prior_set(
             }
             for c in bridge["prerequisite_learning_components"][:8]
         ],
-        "proposed_k_prior_set": [
-            {"index": idx, **item} for idx, item in enumerate(k_prior_set)
-        ],
+        "proposed_k_prior_set": [{"index": idx, **item} for idx, item in enumerate(k_prior_set)],
         "student_task": task_text,
     }
     payload = None
@@ -811,9 +809,7 @@ def evaluate_two_gate_arm(
             "gate1": gate1,
             "gate2": None,
         }
-    gate2 = evaluate_gate2_k_valid_solver(
-        client, model, case, gate1["k_valid"], task_text
-    )
+    gate2 = evaluate_gate2_k_valid_solver(client, model, case, gate1["k_valid"], task_text)
     score = int(gate2["gate2_score"])
     return {
         "score": score,
@@ -1087,9 +1083,7 @@ def summarize_study(records: list[dict[str, Any]]) -> dict[str, Any]:
         d1_leaks = sum(1 for r in records if r[arm]["bridge_fit"]["d1_target_leak"])
         d3_leaks = sum(1 for r in records if r[arm]["bridge_fit"]["d3_target_leak"])
         activates = sum(1 for r in records if r[arm]["bridge_fit"]["activates_s_prior"])
-        impasse = sum(
-            1 for r in records if r[arm]["bridge_fit"]["s_prior_hits_bridge_impasse"]
-        )
+        impasse = sum(1 for r in records if r[arm]["bridge_fit"]["s_prior_hits_bridge_impasse"])
         v29_counts = {m: Counter() for m in MEASURES}
         v29_all5 = 0
         v29_evaluated = 0
@@ -1180,24 +1174,16 @@ def summarize_three_arm_study(records: list[dict[str, Any]]) -> dict[str, Any]:
     for arm in THREE_ARMS:
         scores = [r[arm]["two_gate"]["score"] for r in records]
         dist = Counter(scores)
-        gate1_pass = sum(
-            1 for r in records if r[arm]["two_gate"]["gate1"]["gate1_passed"]
-        )
-        spoiler_sets = sum(
-            1 for r in records if r[arm]["two_gate"]["gate1"]["any_spoiler"]
-        )
+        gate1_pass = sum(1 for r in records if r[arm]["two_gate"]["gate1"]["gate1_passed"])
+        spoiler_sets = sum(1 for r in records if r[arm]["two_gate"]["gate1"]["any_spoiler"])
         valid_ratios = [r[arm]["two_gate"]["gate1"]["valid_ratio"] for r in records]
         total_k = sum(r[arm]["two_gate"]["gate1"]["total_count"] for r in records)
         valid_k = sum(r[arm]["two_gate"]["gate1"]["valid_count"] for r in records)
         irrel_k = sum(r[arm]["two_gate"]["gate1"]["irrelevant_count"] for r in records)
         spoil_k = sum(r[arm]["two_gate"]["gate1"]["spoiler_count"] for r in records)
         summary["arms"][arm] = {
-            "tasks_produced": sum(
-                1 for r in records if r[arm]["student_task"].strip()
-            ),
-            "two_gate_score_mean": (
-                round(sum(scores) / len(scores), 3) if scores else 0.0
-            ),
+            "tasks_produced": sum(1 for r in records if r[arm]["student_task"].strip()),
+            "two_gate_score_mean": (round(sum(scores) / len(scores), 3) if scores else 0.0),
             "score_counts": {
                 "score_2_productive_trap": dist.get(2, 0),
                 "score_1_trap_bypassed_or_off_target": dist.get(1, 0),
@@ -1206,9 +1192,7 @@ def summarize_three_arm_study(records: list[dict[str, Any]]) -> dict[str, Any]:
             "gate1_valid_set_count": gate1_pass,
             "gate1_spoiler_set_count": spoiler_sets,
             "mean_valid_skill_ratio": (
-                round(sum(valid_ratios) / len(valid_ratios), 3)
-                if valid_ratios
-                else 0.0
+                round(sum(valid_ratios) / len(valid_ratios), 3) if valid_ratios else 0.0
             ),
             "item_totals": {
                 "total_proposed_skills": total_k,
@@ -1258,11 +1242,7 @@ def main() -> None:
     output = args.output.resolve()
     output.mkdir(parents=True, exist_ok=True)
 
-    gen_jobs = [
-        (case, arm, str(output), args.model)
-        for case in cases
-        for arm in active_arms
-    ]
+    gen_jobs = [(case, arm, str(output), args.model) for case in cases for arm in active_arms]
     gen_by_case_arm: dict[tuple[str, str], dict[str, Any]] = {}
     print(f"Starting {len(gen_jobs)} generations across {args.max_workers} processes...")
     with ProcessPoolExecutor(max_workers=args.max_workers) as pool:
@@ -1273,8 +1253,7 @@ def main() -> None:
             gen_by_case_arm[(cid, arm)] = res["result"]
             task_ok = bool(extract_student_task(res["result"]))
             print(
-                f"[GEN DONE] {cid} ({arm}) -> status={res['result'].get('status')} "
-                f"task={task_ok}",
+                f"[GEN DONE] {cid} ({arm}) -> status={res['result'].get('status')} task={task_ok}",
                 flush=True,
             )
 
@@ -1381,18 +1360,12 @@ def main() -> None:
                 "lc_grounded_d1_leak": r["lc_grounded"]["bridge_fit"]["d1_target_leak"],
                 "pairwise_winner": r["pairwise"]["consensus_winner"],
                 "ungrounded_v29_all5": (
-                    all(
-                        r["ungrounded"]["v29"]["measures"][m]["value"] == "yes"
-                        for m in MEASURES
-                    )
+                    all(r["ungrounded"]["v29"]["measures"][m]["value"] == "yes" for m in MEASURES)
                     if isinstance(r["ungrounded"].get("v29"), dict)
                     else None
                 ),
                 "lc_grounded_v29_all5": (
-                    all(
-                        r["lc_grounded"]["v29"]["measures"][m]["value"] == "yes"
-                        for m in MEASURES
-                    )
+                    all(r["lc_grounded"]["v29"]["measures"][m]["value"] == "yes" for m in MEASURES)
                     if isinstance(r["lc_grounded"].get("v29"), dict)
                     else None
                 ),

@@ -53,8 +53,9 @@ def test_api_error_is_deleted_logged_and_never_retried(tmp_path):
 def test_non_ready_output_is_kept_as_a_result(tmp_path):
     cfg = config()
     api = FakeAPI(content="not json")
-    runner.generate_one(api, tmp_path, runner.Ledger(tmp_path), cfg, cfg["cells"][0],
-                        "gpt-5-mini", 2, "S", "U")
+    runner.generate_one(
+        api, tmp_path, runner.Ledger(tmp_path), cfg, cfg["cells"][0], "gpt-5-mini", 2, "S", "U"
+    )
     path = tmp_path / "attempts" / "sports_basketball_ratio__gpt5mini__002.json"
     record = json.loads(path.read_text(encoding="utf-8"))
     assert record["status"] != "ready"
@@ -62,8 +63,12 @@ def test_non_ready_output_is_kept_as_a_result(tmp_path):
 
 def test_each_judge_pass_gets_its_own_order_and_blind_ids():
     cfg = config()
-    keys = [runner.task_key(c["cell_id"], m, i) for c in cfg["cells"]
-            for m in cfg["models"] for i in range(1, 31)]
+    keys = [
+        runner.task_key(c["cell_id"], m, i)
+        for c in cfg["cells"]
+        for m in cfg["models"]
+        for i in range(1, 31)
+    ]
     plan = runner.blind_plan(cfg["rater"]["judges"], keys)
     first, second = (plan[j["judge_id"]] for j in cfg["rater"]["judges"])
     assert set(first.values()) == set(second.values()) == set(keys)
@@ -82,8 +87,12 @@ def test_final_score_is_mean_gap_is_flagged_and_missing_is_not_zero(tmp_path):
         path = tmp_path / "judgments" / judge / f"{blind}.json"
         path.parent.mkdir(parents=True, exist_ok=True)
         scores = None if total is None else {"TOTAL": total}
-        path.write_text(json.dumps({"status": "scored" if total else "insufficient_evidence",
-                                    "scores": scores}), encoding="utf-8")
+        path.write_text(
+            json.dumps(
+                {"status": "scored" if total else "insufficient_evidence", "scores": scores}
+            ),
+            encoding="utf-8",
+        )
 
     write("luna-judge-1", "m-a", 12)
     write("luna-judge-2", "m-b", 6)

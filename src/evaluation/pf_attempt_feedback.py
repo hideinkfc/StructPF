@@ -5,17 +5,33 @@ from __future__ import annotations
 from copy import deepcopy
 
 APPROACHES = {
-    "arithmetic_mean", "range", "mean_absolute_deviation", "variance_or_sd",
-    "frequency_or_concentration", "mean_pairwise_distance", "adjacent_difference",
-    "max_deviation", "median_absolute_deviation", "other_measure",
-    "equal_fraction_each_block", "whole_block_search", "greedy_or_proportional_claims",
-    "recursive_divider_chooser", "other_allocation", "unknown",
-    "whole_journey_rate", "unweighted_stage_rates", "elapsed_time_comparison",
+    "arithmetic_mean",
+    "range",
+    "mean_absolute_deviation",
+    "variance_or_sd",
+    "frequency_or_concentration",
+    "mean_pairwise_distance",
+    "adjacent_difference",
+    "max_deviation",
+    "median_absolute_deviation",
+    "other_measure",
+    "equal_fraction_each_block",
+    "whole_block_search",
+    "greedy_or_proportional_claims",
+    "recursive_divider_chooser",
+    "other_allocation",
+    "unknown",
+    "whole_journey_rate",
+    "unweighted_stage_rates",
+    "elapsed_time_comparison",
     "other_rate_method",
 }
 FINDINGS = (
-    "accessible_start", "familiar_method_limit", "distinct_approaches",
-    "task_supplied_method", "missing_or_ambiguous_information",
+    "accessible_start",
+    "familiar_method_limit",
+    "distinct_approaches",
+    "task_supplied_method",
+    "missing_or_ambiguous_information",
 )
 
 
@@ -29,12 +45,16 @@ def parse_panel_review(payload: object, panel: dict) -> dict:
         raise ValueError("Panel review must cover every attempted response")
     for label, row in attempts.items():
         if not isinstance(row, dict) or set(row) != {
-            "approaches", "mathematics_status", "named_advanced_procedure", "rationale",
+            "approaches",
+            "mathematics_status",
+            "named_advanced_procedure",
+            "rationale",
         }:
             raise ValueError(f"Invalid attempt coding fields: {label}")
         methods = row["approaches"]
         if (
-            not isinstance(methods, list) or not methods
+            not isinstance(methods, list)
+            or not methods
             or any(not isinstance(method, str) or method not in APPROACHES for method in methods)
             or len(set(methods)) != len(methods)
         ):
@@ -59,7 +79,11 @@ def parse_panel_review(payload: object, panel: dict) -> dict:
         raise ValueError("Panel feedback must be a list")
     for item in feedback:
         if not isinstance(item, dict) or set(item) != {
-            "attribution", "destination", "evidence", "observation", "suggestion",
+            "attribution",
+            "destination",
+            "evidence",
+            "observation",
+            "suggestion",
         }:
             raise ValueError("Invalid feedback fields")
         if item["attribution"] not in {"task_evidence", "simulator_slip", "uncertain"}:
@@ -93,7 +117,8 @@ def _evidence(value: object, panel: dict, *, required: bool) -> None:
         attempt = entry["attempt"]
         sources[label] = (
             attempt["written_work"] + "\n" + attempt["answer"]
-            if attempt is not None else entry["unparsed_raw_text"] or ""
+            if attempt is not None
+            else entry["unparsed_raw_text"] or ""
         )
     for item in value:
         if not isinstance(item, dict) or set(item) != {"source", "quote"}:

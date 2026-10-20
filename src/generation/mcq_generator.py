@@ -15,22 +15,22 @@ import random
 from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
-from typing import Any, Literal
+from typing import Any
 
 import pandas as pd
 import yaml
+
+# ── Schemas (Pydantic models used for structured generation) ─────────────────
+from pydantic import BaseModel, Field
 
 from src.generation.misconception_bank import MisconceptionBank
 from src.generation.retriever import EmbeddingIndex
 from src.utils.llm_client import LLMClient
 
-# ── Schemas (Pydantic models used for structured generation) ─────────────────
-
-from pydantic import BaseModel, Field
-
 
 class DistractorItem(BaseModel):
     """A single generated distractor. Accepts extra fields from prompt variants."""
+
     model_config = {"extra": "allow"}
 
     text: str
@@ -40,6 +40,7 @@ class DistractorItem(BaseModel):
 
 class MCQGenerationOutput(BaseModel):
     """Output schema for MCQ distractor generation."""
+
     model_config = {"extra": "allow"}
 
     distractors: list[DistractorItem]
@@ -64,6 +65,7 @@ class StructuredMCQGenerationOutput(BaseModel):
 
 # ── Strategy enum ───────────────────────────────────────────────────────────
 
+
 class Strategy(str, Enum):
     ZERO_SHOT = "zero_shot"
     MISCONCEPTION_CONDITIONED = "misconception_conditioned"
@@ -73,6 +75,7 @@ class Strategy(str, Enum):
 
 
 # ── Generator ───────────────────────────────────────────────────────────────
+
 
 @dataclass
 class MCQGenerator:
@@ -135,9 +138,17 @@ class MCQGenerator:
         strategy = Strategy(strategy)
         conditioning_metadata: dict[str, Any] = {}
         messages = self._build_messages(
-            question_text, correct_answer, strategy, n_distractors,
-            prompt_variant, system_variant, instruction_variant,
-            fewshot_mode, mc_cond_depth, structured_paths, question_metadata,
+            question_text,
+            correct_answer,
+            strategy,
+            n_distractors,
+            prompt_variant,
+            system_variant,
+            instruction_variant,
+            fewshot_mode,
+            mc_cond_depth,
+            structured_paths,
+            question_metadata,
             conditioning_metadata,
         )
 
@@ -207,34 +218,34 @@ class MCQGenerator:
 
     # Prompt variant mappings
     _SYSTEM_MAP = {
-        "basic":       "SYSTEM_BASIC",
-        "expert":      "SYSTEM_EXPERT",
+        "basic": "SYSTEM_BASIC",
+        "expert": "SYSTEM_EXPERT",
         "pedagogical": "SYSTEM_PEDAGOGICAL",
-        "lookalike":   "SYSTEM_LOOKALIKE",
+        "lookalike": "SYSTEM_LOOKALIKE",
     }
     _INSTRUCTION_MAP = {
-        "direct":              "USER_DIRECT",
-        "cot":                 "USER_COT",
-        "self_critique":       "USER_SELF_CRITIQUE",
-        "counterfactual":      "USER_COUNTERFACTUAL",
-        "difficulty_calibrated":"USER_DIFFICULTY_CALIBRATED",
-        "negative_examples":   "USER_NEGATIVE_EXAMPLES",
+        "direct": "USER_DIRECT",
+        "cot": "USER_COT",
+        "self_critique": "USER_SELF_CRITIQUE",
+        "counterfactual": "USER_COUNTERFACTUAL",
+        "difficulty_calibrated": "USER_DIFFICULTY_CALIBRATED",
+        "negative_examples": "USER_NEGATIVE_EXAMPLES",
     }
     _INSTRUCTION_GUIDANCE_MAP = {
-        "USER_COT":                   "INSTRUCTION_COT_GUIDANCE",
-        "USER_SELF_CRITIQUE":         "INSTRUCTION_SELF_CRITIQUE_GUIDANCE",
-        "USER_COUNTERFACTUAL":        "INSTRUCTION_COUNTERFACTUAL_GUIDANCE",
+        "USER_COT": "INSTRUCTION_COT_GUIDANCE",
+        "USER_SELF_CRITIQUE": "INSTRUCTION_SELF_CRITIQUE_GUIDANCE",
+        "USER_COUNTERFACTUAL": "INSTRUCTION_COUNTERFACTUAL_GUIDANCE",
         "USER_DIFFICULTY_CALIBRATED": "INSTRUCTION_DIFFICULTY_GUIDANCE",
-        "USER_NEGATIVE_EXAMPLES":     "INSTRUCTION_NEGATIVE_EXAMPLES_GUIDANCE",
+        "USER_NEGATIVE_EXAMPLES": "INSTRUCTION_NEGATIVE_EXAMPLES_GUIDANCE",
     }
     _FEWSHOT_MAP = {
-        "minimal":     "FEWSHOT_MINIMAL",
-        "rationale":   "FEWSHOT_RATIONALE",
-        "contrastive":  "FEWSHOT_CONTRASTIVE",
+        "minimal": "FEWSHOT_MINIMAL",
+        "rationale": "FEWSHOT_RATIONALE",
+        "contrastive": "FEWSHOT_CONTRASTIVE",
     }
     _MC_COND_MAP = {
-        "names":    "MC_CONDITIONED_NAMES",
-        "causal":   "MC_CONDITIONED_CAUSAL",
+        "names": "MC_CONDITIONED_NAMES",
+        "causal": "MC_CONDITIONED_CAUSAL",
         "taxonomy": "MC_CONDITIONED_CAUSAL",
         "personas": "MC_CONDITIONED_PERSONAS",
     }
@@ -294,9 +305,7 @@ class MCQGenerator:
                 source=source,
                 conditioning_metadata=conditioning_metadata,
             )
-            candidate_text = "\n".join(
-                f"  - {m['name']}" for m in misconceptions
-            )
+            candidate_text = "\n".join(f"  - {m['name']}" for m in misconceptions)
             mc_key = self._MC_COND_MAP.get(mc_cond_depth, "MC_CONDITIONED_NAMES")
             user = self.prompts[mc_key].format(
                 question_text=question_text,
@@ -325,8 +334,12 @@ class MCQGenerator:
         if strategy != Strategy.ZERO_SHOT:
             guidance_key = self._INSTRUCTION_GUIDANCE_MAP.get(instruction_key)
             if guidance_key:
-                user = user + "\n\n" + self.prompts[guidance_key].format(
-                    n_distractors=n_distractors,
+                user = (
+                    user
+                    + "\n\n"
+                    + self.prompts[guidance_key].format(
+                        n_distractors=n_distractors,
+                    )
                 )
 
         # Append output format instruction to every user prompt
@@ -337,8 +350,12 @@ class MCQGenerator:
         if structured_paths:
             path_note = self.prompts.get("STRUCTURED_PATH_OUTPUT", "")
             if path_note:
-                user = user + "\n\n" + path_note.format(
-                    n_distractors=n_distractors,
+                user = (
+                    user
+                    + "\n\n"
+                    + path_note.format(
+                        n_distractors=n_distractors,
+                    )
                 )
 
         return [{"role": "system", "content": system}, {"role": "user", "content": user}]
@@ -397,11 +414,13 @@ class MCQGenerator:
                 for item in selected
                 if item.get("misconception_id") is not None
             ]
-            conditioning_metadata.update({
-                "source": source,
-                "candidate_misconception_ids": candidate_ids,
-                "candidate_misconceptions": [item["name"] for item in selected],
-            })
+            conditioning_metadata.update(
+                {
+                    "source": source,
+                    "candidate_misconception_ids": candidate_ids,
+                    "candidate_misconceptions": [item["name"] for item in selected],
+                }
+            )
             scores = [item.get("score") for item in selected]
             if any(score is not None for score in scores):
                 conditioning_metadata["candidate_scores"] = scores
@@ -410,8 +429,10 @@ class MCQGenerator:
             gold_ids = set()
             has_gold_fields = False
             for key in [
-                "MisconceptionAId", "MisconceptionBId",
-                "MisconceptionCId", "MisconceptionDId",
+                "MisconceptionAId",
+                "MisconceptionBId",
+                "MisconceptionCId",
+                "MisconceptionDId",
             ]:
                 if key not in metadata:
                     continue
@@ -425,13 +446,11 @@ class MCQGenerator:
                     continue
             if source == "semantic":
                 conditioning_metadata["gold_in_retrieved"] = (
-                    bool(gold_ids.intersection(candidate_ids))
-                    if has_gold_fields else None
+                    bool(gold_ids.intersection(candidate_ids)) if has_gold_fields else None
                 )
             else:
                 conditioning_metadata["gold_in_candidates"] = (
-                    bool(gold_ids.intersection(candidate_ids))
-                    if has_gold_fields else None
+                    bool(gold_ids.intersection(candidate_ids)) if has_gold_fields else None
                 )
 
         return selected
@@ -455,13 +474,13 @@ class MCQGenerator:
             target_id = (question_metadata or {}).get("QuestionId")
             if target_id is not None:
                 similar = [
-                    item for item in similar
-                    if str(item.get("QuestionId", "")) != str(target_id)
+                    item for item in similar if str(item.get("QuestionId", "")) != str(target_id)
                 ][:3]
             else:
                 normalized_question = question_text.strip()
                 similar = [
-                    item for item in similar
+                    item
+                    for item in similar
                     if str(item.get("QuestionText", item.get("question", ""))).strip()
                     != normalized_question
                 ][:3]
@@ -470,14 +489,28 @@ class MCQGenerator:
         else:
             # Static: pick 2 questions from a matching subject
             all_qs = self.bank.questions
-            subjects = ["BIDMAS", "Arithmetic", "Fractions", "Decimals",
-                         "Algebra", "Geometry", "Ratio", "Probability"]
+            subjects = [
+                "BIDMAS",
+                "Arithmetic",
+                "Fractions",
+                "Decimals",
+                "Algebra",
+                "Geometry",
+                "Ratio",
+                "Probability",
+            ]
             q_lower = question_text.lower()
-            matched = [s for s in subjects if s.lower().split("_")[0] in q_lower
-                       or any(w in q_lower for w in s.lower().split("_"))]
+            matched = [
+                s
+                for s in subjects
+                if s.lower().split("_")[0] in q_lower
+                or any(w in q_lower for w in s.lower().split("_"))
+            ]
             pool = all_qs
             if matched:
-                pool = all_qs[all_qs["SubjectName"].str.contains("|".join(matched), case=False, na=False)]
+                pool = all_qs[
+                    all_qs["SubjectName"].str.contains("|".join(matched), case=False, na=False)
+                ]
             similar_qs = pool.sample(min(2, len(pool)))
             similar = [row for _, row in similar_qs.iterrows()]
 

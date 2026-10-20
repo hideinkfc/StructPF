@@ -38,8 +38,7 @@ def load_client() -> tuple[OpenAI, dict[str, str]]:
     if not base_url or not api_key:
         raise RuntimeError("Azure config missing from .env.local")
     models = {
-        label: os.environ.get(env, MODEL_DEFAULTS[label]).strip()
-        for label, env in MODELS.items()
+        label: os.environ.get(env, MODEL_DEFAULTS[label]).strip() for label, env in MODELS.items()
     }
     return OpenAI(base_url=base_url, api_key=api_key), models
 
@@ -118,13 +117,20 @@ def main() -> None:
             print(f"  {cid:16s} {label:9s} rep{rep}: {len(r['methods'])} methods, {status}")
 
     OUT.parent.mkdir(parents=True, exist_ok=True)
-    OUT.write_text(json.dumps({
-        "concepts": CONCEPTS,
-        "repeats": REPEATS,
-        "n_methods_requested": N_METHODS,
-        "temperature": 0.7,
-        "results": results,
-    }, indent=2, ensure_ascii=False) + "\n")
+    OUT.write_text(
+        json.dumps(
+            {
+                "concepts": CONCEPTS,
+                "repeats": REPEATS,
+                "n_methods_requested": N_METHODS,
+                "temperature": 0.7,
+                "results": results,
+            },
+            indent=2,
+            ensure_ascii=False,
+        )
+        + "\n"
+    )
     n_ok = sum(1 for r in results if r["ok"])
     print(f"\n{n_ok}/{len(results)} calls fully contract-clean; saved -> {OUT.relative_to(ROOT)}")
 

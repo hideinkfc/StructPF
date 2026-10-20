@@ -57,21 +57,23 @@ def main() -> None:
         name = r["name"].strip()
         # Suffix avoids collision with the hand-curated puech_macina_2025_stratl.yaml,
         # which already defines puech2025_consistency and puech2025_country.
-        exercises.append({
-            "id": f"puech2025_stratl_{name.replace('-', '_')}",
-            "type": r["type"].strip(),
-            "phase": "generation",
-            "topic": topic_of(name),
-            "format": "word_problem",
-            "grade": r["grade"].strip(),
-            "source_reference": r["reference"].strip(),
-            "problem": r["exercise"].strip(),
-            "canonical_solution": (r.get("solution") or "").strip(),
-            # Not present in the StratL CSV; kept empty to preserve the shared schema.
-            "prior_knowledge_required": [],
-            "expected_student_rsms": [],
-            "critical_conceptual_features": [],
-        })
+        exercises.append(
+            {
+                "id": f"puech2025_stratl_{name.replace('-', '_')}",
+                "type": r["type"].strip(),
+                "phase": "generation",
+                "topic": topic_of(name),
+                "format": "word_problem",
+                "grade": r["grade"].strip(),
+                "source_reference": r["reference"].strip(),
+                "problem": r["exercise"].strip(),
+                "canonical_solution": (r.get("solution") or "").strip(),
+                # Not present in the StratL CSV; kept empty to preserve the shared schema.
+                "prior_knowledge_required": [],
+                "expected_student_rsms": [],
+                "critical_conceptual_features": [],
+            }
+        )
 
     doc = {
         "metadata": {
@@ -95,8 +97,8 @@ def main() -> None:
     OUT.write_text(yaml.safe_dump(doc, sort_keys=False, allow_unicode=True, width=120))
     print(f"rows read: {len(rows)}")
     print(f"wrote {len(exercises)} exercises -> {OUT.relative_to(ROOT)}")
-    print("grades:", sorted({e['grade'] for e in exercises}))
-    print("names:", [e['id'] for e in exercises])
+    print("grades:", sorted({e["grade"] for e in exercises}))
+    print("names:", [e["id"] for e in exercises])
 
 
 if __name__ == "__main__":

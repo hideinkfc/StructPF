@@ -18,14 +18,16 @@ def proposal_payload():
             "minutes": {"description": "Section times", "unit": "min", "role": "given"},
         },
         "values": {"distance": [2, 2, 2], "minutes": [20, 20, 40]},
-        "conditions": [{
-            "statement": "All section times are positive.",
-            "requirement_indices": [0],
-            "essential": True,
-            "calculation": {"expressions": {}, "predicate": "min(minutes) > 0"},
-            "judgment": None,
-            "reasoning": "Positive times make all section speeds defined.",
-        }],
+        "conditions": [
+            {
+                "statement": "All section times are positive.",
+                "requirement_indices": [0],
+                "essential": True,
+                "calculation": {"expressions": {}, "predicate": "min(minutes) > 0"},
+                "judgment": None,
+                "reasoning": "Positive times make all section speeds defined.",
+            }
+        ],
     }
 
 
@@ -107,24 +109,32 @@ def test_repairs_preserve_names_and_data_sizes():
 
 
 def loop_inputs():
-    brief = design_brief_from_payload({
-        "goal": "Compare journeys",
-        "situation_and_rules": "Teams traverse equal routes.",
-        "student_question": "Which journey was faster?",
-        "approaches": [{
-            "resources": ["Arithmetic"],
-            "first_action": "Compare the times.",
-            "what_it_establishes": "A useful comparison.",
-        }],
-        "successful_route": "Account for the whole journey.",
-        "learning_opportunity": "Relate time and distance.",
-        "number_requirements": ["All section times are positive."],
-    })
+    brief = design_brief_from_payload(
+        {
+            "goal": "Compare journeys",
+            "situation_and_rules": "Teams traverse equal routes.",
+            "student_question": "Which journey was faster?",
+            "approaches": [
+                {
+                    "resources": ["Arithmetic"],
+                    "first_action": "Compare the times.",
+                    "what_it_establishes": "A useful comparison.",
+                }
+            ],
+            "successful_route": "Account for the whole journey.",
+            "learning_opportunity": "Relate time and distance.",
+            "number_requirements": ["All section times are positive."],
+        }
+    )
     return (
         {"target_concept": "Average speed", "grade": 7},
         JudgedCandidate(
-            candidate_id=0, skeleton=brief.skeleton(()), verdicts=(),
-            practice_item=False, target_named=False, activation_count=1,
+            candidate_id=0,
+            skeleton=brief.skeleton(()),
+            verdicts=(),
+            practice_item=False,
+            target_named=False,
+            activation_count=1,
             design_brief=brief,
         ),
         {"recommendations": [{"resource": "Arithmetic"}]},
@@ -134,7 +144,8 @@ def loop_inputs():
 def test_v2_notes_are_internal_writer_evidence_not_student_draft():
     case, winner, context = loop_inputs()
     brief = replace(
-        winner.design_brief, schema_version="design-brief/v2",
+        winner.design_brief,
+        schema_version="design-brief/v2",
         key_idea="Whole-journey distance divided by whole-journey time.",
         naive_answer="Average the section speeds equally.",
     )
@@ -188,8 +199,9 @@ def test_exact_feedback_repairs_only_numbers(monkeypatch):
 def test_failed_values_exhaust_the_same_three_call_budget(monkeypatch):
     original = proposal_payload()
     original["values"]["minutes"] = [-20, 20, 40]
-    result, requests = run_loop(monkeypatch, [original, {"values": original["values"]},
-                                              {"values": original["values"]}])
+    result, requests = run_loop(
+        monkeypatch, [original, {"values": original["values"]}, {"values": original["values"]}]
+    )
     assert result["status"] == "rejected"
     assert len(requests) == 3
     assert result["attempts"][-1]["check"]["conditions"][0]["status"] == "fails"
@@ -221,7 +233,8 @@ def test_repair_cannot_change_formulas_or_drop_values(monkeypatch):
 def test_uncomputed_essential_condition_continues_without_pointless_repairs(monkeypatch, judgment):
     original = proposal_payload()
     original["conditions"][0].update(
-        calculation=None, judgment=judgment,
+        calculation=None,
+        judgment=judgment,
         reasoning=(
             'Original requirement says "All section times are positive."; '
             "this asserts the desired conclusion but does not establish it."
@@ -245,12 +258,16 @@ def test_textual_failure_requires_design_correction_not_numbers_only_repair(
     monkeypatch, numeric_failure
 ):
     original = proposal_payload()
-    original["conditions"].append({
-        "statement": "Subdivision is allowed.",
-        "requirement_indices": [], "essential": True, "calculation": None,
-        "judgment": "fails",
-        "reasoning": 'Design rules say "No subdivision" and "Subdivision is allowed".',
-    })
+    original["conditions"].append(
+        {
+            "statement": "Subdivision is allowed.",
+            "requirement_indices": [],
+            "essential": True,
+            "calculation": None,
+            "judgment": "fails",
+            "reasoning": 'Design rules say "No subdivision" and "Subdivision is allowed".',
+        }
+    )
     if numeric_failure:
         original["values"]["minutes"][0] = -20
     responses = [original] + ([{"values": proposal_payload()["values"]}] if numeric_failure else [])
@@ -267,14 +284,17 @@ def test_textual_failure_requires_design_correction_not_numbers_only_repair(
 def test_uncertainty_does_not_hide_a_repairable_numerical_failure(monkeypatch):
     original = proposal_payload()
     original["values"]["minutes"][0] = -20
-    original["conditions"].append({
-        "statement": "The task invites different methods.",
-        "requirement_indices": [], "essential": True, "calculation": None,
-        "judgment": "uncertain", "reasoning": "Needs student response evidence.",
-    })
-    result, requests = run_loop(
-        monkeypatch, [original, {"values": proposal_payload()["values"]}]
+    original["conditions"].append(
+        {
+            "statement": "The task invites different methods.",
+            "requirement_indices": [],
+            "essential": True,
+            "calculation": None,
+            "judgment": "uncertain",
+            "reasoning": "Needs student response evidence.",
+        }
     )
+    result, requests = run_loop(monkeypatch, [original, {"values": proposal_payload()["values"]}])
     assert result["accepted"] and len(requests) == 2
     assert result["attempts"][0]["check"]["status"] == "rejected"
     assert result["check"]["warnings"] == result["check"]["unresolved"]
@@ -284,11 +304,16 @@ def test_uncertainty_does_not_hide_a_repairable_numerical_failure(monkeypatch):
 
 def test_optional_textual_failure_warns_without_blocking(monkeypatch):
     original = proposal_payload()
-    original["conditions"].append({
-        "statement": "The context is everyday.",
-        "requirement_indices": [], "essential": False, "calculation": None,
-        "judgment": "fails", "reasoning": "The setting uses imaginary units.",
-    })
+    original["conditions"].append(
+        {
+            "statement": "The context is everyday.",
+            "requirement_indices": [],
+            "essential": False,
+            "calculation": None,
+            "judgment": "fails",
+            "reasoning": "The setting uses imaginary units.",
+        }
+    )
     result, _ = run_loop(monkeypatch, [original])
     assert result["accepted"] and result["check"]["warnings"]
     assert not result["check"]["textual_failures"]
@@ -296,11 +321,16 @@ def test_optional_textual_failure_warns_without_blocking(monkeypatch):
 
 def test_optional_student_prediction_is_not_mathematical_evidence(monkeypatch):
     original = proposal_payload()
-    original["conditions"].append({
-        "statement": "Students may compare section times.",
-        "requirement_indices": [], "essential": False, "calculation": None,
-        "judgment": "uncertain", "reasoning": "Needs student response evidence.",
-    })
+    original["conditions"].append(
+        {
+            "statement": "Students may compare section times.",
+            "requirement_indices": [],
+            "essential": False,
+            "calculation": None,
+            "judgment": "uncertain",
+            "reasoning": "Needs student response evidence.",
+        }
+    )
     result, _ = run_loop(monkeypatch, [original])
     assert result["accepted"]
     assert result["check"]["conditions"][1]["status"] == "unverified"
@@ -309,15 +339,18 @@ def test_optional_student_prediction_is_not_mathematical_evidence(monkeypatch):
 
 def test_given_unit_metadata_can_be_checked_without_a_model_review(monkeypatch):
     original = proposal_payload()
-    original["conditions"].append({
-        "statement": "Distances use kilometres and times use minutes.",
-        "requirement_indices": [], "essential": True,
-        "calculation": {
-            "expressions": {},
-            "predicate": 'unit(distance) == "km" and unit(minutes) == "min"',
-        },
-        "reasoning": "Check the fixed unit declarations directly.",
-    })
+    original["conditions"].append(
+        {
+            "statement": "Distances use kilometres and times use minutes.",
+            "requirement_indices": [],
+            "essential": True,
+            "calculation": {
+                "expressions": {},
+                "predicate": 'unit(distance) == "km" and unit(minutes) == "min"',
+            },
+            "reasoning": "Check the fixed unit declarations directly.",
+        }
+    )
     result, requests = run_loop(monkeypatch, [original])
     assert result["accepted"] and len(requests) == 1
     assert result["check"]["conditions"][1]["status"] == "holds"
@@ -378,19 +411,27 @@ def test_writer_receives_fixed_data_and_evidence_not_old_math_plan(monkeypatch, 
     case, winner, context = loop_inputs()
     proposal = proposal_payload()
     if uncertain:
-        proposal["conditions"].append({
-            "statement": "The context is realistic.",
-            "requirement_indices": [], "essential": True, "calculation": None,
-            "judgment": "uncertain", "reasoning": "No supporting wording found.",
-        })
+        proposal["conditions"].append(
+            {
+                "statement": "The context is realistic.",
+                "requirement_indices": [],
+                "essential": True,
+                "calculation": None,
+                "judgment": "uncertain",
+                "reasoning": "No supporting wording found.",
+            }
+        )
     result, _ = run_loop(monkeypatch, [proposal])
     requests = []
 
     def fake_chat(client, model, system, user, **kwargs):
         requests.append((system, user))
         return {
-            "status": "ready", "blocking_issues": [], "title": "Compare journeys",
-            "body": "Section distances: 2, 2, 2 km.", "question": "Explain your comparison.",
+            "status": "ready",
+            "blocking_issues": [],
+            "title": "Compare journeys",
+            "body": "Section distances: 2, 2, 2 km.",
+            "question": "Explain your comparison.",
             "withheld": [],
         }, "writer raw"
 
@@ -444,15 +485,19 @@ def test_teacher_examples_are_checked_but_excluded_from_student_data(all_example
     assert checked["conditions"][0]["status"] == "holds"
     request = stage._writer_request(case, winner, {"payload": proposal, "check": checked}, context)
     user = request["user"]
-    data = json.loads(user.split(
-        "STUDENT-DATA CANDIDATES (GIVEN OR HISTORICAL UNLABELED; TEACHER EXAMPLES EXCLUDED):\n"
-    )[1].split("\nTEACHER-ONLY TASK-SPECIFIC")[0])
+    data = json.loads(
+        user.split(
+            "STUDENT-DATA CANDIDATES (GIVEN OR HISTORICAL UNLABELED; TEACHER EXAMPLES EXCLUDED):\n"
+        )[1].split("\nTEACHER-ONLY TASK-SPECIFIC")[0]
+    )
     assert "minutes" not in data["values"]
     assert "minutes" not in data["quantities"]
     assert data["values"] == ({} if all_examples else {"distance": [2, 2, 2]})
-    evidence = json.loads(user.split(
-        "TEACHER-ONLY TASK-SPECIFIC DO-NOT-STATE EVIDENCE:\n"
-    )[1].split("\nTEACHER-ONLY CHECK")[0])
+    evidence = json.loads(
+        user.split("TEACHER-ONLY TASK-SPECIFIC DO-NOT-STATE EVIDENCE:\n")[1].split(
+            "\nTEACHER-ONLY CHECK"
+        )[0]
+    )
     example = next(item for item in evidence if item.get("role") == "teacher_example")
     assert example["values"] == ([2, 2, 2] if all_examples else [20, 20, 40])
     assert "check that the open" in stage._prompts()["PROPOSE_DATA_SYSTEM"]
@@ -470,8 +515,11 @@ def test_historical_unlabeled_writer_data_are_not_silently_hidden():
 
 def writer_payload():
     return {
-        "status": "ready", "blocking_issues": [], "title": "Journeys",
-        "body": "Compare the journey records.", "question": "Explain your reasoning.",
+        "status": "ready",
+        "blocking_issues": [],
+        "title": "Journeys",
+        "body": "Compare the journey records.",
+        "question": "Explain your reasoning.",
         "withheld": [],
     }
 
@@ -515,27 +563,37 @@ def test_blocked_writer_does_not_run_a_success_shaped_leak_screen():
 def test_writer_retains_grounded_withheld_records():
     _, winner, _ = loop_inputs()
     payload = writer_payload()
-    payload["withheld"] = [{
-        "kind": "discovery", "source": "design_brief.successful_route",
-        "quote": "Account for the whole journey.",
-        "reason": "Students choose how to combine records.",
-    }, {
-        "kind": "quantity", "source": "proposal.quantities.distance.description",
-        "quote": "Section distances",
-        "reason": "Synthetic schema test, not a valid withholding judgment.",
-    }]
+    payload["withheld"] = [
+        {
+            "kind": "discovery",
+            "source": "design_brief.successful_route",
+            "quote": "Account for the whole journey.",
+            "reason": "Students choose how to combine records.",
+        },
+        {
+            "kind": "quantity",
+            "source": "proposal.quantities.distance.description",
+            "quote": "Section distances",
+            "reason": "Synthetic schema test, not a valid withholding judgment.",
+        },
+    ]
     assert stage._validate_writer_payload(payload, winner, proposal_payload()) == payload
 
 
-@pytest.mark.parametrize("defect", ["missing", "invented_source", "invented_quote",
-                                  "partial_quantity", "wrong_kind"])
+@pytest.mark.parametrize(
+    "defect", ["missing", "invented_source", "invented_quote", "partial_quantity", "wrong_kind"]
+)
 def test_writer_revises_invalid_withheld_records_then_returns_flagged_draft(monkeypatch, defect):
     case, winner, context = loop_inputs()
     payload = writer_payload()
-    payload["withheld"] = [{
-        "kind": "quantity", "source": "proposal.quantities.distance.description",
-        "quote": "Section distances", "reason": "Teacher evidence.",
-    }]
+    payload["withheld"] = [
+        {
+            "kind": "quantity",
+            "source": "proposal.quantities.distance.description",
+            "quote": "Section distances",
+            "reason": "Teacher evidence.",
+        }
+    ]
     if defect == "missing":
         del payload["withheld"]
     elif defect == "invented_source":
@@ -561,10 +619,14 @@ def test_writer_revises_invalid_withheld_records_then_returns_flagged_draft(monk
 def test_writer_quote_mismatch_is_repaired_without_losing_history(monkeypatch):
     case, winner, context = loop_inputs()
     original = writer_payload()
-    original["withheld"] = [{
-        "kind": "discovery", "source": "design_brief.successful_route",
-        "quote": "Invented quote", "reason": "Internal method.",
-    }]
+    original["withheld"] = [
+        {
+            "kind": "discovery",
+            "source": "design_brief.successful_route",
+            "quote": "Invented quote",
+            "reason": "Internal method.",
+        }
+    ]
     repaired = deepcopy(original)
     repaired["withheld"][0]["quote"] = winner.design_brief.successful_route
     responses = iter([original, repaired])
@@ -587,10 +649,12 @@ def test_writer_quote_mismatch_is_repaired_without_losing_history(monkeypatch):
 
 def test_writer_retries_refusal_and_keeps_unresolved_data_findings(monkeypatch):
     case, winner, context = loop_inputs()
-    responses = iter([
-        {"status": "blocked", "blocking_issues": ["Unresolved data"], "withheld": []},
-        writer_payload(),
-    ])
+    responses = iter(
+        [
+            {"status": "blocked", "blocking_issues": ["Unresolved data"], "withheld": []},
+            writer_payload(),
+        ]
+    )
     requests = []
 
     def chat(*args, **kwargs):
@@ -599,7 +663,10 @@ def test_writer_retries_refusal_and_keeps_unresolved_data_findings(monkeypatch):
 
     monkeypatch.setattr(runner, "chat_json", chat)
     task, _ = stage.write_design_data_task(
-        None, "test", case, winner,
+        None,
+        "test",
+        case,
+        winner,
         {"payload": proposal_payload(), "check": {}, "quality_findings": ["Failed condition"]},
         context,
     )
@@ -681,15 +748,17 @@ def test_cli_resumes_new_design_with_frozen_case_and_optional_data(
     source = tmp_path / "source.json"
     previous = {"status": "review_needed", "attempts": [{"raw_text": "earlier run"}]}
     saved = {
-        "schema_version": "pf-design-data/v1", "case": "example",
-        "case_input": case, "prior_context": context,
-        "winner": winner.to_dict(), "design_data": data_run,
+        "schema_version": "pf-design-data/v1",
+        "case": "example",
+        "case_input": case,
+        "prior_context": context,
+        "winner": winner.to_dict(),
+        "design_data": data_run,
         "design_data_history": [previous],
     }
     if container != "direct":
         source_stage = {
-            key: saved.pop(key)
-            for key in ("winner", "design_data", "design_data_history")
+            key: saved.pop(key) for key in ("winner", "design_data", "design_data_history")
         }
         saved["schema_version"] = "pf-diagnostic/v2" if container == "diagnostic" else "benchmark"
         if container == "diagnostic":
@@ -700,9 +769,17 @@ def test_cli_resumes_new_design_with_frozen_case_and_optional_data(
     source.write_text(original)
     output = tmp_path / "resumed.json"
     monkeypatch.setattr(
-        runner.sys, "argv",
-        ["run_situation_skeletons.py", "--case", "example",
-         "--from-result", str(source), "--output", str(output)]
+        runner.sys,
+        "argv",
+        [
+            "run_situation_skeletons.py",
+            "--case",
+            "example",
+            "--from-result",
+            str(source),
+            "--output",
+            str(output),
+        ]
         + (["--replan"] if resume_mode == "replan" else [])
         + (["--no-fill"] if resume_mode == "no_fill" else []),
     )
@@ -719,9 +796,18 @@ def test_cli_resumes_new_design_with_frozen_case_and_optional_data(
 
     monkeypatch.setattr(runner, "chat_json", fake_chat)
     monkeypatch.setattr(
-        runner, "_write_design_data_task",
-        lambda *a: ({"status": "ready", "title": "Task", "body": "Data",
-                     "question": "Explain", "blocking_issues": []}, "writer"),
+        runner,
+        "_write_design_data_task",
+        lambda *a: (
+            {
+                "status": "ready",
+                "title": "Task",
+                "body": "Data",
+                "question": "Explain",
+                "blocking_issues": [],
+            },
+            "writer",
+        ),
     )
     monkeypatch.setattr(
         runner, "_plan_until_reviewed", lambda *a: pytest.fail("Do not use the legacy plan")

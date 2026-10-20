@@ -18,10 +18,22 @@ from scripts.run_basic_glm_correctness_pilot import (  # noqa: E402
     evaluate_plausibility,
 )
 
-OUTPUT_PATH = PROJECT_ROOT / "experiments" / "results" / "phase1_mcq" / "distractor_judge_calibration.json"
+OUTPUT_PATH = (
+    PROJECT_ROOT / "experiments" / "results" / "phase1_mcq" / "distractor_judge_calibration.json"
+)
 
 
-def case(case_id: str, split: str, topic: str, question: str, correct: str, text: str, steps: list[str], expected_coherence: bool, expected_plausibility: tuple[int, int] | None) -> dict:
+def case(
+    case_id: str,
+    split: str,
+    topic: str,
+    question: str,
+    correct: str,
+    text: str,
+    steps: list[str],
+    expected_coherence: bool,
+    expected_plausibility: tuple[int, int] | None,
+) -> dict:
     return {
         "question_id": case_id,
         "subject": topic,
@@ -45,22 +57,144 @@ def case(case_id: str, split: str, topic: str, question: str, correct: str, text
 
 def calibration_cases() -> list[dict]:
     return [
-        case("dev-time-good", "development", "time", "How many hours are in 5 weeks?", "840", "120", ["Use 24 hours directly for each of 5 weeks: 5 * 24 = 120"], True, (1, 2)),
-        case("dev-fraction-good", "development", "fraction", "What is 3/4 of 20?", "15", "8", ["Treat 3/4 as 0.4", "20 * 0.4 = 8"], True, (1, 2)),
-        case("dev-area-good", "development", "area", "What is the perimeter of a 6 cm by 4 cm rectangle?", "20 cm", "10 cm", ["Add the length and width once: 6 + 4 = 10 cm"], True, (1, 2)),
-        case("dev-random-good", "development", "arithmetic", "How many hours are in 5 weeks?", "840", "317", ["Use an unrelated conversion: 5 * 63.4 = 317"], True, (0, 0)),
-        case("dev-fraction-broken", "development", "fraction", "What is 3/4 of 20?", "15", "8", ["Convert 3/4 to 0.75", "20 * 0.75 = 15"], False, None),
-        case("dev-area-broken", "development", "area", "What is the perimeter of a 6 cm by 4 cm rectangle?", "20 cm", "10 cm", ["Add all four sides: 6 + 4 + 6 + 4 = 20 cm"], False, None),
-        case("holdout-ratio-good", "holdout", "ratio", "Split 240 euros in the ratio 1:3.", "60 and 180", "120 and 120", ["There are two clubs", "Split 240 equally: 240 / 2 = 120 each"], True, (1, 2)),
-        case("holdout-equation-good", "holdout", "equation", "Solve x + 7 = 12.", "x = 5", "x = 19", ["Move 7 to the other side by adding it: x = 12 + 7 = 19"], True, (1, 2)),
-        case("holdout-percent-good", "holdout", "percentage", "What is 20% of 50?", "10", "60", ["Add 20% to the original amount: 50 + 10 = 60"], True, (1, 2)),
-        case("holdout-random-good", "holdout", "arithmetic", "What is 20% of 50?", "10", "999", ["Add an unrelated amount: 300 + 699 = 999"], True, (0, 0)),
-        case("holdout-ratio-broken", "holdout", "ratio", "Split 240 euros in the ratio 1:3.", "60 and 180", "120 and 120", ["There are 4 ratio parts: 240 / 4 = 60", "Give the groups 60 and 180"], False, None),
-        case("holdout-equation-broken", "holdout", "equation", "Solve x + 7 = 12.", "x = 5", "x = 19", ["Subtract 7 from 12: x = 12 - 7 = 5"], False, None),
+        case(
+            "dev-time-good",
+            "development",
+            "time",
+            "How many hours are in 5 weeks?",
+            "840",
+            "120",
+            ["Use 24 hours directly for each of 5 weeks: 5 * 24 = 120"],
+            True,
+            (1, 2),
+        ),
+        case(
+            "dev-fraction-good",
+            "development",
+            "fraction",
+            "What is 3/4 of 20?",
+            "15",
+            "8",
+            ["Treat 3/4 as 0.4", "20 * 0.4 = 8"],
+            True,
+            (1, 2),
+        ),
+        case(
+            "dev-area-good",
+            "development",
+            "area",
+            "What is the perimeter of a 6 cm by 4 cm rectangle?",
+            "20 cm",
+            "10 cm",
+            ["Add the length and width once: 6 + 4 = 10 cm"],
+            True,
+            (1, 2),
+        ),
+        case(
+            "dev-random-good",
+            "development",
+            "arithmetic",
+            "How many hours are in 5 weeks?",
+            "840",
+            "317",
+            ["Use an unrelated conversion: 5 * 63.4 = 317"],
+            True,
+            (0, 0),
+        ),
+        case(
+            "dev-fraction-broken",
+            "development",
+            "fraction",
+            "What is 3/4 of 20?",
+            "15",
+            "8",
+            ["Convert 3/4 to 0.75", "20 * 0.75 = 15"],
+            False,
+            None,
+        ),
+        case(
+            "dev-area-broken",
+            "development",
+            "area",
+            "What is the perimeter of a 6 cm by 4 cm rectangle?",
+            "20 cm",
+            "10 cm",
+            ["Add all four sides: 6 + 4 + 6 + 4 = 20 cm"],
+            False,
+            None,
+        ),
+        case(
+            "holdout-ratio-good",
+            "holdout",
+            "ratio",
+            "Split 240 euros in the ratio 1:3.",
+            "60 and 180",
+            "120 and 120",
+            ["There are two clubs", "Split 240 equally: 240 / 2 = 120 each"],
+            True,
+            (1, 2),
+        ),
+        case(
+            "holdout-equation-good",
+            "holdout",
+            "equation",
+            "Solve x + 7 = 12.",
+            "x = 5",
+            "x = 19",
+            ["Move 7 to the other side by adding it: x = 12 + 7 = 19"],
+            True,
+            (1, 2),
+        ),
+        case(
+            "holdout-percent-good",
+            "holdout",
+            "percentage",
+            "What is 20% of 50?",
+            "10",
+            "60",
+            ["Add 20% to the original amount: 50 + 10 = 60"],
+            True,
+            (1, 2),
+        ),
+        case(
+            "holdout-random-good",
+            "holdout",
+            "arithmetic",
+            "What is 20% of 50?",
+            "10",
+            "999",
+            ["Add an unrelated amount: 300 + 699 = 999"],
+            True,
+            (0, 0),
+        ),
+        case(
+            "holdout-ratio-broken",
+            "holdout",
+            "ratio",
+            "Split 240 euros in the ratio 1:3.",
+            "60 and 180",
+            "120 and 120",
+            ["There are 4 ratio parts: 240 / 4 = 60", "Give the groups 60 and 180"],
+            False,
+            None,
+        ),
+        case(
+            "holdout-equation-broken",
+            "holdout",
+            "equation",
+            "Solve x + 7 = 12.",
+            "x = 5",
+            "x = 19",
+            ["Subtract 7 from 12: x = 12 - 7 = 5"],
+            False,
+            None,
+        ),
     ]
 
 
-def accuracy_table(details: pd.DataFrame, cases: list[dict], value_column: str, expected_column: str) -> pd.DataFrame:
+def accuracy_table(
+    details: pd.DataFrame, cases: list[dict], value_column: str, expected_column: str
+) -> pd.DataFrame:
     expected = {item["question_id"]: item[expected_column] for item in cases}
     expected_split = {item["question_id"]: item["calibration_split"] for item in cases}
     actual = details.groupby("question_id")[value_column].first().to_dict()
@@ -77,7 +211,15 @@ def accuracy_table(details: pd.DataFrame, cases: list[dict], value_column: str, 
         else:
             expected_display = expected_value
             match = observed == expected_value
-        rows.append({"question_id": question_id, "split": expected_split[question_id], "expected": expected_display, "observed": observed, "match": match})
+        rows.append(
+            {
+                "question_id": question_id,
+                "split": expected_split[question_id],
+                "expected": expected_display,
+                "observed": observed,
+                "match": match,
+            }
+        )
     return pd.DataFrame(rows)
 
 
@@ -98,7 +240,9 @@ def main() -> None:
             table["split"] = table["question_id"].map(case_splits)
 
     coherence_accuracy = accuracy_table(coherence_raw, cases, "status", "expected_coherence")
-    plausibility_accuracy = accuracy_table(plausibility, cases, "plausibility_score", "expected_plausibility")
+    plausibility_accuracy = accuracy_table(
+        plausibility, cases, "plausibility_score", "expected_plausibility"
+    )
     output = {
         "cases": cases,
         "coherence_raw": coherence_raw.to_dict("records"),

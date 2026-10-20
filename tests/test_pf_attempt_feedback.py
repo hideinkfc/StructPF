@@ -16,7 +16,8 @@ def panel():
             "a1": {
                 "attempt": {
                     "written_work": "The range is 3 - 1 = 2.",
-                    "answer": "2", "unfinished": False,
+                    "answer": "2",
+                    "unfinished": False,
                 },
                 "unparsed_raw_text": None,
             },
@@ -28,8 +29,10 @@ def review():
     return {
         "attempts": {
             "a1": {
-                "approaches": ["range"], "mathematics_status": "supported",
-                "named_advanced_procedure": False, "rationale": "Range is 2.",
+                "approaches": ["range"],
+                "mathematics_status": "supported",
+                "named_advanced_procedure": False,
+                "rationale": "Range is 2.",
             },
         },
         "findings": {
@@ -56,11 +59,15 @@ def test_exact_evidence_and_unknown_findings_are_preserved():
 
 def test_task_revision_cannot_be_driven_by_simulator_slip():
     payload = review()
-    payload["feedback"] = [{
-        "attribution": "simulator_slip", "destination": "data",
-        "evidence": [{"source": "a1", "quote": "range"}],
-        "observation": "A calculation needs checking.", "suggestion": "Record only.",
-    }]
+    payload["feedback"] = [
+        {
+            "attribution": "simulator_slip",
+            "destination": "data",
+            "evidence": [{"source": "a1", "quote": "range"}],
+            "observation": "A calculation needs checking.",
+            "suggestion": "Record only.",
+        }
+    ]
     with pytest.raises(ValueError, match="cannot drive task revision"):
         parse_panel_review(payload, panel())
     payload["feedback"][0]["destination"] = "none"
@@ -100,26 +107,47 @@ def test_diagnosis_schedule_covers_all_eighteen_tasks_without_leaking_labels():
 
 def test_panel_preparation_hides_profiles_models_and_source_methods(tmp_path, monkeypatch):
     requests = [
-        {"id": "secret_model", "phase": "fresh", "task_id": "secret_source",
-         "profile_id": "secret_profile", "prompt": {"user": json.dumps({
-             "student_task": "Exercise", "learner_record": {"private": "secret_profile"},
-         })}},
+        {
+            "id": "secret_model",
+            "phase": "fresh",
+            "task_id": "secret_source",
+            "profile_id": "secret_profile",
+            "prompt": {
+                "user": json.dumps(
+                    {
+                        "student_task": "Exercise",
+                        "learner_record": {"private": "secret_profile"},
+                    }
+                )
+            },
+        },
     ]
-    records = {"secret_model": {
-        "status": "invalid_response", "attempt": None, "raw_text": "Partial work retained.",
-    }}
-    monkeypatch.setattr(student_report, "load_results", lambda _: (
-        {"requests": requests}, records,
-    ))
+    records = {
+        "secret_model": {
+            "status": "invalid_response",
+            "attempt": None,
+            "raw_text": "Partial work retained.",
+        }
+    }
+    monkeypatch.setattr(
+        student_report,
+        "load_results",
+        lambda _: (
+            {"requests": requests},
+            records,
+        ),
+    )
     panels = feedback.prepare_panels(tmp_path, tmp_path / "panels")
     assert "secret" not in json.dumps(panels)
     assert panels["panel_01"]["attempts"]["a01"]["unparsed_raw_text"] == "Partial work retained."
 
 
 def test_review_runner_creates_trace_directory_and_retains_rejected_review(tmp_path, monkeypatch):
-    monkeypatch.setattr(feedback, "prepare_panels", lambda *_: {
-        f"panel_{index:02d}": panel() for index in range(1, 5)
-    })
+    monkeypatch.setattr(
+        feedback,
+        "prepare_panels",
+        lambda *_: {f"panel_{index:02d}": panel() for index in range(1, 5)},
+    )
     probe_output = tmp_path / "input"
     probe_output.mkdir()
     (probe_output / "manifest.json").write_text("{}")
@@ -146,14 +174,16 @@ def test_review_runner_creates_trace_directory_and_retains_rejected_review(tmp_p
 def test_unmatched_quote_does_not_erase_usable_attempt_coding():
     payload = review()
     payload["findings"]["accessible_start"] = {
-        "status": "observed", "evidence": [{"source": "a1", "quote": "invented text"}],
+        "status": "observed",
+        "evidence": [{"source": "a1", "quote": "invented text"}],
         "reason": "An unsupported quotation.",
     }
     result = retain_panel_review(payload, panel())
     assert result["attempts"] == payload["attempts"]
     assert result["findings"]["accessible_start"]["status"] == "unknown"
-    assert result["unverified_evidence"]["accessible_start"] == (
-        payload["findings"]["accessible_start"]
+    assert (
+        result["unverified_evidence"]["accessible_start"]
+        == (payload["findings"]["accessible_start"])
     )
     assert result["evidence_errors"]
     assert payload["findings"]["accessible_start"]["status"] == "observed"
@@ -174,11 +204,15 @@ def test_reader_agreement_reports_disagreements_not_a_new_ground_truth():
 
 def test_task_feedback_requires_an_actual_attempt_as_well_as_task_text():
     payload = review()
-    payload["feedback"] = [{
-        "attribution": "task_evidence", "destination": "writer",
-        "evidence": [{"source": "task", "quote": "Invent a consistency measure."}],
-        "observation": "A task-only judgment.", "suggestion": "Consider clearer wording.",
-    }]
+    payload["feedback"] = [
+        {
+            "attribution": "task_evidence",
+            "destination": "writer",
+            "evidence": [{"source": "task", "quote": "Invent a consistency measure."}],
+            "observation": "A task-only judgment.",
+            "suggestion": "Consider clearer wording.",
+        }
+    ]
     result = retain_panel_review(payload, panel())
     assert result["feedback"] == []
     assert "attempt evidence anchor" in result["evidence_errors"][0]

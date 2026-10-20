@@ -23,11 +23,7 @@ from scripts.run_basic_glm_correctness_pilot import (  # noqa: E402
 
 DEFAULT_BENCHMARK = PROJECT_ROOT / "experiments" / "configs" / "pathway_diversity_benchmark.json"
 DEFAULT_OUTPUT = (
-    PROJECT_ROOT
-    / "experiments"
-    / "results"
-    / "phase1_mcq"
-    / "pathway_diversity_benchmark_v1.json"
+    PROJECT_ROOT / "experiments" / "results" / "phase1_mcq" / "pathway_diversity_benchmark_v1.json"
 )
 REQUIRED_PAIR_FIELDS = {
     "pair_id",
@@ -64,9 +60,7 @@ def validate_benchmark(benchmark: dict[str, Any]) -> list[str]:
     pair_ids = [pair.get("pair_id") for pair in pairs if isinstance(pair, dict)]
     if len(pair_ids) != len(set(pair_ids)):
         errors.append("pair_id values must be unique")
-    label_counts = Counter(
-        pair.get("gold_same_error") for pair in pairs if isinstance(pair, dict)
-    )
+    label_counts = Counter(pair.get("gold_same_error") for pair in pairs if isinstance(pair, dict))
     if label_counts != Counter({True: 15, False: 15}):
         errors.append(f"benchmark labels must contain 15 of each class, found {label_counts}")
     split_counts = Counter(pair.get("split") for pair in pairs if isinstance(pair, dict))
@@ -100,9 +94,7 @@ def validate_benchmark(benchmark: dict[str, Any]) -> list[str]:
 
 def _classification_summary(rows: list[dict[str, Any]]) -> dict[str, Any]:
     observed = [row for row in rows if row["observed_same_error"] is not None]
-    true_positive = sum(
-        row["gold_same_error"] and row["observed_same_error"] for row in observed
-    )
+    true_positive = sum(row["gold_same_error"] and row["observed_same_error"] for row in observed)
     false_positive = sum(
         not row["gold_same_error"] and row["observed_same_error"] for row in observed
     )
@@ -138,9 +130,7 @@ def summarize(rows: list[dict[str, Any]]) -> dict[str, Any]:
     by_split: dict[str, dict[str, Any]] = {}
     by_case_type: dict[str, dict[str, Any]] = {}
     for split in sorted({row["split"] for row in rows}):
-        by_split[split] = _classification_summary(
-            [row for row in rows if row["split"] == split]
-        )
+        by_split[split] = _classification_summary([row for row in rows if row["split"] == split])
     for case_type in sorted({row["case_type"] for row in rows}):
         by_case_type[case_type] = _classification_summary(
             [row for row in rows if row["case_type"] == case_type]

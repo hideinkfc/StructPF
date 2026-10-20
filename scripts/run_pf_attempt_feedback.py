@@ -59,7 +59,11 @@ def prepare_panels(probe_output: Path, output: Path) -> dict:
 
 
 def run(
-    probe_output: Path, output: Path, *, phase: str, dry_run: bool = False,
+    probe_output: Path,
+    output: Path,
+    *,
+    phase: str,
+    dry_run: bool = False,
 ) -> dict:
     config = json.loads(CONFIG.read_text())
     output.mkdir(parents=True, exist_ok=False)
@@ -75,7 +79,10 @@ def run(
         for label, panel in panels.items()
     }
     sources = (
-        CONFIG, Path(__file__), prompt_path, ROOT / "src/evaluation/pf_attempt_feedback.py",
+        CONFIG,
+        Path(__file__),
+        prompt_path,
+        ROOT / "src/evaluation/pf_attempt_feedback.py",
         ROOT / "scripts/report_pf_student_probe.py",
         ROOT / "scripts/run_pf_paper_benchmark.py",
         ROOT / "scripts/prior_methods/common.py",
@@ -89,13 +96,17 @@ def run(
         snapshot.parent.mkdir(parents=True, exist_ok=True)
         snapshot.write_bytes(data)
     manifest = {
-        "status": "dry_run" if dry_run else "running", "phase": phase,
-        "protocol": config["review"], "prompt_version": prompt["version"],
-        "source_hashes": hashes, "probe": str(probe_output),
+        "status": "dry_run" if dry_run else "running",
+        "phase": phase,
+        "protocol": config["review"],
+        "prompt_version": prompt["version"],
+        "source_hashes": hashes,
+        "probe": str(probe_output),
         "probe_manifest_sha256": hashlib.sha256(
             (probe_output / "manifest.json").read_bytes()
         ).hexdigest(),
-        "requests": requests, "results": [],
+        "requests": requests,
+        "results": [],
     }
     benchmark._write_json(output / "manifest.json", manifest)
     if dry_run:
@@ -107,8 +118,12 @@ def run(
         result_path = output / label / "result.json"
         result_path.parent.mkdir(parents=True, exist_ok=False)
         payload, raw, metadata, api_error = benchmark._call_json(
-            client, model, request["system"], request["user"],
-            max_tokens=config["review"]["max_tokens"], retries=0,
+            client,
+            model,
+            request["system"],
+            request["user"],
+            max_tokens=config["review"]["max_tokens"],
+            retries=0,
             trace_path=result_path.parent / "model_calls.jsonl",
             stage="attempt_panel.review",
         )
@@ -121,14 +136,24 @@ def run(
                     status = "parsed_with_unverified_evidence"
             except ValueError as exc:
                 status, error = "invalid_response", str(exc)
-        benchmark._write_json(result_path, {
-            "status": status, "review": review, "payload": payload, "raw_text": raw,
-            "error": error, "model_metadata": metadata,
-        })
-        manifest["results"].append({
-            "panel": label, "status": status,
-            "result_path": str(result_path.relative_to(output)),
-        })
+        benchmark._write_json(
+            result_path,
+            {
+                "status": status,
+                "review": review,
+                "payload": payload,
+                "raw_text": raw,
+                "error": error,
+                "model_metadata": metadata,
+            },
+        )
+        manifest["results"].append(
+            {
+                "panel": label,
+                "status": status,
+                "result_path": str(result_path.relative_to(output)),
+            }
+        )
         benchmark._write_json(output / "manifest.json", manifest)
         print(phase, label, status, error or "", flush=True)
     manifest["status"] = "completed"

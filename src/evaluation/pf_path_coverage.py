@@ -31,7 +31,10 @@ def validate_path(path: dict, attempts: dict, design_text: str) -> dict:
         if row.get("status") not in STATUSES:
             raise ValueError("Unknown intended-path reachability")
         if "phase" in row and row["phase"] not in {
-            "attempted", "successful", "unsuccessful", "unknown",
+            "attempted",
+            "successful",
+            "unsuccessful",
+            "unknown",
         }:
             raise ValueError("Unknown intended-path execution phase")
         evidence = row.get("evidence")
@@ -39,7 +42,8 @@ def validate_path(path: dict, attempts: dict, design_text: str) -> dict:
             raise ValueError("A reached path requires an exact attempt quotation")
         for item in evidence:
             if (
-                not isinstance(item, str) or not item.strip()
+                not isinstance(item, str)
+                or not item.strip()
                 or item not in source_text(attempts[label])
             ):
                 raise ValueError("Path evidence does not match the saved attempt")
@@ -52,8 +56,7 @@ def path_counts(path: dict) -> dict:
         "attempted": len(rows),
         **{status: sum(row["status"] == status for row in rows.values()) for status in STATUSES},
         "reached_successful": sum(
-            row["status"] == "reached" and row.get("phase") == "successful"
-            for row in rows.values()
+            row["status"] == "reached" and row.get("phase") == "successful" for row in rows.values()
         ),
         "reached_unsuccessful": sum(
             row["status"] == "reached" and row.get("phase") == "unsuccessful"
@@ -67,8 +70,8 @@ def path_counts(path: dict) -> dict:
 
 def weighted_path_rate(rows: dict, profiles: dict, weights: dict) -> dict:
     if not weights or any(
-        isinstance(w, bool) or not isinstance(w, (int, float))
-        or not math.isfinite(w) or w < 0 for w in weights.values()
+        isinstance(w, bool) or not isinstance(w, (int, float)) or not math.isfinite(w) or w < 0
+        for w in weights.values()
     ):
         raise ValueError("Assumed profile weights must be nonnegative numbers")
     if abs(sum(weights.values()) - 1) > 1e-9:

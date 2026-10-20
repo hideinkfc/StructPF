@@ -11,7 +11,6 @@ import pytest
 
 from scripts import run_pf_grounding_evidence_comparison as study
 
-
 CONFIG = study.read_json(study.DEFAULT_CONFIG)
 
 
@@ -33,8 +32,7 @@ def test_frozen_design_has_exact_three_arm_schedule_and_cap():
     main_counts = Counter(item["arm"] for item in plan if item["phase"] == "main")
     assert main_counts == {"A": 20, "B": 20, "C": 20}
     per_topic = Counter(
-        (item["case_id"], item["repeat"], item["arm"])
-        for item in plan if item["phase"] == "main"
+        (item["case_id"], item["repeat"], item["arm"]) for item in plan if item["phase"] == "main"
     )
     assert len(per_topic) == 60
     assert all(count == 1 for count in per_topic.values())
@@ -42,10 +40,14 @@ def test_frozen_design_has_exact_three_arm_schedule_and_cap():
     assert CONFIG["max_workers"] == 3
     assert CONFIG["model_id"] == study.STUDY_MODEL_ID == "gpt-6-luna"
     assert CONFIG["preconsumed_request_reserve"] == 12
-    assert sum(
-        value for key, value in CONFIG["preconsumed_request_breakdown"].items()
-        if key != "source"
-    ) == 12
+    assert (
+        sum(
+            value
+            for key, value in CONFIG["preconsumed_request_breakdown"].items()
+            if key != "source"
+        )
+        == 12
+    )
 
 
 def test_each_case_freezes_one_d1_and_only_varies_evidence_arrays():
@@ -69,13 +71,14 @@ def test_each_case_freezes_one_d1_and_only_varies_evidence_arrays():
         assert contexts["C"][study.INVENTORY_KEY]["learning_commons_standard_descriptions"]
         normalized = [_normalized_context(context) for context in contexts.values()]
         assert all(context == normalized[0] for context in normalized[1:])
-        assert len({
-            context[study.INVENTORY_KEY]["instruction"] for context in contexts.values()
-        }) == 1
+        assert (
+            len({context[study.INVENTORY_KEY]["instruction"] for context in contexts.values()}) == 1
+        )
         assert "not learner prior knowledge" in contexts["A"][study.INVENTORY_KEY]["instruction"]
-        assert "Do not override the selected task request" in contexts["A"][study.INVENTORY_KEY][
-            "instruction"
-        ]
+        assert (
+            "Do not override the selected task request"
+            in contexts["A"][study.INVENTORY_KEY]["instruction"]
+        )
         assert frozen["learning_commons"]["study_provenance"]["api_requests_for_this_study"] == 0
         assert frozen["local_retrieval"]["provenance"]["api_requests_for_this_study"] == 0
         assert all(
@@ -92,10 +95,7 @@ def test_each_case_freezes_one_d1_and_only_varies_evidence_arrays():
                 "learning_commons_standard_descriptions"
             ]
         )
-        attempts = [
-            item for item in plan
-            if item["case_id"] == case["id"]
-        ]
+        attempts = [item for item in plan if item["case_id"] == case["id"]]
         assert attempts
         assert all(
             item["attempt_path"].startswith(f"attempts/{item['phase']}/{case['id']}/")
@@ -112,7 +112,7 @@ def test_every_generation_call_uses_the_frozen_common_prompt_wrapper():
         "\n\nSHARED BENCHMARK CONTEXT (use throughout this design stage):\n"
     )
     assert study.INVENTORY_KEY == "mathematical_reference_inventory"
-    assert "reused_d1_path_str=str(inputs / \"fixed_d1.json\")" in inspect.getsource(
+    assert 'reused_d1_path_str=str(inputs / "fixed_d1.json")' in inspect.getsource(
         study.attempt_worker
     )
 
@@ -148,7 +148,9 @@ class _FakeResponse:
     id = "fake-response"
     model = "gpt-6-luna"
     usage = None
-    choices = [SimpleNamespace(finish_reason="stop", message=SimpleNamespace(content='{"ok":true}'))]
+    choices = [
+        SimpleNamespace(finish_reason="stop", message=SimpleNamespace(content='{"ok":true}'))
+    ]
 
 
 class _FakeCompletions:
@@ -178,14 +180,17 @@ def test_gpt6_settings_and_request_cap_count_failures_without_retries():
     assert fake.calls[0]["model"] == "gpt-6-luna"
     assert fake.calls[0]["max_completion_tokens"] == 91
     assert "temperature" not in fake.calls[0]
-    assert study.effective_settings(
-        "gpt-6-luna", {"temperature": 0.7, "max_tokens": 91}
-    ) == {"max_completion_tokens": 91}
+    assert study.effective_settings("gpt-6-luna", {"temperature": 0.7, "max_tokens": 91}) == {
+        "max_completion_tokens": 91
+    }
 
     counter = SimpleNamespace(value=CONFIG["preconsumed_request_reserve"])
     wrapped_client = _FakeCompletions()
     observed = study.ObservedClient(
-        wrapped_client, Path("/dev/null"), counter, threading.Lock(),
+        wrapped_client,
+        Path("/dev/null"),
+        counter,
+        threading.Lock(),
         cap=CONFIG["preconsumed_request_reserve"] + 1,
         attempt_cap=study.max_calls_per_attempt(),
     )
@@ -203,8 +208,12 @@ def test_gpt6_settings_and_request_cap_count_failures_without_retries():
     failed_client = _FakeCompletions()
     failed_client.fail = True
     failed_observed = study.ObservedClient(
-        failed_client, Path("/dev/null"), failed_counter, threading.Lock(),
-        cap=CONFIG["request_cap"], attempt_cap=study.max_calls_per_attempt(),
+        failed_client,
+        Path("/dev/null"),
+        failed_counter,
+        threading.Lock(),
+        cap=CONFIG["request_cap"],
+        attempt_cap=study.max_calls_per_attempt(),
     )
     with pytest.raises(RuntimeError, match="simulated transport failure"):
         failed_observed.chat.completions.create(model="gpt-6-luna")

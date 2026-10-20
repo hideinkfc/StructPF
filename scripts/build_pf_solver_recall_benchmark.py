@@ -36,7 +36,9 @@ ROOT = Path(__file__).resolve().parents[1]
 OUTPUT = ROOT / "experiments/configs/pf_solver_recall_benchmark_20261016.json"
 CALIBRATION_PACK = ROOT / "experiments/results/pf_measure_campaign_20261014/calibration_pack.json"
 CATALOG = ROOT / "experiments/results/pf_measure_campaign_20261014/catalog.json"
-BASELINE_COVERAGE = ROOT / "experiments/results/pf_path_coverage_final_20261012/baseline_coverage.json"
+BASELINE_COVERAGE = (
+    ROOT / "experiments/results/pf_path_coverage_final_20261012/baseline_coverage.json"
+)
 V30_CALIB_DIR = ROOT / "experiments/results/pf_v30_calibration_20261015"
 
 KAPUR_YAML = "data/pf_exercises/kapur_bielaczyc_2012.yaml"
@@ -66,7 +68,9 @@ def file_sha256(rel_path: str | Path) -> str:
 
 
 def canonical_sha256(value: Any) -> str:
-    raw = json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    raw = json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode(
+        "utf-8"
+    )
     return hashlib.sha256(raw).hexdigest()
 
 
@@ -479,7 +483,9 @@ EXPERT_PF_APPROACH_SPECS: dict[str, list[dict[str, Any]]] = {
                 "bars) and boys' success as 5/10 = 1/2, showing girls had the better rate (6/10 > 5/10)."
             ),
             "expected_limitation": None,
-            "resources_used": ["Equal sharing, fractions as parts of a whole and drawing fraction bars"],
+            "resources_used": [
+                "Equal sharing, fractions as parts of a whole and drawing fraction bars"
+            ],
             "provenance_kind": "calibration_pack_witness",
             "source_file": "experiments/results/pf_measure_campaign_20261014/calibration_pack.json",
             "selector": "transfer[case_id=expert_goals].expected_familiar_approaches[1]",
@@ -513,7 +519,9 @@ EXPERT_PF_APPROACH_SPECS: dict[str, list[dict[str, Any]]] = {
                 "exactly 2/3 of a pizza."
             ),
             "expected_limitation": None,
-            "resources_used": ["Equal sharing and fractions as division; drawing equal-size wholes"],
+            "resources_used": [
+                "Equal sharing and fractions as division; drawing equal-size wholes"
+            ],
             "provenance_kind": "calibration_pack_witness",
             "source_file": "experiments/results/pf_measure_campaign_20261014/calibration_pack.json",
             "selector": "transfer[case_id=expert_pizza].expected_familiar_approaches[1]",
@@ -570,7 +578,9 @@ EXPERT_PF_APPROACH_SPECS: dict[str, list[dict[str, Any]]] = {
                 "The 24 km/h reading is the speed at impact after 2 seconds of braking, not the initial "
                 "pre-braking speed, and d = v*t with constant speed ignores deceleration."
             ),
-            "resources_used": ["Speed as distance divided by time and conversion between m/s and km/h"],
+            "resources_used": [
+                "Speed as distance divided by time and conversion between m/s and km/h"
+            ],
             "provenance_kind": "calibration_pack_witness",
             "source_file": "experiments/results/pf_measure_campaign_20261014/calibration_pack.json",
             "selector": "transfer[case_id=expert_braking_collision].expected_familiar_approaches[1]",
@@ -609,7 +619,9 @@ EXPERT_PF_APPROACH_SPECS: dict[str, list[dict[str, Any]]] = {
                 "The 0.8 s is reaction time before the brakes lock, whereas the 15 m skid happens "
                 "during decelerating braking after reaction."
             ),
-            "resources_used": ["Speed as distance divided by time and conversion between m/s and km/h"],
+            "resources_used": [
+                "Speed as distance divided by time and conversion between m/s and km/h"
+            ],
             "provenance_kind": "calibration_pack_witness",
             "source_file": "experiments/results/pf_measure_campaign_20261014/calibration_pack.json",
             "selector": "transfer[case_id=expert_braking_lawyer].expected_familiar_approaches[0]",
@@ -646,10 +658,17 @@ def build_cohort_1_and_2() -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
     for c in all_pack_cases:
         cid = c["case_id"]
         # Skip the 3 unassessable controls where the solver is intentionally not run or has 0 approaches
-        if cid in ("control_inaccessible", "control_missing_task_context", "control_missing_history"):
+        if cid in (
+            "control_inaccessible",
+            "control_missing_task_context",
+            "control_missing_history",
+        ):
             continue
         # Skip the 2 grounding_r01 cases here so they sit cleanly in Cohort 6 without duplication
-        if cid in ("grounding_scientific_scale_comparison_r01_A", "grounding_signed_product_ledger_r01_A"):
+        if cid in (
+            "grounding_scientific_scale_comparison_r01_A",
+            "grounding_signed_product_ledger_r01_A",
+        ):
             continue
 
         clean_ctx = sanitize_learner_context(c["learner_context"])
@@ -657,7 +676,9 @@ def build_cohort_1_and_2() -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
         inv_ref = c["references"]["room_for_invention"]["value"]
 
         # Check if cached v3.0 evaluation job exists
-        cached_sub = "full_dev_jobs" if c["split"] in ("development", "control") else "transfer_jobs"
+        cached_sub = (
+            "full_dev_jobs" if c["split"] in ("development", "control") else "transfer_jobs"
+        )
         cached_path = V30_CALIB_DIR / cached_sub / f"{cid}.json"
         cached_rel = cached_path.relative_to(ROOT).as_posix() if cached_path.exists() else None
 
@@ -702,7 +723,8 @@ def build_cohort_1_and_2() -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
             for idx, a in enumerate(c.get("expected_familiar_approaches", [])):
                 role = (
                     "diagnostic_control_check"
-                    if cid in (
+                    if cid
+                    in (
                         "garden_composite_area__gpt5mini__028",
                         "garden_composite_area__gpt41__019",
                         "control_mathematical_contradiction",
@@ -712,7 +734,7 @@ def build_cohort_1_and_2() -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
                 )
                 ref_approaches.append(
                     {
-                        "approach_id": f"{cid}__ref_{idx+1}",
+                        "approach_id": f"{cid}__ref_{idx + 1}",
                         "name": a["idea"],
                         "role": role,
                         "action_definition": a["checkable_action"],
@@ -780,7 +802,7 @@ def _brief_approaches_from_result(
         resources = [str(r).strip() for r in (app.get("resources") or []) if str(r).strip()]
         approaches.append(
             {
-                "approach_id": f"brief_baseline_{idx+1}",
+                "approach_id": f"brief_baseline_{idx + 1}",
                 "name": first_action[:90] + ("..." if len(first_action) > 90 else ""),
                 "role": "baseline_trap",
                 "action_definition": f"{first_action} (Establishes: {establishes})",
@@ -1018,9 +1040,7 @@ def build_dataset() -> dict[str, Any]:
     all_cases = c1 + c2 + c3 + c4 + c5 + c6
 
     cohort_counts = Counter(c["cohort"] for c in all_cases)
-    role_counts = Counter(
-        a["role"] for c in all_cases for a in c["reference_approaches"]
-    )
+    role_counts = Counter(a["role"] for c in all_cases for a in c["reference_approaches"])
     prov_counts = Counter(
         a["provenance_kind"] for c in all_cases for a in c["reference_approaches"]
     )
@@ -1142,7 +1162,9 @@ def verify_dataset(dataset: dict[str, Any]) -> None:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--verify", action="store_true", help="Verify existing file without writing")
+    parser.add_argument(
+        "--verify", action="store_true", help="Verify existing file without writing"
+    )
     parser.add_argument("--output", type=Path, default=OUTPUT)
     args = parser.parse_args()
 

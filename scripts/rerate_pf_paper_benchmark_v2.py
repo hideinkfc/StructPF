@@ -65,9 +65,7 @@ def _sha256(path: Path) -> str:
 def _write_json(path: Path, value: object) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     temporary = path.with_suffix(path.suffix + ".tmp")
-    temporary.write_text(
-        json.dumps(value, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
-    )
+    temporary.write_text(json.dumps(value, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     temporary.replace(path)
 
 
@@ -90,8 +88,7 @@ def _source_files() -> dict[str, Path]:
         "src/evaluation/pf_rubric_v2.py": ROOT / "src/evaluation/pf_rubric_v2.py",
         "src/evaluation/prompts/pf_rubric_v2.yaml": PROMPT_PATH,
         "src/evaluation/pf_rubric.py": ROOT / "src/evaluation/pf_rubric.py",
-        "src/evaluation/prompts/pf_rubric.yaml": ROOT
-        / "src/evaluation/prompts/pf_rubric.yaml",
+        "src/evaluation/prompts/pf_rubric.yaml": ROOT / "src/evaluation/prompts/pf_rubric.yaml",
         "scripts/prior_methods/common.py": ROOT / "scripts/prior_methods/common.py",
         "scripts/run_pf_diagnostic.py": ROOT / "scripts/run_pf_diagnostic.py",
     }
@@ -138,9 +135,7 @@ def _verify_source_snapshot(source_run: Path, manifest: dict[str, Any]) -> None:
             raise ValueError(f"Frozen benchmark source snapshot differs: {relative}")
 
 
-def _calibration_ids(
-    cases: list[dict[str, Any]], protocol: dict[str, Any]
-) -> list[str]:
+def _calibration_ids(cases: list[dict[str, Any]], protocol: dict[str, Any]) -> list[str]:
     ready_by_condition = {
         condition: [
             case["attempt_id"]
@@ -267,9 +262,7 @@ def _load_source_cases(
             condition: dict(actual_statuses[condition]) for condition in CONDITIONS
         },
         "ready_counts": {
-            condition: sum(
-                case["eligible"] for case in cases if case["condition"] == condition
-            )
+            condition: sum(case["eligible"] for case in cases if case["condition"] == condition)
             for condition in CONDITIONS
         },
     }
@@ -277,8 +270,7 @@ def _load_source_cases(
 
 def _jsonl_bytes(records: list[dict[str, Any]]) -> bytes:
     return "".join(
-        json.dumps(record, ensure_ascii=False, separators=(",", ":")) + "\n"
-        for record in records
+        json.dumps(record, ensure_ascii=False, separators=(",", ":")) + "\n" for record in records
     ).encode("utf-8")
 
 
@@ -307,9 +299,7 @@ def prepare_run(
     missing_sources = [name for name, path in source_files.items() if not path.is_file()]
     if missing_sources:
         raise FileNotFoundError(f"Required rerating source files missing: {missing_sources}")
-    code_hashes = {
-        name: _sha256(path) for name, path in source_files.items()
-    }
+    code_hashes = {name: _sha256(path) for name, path in source_files.items()}
 
     output.mkdir(parents=True, exist_ok=False)
     (output / "protocol.json").write_bytes(protocol_bytes)
@@ -379,19 +369,25 @@ def prepare_run(
             },
         )
     _write_json(output / "manifest.json", manifest)
-    _write_json(output / "source_hashes.json", {
-        "protocol_sha256": manifest["protocol_sha256"],
-        "prompt_sha256": manifest["prompt_sha256"],
-        "inputs_sha256": input_hash,
-        "source_code_hashes": code_hashes,
-        "source_benchmark": source_hashes,
-    })
-    _write_json(output / "calibration_summary.json", {
-        "status": "not_started",
-        "case_ids": calibration_ids,
-        "cases_per_condition": protocol["calibration"]["cases_per_condition"],
-        "scores_deliberately_omitted": True,
-    })
+    _write_json(
+        output / "source_hashes.json",
+        {
+            "protocol_sha256": manifest["protocol_sha256"],
+            "prompt_sha256": manifest["prompt_sha256"],
+            "inputs_sha256": input_hash,
+            "source_code_hashes": code_hashes,
+            "source_benchmark": source_hashes,
+        },
+    )
+    _write_json(
+        output / "calibration_summary.json",
+        {
+            "status": "not_started",
+            "case_ids": calibration_ids,
+            "cases_per_condition": protocol["calibration"]["cases_per_condition"],
+            "scores_deliberately_omitted": True,
+        },
+    )
     return manifest
 
 
@@ -492,15 +488,18 @@ def _rate_case(
     total_elapsed = 0.0
     for retry in range(retries + 1):
         started_at = _now()
-        _append_jsonl(trace_path, {
-            "event": "model_call_started",
-            "attempt_id": attempt_id,
-            "retry": retry,
-            "model": model,
-            "requested_settings": settings,
-            "effective_settings": effective,
-            "started_at": started_at,
-        })
+        _append_jsonl(
+            trace_path,
+            {
+                "event": "model_call_started",
+                "attempt_id": attempt_id,
+                "retry": retry,
+                "model": model,
+                "requested_settings": settings,
+                "effective_settings": effective,
+                "started_at": started_at,
+            },
+        )
         started = time.perf_counter()
         try:
             response = client.chat.completions.create(
@@ -519,16 +518,19 @@ def _rate_case(
             usage = _jsonable(getattr(response, "usage", None))
             response_model = getattr(response, "model", model)
             finish_reason = getattr(response.choices[0], "finish_reason", None)
-            _append_jsonl(trace_path, {
-                "event": "model_call_finished",
-                "attempt_id": attempt_id,
-                "retry": retry,
-                "finished_at": _now(),
-                "elapsed_seconds": round(elapsed, 3),
-                "model": response_model,
-                "finish_reason": finish_reason,
-                "usage": usage,
-            })
+            _append_jsonl(
+                trace_path,
+                {
+                    "event": "model_call_finished",
+                    "attempt_id": attempt_id,
+                    "retry": retry,
+                    "finished_at": _now(),
+                    "elapsed_seconds": round(elapsed, 3),
+                    "model": response_model,
+                    "finish_reason": finish_reason,
+                    "usage": usage,
+                },
+            )
             try:
                 parsed = parse_rating(raw)
             except ValidationError as exc:
@@ -557,14 +559,17 @@ def _rate_case(
             elapsed = time.perf_counter() - started
             total_elapsed += elapsed
             last_error = exc
-            _append_jsonl(trace_path, {
-                "event": "model_call_finished",
-                "attempt_id": attempt_id,
-                "retry": retry,
-                "finished_at": _now(),
-                "elapsed_seconds": round(elapsed, 3),
-                "error": {"type": type(exc).__name__, "message": str(exc)},
-            })
+            _append_jsonl(
+                trace_path,
+                {
+                    "event": "model_call_finished",
+                    "attempt_id": attempt_id,
+                    "retry": retry,
+                    "finished_at": _now(),
+                    "elapsed_seconds": round(elapsed, 3),
+                    "error": {"type": type(exc).__name__, "message": str(exc)},
+                },
+            )
             if retry >= retries or not _retryable(exc):
                 break
             time.sleep(min(2**retry, 8))
@@ -593,14 +598,18 @@ def _setup_error_results(
         current = _load_rating(output, attempt_id)
         if current.get("status") not in {"pending", "started"}:
             continue
-        _write_case_result(output, case, {
-            **current,
-            "status": "api_setup_error",
-            "scores": None,
-            "error": error,
-            "finished_at": _now(),
-            "request_attempts": 0,
-        })
+        _write_case_result(
+            output,
+            case,
+            {
+                **current,
+                "status": "api_setup_error",
+                "scores": None,
+                "error": error,
+                "finished_at": _now(),
+                "request_attempts": 0,
+            },
+        )
 
 
 def run_calibration(
@@ -642,9 +651,13 @@ def run_calibration(
     except Exception as exc:
         _setup_error_results(output, cases_by_id, case_ids, exc)
         calibration.update(status="failed", finished_at=_now())
-        manifest.update(status="calibration_failed", model_setup_error={
-            "type": type(exc).__name__, "message": str(exc),
-        })
+        manifest.update(
+            status="calibration_failed",
+            model_setup_error={
+                "type": type(exc).__name__,
+                "message": str(exc),
+            },
+        )
         summary = _calibration_summary(case_ids, cases_by_id, output)
         summary.update(
             status="failed",
@@ -669,15 +682,18 @@ def run_calibration(
     for index, attempt_id in enumerate(case_ids):
         case = cases_by_id[attempt_id]
         result_path = _rating_path(output, attempt_id)
-        _write_json(result_path, {
-            "attempt_id": attempt_id,
-            "condition": case["condition"],
-            "source_generation_status": case["source_generation_status"],
-            "rubric_version": manifest["rubric_version"],
-            "status": "started",
-            "started_at": _now(),
-            "user_prompt_sha256": case["user_prompt_sha256"],
-        })
+        _write_json(
+            result_path,
+            {
+                "attempt_id": attempt_id,
+                "condition": case["condition"],
+                "source_generation_status": case["source_generation_status"],
+                "rubric_version": manifest["rubric_version"],
+                "status": "started",
+                "started_at": _now(),
+                "user_prompt_sha256": case["user_prompt_sha256"],
+            },
+        )
         try:
             rating = _rate_case(
                 client,
@@ -698,32 +714,40 @@ def run_calibration(
                 "error": {"type": type(exc).__name__, "message": str(exc)},
                 "request_attempts": 0,
             }
-        _write_case_result(output, case, {
-            "attempt_id": attempt_id,
-            "condition": case["condition"],
-            "source_generation_status": case["source_generation_status"],
-            "rubric_version": manifest["rubric_version"],
-            "model_name": model,
-            "user_prompt_sha256": case["user_prompt_sha256"],
-            "started_at": _now(),
-            "finished_at": _now(),
-            **rating,
-        })
+        _write_case_result(
+            output,
+            case,
+            {
+                "attempt_id": attempt_id,
+                "condition": case["condition"],
+                "source_generation_status": case["source_generation_status"],
+                "rubric_version": manifest["rubric_version"],
+                "model_name": model,
+                "user_prompt_sha256": case["user_prompt_sha256"],
+                "started_at": _now(),
+                "finished_at": _now(),
+                **rating,
+            },
+        )
         if rating["status"] not in VALID_RATING_STATUSES:
             for remaining_id in case_ids[index + 1 :]:
                 remaining_case = cases_by_id[remaining_id]
                 remaining_result = _load_rating(output, remaining_id)
                 if remaining_result.get("status") == "pending":
-                    _write_case_result(output, remaining_case, {
-                        **remaining_result,
-                        "status": "not_attempted_calibration_blocked",
-                        "scores": None,
-                        "reason": (
-                            f"Calibration stopped after {attempt_id} returned "
-                            f"{rating['status']}."
-                        ),
-                        "finished_at": _now(),
-                    })
+                    _write_case_result(
+                        output,
+                        remaining_case,
+                        {
+                            **remaining_result,
+                            "status": "not_attempted_calibration_blocked",
+                            "scores": None,
+                            "reason": (
+                                f"Calibration stopped after {attempt_id} returned "
+                                f"{rating['status']}."
+                            ),
+                            "finished_at": _now(),
+                        },
+                    )
             break
     case_results = [_load_rating(output, identifier) for identifier in case_ids]
     passed = all(item.get("status") in VALID_RATING_STATUSES for item in case_results)
@@ -747,12 +771,14 @@ def _calibration_summary(
     outcomes = []
     for attempt_id in case_ids:
         rating = _load_rating(output, attempt_id)
-        outcomes.append({
-            "attempt_id": attempt_id,
-            "condition": cases_by_id[attempt_id]["condition"],
-            "status": rating["status"],
-            "request_attempts": rating.get("request_attempts", 0),
-        })
+        outcomes.append(
+            {
+                "attempt_id": attempt_id,
+                "condition": cases_by_id[attempt_id]["condition"],
+                "status": rating["status"],
+                "request_attempts": rating.get("request_attempts", 0),
+            }
+        )
     return {
         "schema_version": "rahimi-table1-rerating-calibration/v1",
         "status": (
@@ -791,16 +817,20 @@ def run_full(
             if retry_interrupted:
                 todo.append(case)
             else:
-                _write_case_result(output, case, {
-                    **result,
-                    "status": "interrupted",
-                    "scores": None,
-                    "finished_at": _now(),
-                    "reason": (
-                        "Previous process stopped after recording the call as started; "
-                        "not repeated without --retry-interrupted."
-                    ),
-                })
+                _write_case_result(
+                    output,
+                    case,
+                    {
+                        **result,
+                        "status": "interrupted",
+                        "scores": None,
+                        "finished_at": _now(),
+                        "reason": (
+                            "Previous process stopped after recording the call as started; "
+                            "not repeated without --retry-interrupted."
+                        ),
+                    },
+                )
         elif status not in TERMINAL_STATUSES:
             raise ValueError(f"Unknown saved rating status for {case['attempt_id']}: {status}")
     if not todo:
@@ -841,16 +871,19 @@ def run_full(
     _write_json(output / "manifest.json", manifest)
     for case in todo:
         attempt_id = case["attempt_id"]
-        _write_json(_rating_path(output, attempt_id), {
-            "attempt_id": attempt_id,
-            "condition": case["condition"],
-            "source_generation_status": case["source_generation_status"],
-            "rubric_version": manifest["rubric_version"],
-            "model_name": model,
-            "user_prompt_sha256": case["user_prompt_sha256"],
-            "status": "started",
-            "started_at": _now(),
-        })
+        _write_json(
+            _rating_path(output, attempt_id),
+            {
+                "attempt_id": attempt_id,
+                "condition": case["condition"],
+                "source_generation_status": case["source_generation_status"],
+                "rubric_version": manifest["rubric_version"],
+                "model_name": model,
+                "user_prompt_sha256": case["user_prompt_sha256"],
+                "status": "started",
+                "started_at": _now(),
+            },
+        )
         try:
             rating = _rate_case(
                 client,
@@ -871,26 +904,27 @@ def run_full(
                 "error": {"type": type(exc).__name__, "message": str(exc)},
                 "request_attempts": 0,
             }
-        _write_case_result(output, case, {
-            "attempt_id": attempt_id,
-            "condition": case["condition"],
-            "source_generation_status": case["source_generation_status"],
-            "rubric_version": manifest["rubric_version"],
-            "model_name": model,
-            "user_prompt_sha256": case["user_prompt_sha256"],
-            "started_at": _now(),
-            "finished_at": _now(),
-            **rating,
-        })
+        _write_case_result(
+            output,
+            case,
+            {
+                "attempt_id": attempt_id,
+                "condition": case["condition"],
+                "source_generation_status": case["source_generation_status"],
+                "rubric_version": manifest["rubric_version"],
+                "model_name": model,
+                "user_prompt_sha256": case["user_prompt_sha256"],
+                "started_at": _now(),
+                "finished_at": _now(),
+                **rating,
+            },
+        )
         print(
-            f"{attempt_id}: {rating['status']} "
-            f"(requests={rating.get('request_attempts', 0)})",
+            f"{attempt_id}: {rating['status']} (requests={rating.get('request_attempts', 0)})",
             flush=True,
         )
     final_statuses = [
-        _load_rating(output, case["attempt_id"]).get("status")
-        for case in cases
-        if case["eligible"]
+        _load_rating(output, case["attempt_id"]).get("status") for case in cases if case["eligible"]
     ]
     manifest["status"] = (
         "completed"
@@ -949,16 +983,13 @@ def _write_summary(
                 "ready": len(eligible),
                 "not_ready": len(group) - len(eligible),
                 "ratings_attempted": sum(
-                    rating["status"] not in {"pending", "not_eligible"}
-                    for rating in ratings
+                    rating["status"] not in {"pending", "not_eligible"} for rating in ratings
                 ),
                 "complete_five_dimension_scores": rating_status_counts.get("scored", 0),
             },
             "generation_status_counts": generation_status_counts,
             "rating_status_counts": rating_status_counts,
-            "scores": {
-                key: _scores_summary(values) for key, values in score_values.items()
-            },
+            "scores": {key: _scores_summary(values) for key, values in score_values.items()},
             "model_calls": {
                 "request_attempts_including_transport_retries": request_attempts,
                 "elapsed_seconds": round(elapsed_seconds, 3),
@@ -982,8 +1013,7 @@ def _write_summary(
             "ready": sum(case["eligible"] for case in cases),
             "not_ready": sum(not case["eligible"] for case in cases),
             "complete_five_dimension_scores": sum(
-                _load_rating(output, case["attempt_id"]).get("status") == "scored"
-                for case in cases
+                _load_rating(output, case["attempt_id"]).get("status") == "scored" for case in cases
             ),
         },
         "conditions": conditions,
@@ -1048,15 +1078,20 @@ def main() -> None:
             protocol_path=args.protocol,
             source_run=args.source_run,
         )
-        print(json.dumps({
-            "status": manifest["status"],
-            "output": str(args.output.resolve()),
-            "scheduled": manifest["case_count"],
-            "ready": manifest["eligible_count"],
-            "calibration_case_ids": manifest["calibration"]["case_ids"],
-            "inputs_sha256": manifest["inputs_sha256"],
-            "prompt_sha256": manifest["prompt_sha256"],
-        }, indent=2))
+        print(
+            json.dumps(
+                {
+                    "status": manifest["status"],
+                    "output": str(args.output.resolve()),
+                    "scheduled": manifest["case_count"],
+                    "ready": manifest["eligible_count"],
+                    "calibration_case_ids": manifest["calibration"]["case_ids"],
+                    "inputs_sha256": manifest["inputs_sha256"],
+                    "prompt_sha256": manifest["prompt_sha256"],
+                },
+                indent=2,
+            )
+        )
         return
     if args.calibrate:
         summary = run_calibration(args.output)
@@ -1066,9 +1101,10 @@ def main() -> None:
         return
     summary = run_full(args.output, retry_interrupted=args.retry_interrupted)
     print(json.dumps(summary, indent=2))
-    if summary["overall_denominators"]["complete_five_dimension_scores"] < summary[
-        "overall_denominators"
-    ]["ready"]:
+    if (
+        summary["overall_denominators"]["complete_five_dimension_scores"]
+        < summary["overall_denominators"]["ready"]
+    ):
         raise SystemExit(1)
 
 

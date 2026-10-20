@@ -49,14 +49,15 @@ def ground_truth_list(package: dict) -> str:
     for i, e in enumerate(package["all_errors"]):
         expl = e["explanation"] or "(no explanation available)"
         lines.append(
-            f"[{i}] {e['pct_students']}% of students chose \"{e['option_text']}\" "
+            f'[{i}] {e["pct_students"]}% of students chose "{e["option_text"]}" '
             f"on: {e['question_stem'][:120]} | teacher note: {expl[:220]}"
         )
     return "\n".join(lines)
 
 
-def chat_json(client: OpenAI, model: str, system: str, user: str,
-              temperature: float, max_tokens: int) -> tuple[dict | None, str]:
+def chat_json(
+    client: OpenAI, model: str, system: str, user: str, temperature: float, max_tokens: int
+) -> tuple[dict | None, str]:
     """One JSON-mode chat call. Returns (parsed_payload, raw_text)."""
     is_new = model.startswith("gpt-5") or model.startswith("o1") or model.startswith("o3")
     kwargs = dict(
@@ -81,7 +82,7 @@ def chat_json(client: OpenAI, model: str, system: str, user: str,
         start, end = text.find("{"), text.rfind("}")
         if 0 <= start < end:
             try:
-                payload = json.loads(text[start:end + 1])
+                payload = json.loads(text[start : end + 1])
             except json.JSONDecodeError:
                 payload = None
         else:

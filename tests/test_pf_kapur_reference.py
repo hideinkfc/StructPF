@@ -45,17 +45,25 @@ def test_calibration_keeps_invalid_outputs_without_substitution(tmp_path, monkey
 def test_reference_exact_math_and_evidence_do_not_force_human_failure():
     assert report.exact_check()["handover_metres"] == "3400"
     assert report.exact_check()["mira_minutes"] == report.exact_check()["leon_minutes"] == "76"
-    packet = {"response_01": {
-        "response_type": "attempt", "output": {
-            "written_work": "Let x be the riding distance. Solving gives x = 3400.",
-            "answer": "3400 m", "unfinished": False,
-        }, "raw_text": "",
-    }}
+    packet = {
+        "response_01": {
+            "response_type": "attempt",
+            "output": {
+                "written_work": "Let x be the riding distance. Solving gives x = 3400.",
+                "answer": "3400 m",
+                "unfinished": False,
+            },
+            "raw_text": "",
+        }
+    }
     row = {
-        "categories": ["algebra_single_variable"], "mentioned_only": [],
+        "categories": ["algebra_single_variable"],
+        "mentioned_only": [],
         "evidence": {"algebra_single_variable": ["Solving gives x = 3400."]},
-        "unsuccessful_work": "no", "unsuccessful_evidence": [],
-        "final_result": "correct", "rationale": "Correct algebra is not forced into failure.",
+        "unsuccessful_work": "no",
+        "unsuccessful_evidence": [],
+        "final_result": "correct",
+        "rationale": "Correct algebra is not forced into failure.",
     }
     payload = {"provenance": "Illustrative software test", "responses": {"response_01": row}}
     assert report.validate_coding(payload, packet) == payload
@@ -65,19 +73,34 @@ def test_reference_exact_math_and_evidence_do_not_force_human_failure():
 
 
 def test_prediction_categories_are_not_scored_as_completed_attempts():
-    packet = {"response_01": {
-        "response_type": "prediction",
-        "output": {"approaches": [
-            {"description": "A learner may try ratios.", "possible_limitation": "May not suffice."}
-        ]},
-        "raw_text": '{"description": "A learner may try ratios."}',
-    }}
-    payload = {"provenance": "Illustrative prediction", "responses": {"response_01": {
-        "categories": ["ratios"], "mentioned_only": [],
-        "evidence": {"ratios": ["A learner may try ratios."]},
-        "unsuccessful_work": "unknown", "unsuccessful_evidence": [],
-        "final_result": "not_applicable", "rationale": "A prediction is not an enactment.",
-    }}}
+    packet = {
+        "response_01": {
+            "response_type": "prediction",
+            "output": {
+                "approaches": [
+                    {
+                        "description": "A learner may try ratios.",
+                        "possible_limitation": "May not suffice.",
+                    }
+                ]
+            },
+            "raw_text": '{"description": "A learner may try ratios."}',
+        }
+    }
+    payload = {
+        "provenance": "Illustrative prediction",
+        "responses": {
+            "response_01": {
+                "categories": ["ratios"],
+                "mentioned_only": [],
+                "evidence": {"ratios": ["A learner may try ratios."]},
+                "unsuccessful_work": "unknown",
+                "unsuccessful_evidence": [],
+                "final_result": "not_applicable",
+                "rationale": "A prediction is not an enactment.",
+            }
+        },
+    }
     assert report.validate_coding(payload, packet) == payload
     payload["responses"]["response_01"]["final_result"] = "correct"
     with pytest.raises(ValueError, match="not a completed learner"):
@@ -94,25 +117,36 @@ def test_representation_coverage_is_not_algorithm_coverage():
 def test_reference_gallery_preserves_count_meaning_and_escaped_output(tmp_path):
     config = json.loads(reference.CONFIG.read_text())
     reference.benchmark._write_json(tmp_path / "manifest.json", {"protocol": config})
-    packet = {"response_01": {
-        "response_type": "attempt",
-        "output": {"written_work": "Trial <test>", "answer": "3400", "unfinished": False},
-        "raw_text": "",
-    }}
+    packet = {
+        "response_01": {
+            "response_type": "attempt",
+            "output": {"written_work": "Trial <test>", "answer": "3400", "unfinished": False},
+            "raw_text": "",
+        }
+    }
     key = {"response_01": "test"}
     groups = {
-        "learner": {"responses": 24, "category/algebra_single_variable": 19,
-                    "category/trial_bruteforce": 6, "final/correct": 21,
-                    "final/unfinished": 2, "final/incorrect": 1},
+        "learner": {
+            "responses": 24,
+            "category/algebra_single_variable": 19,
+            "category/trial_bruteforce": 6,
+            "final/correct": 21,
+            "final/unfinished": 2,
+            "final/incorrect": 1,
+        },
         "solver": {"responses": 4, "final/correct": 4},
         "prediction": {"responses": 2},
     }
     summary = {
         "groups": groups,
-        "responses": {"test": {
-            "kind": "learner", "final_result": "correct",
-            "categories": ["trial_bruteforce"], "rationale": "Illustrative <coding>",
-        }},
+        "responses": {
+            "test": {
+                "kind": "learner",
+                "final_result": "correct",
+                "categories": ["trial_bruteforce"],
+                "rationale": "Illustrative <coding>",
+            }
+        },
     }
     report.render(tmp_path, summary, packet, key)
     page = (tmp_path / "reference.html").read_text()

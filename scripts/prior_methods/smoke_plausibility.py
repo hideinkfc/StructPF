@@ -83,8 +83,10 @@ CALIBRATION = [
         "expected_band": 2,
         "method": {
             "method_name": "Compare raw amounts",
-            "general_procedure": ("Compare the raw quantities or prices of the options "
-                "directly, without adjusting for differences in size or amount."),
+            "general_procedure": (
+                "Compare the raw quantities or prices of the options "
+                "directly, without adjusting for differences in size or amount."
+            ),
             "student_thinking": "More of it for the money looks like better value.",
         },
     },
@@ -94,8 +96,10 @@ CALIBRATION = [
         "expected_band": 2,
         "method": {
             "method_name": "Scale one option to a round amount",
-            "general_procedure": ("Take the option that looks easiest, scale it up to a "
-                "nice round price or amount, and compare the others roughly."),
+            "general_procedure": (
+                "Take the option that looks easiest, scale it up to a "
+                "nice round price or amount, and compare the others roughly."
+            ),
             "student_thinking": "If I make one of them a nice number I can see which is better.",
         },
     },
@@ -105,8 +109,9 @@ CALIBRATION = [
         "expected_band": 0,
         "method": {
             "method_name": "Harmonic density balancing",
-            "general_procedure": ("Balance the harmonic densities of the options "
-                "to find the optimal value."),
+            "general_procedure": (
+                "Balance the harmonic densities of the options to find the optimal value."
+            ),
             "student_thinking": "The harmonic densities need to be balanced out.",
         },
     },
@@ -116,8 +121,10 @@ CALIBRATION = [
         "expected_band": 0,
         "method": {
             "method_name": "Normalize to the same basis",
-            "general_procedure": ("Convert each option to the same unit basis (per ml, "
-                "per pound, or per 100 ml) and compare the unit values."),
+            "general_procedure": (
+                "Convert each option to the same unit basis (per ml, "
+                "per pound, or per 100 ml) and compare the unit values."
+            ),
             "student_thinking": "If I get them all to the same unit I can compare directly.",
         },
     },
@@ -127,8 +134,9 @@ CALIBRATION = [
         "expected_band": 1,
         "method": {
             "method_name": "Guess from the look of the numbers",
-            "general_procedure": ("Look at the numbers and pick whichever option "
-                "feels like a better deal."),
+            "general_procedure": (
+                "Look at the numbers and pick whichever option feels like a better deal."
+            ),
             "student_thinking": "One of them just seems like more for the money.",
         },
     },
@@ -173,9 +181,15 @@ def judge_one(client: OpenAI, model: str, package: dict, case: dict) -> dict:
         ok = score in (0, 1, 2) and isinstance(overlap, bool)
     except json.JSONDecodeError:
         score, reason, overlap, ok = None, f"parse failure: {text[:120]}", None, False
-    return {"case": case["case"], "score": score, "concept_overlap": overlap,
-            "reason": reason, "parse_ok": ok,
-            "expected_band": case["expected_band"], "note": case["note"]}
+    return {
+        "case": case["case"],
+        "score": score,
+        "concept_overlap": overlap,
+        "reason": reason,
+        "parse_ok": ok,
+        "expected_band": case["expected_band"],
+        "note": case["note"],
+    }
 
 
 def main() -> None:
@@ -194,16 +208,21 @@ def main() -> None:
         if band is not None:
             mark = "HIT" if r["score"] == band else "MISS"
             hits += r["score"] == band
-        print(f"  {r['case']:20s} score={r['score']} overlap={r['concept_overlap']} "
-              f"expected={band} {mark:4s} | {r['reason'][:70]}")
+        print(
+            f"  {r['case']:20s} score={r['score']} overlap={r['concept_overlap']} "
+            f"expected={band} {mark:4s} | {r['reason'][:70]}"
+        )
 
     n_banded = sum(1 for c in CALIBRATION if c["expected_band"] is not None)
     n_parse_fail = sum(1 for r in results if not r["parse_ok"])
     print(f"\n{hits}/{n_banded} banded cases hit; parse failures: {n_parse_fail}")
 
     OUT.parent.mkdir(parents=True, exist_ok=True)
-    payload = {"judge_model": model, "prompt_version": "prior_methods_plausibility_v2",
-               "results": results}
+    payload = {
+        "judge_model": model,
+        "prompt_version": "prior_methods_plausibility_v2",
+        "results": results,
+    }
     OUT.write_text(json.dumps(payload, indent=2, ensure_ascii=False) + "\n")
     print(f"saved -> {OUT.relative_to(ROOT)}")
 

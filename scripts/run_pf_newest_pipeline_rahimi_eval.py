@@ -41,7 +41,9 @@ from src.evaluation.pf_task_measures import MEASURES
 
 ROOT = Path(__file__).resolve().parents[1]
 SETTING_PATH = ROOT / "experiments/configs/pf_rahimi_multi_theme_setting.json"
-MAIN30_SUMMARY_PATH = ROOT / "experiments/results/pf_rahimi_multi_theme_20261013/main_30/summary.json"
+MAIN30_SUMMARY_PATH = (
+    ROOT / "experiments/results/pf_rahimi_multi_theme_20261013/main_30/summary.json"
+)
 LC_BRIDGE_SNAP = ROOT / "data/learning_commons/progression_bridge_v1"
 DEFAULT_OUTPUT = ROOT / "experiments/results/pf_newest_pipeline_rahimi_eval_20261016"
 DIMENSIONS = pf_rubric.DIMENSIONS
@@ -137,7 +139,9 @@ def rate_one_table1(
                         }
                     )
 
-    valid_passes = [p["scores"] for p in passes if p.get("scores") and p["scores"].get("TOTAL") is not None]
+    valid_passes = [
+        p["scores"] for p in passes if p.get("scores") and p["scores"].get("TOTAL") is not None
+    ]
     mean_scores = None
     if valid_passes:
         mean_scores = {
@@ -207,10 +211,10 @@ def collect_saved_newest_pipeline_tasks() -> list[dict[str, Any]]:
         )
 
     # 4. 20-Topic Progression Bridge Study (Direct vs Pipeline Ungrounded vs Pipeline LC-Grounded)
-    pb_summary = json.loads(
-        (ROOT / "experiments/results/pf_progression_bridge_20cases_20261016/summary.json").read_text(
-            encoding="utf-8"
-        )
+    _pb_summary = json.loads(
+        (
+            ROOT / "experiments/results/pf_progression_bridge_20cases_20261016/summary.json"
+        ).read_text(encoding="utf-8")
     )
     pb_dataset = json.loads(
         (ROOT / "data/learning_commons/progression_bridge_dataset_v1.json").read_text(
@@ -274,9 +278,7 @@ def _lc_bundle_for_rahimi_cell(cell_id: str) -> dict[str, Any]:
         n for n in nodes.values() if (n.get("properties", {}).get("statementCode") or "") == t_code
     ]
     p_nodes = [
-        n
-        for n in nodes.values()
-        if (n.get("properties", {}).get("statementCode") or "") in p_codes
+        n for n in nodes.values() if (n.get("properties", {}).get("statementCode") or "") in p_codes
     ]
     t_ids = {n["identifier"] for n in t_nodes}
     p_ids = {n["identifier"] for n in p_nodes}
@@ -315,7 +317,9 @@ def _lc_bundle_for_rahimi_cell(cell_id: str) -> dict[str, Any]:
     }
 
 
-def _build_cell_inputs(cell: dict[str, Any], key: str) -> tuple[dict[str, Any], list[dict[str, Any]], dict[str, Any]]:
+def _build_cell_inputs(
+    cell: dict[str, Any], key: str
+) -> tuple[dict[str, Any], list[dict[str, Any]], dict[str, Any]]:
     case = copy.deepcopy(cell["case"])
     case["id"] = key
     case["teacher_skills"] = list(case.get("teacher_recently_taught") or [])
@@ -488,10 +492,7 @@ def summarize_cohort_table1(records: list[dict[str, Any]]) -> dict[str, Any]:
     valid = [r["mean_scores"] for r in records if r.get("mean_scores")]
     if not valid:
         return {"n_scored": 0}
-    means = {
-        k: round(sum(s[k] for s in valid) / len(valid), 2)
-        for k in (*DIMENSIONS, "TOTAL")
-    }
+    means = {k: round(sum(s[k] for s in valid) / len(valid), 2) for k in (*DIMENSIONS, "TOTAL")}
     return {"n_scored": len(valid), "mean_scores": means}
 
 
@@ -549,10 +550,7 @@ def main() -> None:
         existing_saved = summary_out.get("saved_cohorts_table1") or {}
         summary_out["saved_cohorts_table1"] = {
             **existing_saved,
-            **{
-                coh: summarize_cohort_table1(recs)
-                for coh, recs in sorted(rated_by_cohort.items())
-            },
+            **{coh: summarize_cohort_table1(recs) for coh, recs in sorted(rated_by_cohort.items())},
         }
         save_json(out_dir / "summary.json", summary_out)
 
@@ -563,17 +561,15 @@ def main() -> None:
 
         # Step 1: Ensure fixed_d1.json per cell in isolated processes
         with ProcessPoolExecutor(max_workers=4) as pool:
-            d1_futs = {pool.submit(ensure_cell_fixed_d1, cell, out_dir): cell["cell_id"] for cell in cells}
+            d1_futs = {
+                pool.submit(ensure_cell_fixed_d1, cell, out_dir): cell["cell_id"] for cell in cells
+            }
             for fut in as_completed(d1_futs):
                 d1_p = fut.result()
                 print(f"[d1-cell] {d1_futs[fut]} -> {d1_p.name}", flush=True)
 
         # Step 2: Run all 120 D2a-D2b-D3 generations in isolated processes
-        gen_jobs = [
-            (cell, rep)
-            for cell in cells
-            for rep in range(1, args.repeats_per_cell + 1)
-        ]
+        gen_jobs = [(cell, rep) for cell in cells for rep in range(1, args.repeats_per_cell + 1)]
         gen_records: list[dict[str, Any]] = []
         with ProcessPoolExecutor(max_workers=args.workers) as pool:
             futs = {
@@ -586,16 +582,17 @@ def main() -> None:
             for fut in as_completed(futs):
                 grec = fut.result()
                 gen_records.append(grec)
-                print(f"[gen-rahimi-cell] {grec['key']} done ({len(gen_records)}/{len(gen_jobs)})", flush=True)
+                print(
+                    f"[gen-rahimi-cell] {grec['key']} done ({len(gen_records)}/{len(gen_jobs)})",
+                    flush=True,
+                )
 
         # Evaluate each ready task on BOTH Rahimi Table 1 (setting prompt) and v3.0
         cell_table1_recs: list[dict[str, Any]] = []
         cell_v30_recs: list[dict[str, Any]] = []
         ready_items = []
         for grec in sorted(gen_records, key=lambda x: x["key"]):
-            task_obj = (
-                ((grec["result"].get("stages") or {}).get("D2_D3") or {}).get("task") or {}
-            )
+            task_obj = ((grec["result"].get("stages") or {}).get("D2_D3") or {}).get("task") or {}
             st_text = "\n\n".join(
                 str(task_obj.get(k, "")).strip()
                 for k in ("title", "body", "question")

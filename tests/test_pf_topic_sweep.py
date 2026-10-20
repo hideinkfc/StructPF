@@ -72,12 +72,14 @@ def test_run_rejects_unknown_cases_before_call(tmp_path):
 def test_prepare_validates_and_freezes_official_packets(tmp_path, monkeypatch):
     config = sweep.ROOT / "experiments/configs/pf_topic_sweep_20261011.json"
     ids = [case["id"] for case in json.loads(config.read_text())["cases"]]
-    evidence = [{
-        "standard_id": "test-standard",
-        "label": "Illustrative test evidence, not a real standard",
-        "source_url": "https://example.org/test",
-        "text": "Illustrative prerequisite excerpt for a software test.",
-    }]
+    evidence = [
+        {
+            "standard_id": "test-standard",
+            "label": "Illustrative test evidence, not a real standard",
+            "source_url": "https://example.org/test",
+            "text": "Illustrative prerequisite excerpt for a software test.",
+        }
+    ]
     packets = {"cases": {case_id: {"grounding_evidence": evidence} for case_id in ids}}
     grounding = tmp_path / "grounding.json"
     grounding.write_text(json.dumps(packets))

@@ -26,7 +26,9 @@ from scripts.replay_pf_discovery_writer import numeric_coverage  # noqa: E402
 
 def source_hashes(config_path: Path) -> dict[str, str]:
     paths = (
-        Path(__file__), config_path, ROOT / "scripts/replay_pf_discovery_writer.py",
+        Path(__file__),
+        config_path,
+        ROOT / "scripts/replay_pf_discovery_writer.py",
         ROOT / "scripts/prior_methods/common.py",
     )
     return {
@@ -56,7 +58,8 @@ def prepare(config_path: Path, output: Path) -> dict:
     if manifest_path.exists():
         manifest = json.loads(manifest_path.read_text())
         if (
-            manifest["config"] != config or manifest["inputs"] != inputs
+            manifest["config"] != config
+            or manifest["inputs"] != inputs
             or manifest["source_hashes"] != hashes
         ):
             raise ValueError("Frozen inputs or implementation changed; use a new output directory")
@@ -98,7 +101,8 @@ def replay_case(case_id: str, output: Path, manifest: dict, *, client, model: st
         "case_id": case_id,
         "model": model,
         "phase": (
-            "calibration" if case_id in manifest["config"]["protocol"]["calibration_cases"]
+            "calibration"
+            if case_id in manifest["config"]["protocol"]["calibration_cases"]
             else "prespecified_development"
         ),
         "evidence_kind": manifest["config"]["protocol"]["evidence_kind"],
@@ -118,7 +122,8 @@ def replay_case(case_id: str, output: Path, manifest: dict, *, client, model: st
     diagnostic._write_json(destination, record)
     try:
         with patch.object(
-            runner, "chat_json",
+            runner,
+            "chat_json",
             diagnostic._traced_chat(tracer, "D2_D3", d1_prompt=False),
         ):
             data = stage.run_design_data(client, model, case, winner, context)
@@ -126,12 +131,11 @@ def replay_case(case_id: str, output: Path, manifest: dict, *, client, model: st
             diagnostic._write_json(destination, record)
             if data["payload"] is not None:
                 record["writer_request"] = stage._writer_request(case, winner, data, context)
-                task, raw = stage.write_design_data_task(
-                    client, model, case, winner, data, context
-                )
+                task, raw = stage.write_design_data_task(client, model, case, winner, data, context)
                 record.update(task=task, task_raw_text=raw, status=task["status"])
                 given = [
-                    name for name, metadata in data["payload"]["quantities"].items()
+                    name
+                    for name, metadata in data["payload"]["quantities"].items()
                     if metadata["role"] == "given"
                 ]
                 record["numeric_coverage"] = numeric_coverage(
@@ -172,10 +176,11 @@ def run(config_path: Path, output: Path, case_ids: list[str]) -> dict:
     for case_id in chosen:
         record = replay_case(case_id, output, manifest, client=client, model=model)
         manifest["attempts"][case_id] = {
-            "status": record["status"], "model_calls": record["model_calls"],
+            "status": record["status"],
+            "model_calls": record["model_calls"],
         }
-        manifest["source_integrity_unchanged"] = (
-            manifest["source_hashes"] == source_hashes(config_path)
+        manifest["source_integrity_unchanged"] = manifest["source_hashes"] == source_hashes(
+            config_path
         )
         manifest["updated_at"] = diagnostic._now()
         diagnostic._write_json(output / "manifest.json", manifest)
@@ -188,7 +193,8 @@ def render(output: Path) -> None:
     inspection_path = output / "inspection.json"
     notes = (
         {item["case_id"]: item for item in json.loads(inspection_path.read_text())["cases"]}
-        if inspection_path.exists() else {}
+        if inspection_path.exists()
+        else {}
     )
     sections = []
     for case in manifest["config"]["cases"]:
@@ -201,8 +207,10 @@ def render(output: Path) -> None:
             "blocking_issues": [record.get("error") or record["status"]],
         }
         roles = Counter(
-            metadata["role"] for metadata in
-            ((record.get("design_data") or {}).get("payload") or {}).get("quantities", {}).values()
+            metadata["role"]
+            for metadata in ((record.get("design_data") or {}).get("payload") or {})
+            .get("quantities", {})
+            .values()
         )
         note = notes.get(case["id"], {}).get("finding", "Not yet directly inspected.")
         coverage = record.get("numeric_coverage", {}).get("status", "unavailable")
@@ -218,7 +226,8 @@ def render(output: Path) -> None:
             + task_panel(new_task, "After: fresh data and writer", path.resolve())
             + f"</div><p class='inspection'>Assistant inspection: {html.escape(note)}</p></section>"
         )
-    page = """<!doctype html><html lang="en"><head><meta charset="utf-8">
+    page = (
+        """<!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>PF data roles: eight fixed-brief comparisons</title><style>
 body{font:16px/1.55 system-ui,sans-serif;background:#f3f5f1;color:#23392f;margin:24px}
@@ -233,7 +242,10 @@ table{border-collapse:collapse}th,td{border:1px solid #ddd;padding:7px}
 <p>Selected development cases: frozen designs and prior context, fresh D2b data and D3 writing.
 Not fresh end-to-end generation, human ratings, or student-outcome evidence.
 Both data and writing change; the comparison does not isolate their causal effects.</p>
-""" + "".join(sections) + "</main></body></html>"
+"""
+        + "".join(sections)
+        + "</main></body></html>"
+    )
     (output / "tasks.html").write_text(page, encoding="utf-8")
 
 

@@ -103,18 +103,20 @@ def chunk_document(fname: str, meta: dict) -> list[dict]:
             continue
         if len(text) > MAX_CHUNK_CHARS:
             text = text[:MAX_CHUNK_CHARS]
-        chunks.append({
-            "doc": fname,
-            "jurisdiction": meta["jurisdiction"],
-            "grades": meta["grades"],
-            "subject": meta["subject"],
-            "doc_title": meta["title"],
-            "source_url": meta["url"],
-            "page": page_no,
-            "language": meta["language"],
-            "chunk_id": f"{fname}::p{page_no}::original",
-            "text": text,
-        })
+        chunks.append(
+            {
+                "doc": fname,
+                "jurisdiction": meta["jurisdiction"],
+                "grades": meta["grades"],
+                "subject": meta["subject"],
+                "doc_title": meta["title"],
+                "source_url": meta["url"],
+                "page": page_no,
+                "language": meta["language"],
+                "chunk_id": f"{fname}::p{page_no}::original",
+                "text": text,
+            }
+        )
     return chunks
 
 
@@ -143,15 +145,17 @@ def add_translation_chunks(chunks: list[dict], translations: dict[str, dict]) ->
         text = record.get("translation")
         if not isinstance(text, str) or len(text.strip()) < MIN_CHUNK_CHARS:
             raise ValueError(f"Invalid translation for {key} in {TRANSLATIONS_PATH}")
-        output.append({
-            **chunk,
-            "chunk_id": f"{chunk['doc']}::p{chunk['page']}::en_translation",
-            "language": "en",
-            "translation_of": chunk["chunk_id"],
-            "translation_model": record.get("model"),
-            "translation_source_sha256": expected_hash,
-            "text": text.strip()[:MAX_CHUNK_CHARS],
-        })
+        output.append(
+            {
+                **chunk,
+                "chunk_id": f"{chunk['doc']}::p{chunk['page']}::en_translation",
+                "language": "en",
+                "translation_of": chunk["chunk_id"],
+                "translation_model": record.get("model"),
+                "translation_source_sha256": expected_hash,
+                "text": text.strip()[:MAX_CHUNK_CHARS],
+            }
+        )
     return output
 
 
@@ -179,18 +183,20 @@ def load_supplement_chunks() -> list[dict]:
             or not isinstance(url, str)
         ):
             raise ValueError(f"Invalid supplement record {index} in {SUPPLEMENT_PATH}")
-        chunks.append({
-            "doc": SUPPLEMENT_PATH.name,
-            "jurisdiction": source.get("jurisdiction", "unknown"),
-            "grades": grades,
-            "subject": source.get("subject", "unknown"),
-            "doc_title": source.get("title", SUPPLEMENT_PATH.name),
-            "source_url": url,
-            "page": standard_id,
-            "language": source.get("language", "en"),
-            "chunk_id": f"{SUPPLEMENT_PATH.name}::{standard_id}",
-            "text": text.strip()[:MAX_CHUNK_CHARS],
-        })
+        chunks.append(
+            {
+                "doc": SUPPLEMENT_PATH.name,
+                "jurisdiction": source.get("jurisdiction", "unknown"),
+                "grades": grades,
+                "subject": source.get("subject", "unknown"),
+                "doc_title": source.get("title", SUPPLEMENT_PATH.name),
+                "source_url": url,
+                "page": standard_id,
+                "language": source.get("language", "en"),
+                "chunk_id": f"{SUPPLEMENT_PATH.name}::{standard_id}",
+                "text": text.strip()[:MAX_CHUNK_CHARS],
+            }
+        )
     return chunks
 
 

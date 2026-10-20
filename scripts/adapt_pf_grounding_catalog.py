@@ -24,8 +24,10 @@ def adapt_catalog(catalog: dict) -> tuple[dict, dict]:
         if not isinstance(context, dict):
             raise ValueError(f"Missing learner context: {entry.get('task_id')}")
         taught = context.get("recently_taught")
-        if not isinstance(taught, list) or not taught or any(
-            not isinstance(value, str) or not value.strip() for value in taught
+        if (
+            not isinstance(taught, list)
+            or not taught
+            or any(not isinstance(value, str) or not value.strip() for value in taught)
         ):
             raise ValueError(f"Missing frozen prior-learning descriptions: {entry['task_id']}")
         case = entry["case_id"]
@@ -45,14 +47,16 @@ def adapt_catalog(catalog: dict) -> tuple[dict, dict]:
         if adapted["task"] != entry["task"]:
             raise ValueError("An adapter must not alter the student task")
         tasks.append(adapted)
-        receipts.append({
-            "task_id": entry["task_id"],
-            "case_id": case,
-            "arm": entry["arm"],
-            "frozen_recently_taught": taught,
-            "sent_assumed_prior_knowledge": resources,
-            "student_task_unchanged": True,
-        })
+        receipts.append(
+            {
+                "task_id": entry["task_id"],
+                "case_id": case,
+                "arm": entry["arm"],
+                "frozen_recently_taught": taught,
+                "sent_assumed_prior_knowledge": resources,
+                "student_task_unchanged": True,
+            }
+        )
     if not tasks:
         raise ValueError("No grounding tasks supplied")
     return {"tasks": tasks}, {

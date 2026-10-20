@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 """Dry-run the main condition grid on N questions with progress bar."""
 
-import json, sys
+import json
+import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from tqdm import tqdm
+
 from scripts.run_phase1_mcq import CONDITIONS, _build_condition_components
 from src.evaluation.mcq_metrics import ConditionResults
 
@@ -44,8 +46,11 @@ for name, sys_var, inst, strat, fs, mc_d in CONDITIONS:
             r = gen.generate(
                 question_text=str(q["QuestionText"]),
                 correct_answer=str(ct),
-                strategy=strat, n_distractors=3, temperature=0.7,
-                system_variant=sys_var, instruction_variant=inst,
+                strategy=strat,
+                n_distractors=3,
+                temperature=0.7,
+                system_variant=sys_var,
+                instruction_variant=inst,
                 fewshot_mode=fs or "rationale",
                 mc_cond_depth=mc_d or "names",
                 question_metadata=q,
@@ -56,14 +61,18 @@ for name, sys_var, inst, strat, fs, mc_d in CONDITIONS:
             )
             m.condition = name
             cond_metrics.append(m)
-            per_q.append({
-                "condition": name, "question_id": qid,
-                "texts": [d.text for d in r.distractors],
-                "misconceptions": [d.target_misconception for d in r.distractors],
-                "pm": m.pm,
-                "validity": m.validity, "diversity": m.diversity,
-                "conditioning": getattr(r, "model_extra", {}).get("conditioning_metadata", {}),
-            })
+            per_q.append(
+                {
+                    "condition": name,
+                    "question_id": qid,
+                    "texts": [d.text for d in r.distractors],
+                    "misconceptions": [d.target_misconception for d in r.distractors],
+                    "pm": m.pm,
+                    "validity": m.validity,
+                    "diversity": m.diversity,
+                    "conditioning": getattr(r, "model_extra", {}).get("conditioning_metadata", {}),
+                }
+            )
             pbar.set_postfix_str(f"{name} Q{qid} PM={m.pm:.2f}")
         except Exception as e:
             pbar.write(f"  FAIL {name} Q{qid}: {e}")
@@ -80,8 +89,7 @@ with open(results_dir / "dry_run_with_fewshot_rag_per_question.json", "w") as f:
     json.dump(per_q, f, indent=2)
 with open(results_dir / "dry_run_with_fewshot_rag_aggregated.json", "w") as f:
     summaries = [
-        {"condition": c.condition_name, "n": c.n_questions, **c.summary()}
-        for c in all_results
+        {"condition": c.condition_name, "n": c.n_questions, **c.summary()} for c in all_results
     ]
     json.dump(summaries, f, indent=2)
 

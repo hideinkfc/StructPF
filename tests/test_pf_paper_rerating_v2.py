@@ -11,13 +11,15 @@ from src.evaluation.pf_rubric_v2 import DIMENSIONS
 
 
 def _rating_response(score=2):
-    return json.dumps({
-        **{
-            dimension: {"evidence": "Concrete task evidence.", "score": score}
-            for dimension in DIMENSIONS
-        },
-        "mathematical_concerns": [],
-    })
+    return json.dumps(
+        {
+            **{
+                dimension: {"evidence": "Concrete task evidence.", "score": score}
+                for dimension in DIMENSIONS
+            },
+            "mathematical_concerns": [],
+        }
+    )
 
 
 def _make_source_run(root: Path, protocol_path: Path) -> Path:
@@ -33,10 +35,12 @@ def _make_source_run(root: Path, protocol_path: Path) -> Path:
         "grade": 7,
         "subject": "mathematics",
         "jurisdiction": "USA",
-        "assumed_prior_knowledge": [{
-            "resource": "Unit rates",
-            "taught_as": "Compute rates.",
-        }],
+        "assumed_prior_knowledge": [
+            {
+                "resource": "Unit rates",
+                "taught_as": "Compute rates.",
+            }
+        ],
     }
     config = {
         "conditions": list(rerate.CONDITIONS),
@@ -93,9 +97,7 @@ def _make_source_run(root: Path, protocol_path: Path) -> Path:
     (source / "manifest.json").write_text(json.dumps(manifest))
     summary = {
         "conditions": {
-            condition: {
-                "counts": {"scheduled": 2, "ready": ready_counts[condition]}
-            }
+            condition: {"counts": {"scheduled": 2, "ready": ready_counts[condition]}}
             for condition in rerate.CONDITIONS
         }
     }
@@ -125,10 +127,12 @@ def _client(response_text=None, error=None):
         if error:
             raise error
         return SimpleNamespace(
-            choices=[SimpleNamespace(
-                message=SimpleNamespace(content=response_text or _rating_response()),
-                finish_reason="stop",
-            )],
+            choices=[
+                SimpleNamespace(
+                    message=SimpleNamespace(content=response_text or _rating_response()),
+                    finish_reason="stop",
+                )
+            ],
             usage={
                 "prompt_tokens": 12,
                 "completion_tokens": 34,
@@ -137,9 +141,7 @@ def _client(response_text=None, error=None):
             model="gpt-5.6-luna-2026-07-09",
         )
 
-    return SimpleNamespace(
-        chat=SimpleNamespace(completions=SimpleNamespace(create=create))
-    ), calls
+    return SimpleNamespace(chat=SimpleNamespace(completions=SimpleNamespace(create=create))), calls
 
 
 def test_prepare_freezes_all_source_cases_and_method_blind_inputs(tmp_path):
@@ -147,12 +149,12 @@ def test_prepare_freezes_all_source_cases_and_method_blind_inputs(tmp_path):
     assert manifest["case_count"] == 8
     assert manifest["eligible_count"] == 7
     assert manifest["ready_counts"] == {
-        "V1": 2, "V2": 2, "V3": 2, "PIPELINE": 1,
+        "V1": 2,
+        "V2": 2,
+        "V3": 2,
+        "PIPELINE": 1,
     }
-    inputs = [
-        json.loads(line)
-        for line in (output / "inputs.jsonl").read_text().splitlines()
-    ]
+    inputs = [json.loads(line) for line in (output / "inputs.jsonl").read_text().splitlines()]
     assert len(inputs) == 8
     assert sum(item["calibration_selected"] for item in inputs) == 4
     for item in inputs:
@@ -168,9 +170,7 @@ def test_prepare_freezes_all_source_cases_and_method_blind_inputs(tmp_path):
         else:
             assert item["source_generation_status"] == "review_blocked"
             assert item["user_prompt"] is None
-            rating = json.loads(
-                (output / "ratings" / f"{item['attempt_id']}.json").read_text()
-            )
+            rating = json.loads((output / "ratings" / f"{item['attempt_id']}.json").read_text())
             assert rating["status"] == "not_eligible"
     with pytest.raises(FileExistsError):
         rerate.prepare_run(
@@ -184,6 +184,7 @@ def test_prepare_freezes_all_source_cases_and_method_blind_inputs(tmp_path):
 def test_balanced_calibration_then_full_run_resumes_without_duplicate_calls(tmp_path):
     output, manifest = _prepare(tmp_path)
     fake_client, calls = _client()
+
     def loader(selector):
         return fake_client, "gpt-5.6-luna"
 
@@ -193,9 +194,7 @@ def test_balanced_calibration_then_full_run_resumes_without_duplicate_calls(tmp_
     assert calibration["scores_deliberately_omitted"] is True
     assert all("scores" not in item for item in calibration["outcomes"])
     assert len(calls) == 4
-    assert {item["condition"] for item in calibration["outcomes"]} == set(
-        rerate.CONDITIONS
-    )
+    assert {item["condition"] for item in calibration["outcomes"]} == set(rerate.CONDITIONS)
     for call in calls:
         assert call["response_format"] == {"type": "json_object"}
         assert call["max_completion_tokens"] == 4000
@@ -213,22 +212,23 @@ def test_balanced_calibration_then_full_run_resumes_without_duplicate_calls(tmp_
     assert summary["conditions"]["PIPELINE"]["denominators"]["scheduled"] == 2
     assert summary["conditions"]["PIPELINE"]["denominators"]["ready"] == 1
     assert summary["conditions"]["PIPELINE"]["scores"]["TOTAL"]["mean"] == 10
-    assert summary["conditions"]["PIPELINE"]["model_calls"]["usage_tokens_when_returned"][
-        "total_tokens"
-    ] == 46
+    assert (
+        summary["conditions"]["PIPELINE"]["model_calls"]["usage_tokens_when_returned"][
+            "total_tokens"
+        ]
+        == 46
+    )
     rerun = rerate.run_full(output, client_loader=lambda _: pytest.fail("must not call model"))
     assert len(calls) == 7
     assert rerun["overall_denominators"]["complete_five_dimension_scores"] == 7
 
 
-def test_transport_and_schema_failures_are_explicit_and_block_full_run(
-    tmp_path, monkeypatch
-):
+def test_transport_and_schema_failures_are_explicit_and_block_full_run(tmp_path, monkeypatch):
     output, _ = _prepare(tmp_path)
     monkeypatch.setattr(rerate.time, "sleep", lambda _: None)
-    fake_client, calls = _client(error=APIConnectionError(
-        request=httpx.Request("POST", "https://example.invalid")
-    ))
+    fake_client, calls = _client(
+        error=APIConnectionError(request=httpx.Request("POST", "https://example.invalid"))
+    )
     calibration = rerate.run_calibration(
         output, client_loader=lambda selector: (fake_client, "gpt-5.6-luna")
     )
@@ -236,15 +236,10 @@ def test_transport_and_schema_failures_are_explicit_and_block_full_run(
     assert len(calls) == 3
     results = [
         json.loads((output / "ratings" / f"{case_id}.json").read_text())
-        for case_id in json.loads((output / "manifest.json").read_text())[
-            "calibration"
-        ]["case_ids"]
+        for case_id in json.loads((output / "manifest.json").read_text())["calibration"]["case_ids"]
     ]
     assert results[0]["status"] == "api_error"
-    assert all(
-        result["status"] == "not_attempted_calibration_blocked"
-        for result in results[1:]
-    )
+    assert all(result["status"] == "not_attempted_calibration_blocked" for result in results[1:])
     with pytest.raises(RuntimeError, match="calibration passes"):
         rerate.run_full(output)
 
@@ -258,14 +253,9 @@ def test_invalid_json_schema_is_not_repaired_or_scored(tmp_path):
     assert calibration["status"] == "failed"
     results = [
         json.loads((output / "ratings" / f"{case_id}.json").read_text())
-        for case_id in json.loads((output / "manifest.json").read_text())[
-            "calibration"
-        ]["case_ids"]
+        for case_id in json.loads((output / "manifest.json").read_text())["calibration"]["case_ids"]
     ]
     assert results[0]["status"] == "invalid_response"
     assert all(result["scores"] is None for result in results)
     assert results[0]["raw_response"] == '{"unexpected": true}'
-    assert all(
-        result["status"] == "not_attempted_calibration_blocked"
-        for result in results[1:]
-    )
+    assert all(result["status"] == "not_attempted_calibration_blocked" for result in results[1:])

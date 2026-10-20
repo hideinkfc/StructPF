@@ -17,26 +17,49 @@ WHITE = "#FFFFFF"
 HEAD_STYLE = "-|>,head_length=0.42,head_width=0.26"
 
 ROWS = [
-    ("", "Does the task target the concept\nwith correct mathematics?",
-     "Task Judge", "Target alignment and mathematical validity"),
-    ("Req. 1", "Can students start with\nwhat they already know?",
-     "Task Judge", "Prior-knowledge accessibility"),
-    ("Req. 2", "Do familiar methods fall short\nfor the target reason?",
-     "Prior-Knowledge Solver + Attempt Judge", "Limits of familiar approaches"),
-    ("Req. 3", "Is the key idea left\nfor students to invent?",
-     "Task Judge", "Room for invention"),
+    (
+        "",
+        "Does the task target the concept\nwith correct mathematics?",
+        "Task Judge",
+        "Target alignment and mathematical validity",
+    ),
+    (
+        "Req. 1",
+        "Can students start with\nwhat they already know?",
+        "Task Judge",
+        "Prior-knowledge accessibility",
+    ),
+    (
+        "Req. 2",
+        "Do familiar methods fall short\nfor the target reason?",
+        "Prior-Knowledge Solver + Attempt Judge",
+        "Limits of familiar approaches",
+    ),
+    ("Req. 3", "Is the key idea left\nfor students to invent?", "Task Judge", "Room for invention"),
 ]
 
 
 def draw_rect(ax, x, y, w, h, facecolor=WHITE, linewidth=1.0, zorder=2):
-    ax.add_patch(Rectangle((x, y), w, h, facecolor=facecolor, edgecolor=BLACK,
-                           linewidth=linewidth, zorder=zorder))
+    ax.add_patch(
+        Rectangle(
+            (x, y), w, h, facecolor=facecolor, edgecolor=BLACK, linewidth=linewidth, zorder=zorder
+        )
+    )
 
 
 def container(ax, x, y, w, h, title):
     draw_rect(ax, x, y, w, h, facecolor=GROUP, linewidth=1.05, zorder=1)
-    ax.text(x + 0.18, y + h - 0.26, title, fontsize=12.4, fontweight="bold",
-            color=BLACK, ha="left", va="center", zorder=2)
+    ax.text(
+        x + 0.18,
+        y + h - 0.26,
+        title,
+        fontsize=12.4,
+        fontweight="bold",
+        color=BLACK,
+        ha="left",
+        va="center",
+        zorder=2,
+    )
 
 
 def main():
@@ -64,21 +87,60 @@ def main():
         y = top - (i + 1) * row_h - i * gap
         ym = y + row_h / 2
         if tag:
-            ax.text(left_x + 0.20, ym, tag, fontsize=11.0, fontstyle="italic",
-                    color=DARK, ha="left", va="center", zorder=4)
+            ax.text(
+                left_x + 0.20,
+                ym,
+                tag,
+                fontsize=11.0,
+                fontstyle="italic",
+                color=DARK,
+                ha="left",
+                va="center",
+                zorder=4,
+            )
         draw_rect(ax, q_x, y, q_w, row_h, facecolor=WHITE, linewidth=1.0, zorder=3)
-        ax.text(q_x + q_w / 2, ym, question, fontsize=11.6, color=BLACK,
-                ha="center", va="center", linespacing=1.25, zorder=4)
+        ax.text(
+            q_x + q_w / 2,
+            ym,
+            question,
+            fontsize=11.6,
+            color=BLACK,
+            ha="center",
+            va="center",
+            linespacing=1.25,
+            zorder=4,
+        )
 
         draw_rect(ax, c_x, y, c_w, row_h, facecolor=PROC, linewidth=1.05, zorder=3)
-        ax.text(c_x + c_w / 2, y + row_h * 0.67, role, fontsize=11.4, fontweight="bold",
-                color=BLACK, ha="center", va="center", zorder=4)
-        ax.text(c_x + c_w / 2, y + row_h * 0.31, measure, fontsize=11.0, color=DARK,
-                ha="center", va="center", zorder=4)
+        ax.text(
+            c_x + c_w / 2,
+            y + row_h * 0.67,
+            role,
+            fontsize=11.4,
+            fontweight="bold",
+            color=BLACK,
+            ha="center",
+            va="center",
+            zorder=4,
+        )
+        ax.text(
+            c_x + c_w / 2,
+            y + row_h * 0.31,
+            measure,
+            fontsize=11.0,
+            color=DARK,
+            ha="center",
+            va="center",
+            zorder=4,
+        )
 
-        ax.annotate("", xy=(c_x, ym), xytext=(q_x + q_w, ym),
-                    arrowprops=dict(arrowstyle=HEAD_STYLE, color=BLACK, lw=1.2,
-                                    shrinkA=0, shrinkB=0), zorder=5)
+        ax.annotate(
+            "",
+            xy=(c_x, ym),
+            xytext=(q_x + q_w, ym),
+            arrowprops=dict(arrowstyle=HEAD_STYLE, color=BLACK, lw=1.2, shrinkA=0, shrinkB=0),
+            zorder=5,
+        )
 
     out_dir = Path(__file__).resolve().parents[1] / "thesis" / "figures"
     out_dir.mkdir(parents=True, exist_ok=True)

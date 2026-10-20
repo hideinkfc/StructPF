@@ -131,16 +131,27 @@ def test_produced_flagged_pipeline_task_is_counted_and_rendered(tmp_path):
         "writer_attempts": [],
         "withheld": [],
     }
-    comparison.save(output / "001/pipeline/result.json", {
-        "status": "completed", "stages": {"D2_D3": {"task": task}},
-    })
-    comparison.save(output / "manifest.json", {
-        "case_name": "loibl_variance",
-        "attempts": [{
-            "number": 1, "method": "pipeline", "status": "completed",
-            "path": "001/pipeline/result.json",
-        }],
-    })
+    comparison.save(
+        output / "001/pipeline/result.json",
+        {
+            "status": "completed",
+            "stages": {"D2_D3": {"task": task}},
+        },
+    )
+    comparison.save(
+        output / "manifest.json",
+        {
+            "case_name": "loibl_variance",
+            "attempts": [
+                {
+                    "number": 1,
+                    "method": "pipeline",
+                    "status": "completed",
+                    "path": "001/pipeline/result.json",
+                }
+            ],
+        },
+    )
     assert comparison.task_is_produced(task)
     assert not comparison.task_is_produced({**task, "body": " "})
     assert not comparison.task_is_produced({**task, "status": "blocked"})
@@ -154,13 +165,19 @@ def test_produced_flagged_pipeline_task_is_counted_and_rendered(tmp_path):
 
 def test_review_counts_keep_unknown_separate_from_supported_choice():
     supported = {
-        "mathematics_status": "supported", "target": "preserved",
-        "accessible_start": "yes", "disclosure": "none", "consequential_choice": "yes",
+        "mathematics_status": "supported",
+        "target": "preserved",
+        "accessible_start": "yes",
+        "disclosure": "none",
+        "consequential_choice": "yes",
     }
-    counts = reporting.outcome_counts({
-        "first": supported, "second": {**supported, "mathematics_status": "unknown"},
-        "third": {**supported, "target": "narrowed"},
-    })
+    counts = reporting.outcome_counts(
+        {
+            "first": supported,
+            "second": {**supported, "mathematics_status": "unknown"},
+            "third": {**supported, "target": "narrowed"},
+        }
+    )
     assert counts["attempted"] == 3
     assert counts["mathematics_status/unknown"] == 1
     assert counts["supported_undisclosed_choice"] == 1

@@ -98,8 +98,7 @@ def render(grouped: dict[str, list[dict]]) -> str:
                 f'<rect x="{X0}" y="{by}" width="{width:.1f}" height="22" fill="{color}"/>'
             )
             parts.append(
-                f'<text x="{X0 + width + 10:.1f}" y="{by + 17}">'
-                f"{mean:.2f} (SD {sd:.2f})</text>"
+                f'<text x="{X0 + width + 10:.1f}" y="{by + 17}">{mean:.2f} (SD {sd:.2f})</text>'
             )
         d = cohens_d(a, b, dim)
         d_text = "n/a" if d is None else f"{d:.2f}"
@@ -142,10 +141,12 @@ def render_combined(grouped: dict[str, list[dict]]) -> str:
     ]
     legend_1 = [(name, color) for name, color in PAPER_MODELS]
     legend_2 = [(label, color) for _, label, color in MODELS]
-    for row, (legend, note) in enumerate([
-        (legend_1, "Rahimi et al. (paper): two trained human raters, n = 30 per model"),
-        (legend_2, f"This replication: two Luna AI passes, n = {len(a)} and {len(b)}"),
-    ]):
+    for row, (legend, note) in enumerate(
+        [
+            (legend_1, "Rahimi et al. (paper): two trained human raters, n = 30 per model"),
+            (legend_2, f"This replication: two Luna AI passes, n = {len(a)} and {len(b)}"),
+        ]
+    ):
         y = 22 + row * 30
         x = 0
         for name, color in legend:
@@ -165,9 +166,7 @@ def render_combined(grouped: dict[str, list[dict]]) -> str:
             f'<text x="0" y="{y + 58}" class="small">'
             f"d paper {PAPER[dim][2]:.2f} · ours {ours_text}</text>"
         )
-        paper_bars = [
-            (name, color, *PAPER[dim][j]) for j, (name, color) in enumerate(PAPER_MODELS)
-        ]
+        paper_bars = [(name, color, *PAPER[dim][j]) for j, (name, color) in enumerate(PAPER_MODELS)]
         our_bars = [
             (label, color, *describe(grouped[model], dim)[:2]) for model, label, color in MODELS
         ]

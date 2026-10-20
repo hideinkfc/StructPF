@@ -27,11 +27,7 @@ from src.utils.config import get_settings
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 DATA_PATH = PROJECT_ROOT / "data" / "eedi" / "test_set_200.json"
 RESULTS_PATH = (
-    PROJECT_ROOT
-    / "experiments"
-    / "results"
-    / "phase1_mcq"
-    / "basic_glm_correctness_pilot.json"
+    PROJECT_ROOT / "experiments" / "results" / "phase1_mcq" / "basic_glm_correctness_pilot.json"
 )
 MODEL = "zai-org/GLM-4.7-Flash"
 MAX_TOKENS = 8192
@@ -53,8 +49,7 @@ JUDGE_CACHE_PATH = (
 _JUDGE_CACHE_LOCK = threading.Lock()
 
 BASIC_SYSTEM_PROMPT = (
-    "You generate wrong answers for math multiple-choice questions. "
-    "Respond with a JSON array only."
+    "You generate wrong answers for math multiple-choice questions. Respond with a JSON array only."
 )
 BASIC_USER_TEMPLATE = """Generate exactly 3 wrong but plausible distractors for this math question.
 
@@ -122,10 +117,7 @@ def contains_image_placeholder(question: dict[str, Any]) -> bool:
 
 
 def is_viable(question: dict[str, Any]) -> bool:
-    option_texts = [
-        str(question.get(f"Answer{letter}Text", "") or "").strip()
-        for letter in "ABCD"
-    ]
+    option_texts = [str(question.get(f"Answer{letter}Text", "") or "").strip() for letter in "ABCD"]
     return (
         bool(str(question.get("QuestionText", "")).strip())
         and bool(answer_text(question))
@@ -325,7 +317,9 @@ def run_pilot(
 
     with ThreadPoolExecutor(max_workers=workers) as pool:
         futures = {
-            pool.submit(generate_distractors, question, client, structured_paths=structured_paths): question
+            pool.submit(
+                generate_distractors, question, client, structured_paths=structured_paths
+            ): question
             for question in questions
         }
         for completed, future in enumerate(as_completed(futures), start=1):
@@ -386,7 +380,7 @@ def evaluate_numeric_ast(node: ast.AST) -> Fraction:
         if isinstance(node.op, ast.Div) and right != 0:
             return left / right
         if isinstance(node.op, ast.Pow) and right.denominator == 1 and abs(right.numerator) <= 20:
-            return left ** right.numerator
+            return left**right.numerator
     raise ValueError("Unsupported numeric expression")
 
 
@@ -566,23 +560,49 @@ def evaluate_records(
         "expected_distractors": len(records) * 3,
         "usable_distractors": len(usable),
         "decisive_distractors": len(decisive),
-        "incorrect_distractors": int((decisive["status"] == "incorrect").sum()) if not decisive.empty else 0,
-        "accidentally_correct": int((decisive["status"] == "correct").sum()) if not decisive.empty else 0,
-        "unknown_equivalence": int((usable["status"] == "unknown").sum()) if not usable.empty else 0,
+        "incorrect_distractors": int((decisive["status"] == "incorrect").sum())
+        if not decisive.empty
+        else 0,
+        "accidentally_correct": int((decisive["status"] == "correct").sum())
+        if not decisive.empty
+        else 0,
+        "unknown_equivalence": int((usable["status"] == "unknown").sum())
+        if not usable.empty
+        else 0,
         "unusable": int((evaluation["status"] == "unusable").sum()) if not evaluation.empty else 0,
-        "incorrectness_rate": round(float((decisive["status"] == "incorrect").mean()), 3) if not decisive.empty else None,
-        "accidental_correct_rate": round(float((decisive["status"] == "correct").mean()), 3) if not decisive.empty else None,
-        "unknown_rate": round(float((usable["status"] == "unknown").mean()), 3) if not usable.empty else None,
+        "incorrectness_rate": round(float((decisive["status"] == "incorrect").mean()), 3)
+        if not decisive.empty
+        else None,
+        "accidental_correct_rate": round(float((decisive["status"] == "correct").mean()), 3)
+        if not decisive.empty
+        else None,
+        "unknown_rate": round(float((usable["status"] == "unknown").mean()), 3)
+        if not usable.empty
+        else None,
         "duplicate_distractors": int(evaluation["duplicate"].sum()) if not evaluation.empty else 0,
     }
     if include_derivation:
-        derivation_decisive = evaluation[evaluation["derivation_status"].isin(("pass", "fail"))] if not evaluation.empty else evaluation
+        derivation_decisive = (
+            evaluation[evaluation["derivation_status"].isin(("pass", "fail"))]
+            if not evaluation.empty
+            else evaluation
+        )
         summary_data.update(
             {
-                "derivation_pass": int((derivation_decisive["derivation_status"] == "pass").sum()) if not derivation_decisive.empty else 0,
-                "derivation_fail": int((derivation_decisive["derivation_status"] == "fail").sum()) if not derivation_decisive.empty else 0,
-                "derivation_unknown": int((evaluation["derivation_status"] == "unknown").sum()) if not evaluation.empty else 0,
-                "derivation_fidelity_rate": round(float((derivation_decisive["derivation_status"] == "pass").mean()), 3) if not derivation_decisive.empty else None,
+                "derivation_pass": int((derivation_decisive["derivation_status"] == "pass").sum())
+                if not derivation_decisive.empty
+                else 0,
+                "derivation_fail": int((derivation_decisive["derivation_status"] == "fail").sum())
+                if not derivation_decisive.empty
+                else 0,
+                "derivation_unknown": int((evaluation["derivation_status"] == "unknown").sum())
+                if not evaluation.empty
+                else 0,
+                "derivation_fidelity_rate": round(
+                    float((derivation_decisive["derivation_status"] == "pass").mean()), 3
+                )
+                if not derivation_decisive.empty
+                else None,
             }
         )
     summary = pd.DataFrame([summary_data])
@@ -663,9 +683,9 @@ Score 1 = possible but weak, ambiguous, or not especially tempting.
 Score 2 = likely: a recognizable error that could realistically attract the target students.
 Random numerical guesses with no recognizable connection to the question should receive 0.
 
-Question: {record['question_text']}
-Correct answer: {record['correct_answer']}
-Distractor: {distractor.get('text', '')}
+Question: {record["question_text"]}
+Correct answer: {record["correct_answer"]}
+Distractor: {distractor.get("text", "")}
 
 How likely is a middle-school student to select this distractor?"""
 
@@ -689,9 +709,23 @@ def evaluate_plausibility(
             score = int(result.get("score", -1))
             if score not in (0, 1, 2):
                 raise ValueError("score must be 0, 1, or 2")
-            return {"question_id": record["question_id"], "distractor_index": index, "repeat": repeat, "score": score, "reason": str(result.get("reason", "")), "cache_hit": cache_hit}
+            return {
+                "question_id": record["question_id"],
+                "distractor_index": index,
+                "repeat": repeat,
+                "score": score,
+                "reason": str(result.get("reason", "")),
+                "cache_hit": cache_hit,
+            }
         except Exception as error:
-                return {"question_id": record["question_id"], "distractor_index": index, "repeat": repeat, "score": None, "reason": f"{type(error).__name__}: {error}", "cache_hit": False}
+            return {
+                "question_id": record["question_id"],
+                "distractor_index": index,
+                "repeat": repeat,
+                "score": None,
+                "reason": f"{type(error).__name__}: {error}",
+                "cache_hit": False,
+            }
 
     with ThreadPoolExecutor(max_workers=min(WORKERS, max(1, len(tasks)))) as pool:
         rows = list(pool.map(run_one, tasks))
@@ -702,7 +736,16 @@ def evaluate_plausibility(
     summary_rows = []
     for (question_id, index), group in judged.groupby(["question_id", "distractor_index"]):
         score = int(round(float(np.median(group["score"].astype(int).tolist()))))
-        summary_rows.append({"question_id": question_id, "distractor_index": index, "plausibility_score": score, "plausible": score >= 1, "judge_calls": len(group), "cache_hits": int(group["cache_hit"].sum())})
+        summary_rows.append(
+            {
+                "question_id": question_id,
+                "distractor_index": index,
+                "plausibility_score": score,
+                "plausible": score >= 1,
+                "judge_calls": len(group),
+                "cache_hits": int(group["cache_hit"].sum()),
+            }
+        )
     return raw, pd.DataFrame(summary_rows)
 
 
@@ -715,9 +758,9 @@ def coherence_prompt(record: dict[str, Any], distractor: dict[str, Any]) -> str:
 Execute the steps without correcting them, then compare the final result with the distractor.
 Return JSON only: {{"final_from_steps": "...", "matches_text": true, "reason": "..."}}
 
-Question: {record['question_text']}
-Distractor text: {distractor.get('text', '')}
-Faulty step: {distractor.get('faulty_step', '')}
+Question: {record["question_text"]}
+Distractor text: {distractor.get("text", "")}
+Faulty step: {distractor.get("faulty_step", "")}
 Reasoning steps:
 {numbered_steps}
 
@@ -737,19 +780,69 @@ def evaluate_coherence(
         for index, distractor in enumerate(record.get("distractors", []), start=1):
             steps = distractor.get("reasoning_steps")
             if not steps:
-                rows.append({"question_id": record["question_id"], "distractor_index": index, "coherent": None, "status": "unknown", "reason": "missing reasoning_steps", "cache_hit": False})
+                rows.append(
+                    {
+                        "question_id": record["question_id"],
+                        "distractor_index": index,
+                        "coherent": None,
+                        "status": "unknown",
+                        "reason": "missing reasoning_steps",
+                        "cache_hit": False,
+                    }
+                )
                 continue
             try:
                 result, cache_hit = cached_judge_json(coherence_prompt(record, distractor), client)
                 coherent = result.get("matches_text", result.get("coherent"))
                 if coherent not in (True, False, None):
                     raise ValueError("matches_text must be true, false, or null")
-                rows.append({"question_id": record["question_id"], "distractor_index": index, "coherent": coherent, "final_from_steps": result.get("final_from_steps"), "status": "pass" if coherent is True else "fail" if coherent is False else "unknown", "reason": str(result.get("reason", "")), "cache_hit": cache_hit})
+                rows.append(
+                    {
+                        "question_id": record["question_id"],
+                        "distractor_index": index,
+                        "coherent": coherent,
+                        "final_from_steps": result.get("final_from_steps"),
+                        "status": "pass"
+                        if coherent is True
+                        else "fail"
+                        if coherent is False
+                        else "unknown",
+                        "reason": str(result.get("reason", "")),
+                        "cache_hit": cache_hit,
+                    }
+                )
             except Exception as error:
-                rows.append({"question_id": record["question_id"], "distractor_index": index, "coherent": None, "status": "unknown", "reason": f"{type(error).__name__}: {error}", "cache_hit": False})
+                rows.append(
+                    {
+                        "question_id": record["question_id"],
+                        "distractor_index": index,
+                        "coherent": None,
+                        "status": "unknown",
+                        "reason": f"{type(error).__name__}: {error}",
+                        "cache_hit": False,
+                    }
+                )
     details = pd.DataFrame(rows)
     decisive = details[details["status"].isin(("pass", "fail"))] if not details.empty else details
-    summary = pd.DataFrame([{"distractors_seen": len(details), "coherence_pass": int((decisive["status"] == "pass").sum()) if not decisive.empty else 0, "coherence_fail": int((decisive["status"] == "fail").sum()) if not decisive.empty else 0, "coherence_unknown": int((details["status"] == "unknown").sum()) if not details.empty else 0, "coherence_rate": float((decisive["status"] == "pass").mean()) if not decisive.empty else None}])
+    summary = pd.DataFrame(
+        [
+            {
+                "distractors_seen": len(details),
+                "coherence_pass": int((decisive["status"] == "pass").sum())
+                if not decisive.empty
+                else 0,
+                "coherence_fail": int((decisive["status"] == "fail").sum())
+                if not decisive.empty
+                else 0,
+                "coherence_unknown": int((details["status"] == "unknown").sum())
+                if not details.empty
+                else 0,
+                "coherence_rate": float((decisive["status"] == "pass").mean())
+                if not decisive.empty
+                else None,
+            }
+        ]
+    )
     return details, summary
 
 
@@ -757,15 +850,16 @@ def _pathway_text(label: str, distractor: dict[str, Any]) -> str:
     steps = distractor.get("reasoning_steps", [])
     if isinstance(steps, str):
         steps = [steps]
-    numbered_steps = "\n".join(
-        f"{index}. {step}" for index, step in enumerate(steps, start=1)
-    ) or "(not provided)"
-    return f"""{label} final answer: {distractor.get('text', '')}
-{label} faulty step: {distractor.get('faulty_step', '(not provided)')}
+    numbered_steps = (
+        "\n".join(f"{index}. {step}" for index, step in enumerate(steps, start=1))
+        or "(not provided)"
+    )
+    return f"""{label} final answer: {distractor.get("text", "")}
+{label} faulty step: {distractor.get("faulty_step", "(not provided)")}
 {label} reasoning steps:
 {numbered_steps}
-{label} claimed label: {distractor.get('target_misconception', '')}
-{label} rationale: {distractor.get('error_rationale', '')}"""
+{label} claimed label: {distractor.get("target_misconception", "")}
+{label} rationale: {distractor.get("error_rationale", "")}"""
 
 
 def _same_error_prompt(record: dict[str, Any], left: dict[str, Any], right: dict[str, Any]) -> str:
@@ -775,12 +869,12 @@ Two pathways have the same error type iff they arise from the same underlying fa
 to the correct solution. Compare the faulty steps and reasoning steps first. Use the claimed labels
 and rationales only as supporting context; different wording is not evidence of different errors.
 
-Question: {record['question_text']}
-Correct answer: {record['correct_answer']}
+Question: {record["question_text"]}
+Correct answer: {record["correct_answer"]}
 
-{_pathway_text('A', left)}
+{_pathway_text("A", left)}
 
-{_pathway_text('B', right)}
+{_pathway_text("B", right)}
 
 Are A and B the same underlying error type?"""
 
@@ -794,38 +888,87 @@ def evaluate_diversity(
     coherence: pd.DataFrame | None = None,
 ) -> tuple[pd.DataFrame, pd.DataFrame]:
     if plausibility is None or plausibility.empty:
-        result = pd.DataFrame([{"question_id": record["question_id"], "diversity": None, "valid_distractors": 0, "reason": "plausibility not measured"} for record in records])
+        result = pd.DataFrame(
+            [
+                {
+                    "question_id": record["question_id"],
+                    "diversity": None,
+                    "valid_distractors": 0,
+                    "reason": "plausibility not measured",
+                }
+                for record in records
+            ]
+        )
         return result, pd.DataFrame([{"questions_measured": 0, "mean_diversity": None}])
     correctness, _ = evaluate_records(records)
     derivation = {}
     if use_derivation:
         derivation = {
-            (record["question_id"], index): evaluate_derivation(distractor, record["correct_answer"], record["question_text"])[0]
+            (record["question_id"], index): evaluate_derivation(
+                distractor, record["correct_answer"], record["question_text"]
+            )[0]
             for record in records
             for index, distractor in enumerate(record.get("distractors", []), start=1)
         }
     valid: dict[int, list[dict[str, Any]]] = {}
     for record in records:
         for index, distractor in enumerate(record.get("distractors", []), start=1):
-            row = correctness[(correctness["question_id"] == record["question_id"]) & (correctness["distractor_index"] == index)]
-            p = plausibility[(plausibility["question_id"] == record["question_id"]) & (plausibility["distractor_index"] == index)]
-            derivation_ok = not use_derivation or derivation.get((record["question_id"], index)) == "pass"
-            coherence_ok = coherence is None or not coherence.empty and not coherence[(coherence["question_id"] == record["question_id"]) & (coherence["distractor_index"] == index)].empty and coherence[(coherence["question_id"] == record["question_id"]) & (coherence["distractor_index"] == index)].iloc[0]["status"] == "pass"
-            if not row.empty and row.iloc[0]["status"] == "incorrect" and not p.empty and bool(p.iloc[0]["plausible"]) and derivation_ok and coherence_ok:
+            row = correctness[
+                (correctness["question_id"] == record["question_id"])
+                & (correctness["distractor_index"] == index)
+            ]
+            p = plausibility[
+                (plausibility["question_id"] == record["question_id"])
+                & (plausibility["distractor_index"] == index)
+            ]
+            derivation_ok = (
+                not use_derivation or derivation.get((record["question_id"], index)) == "pass"
+            )
+            coherence_ok = (
+                coherence is None
+                or not coherence.empty
+                and not coherence[
+                    (coherence["question_id"] == record["question_id"])
+                    & (coherence["distractor_index"] == index)
+                ].empty
+                and coherence[
+                    (coherence["question_id"] == record["question_id"])
+                    & (coherence["distractor_index"] == index)
+                ].iloc[0]["status"]
+                == "pass"
+            )
+            if (
+                not row.empty
+                and row.iloc[0]["status"] == "incorrect"
+                and not p.empty
+                and bool(p.iloc[0]["plausible"])
+                and derivation_ok
+                and coherence_ok
+            ):
                 valid.setdefault(record["question_id"], []).append(distractor)
 
     rows = []
     for record in records:
         options = valid.get(record["question_id"], [])
         if len(options) < 2:
-            rows.append({"question_id": record["question_id"], "diversity": None, "valid_distractors": len(options), "reason": "fewer than two valid distractors"})
+            rows.append(
+                {
+                    "question_id": record["question_id"],
+                    "diversity": None,
+                    "valid_distractors": len(options),
+                    "reason": "fewer than two valid distractors",
+                }
+            )
             continue
         edges = []
         for left_index, right_index in itertools.combinations(range(len(options)), 2):
             decisions = []
             for _ in range(repeats):
                 try:
-                    result, _ = cached_judge_json(_same_error_prompt(record, options[left_index], options[right_index]), client)
+                    result, _ = cached_judge_json(
+                        _same_error_prompt(record, options[left_index], options[right_index]),
+                        client,
+                    )
                     decisions.append(bool(result["same_error"]))
                 except Exception:
                     pass
@@ -845,16 +988,39 @@ def evaluate_diversity(
                 if left_root != right_root:
                     parent[right_root] = left_root
         classes = len({find(index) for index in range(len(options))})
-        rows.append({"question_id": record["question_id"], "diversity": (classes - 1) / (len(options) - 1), "valid_distractors": len(options), "error_classes": classes, "reason": "pairwise faulty-step judgments"})
+        rows.append(
+            {
+                "question_id": record["question_id"],
+                "diversity": (classes - 1) / (len(options) - 1),
+                "valid_distractors": len(options),
+                "error_classes": classes,
+                "reason": "pairwise faulty-step judgments",
+            }
+        )
     result = pd.DataFrame(rows)
-    summary = pd.DataFrame([{"questions_measured": int(result["diversity"].notna().sum()) if not result.empty else 0, "mean_diversity": float(result["diversity"].mean()) if not result.empty and result["diversity"].notna().any() else None}])
+    summary = pd.DataFrame(
+        [
+            {
+                "questions_measured": int(result["diversity"].notna().sum())
+                if not result.empty
+                else 0,
+                "mean_diversity": float(result["diversity"].mean())
+                if not result.empty and result["diversity"].notna().any()
+                else None,
+            }
+        ]
+    )
     return result, summary
 
 
 def _maximum_matches(generated: list[str], human: list[str], matcher: Any) -> list[tuple[int, int]]:
     best: list[tuple[int, int]] = []
     for permutation in itertools.permutations(range(len(human)), min(len(generated), len(human))):
-        pairs = [(index, human_index) for index, human_index in enumerate(permutation) if matcher(generated[index], human[human_index])]
+        pairs = [
+            (index, human_index)
+            for index, human_index in enumerate(permutation)
+            if matcher(generated[index], human[human_index])
+        ]
         if len(pairs) > len(best):
             best = pairs
     return best
@@ -939,7 +1105,12 @@ def _llm_answer_match(
         if result.get("reason"):
             reasons.append(str(result["reason"]))
     if not decisions:
-        return None, reasons[-1] if reasons else "judge returned no decisive answer", len(decisions), cache_hits
+        return (
+            None,
+            reasons[-1] if reasons else "judge returned no decisive answer",
+            len(decisions),
+            cache_hits,
+        )
     true_count = sum(decisions)
     false_count = len(decisions) - true_count
     if true_count == false_count:
@@ -957,13 +1128,29 @@ def compute_pm(
     judge_model: str | None = None,
 ) -> dict[str, Any]:
     generated = [str(item.get("text", "")) for item in record.get("distractors", [])]
-    human = [str(question.get(f"Answer{letter}Text", "")) for letter in "ABCD" if letter != question.get("CorrectAnswer")]
-    normalized = lambda text: normalize_expression(text)
-    numeric = lambda text: parse_numeric_expression(text)
+    human = [
+        str(question.get(f"Answer{letter}Text", ""))
+        for letter in "ABCD"
+        if letter != question.get("CorrectAnswer")
+    ]
+
+    def normalized(text):
+        return normalize_expression(text)
+
+    def numeric(text):
+        return parse_numeric_expression(text)
+
     tiers = {
         "raw": lambda left, right: left.strip() == right.strip(),
         "normalized": lambda left, right: normalized(left) == normalized(right),
-        "typed": lambda left, right: (numeric(left) is not None and numeric(right) is not None and numeric(left) == numeric(right)) or canonical_answer_key(left) == canonical_answer_key(right),
+        "typed": lambda left, right: (
+            (
+                numeric(left) is not None
+                and numeric(right) is not None
+                and numeric(left) == numeric(right)
+            )
+            or canonical_answer_key(left) == canonical_answer_key(right)
+        ),
     }
     result: dict[str, Any] = {
         "question_id": record["question_id"],
@@ -1063,7 +1250,9 @@ def evaluate_pm(
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--run", action="store_true", help="Call GLM instead of loading saved results.")
+    parser.add_argument(
+        "--run", action="store_true", help="Call GLM instead of loading saved results."
+    )
     parser.add_argument("--sample-size", type=int, default=SAMPLE_SIZE)
     parser.add_argument("--seed", type=int, default=RANDOM_SEED)
     parser.add_argument("--workers", type=int, default=WORKERS)

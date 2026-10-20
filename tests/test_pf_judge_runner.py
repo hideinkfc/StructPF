@@ -10,15 +10,18 @@ from src.evaluation.pf_rubric import DIMENSIONS
 
 
 def response(score=2):
-    return json.dumps({
-        **{key: {"evidence": "Specific evidence.", "score": score} for key in DIMENSIONS},
-        "mathematical_concerns": [],
-    })
+    return json.dumps(
+        {
+            **{key: {"evidence": "Specific evidence.", "score": score} for key in DIMENSIONS},
+            "mathematical_concerns": [],
+        }
+    )
 
 
 def case():
     return {
-        "case_id": "case", "kind": "saved_pipeline_task",
+        "case_id": "case",
+        "kind": "saved_pipeline_task",
         "user_prompt": '{"student_task": "Compare."}',
     }
 
@@ -28,19 +31,29 @@ def test_saved_case_uses_current_task_and_sanitized_context(tmp_path):
         "case_id": "example",
         "task": {"status": "ready", "title": "New", "body": "Values", "question": "Explain"},
         "source_task": {"body": "SECRET_OLD_TASK"},
-        "new_writer_context": {"student_context": {
-            "grade": "7", "target_concept": "SECRET_TARGET",
-            "assumed_prior_knowledge": [{
-                "resource": "Division", "taught_as": "Divide whole numbers",
-                "falls_short_because": "SECRET_FAILURE",
-            }],
-        }},
+        "new_writer_context": {
+            "student_context": {
+                "grade": "7",
+                "target_concept": "SECRET_TARGET",
+                "assumed_prior_knowledge": [
+                    {
+                        "resource": "Division",
+                        "taught_as": "Divide whole numbers",
+                        "falls_short_because": "SECRET_FAILURE",
+                    }
+                ],
+            }
+        },
     }
     (tmp_path / "result.json").write_text(json.dumps(source))
     audit_path = tmp_path / "audit.json"
-    audit_path.write_text(json.dumps({
-        "cases": [{"case_id": "example", "replay_result": "result.json"}],
-    }))
+    audit_path.write_text(
+        json.dumps(
+            {
+                "cases": [{"case_id": "example", "replay_result": "result.json"}],
+            }
+        )
+    )
     saved = load_saved_cases(audit_path, ["example"], tmp_path)[0]
     assert "SECRET" not in saved["user_prompt"]
     assert "New" in saved["user_prompt"]
@@ -53,10 +66,18 @@ def test_saved_case_uses_current_task_and_sanitized_context(tmp_path):
 
 def test_controls_labelled_in_artifact_not_judge_input(tmp_path):
     path = tmp_path / "controls.json"
-    path.write_text(json.dumps([{
-        "case_id": "control", "purpose": "SECRET_EXPECTATION",
-        "student_task": "24 / 6", "learner_context": {"grade": "7"},
-    }]))
+    path.write_text(
+        json.dumps(
+            [
+                {
+                    "case_id": "control",
+                    "purpose": "SECRET_EXPECTATION",
+                    "student_task": "24 / 6",
+                    "learner_context": {"grade": "7"},
+                }
+            ]
+        )
+    )
     control = load_controls(path)[0]
     assert control["kind"] == "synthetic_control_not_human_rated"
     assert "SECRET" not in control["user_prompt"]
@@ -123,7 +144,8 @@ def test_luna_run_saves_prompt_response_settings_and_computed_total(tmp_path):
 
 def test_failed_run_not_success_shaped(tmp_path):
     summary = run_cases(
-        [case()], tmp_path / "run",
+        [case()],
+        tmp_path / "run",
         client_loader=lambda _: (None, "gpt-5.6-luna"),
         chat=lambda *a, **k: (None, "not JSON"),
     )
@@ -136,19 +158,23 @@ def test_failed_run_not_success_shaped(tmp_path):
 def test_notebook_wires_shared_judge_without_generating_or_sending_teacher_notes():
     path = Path(__file__).resolve().parents[1] / "notebooks/05_pf_evaluation_round1.ipynb"
     notebook = json.loads(path.read_text())
-    sources = [
-        "".join(cell["source"]) for cell in notebook["cells"] if cell["cell_type"] == "code"
-    ]
+    sources = ["".join(cell["source"]) for cell in notebook["cells"] if cell["cell_type"] == "code"]
     for source in sources:
         compile(source, str(path), "exec")
     assert any('load_client("luna")' in source for source in sources)
-    exercises = [SimpleNamespace(
-        version="V2", grade="7", raw_output="SECRET_RAW",
-        sections={
-            "TOPIC": "SECRET_TARGET", "NARRATIVE": "Student context.",
-            "TASK": "Compare.", "CONSOLIDATION NOTE": "SECRET_SOLUTION",
-        },
-    )]
+    exercises = [
+        SimpleNamespace(
+            version="V2",
+            grade="7",
+            raw_output="SECRET_RAW",
+            sections={
+                "TOPIC": "SECRET_TARGET",
+                "NARRATIVE": "Student context.",
+                "TASK": "Compare.",
+                "CONSOLIDATION NOTE": "SECRET_SOLUTION",
+            },
+        )
+    ]
     scope = {"exercises": exercises, "judge_client": None, "judge_model": "gpt-5.6-luna"}
     exec(next(source for source in sources if "def judge_input_for" in source), scope)
     seen = []

@@ -36,27 +36,31 @@ def test_mr_and_oe_clarify_without_requiring_a_new_gate():
 
 
 def test_v2_1_rating_input_drops_teacher_trace_and_method_labels():
-    text = pf_rubric_v2_1.student_task_text({
-        "status": "ready",
-        "title": "Compare two groups",
-        "body": "Their scores are listed.",
-        "question": "What can you conclude?",
-        "condition": "PIPELINE",
-        "teacher_trace": "SECRET_TRACE",
-        "teacher_label": "SECRET_LABEL",
-        "review_result": "SECRET_REVIEW",
-    })
+    text = pf_rubric_v2_1.student_task_text(
+        {
+            "status": "ready",
+            "title": "Compare two groups",
+            "body": "Their scores are listed.",
+            "question": "What can you conclude?",
+            "condition": "PIPELINE",
+            "teacher_trace": "SECRET_TRACE",
+            "teacher_label": "SECRET_LABEL",
+            "review_result": "SECRET_REVIEW",
+        }
+    )
     user = pf_rubric_v2_1.judge_input(
         text,
         {
             "grade": 7,
             "subject": "mathematics",
             "jurisdiction": "USA",
-            "assumed_prior_knowledge": [{
-                "resource": "Unit rates",
-                "taught_as": "Compute rates.",
-                "teacher_trace": "SECRET_CONTEXT_TRACE",
-            }],
+            "assumed_prior_knowledge": [
+                {
+                    "resource": "Unit rates",
+                    "taught_as": "Compute rates.",
+                    "teacher_trace": "SECRET_CONTEXT_TRACE",
+                }
+            ],
             "condition": "V1",
             "teacher_trace": "SECRET_CONTEXT_TRACE",
             "teacher_label": "SECRET_CONTEXT_LABEL",
@@ -77,9 +81,9 @@ def test_v4_frozen_direct_and_pipeline_prompts_both_include_all_anchors():
     snapshot = source / manifest["source_snapshot_dir"]
     direct = snapshot / "src/generation/prompts/pf_paper_benchmark.yaml"
     pipeline = snapshot / "src/generation/prompts/situation_skeletons.yaml"
-    assert all(anchor in direct.read_text() for anchor in _anchors(
-        pf_rubric.load_prompt()["system"]
-    ))
-    assert all(anchor in pipeline.read_text() for anchor in _anchors(
-        pf_rubric.load_prompt()["system"]
-    ))
+    assert all(
+        anchor in direct.read_text() for anchor in _anchors(pf_rubric.load_prompt()["system"])
+    )
+    assert all(
+        anchor in pipeline.read_text() for anchor in _anchors(pf_rubric.load_prompt()["system"])
+    )

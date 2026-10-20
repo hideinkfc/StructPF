@@ -41,7 +41,8 @@ def page(title: str, body: str) -> str:
 def task_block(entry: dict) -> str:
     task = entry.get("task") or {}
     return "".join(
-        f"<h3>{esc(task.get('title', 'Unavailable task'))}</h3>" if key == "title"
+        f"<h3>{esc(task.get('title', 'Unavailable task'))}</h3>"
+        if key == "title"
         else f"<pre>{esc(task.get(key, 'Not supplied'))}</pre>"
         for key in ("title", "body", "question")
     )
@@ -69,13 +70,15 @@ def review_pack(output: Path, catalog: list[dict]) -> None:
         try:
             context = (
                 learner_context(entry["learner_context"])
-                if isinstance(entry.get("learner_context"), dict) else None
+                if isinstance(entry.get("learner_context"), dict)
+                else None
             )
         except (ValueError, TypeError) as error:
             context = None
             context_error = f"{type(error).__name__}: {error}"
         public = {
-            "review_id": identifier, "task": entry.get("task"),
+            "review_id": identifier,
+            "task": entry.get("task"),
             "learning_target": entry.get("learning_target"),
             "learner_context": context,
             "context_error": context_error,
@@ -85,11 +88,17 @@ def review_pack(output: Path, catalog: list[dict]) -> None:
         body += (
             f"<article><h2>{identifier}</h2><p><strong>Target:</strong> {esc(entry.get('learning_target'))}</p>"
             f"<p><strong>Prior context:</strong> {esc(json.dumps(context, ensure_ascii=False))}</p>"
-            f"{task_block(entry)}<ol>" + "".join(f"<li>{esc(question)}<p>Response: ____________________</p></li>" for question in questions)
+            f"{task_block(entry)}<ol>"
+            + "".join(
+                f"<li>{esc(question)}<p>Response: ____________________</p></li>"
+                for question in questions
+            )
             + "</ol></article>"
         )
     (output / "review_pack_labels_hidden.html").write_text(page("Labels-hidden task review", body))
-    (output / "review_pack_labels_hidden.json").write_text(json.dumps(entries, indent=2, ensure_ascii=False) + "\n")
+    (output / "review_pack_labels_hidden.json").write_text(
+        json.dumps(entries, indent=2, ensure_ascii=False) + "\n"
+    )
     (output / "review_pack_mapping_private.json").write_text(json.dumps(mapping, indent=2) + "\n")
 
 
@@ -97,9 +106,7 @@ def report_run(output: Path) -> None:
     summary = load(output / "summary.json")
     manifest = load(output / "manifest.json")
     catalog = load(output / "catalog.json")["tasks"]
-    judgments = [
-        json.loads(line) for line in (output / "judgments.jsonl").read_text().splitlines()
-    ]
+    judgments = [json.loads(line) for line in (output / "judgments.jsonl").read_text().splitlines()]
     indexed = {(row["task_id"], row["judge"]): row for row in judgments}
     catalog_index = {entry["task_id"]: entry for entry in catalog}
     review_pack(output, catalog)
@@ -158,34 +165,40 @@ def report_run(output: Path) -> None:
         "|---|---:|---:|---:|---:|",
     ]
     for name, counts in summary["rates"].items():
-        text.append(f"| {name} | {counts['pass']} | {counts['concern']} | {counts['unknown']} | {counts['denominator_all_catalog_tasks']} |")
-    text.extend([
-        "",
-        "The fixed checklist is the conjunction of mathematics, target relevance, accessible start, preserved "
-        "discovery, and consequential choice. It is NOT all PF requirements. Idea diversity is separate. "
-        "Mathematics support means model-supported/no confirmed concern, with model_recomputed and "
-        "source-grounded exact arithmetic witnesses; it is not proof "
-        "that every requirement is consistent. Math concerns remain unresolved; unsupported arithmetic stays unknown.",
-        "",
-        "## Agreement and quotation fidelity",
-        "",
-        "| Property | Matched paired categories | Parsed pairs | Known pairs | Agreement on known pairs |",
-        "|---|---:|---:|---:|---:|",
-    ])
+        text.append(
+            f"| {name} | {counts['pass']} | {counts['concern']} | {counts['unknown']} | {counts['denominator_all_catalog_tasks']} |"
+        )
+    text.extend(
+        [
+            "",
+            "The fixed checklist is the conjunction of mathematics, target relevance, accessible start, preserved "
+            "discovery, and consequential choice. It is NOT all PF requirements. Idea diversity is separate. "
+            "Mathematics support means model-supported/no confirmed concern, with model_recomputed and "
+            "source-grounded exact arithmetic witnesses; it is not proof "
+            "that every requirement is consistent. Math concerns remain unresolved; unsupported arithmetic stays unknown.",
+            "",
+            "## Agreement and quotation fidelity",
+            "",
+            "| Property | Matched paired categories | Parsed pairs | Known pairs | Agreement on known pairs |",
+            "|---|---:|---:|---:|---:|",
+        ]
+    )
     for name, values in summary["agreement"].items():
         text.append(
             f"| {name} | {values['matched_categories']} | {values['paired_parsed_denominator']} | "
             f"{values['known_pair_denominator']} | {values['agreement_known_pairs']} |"
         )
     fidelity = summary["quote_fidelity"]
-    text.extend([
-        "",
-        f"Exact source fidelity: {fidelity['verified_exact_quotes']} of {fidelity['quoted_spans_checked']} "
-        "finding quotes matched contiguous task text. Exact quote matching checks source fidelity, not the interpretation.",
-        "",
-        "## Frozen instrument controls",
-        "",
-    ])
+    text.extend(
+        [
+            "",
+            f"Exact source fidelity: {fidelity['verified_exact_quotes']} of {fidelity['quoted_spans_checked']} "
+            "finding quotes matched contiguous task text. Exact quote matching checks source fidelity, not the interpretation.",
+            "",
+            "## Frozen instrument controls",
+            "",
+        ]
+    )
     calibration = summary["execution"].get("calibration")
     if calibration:
         for key, values in calibration["by_role_and_judge"].items():
@@ -195,10 +208,13 @@ def report_run(output: Path) -> None:
             )
         mismatches = [row for row in calibration["rows"] if not row["matches"]]
         unavailable = sum(row.get("field_validation_error") is not None for row in mismatches)
-        text.extend([
-            "", f"{len(mismatches)} expected property checks did not match, including "
-            f"{unavailable} unavailable because of field validation failure. No prompt tuning followed these results.",
-        ])
+        text.extend(
+            [
+                "",
+                f"{len(mismatches)} expected property checks did not match, including "
+                f"{unavailable} unavailable because of field validation failure. No prompt tuning followed these results.",
+            ]
+        )
         for row in mismatches:
             text.append(
                 f"- {row['task_id']} / {row['judge']} / {row['property']}: expected "
@@ -206,67 +222,87 @@ def report_run(output: Path) -> None:
             )
     else:
         text.append("No controls were run in this caller-supplied catalog.")
-    text.extend([
-        "",
-        "## Judge direction and unresolved review queue",
-        "",
-        "Agreement does not establish validity. Raw status distributions are retained separately from "
-        "pass/concern/unknown decisions so that partial evidence is not mistaken for approval.",
-        "",
-    ])
+    text.extend(
+        [
+            "",
+            "## Judge direction and unresolved review queue",
+            "",
+            "Agreement does not establish validity. Raw status distributions are retained separately from "
+            "pass/concern/unknown decisions so that partial evidence is not mistaken for approval.",
+            "",
+        ]
+    )
     for judge, properties in summary["judge_status_distributions"].items():
-        for name in ("preserved_discovery", "consequential_choice", "distinct_mathematical_ideas", "useful_prior_contrast"):
+        for name in (
+            "preserved_discovery",
+            "consequential_choice",
+            "distinct_mathematical_ideas",
+            "useful_prior_contrast",
+        ):
             text.append(f"- {judge}, {name}: {properties[name]}.")
     review_ids = [
-        row["task_id"] for row in summary["rows"]
-        if any("concern" in values for name, values in row["individual_decisions"].items()
-               if name in FINDINGS or name.startswith("anchor_"))
-        and not row["agreed_additional_concerns"] and not row["agreed_original_anchor_tensions"]
+        row["task_id"]
+        for row in summary["rows"]
+        if any(
+            "concern" in values
+            for name, values in row["individual_decisions"].items()
+            if name in FINDINGS or name.startswith("anchor_")
+        )
+        and not row["agreed_additional_concerns"]
+        and not row["agreed_original_anchor_tensions"]
     ]
-    text.extend([
-        "",
-        f"{len(review_ids)} tasks have a one-judge evidence concern without two-judge agreement. "
-        "They are disputed review candidates, not verified issues. A judge that nearly always supports "
-        "a property may be lenient, so zero consensus concerns must not be read as a validated positive result.",
-        "",
-    ])
+    text.extend(
+        [
+            "",
+            f"{len(review_ids)} tasks have a one-judge evidence concern without two-judge agreement. "
+            "They are disputed review candidates, not verified issues. A judge that nearly always supports "
+            "a property may be lenient, so zero consensus concerns must not be read as a validated positive result.",
+            "",
+        ]
+    )
     if summary.get("analysis_correction"):
-        text.extend([
-            "A runtime-only analysis correction was applied after collection. The frozen prompt, responses, "
-            "selection and original ratings were unchanged; original analysis is preserved in analysis_original_v1. "
-            "The correction enforces the predeclared unresolved-mathematics policy and adds transparent raw vote "
-            "counts. It did not change this study's headline counts.",
-            "",
-        ])
+        text.extend(
+            [
+                "A runtime-only analysis correction was applied after collection. The frozen prompt, responses, "
+                "selection and original ratings were unchanged; original analysis is preserved in analysis_original_v1. "
+                "The correction enforces the predeclared unresolved-mathematics policy and adds transparent raw vote "
+                "counts. It did not change this study's headline counts.",
+                "",
+            ]
+        )
     if summary.get("parser_correction"):
-        text.extend([
-            "This is the V1.3 mechanical parser sidecar. The prompt, task sample, original ratings and "
-            "raw model responses are unchanged, and no new calls were made. Field-local validation retains "
-            "valid findings beside invalid fields; invalid fields remain unknown with their raw data and "
-            "explicit validation errors. Strict quoted concern witnesses are accepted as typed evidence, "
-            "not converted into prose. Previous reports are archived in previous_analysis_v1_2. "
-            "See [old versus corrected counts](comparison_to_previous.json).",
-            "",
-        ])
+        text.extend(
+            [
+                "This is the V1.3 mechanical parser sidecar. The prompt, task sample, original ratings and "
+                "raw model responses are unchanged, and no new calls were made. Field-local validation retains "
+                "valid findings beside invalid fields; invalid fields remain unknown with their raw data and "
+                "explicit validation errors. Strict quoted concern witnesses are accepted as typed evidence, "
+                "not converted into prose. Previous reports are archived in previous_analysis_v1_2. "
+                "See [old versus corrected counts](comparison_to_previous.json).",
+                "",
+            ]
+        )
     execution = summary["execution"]
-    text.extend([
-        "",
-        "## Execution and limitations",
-        "",
-        f"Recorded requests: {execution['actual_model_requests']} (cap {execution['request_cap']}); "
-        f"prompt tokens {execution['total_prompt_tokens']}; completion tokens {execution['total_completion_tokens']}. "
-        "Each saved request has a response ID when returned, token usage, latency, raw/parsed output and input hash. No automatic retries.",
-        "",
-        "Unknowns and disagreements are retained in the full catalog denominator. Known-only coverage is reported "
-        "separately in summary.json and must not be treated as unconditional performance. Two judges can share "
-        "biases; exact arithmetic cannot verify arbitrary semantics; no human ratings or student attempts have "
-        "been collected. No cross-topic or causal generation-improvement claim follows.",
-        "",
-        "Review artifacts: [labels-hidden pack](review_pack_labels_hidden.html), "
-        "[same-task gallery with historical ratings revealed](same_task_issue_gallery.html), "
-        "[disputed same-task review candidates](same_task_disagreement_gallery.html), "
-        "[full summary](summary.json), [calibration details](calibration_summary.json).",
-    ])
+    text.extend(
+        [
+            "",
+            "## Execution and limitations",
+            "",
+            f"Recorded requests: {execution['actual_model_requests']} (cap {execution['request_cap']}); "
+            f"prompt tokens {execution['total_prompt_tokens']}; completion tokens {execution['total_completion_tokens']}. "
+            "Each saved request has a response ID when returned, token usage, latency, raw/parsed output and input hash. No automatic retries.",
+            "",
+            "Unknowns and disagreements are retained in the full catalog denominator. Known-only coverage is reported "
+            "separately in summary.json and must not be treated as unconditional performance. Two judges can share "
+            "biases; exact arithmetic cannot verify arbitrary semantics; no human ratings or student attempts have "
+            "been collected. No cross-topic or causal generation-improvement claim follows.",
+            "",
+            "Review artifacts: [labels-hidden pack](review_pack_labels_hidden.html), "
+            "[same-task gallery with historical ratings revealed](same_task_issue_gallery.html), "
+            "[disputed same-task review candidates](same_task_disagreement_gallery.html), "
+            "[full summary](summary.json), [calibration details](calibration_summary.json).",
+        ]
+    )
     markdown = "\n".join(text) + "\n"
     (output / "report.md").write_text(markdown)
     try:
@@ -278,11 +314,15 @@ def report_run(output: Path) -> None:
     (output / "report.html").write_text(page("Same-task measurement-gap report", body))
     gallery = (
         '<p class="note">Historical ratings are revealed here AFTER blind audit. '
-        'Agreed concerns are computational evidence candidates, not human adjudications or proof of learner failure.</p>'
+        "Agreed concerns are computational evidence candidates, not human adjudications or proof of learner failure.</p>"
     )
     gallery_rows = []
     for row in summary["rows"]:
-        if not row["agreed_additional_concerns"] and not row["agreed_original_anchor_tensions"] and not row["unresolved_mathematical_concern_judges"]:
+        if (
+            not row["agreed_additional_concerns"]
+            and not row["agreed_original_anchor_tensions"]
+            and not row["unresolved_mathematical_concern_judges"]
+        ):
             continue
         entry = catalog_index[row["task_id"]]
         gallery_rows.append(row["task_id"])
@@ -307,7 +347,8 @@ def report_run(output: Path) -> None:
             for name in properties:
                 finding = (
                     result["audit"]["original_high_anchor_support"][name[7:]]
-                    if name.startswith("anchor_") else result["audit"][name]
+                    if name.startswith("anchor_")
+                    else result["audit"][name]
                 )
                 gallery += f"<h4>{esc(name)}</h4><p>{esc(finding['reason'])}</p>"
                 for quote in finding["task_quotes"]:
@@ -317,7 +358,9 @@ def report_run(output: Path) -> None:
         gallery += "</article>"
     if not gallery_rows:
         gallery += "<p>No agreed concerns or unresolved math concerns were observed.</p>"
-    (output / "same_task_issue_gallery.html").write_text(page("Same-task paired evidence gallery", gallery))
+    (output / "same_task_issue_gallery.html").write_text(
+        page("Same-task paired evidence gallery", gallery)
+    )
     (output / "gallery_index.json").write_text(json.dumps({"tasks": gallery_rows}, indent=2) + "\n")
     disputed = '<p class="note">One-judge concerns without consensus. These are NOT verified issues. Historical scores are revealed after the blind audit for human interpretation review.</p>'
     for task_id in review_ids:
@@ -337,26 +380,37 @@ def report_run(output: Path) -> None:
                     continue
                 finding = (
                     result["audit"]["original_high_anchor_support"][name[7:]]
-                    if name.startswith("anchor_") else result["audit"][name]
+                    if name.startswith("anchor_")
+                    else result["audit"][name]
                 )
                 disputed += (
                     f"<h4>{esc(judge)}: {esc(finding['status'])}</h4><p>{esc(finding['reason'])}</p>"
-                    + "".join(f"<blockquote>{esc(quote)}</blockquote>" for quote in finding["task_quotes"])
+                    + "".join(
+                        f"<blockquote>{esc(quote)}</blockquote>" for quote in finding["task_quotes"]
+                    )
                     + f"<p>Counterevidence: {esc(finding['counterevidence'])}</p>"
                 )
         disputed += "</article>"
     if not review_ids:
         disputed += "<p>No one-judge concerns were observed.</p>"
-    (output / "same_task_disagreement_gallery.html").write_text(page("Disputed same-task review candidates", disputed))
-    (output / "disagreement_gallery_index.json").write_text(json.dumps({"tasks": review_ids}, indent=2) + "\n")
+    (output / "same_task_disagreement_gallery.html").write_text(
+        page("Disputed same-task review candidates", disputed)
+    )
+    (output / "disagreement_gallery_index.json").write_text(
+        json.dumps({"tasks": review_ids}, indent=2) + "\n"
+    )
     arm_rates = {}
     for arm in sorted({row["arm"] for row in summary["rows"]}):
         rows = [row for row in summary["rows"] if row["arm"] == arm]
         arm_rates[arm] = {
             "tasks": len(rows),
             "fixed_checklist_counts": dict(Counter(row["fixed_checklist"] for row in rows)),
-            "additional_concern_tasks": sum(bool(row["agreed_additional_concerns"]) for row in rows),
-            "anchor_tension_tasks": sum(bool(row["agreed_original_anchor_tensions"]) for row in rows),
+            "additional_concern_tasks": sum(
+                bool(row["agreed_additional_concerns"]) for row in rows
+            ),
+            "anchor_tension_tasks": sum(
+                bool(row["agreed_original_anchor_tensions"]) for row in rows
+            ),
             "property_counts": {
                 name: dict(Counter(row["consensus"][name] for row in rows)) for name in FINDINGS
             },

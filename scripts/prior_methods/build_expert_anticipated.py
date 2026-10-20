@@ -30,8 +30,10 @@ CONCEPT_LINK = {
     "kerrigan2021_invention_1": [],
 }
 
-NOT_A_METHOD = {"Discover the standoff (Cleo & Beatrice both need piece 2)",
-                "Struggle with resolution — this is where productive failure occurs"}
+NOT_A_METHOD = {
+    "Discover the standoff (Cleo & Beatrice both need piece 2)",
+    "Struggle with resolution — this is where productive failure occurs",
+}
 
 
 def norm_dict_method(m: dict) -> dict:
@@ -80,13 +82,15 @@ def main() -> None:
                     methods.append(nm)
             if not methods:
                 continue
-            records.append({
-                "exercise": ex_id,
-                "source": source,
-                "topic": ex.get("topic"),
-                "closest_benchmark_concepts": CONCEPT_LINK.get(ex_id, []),
-                "methods": methods,
-            })
+            records.append(
+                {
+                    "exercise": ex_id,
+                    "source": source,
+                    "topic": ex.get("topic"),
+                    "closest_benchmark_concepts": CONCEPT_LINK.get(ex_id, []),
+                    "methods": methods,
+                }
+            )
 
     OUT.write_text(json.dumps(records, indent=2, ensure_ascii=False) + "\n")
     for r in records:

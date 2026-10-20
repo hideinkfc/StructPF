@@ -77,10 +77,12 @@ def load_old() -> list[dict]:
     rows = []
     for case_id in cohort["case_ids"]:
         result = json.loads((OLD_JOBS / f"{case_id}.json").read_text())["result"]
-        rows.append({
-            "family": family_from_target(by_id[case_id]["learning_target"]),
-            "values": [verdict_to_value(result["measures"][m]) for m, _ in MEASURES],
-        })
+        rows.append(
+            {
+                "family": family_from_target(by_id[case_id]["learning_target"]),
+                "values": [verdict_to_value(result["measures"][m]) for m, _ in MEASURES],
+            }
+        )
     return rows
 
 
@@ -88,10 +90,12 @@ def load_round(root: Path) -> list[dict]:
     rows = []
     for path in sorted((root / "evaluations").glob("*.json")):
         measures = json.loads(path.read_text())["v29"]["measures"]
-        rows.append({
-            "family": family_from_case_id(path.stem),
-            "values": [verdict_to_value(measures[m]) for m, _ in MEASURES],
-        })
+        rows.append(
+            {
+                "family": family_from_case_id(path.stem),
+                "values": [verdict_to_value(measures[m]) for m, _ in MEASURES],
+            }
+        )
     return rows
 
 
@@ -112,10 +116,17 @@ def main() -> None:
     summary = {}
     for label, rows in sets.items():
         passes, evaluated, all_five, fully_run = summarize(rows)
-        summary[label] = {"n": len(rows), "fully_run": fully_run, "all_five": all_five,
-                          "passes": passes, "evaluated": evaluated}
-        print(f"{label:<18} n={len(rows)} fully_run={fully_run} all_five={all_five} "
-              f"passes={passes} evaluated={evaluated}")
+        summary[label] = {
+            "n": len(rows),
+            "fully_run": fully_run,
+            "all_five": all_five,
+            "passes": passes,
+            "evaluated": evaluated,
+        }
+        print(
+            f"{label:<18} n={len(rows)} fully_run={fully_run} all_five={all_five} "
+            f"passes={passes} evaluated={evaluated}"
+        )
 
     fig = plt.figure(figsize=(15, 7.2))
     grid = fig.add_gridspec(1, 2, width_ratios=[1.3, 1])
@@ -128,8 +139,9 @@ def main() -> None:
             blocks.append(r["values"])
             labels.append(f"{label} · {FAMILY_LABEL[r['family']]}")
     matrix = np.array(blocks, dtype=float)
-    all_five_col = np.where(np.isnan(matrix).any(axis=1), NOT_RUN,
-                            (matrix == 1).all(axis=1).astype(float))
+    all_five_col = np.where(
+        np.isnan(matrix).any(axis=1), NOT_RUN, (matrix == 1).all(axis=1).astype(float)
+    )
     full = np.column_stack([matrix, all_five_col])
     display = np.where(np.isnan(full), 0.5, full)
     cmap = matplotlib.colors.ListedColormap(["#e3e8ee", "#c9ced6", "#2f6f4a"])
@@ -146,8 +158,11 @@ def main() -> None:
             text = "not run" if np.isnan(v) else ("yes" if v == 1 else "no")
             color = "white" if v == 1 else "#4a5560"
             ax.text(x, y, text, ha="center", va="center", fontsize=7.5, color=color)
-    ax.set_title("(a) Each task and measure: green = yes, grey = no, light grey = not run",
-                 loc="left", fontsize=10.5)
+    ax.set_title(
+        "(a) Each task and measure: green = yes, grey = no, light grey = not run",
+        loc="left",
+        fontsize=10.5,
+    )
     ax.tick_params(length=0)
     for spine in ax.spines.values():
         spine.set_visible(False)
@@ -176,12 +191,14 @@ def main() -> None:
 
     old = summary["Old pipeline"]
     fig.text(
-        0.01, 0.012,
+        0.01,
+        0.012,
         f"Computational model judgments (pf-three-role v2.9), not human ratings. Old pipeline: "
         f"{old['fully_run']} of {old['n']} tasks fully evaluated "
         "(one hit the model-call budget and is not run). "
         "Generalized check: 3 tasks, one repeat per family.",
-        fontsize=8, color="#4a5560",
+        fontsize=8,
+        color="#4a5560",
     )
     fig.tight_layout(rect=[0, 0.035, 1, 1])
     OUT_PNG.parent.mkdir(parents=True, exist_ok=True)

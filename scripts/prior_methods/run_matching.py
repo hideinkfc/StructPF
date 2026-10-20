@@ -39,31 +39,53 @@ def render(template: str, values: dict) -> str:
     return out
 
 
-def match_one(client, model, matcher_system, matcher_user_tmpl,
-              package, gt_list, gen, m_idx, method):
-    user = render(matcher_user_tmpl, {
-        "{topic}": package["anchor"]["topic"],
-        "{general_procedure}": method.get("general_procedure", ""),
-        "{student_thinking}": method.get("student_thinking", ""),
-        "{ground_truth_list}": gt_list,
-    })
+def match_one(
+    client, model, matcher_system, matcher_user_tmpl, package, gt_list, gen, m_idx, method
+):
+    user = render(
+        matcher_user_tmpl,
+        {
+            "{topic}": package["anchor"]["topic"],
+            "{general_procedure}": method.get("general_procedure", ""),
+            "{student_thinking}": method.get("student_thinking", ""),
+            "{ground_truth_list}": gt_list,
+        },
+    )
     key = {
-        "concept_id": gen["concept_id"], "model_label": gen["model_label"],
-        "repeat": gen["repeat"], "method_index": m_idx,
+        "concept_id": gen["concept_id"],
+        "model_label": gen["model_label"],
+        "repeat": gen["repeat"],
+        "method_index": m_idx,
     }
     try:
-        payload, raw = chat_json(client, model, matcher_system, user,
-                                 temperature=0.0, max_tokens=300)
+        payload, raw = chat_json(
+            client, model, matcher_system, user, temperature=0.0, max_tokens=300
+        )
         if payload is None:
-            return {**key, "matched_error_index": None, "confidence": None,
-                    "reason": f"parse failure: {raw[:150]}", "parse_ok": False}
+            return {
+                **key,
+                "matched_error_index": None,
+                "confidence": None,
+                "reason": f"parse failure: {raw[:150]}",
+                "parse_ok": False,
+            }
         idx = payload.get("matched_error_index")
         ok = (idx is None) or isinstance(idx, int)
-        return {**key, "matched_error_index": idx, "confidence": payload.get("confidence"),
-                "reason": payload.get("reason", ""), "parse_ok": ok}
+        return {
+            **key,
+            "matched_error_index": idx,
+            "confidence": payload.get("confidence"),
+            "reason": payload.get("reason", ""),
+            "parse_ok": ok,
+        }
     except Exception as exc:  # noqa: BLE001
-        return {**key, "matched_error_index": None, "confidence": None,
-                "reason": f"exception: {exc}", "parse_ok": False}
+        return {
+            **key,
+            "matched_error_index": None,
+            "confidence": None,
+            "reason": f"exception: {exc}",
+            "parse_ok": False,
+        }
 
 
 def main() -> None:
@@ -102,10 +124,21 @@ def main() -> None:
 
     rows = []
     with ThreadPoolExecutor(max_workers=WORKERS) as pool:
-        futs = [pool.submit(match_one, client, model, prompts["MATCHER_SYSTEM"],
-                            prompts["MATCHER_USER"], pkg, gt_lists[pkg["concept_id"]],
-                            gen, i, m)
-                for pkg, gen, i, m in jobs]
+        futs = [
+            pool.submit(
+                match_one,
+                client,
+                model,
+                prompts["MATCHER_SYSTEM"],
+                prompts["MATCHER_USER"],
+                pkg,
+                gt_lists[pkg["concept_id"]],
+                gen,
+                i,
+                m,
+            )
+            for pkg, gen, i, m in jobs
+        ]
         for k, fut in enumerate(futs, 1):
             rows.append(fut.result())
             if k % 50 == 0 or k == len(futs):

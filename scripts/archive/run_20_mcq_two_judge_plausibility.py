@@ -9,8 +9,6 @@ from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from typing import Any
 
-import pandas as pd
-
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(PROJECT_ROOT))
 
@@ -31,7 +29,9 @@ from scripts.run_basic_glm_correctness_pilot import (  # noqa: E402
     load_questions,
 )
 
-OUTPUT_PATH = PROJECT_ROOT / "experiments" / "results" / "phase1_mcq" / "mcq_20_two_judge_plausibility.json"
+OUTPUT_PATH = (
+    PROJECT_ROOT / "experiments" / "results" / "phase1_mcq" / "mcq_20_two_judge_plausibility.json"
+)
 SAMPLE_SIZE = 20
 SAMPLE_SEED = 2026
 
@@ -63,8 +63,15 @@ def write_payload(payload: dict[str, Any]) -> None:
 def main() -> None:
     saved_records = json.loads(RESULTS_PATH.read_text())
     old_ids = {record["question_id"] for record in saved_records}
-    questions = [question for question in load_questions() if is_viable(question) and question["QuestionId"] not in old_ids]
-    selected = sorted(random.Random(SAMPLE_SEED).sample(questions, SAMPLE_SIZE), key=lambda question: question["QuestionId"])
+    questions = [
+        question
+        for question in load_questions()
+        if is_viable(question) and question["QuestionId"] not in old_ids
+    ]
+    selected = sorted(
+        random.Random(SAMPLE_SEED).sample(questions, SAMPLE_SIZE),
+        key=lambda question: question["QuestionId"],
+    )
     question_ids = [question["QuestionId"] for question in selected]
 
     payload: dict[str, Any] = {
@@ -84,7 +91,10 @@ def main() -> None:
 
     generator_client = get_client()
     with ThreadPoolExecutor(max_workers=min(WORKERS, len(selected))) as pool:
-        futures = [pool.submit(generate_distractors, question, generator_client, structured_paths=False) for question in selected]
+        futures = [
+            pool.submit(generate_distractors, question, generator_client, structured_paths=False)
+            for question in selected
+        ]
         generated_records = [future.result() for future in futures]
     generated_records.sort(key=lambda record: record["question_id"])
 
@@ -99,9 +109,16 @@ def main() -> None:
             "generated_records": generated_records,
             "generation_summary": {
                 "questions_generated": len(generated_records),
-                "complete_three_distractor_sets": sum(len(record.get("distractors", [])) == 3 and not record.get("parse_error") for record in generated_records),
-                "parse_failures": sum(bool(record.get("parse_error")) for record in generated_records),
-                "distractors_parsed": sum(len(record.get("distractors", [])) for record in generated_records),
+                "complete_three_distractor_sets": sum(
+                    len(record.get("distractors", [])) == 3 and not record.get("parse_error")
+                    for record in generated_records
+                ),
+                "parse_failures": sum(
+                    bool(record.get("parse_error")) for record in generated_records
+                ),
+                "distractors_parsed": sum(
+                    len(record.get("distractors", [])) for record in generated_records
+                ),
             },
             "correctness_summary": correctness_summary,
             "plausibility_judgments": judge_rows,

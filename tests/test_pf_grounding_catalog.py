@@ -15,12 +15,15 @@ def output(tmp_path):
     for case in config["cases"] + config["calibration_cases"]:
         for arm in study.ARMS:
             path = directory / "inputs" / case["id"] / f"context_{arm}.json"
-            study.save_json(path, {
-                "learner_context": {
-                    "grade": case["grade"],
-                    "recently_taught": case["teacher_recently_taught"],
+            study.save_json(
+                path,
+                {
+                    "learner_context": {
+                        "grade": case["grade"],
+                        "recently_taught": case["teacher_recently_taught"],
+                    },
                 },
-            })
+            )
             hashes[str(path.relative_to(directory))] = study.digest(path)
     manifest = {
         "config": config,
@@ -32,14 +35,25 @@ def output(tmp_path):
     main = [item for item in schedule if item["phase"] == "main"]
     for item, failed in ((main[0], False), (main[1], True)):
         attempt = directory / item["attempt_path"]
-        study.save_json(attempt / "result.json", {
-            "status": "D2_D3_failed" if failed else "completed",
-            "error": "Illustrative transport error" if failed else None,
-            "stages": {"D2_D3": {"task": None if failed else {
-                "status": "ready", "title": "Illustrative task",
-                "body": "Illustrative body.", "question": "Illustrative question?",
-            }}},
-        })
+        study.save_json(
+            attempt / "result.json",
+            {
+                "status": "D2_D3_failed" if failed else "completed",
+                "error": "Illustrative transport error" if failed else None,
+                "stages": {
+                    "D2_D3": {
+                        "task": None
+                        if failed
+                        else {
+                            "status": "ready",
+                            "title": "Illustrative task",
+                            "body": "Illustrative body.",
+                            "question": "Illustrative question?",
+                        }
+                    }
+                },
+            },
+        )
         study.complete_receipt(attempt)
     (directory / main[2]["attempt_path"]).mkdir(parents=True)
     for name in ("all_tasks", "calibration_tasks", "evaluator_input"):
@@ -56,7 +70,10 @@ def test_shared_catalog_keeps_all_slots_and_explicit_missing_statuses(output):
     assert len(records["tasks"]) == 60
     assert all(set(catalog.CATALOG_FIELDS) <= record.keys() for record in records["tasks"])
     assert Counter(record["status"] for record in records["tasks"]) == {
-        "completed": 1, "D2_D3_failed": 1, "running": 1, "not_run": 57,
+        "completed": 1,
+        "D2_D3_failed": 1,
+        "running": 1,
+        "not_run": 57,
     }
     assert records["tasks"][0]["task"]["title"] == "Illustrative task"
     failed = records["tasks"][1]
@@ -93,5 +110,5 @@ def test_reporting_boundary_uses_targets_not_twenty_independent_pairs():
     boundary = catalog.REPORTING_BOUNDARY
     assert boundary["independent_blocks"] == 5
     assert boundary["matched_slots_per_arm"] == 20
-    assert boundary["five_target_two_sided_sign_test_minimum_p"] == 2 / (2 ** 5)
+    assert boundary["five_target_two_sided_sign_test_minimum_p"] == 2 / (2**5)
     assert boundary["additional_generation_or_simulated_attempts"] is False

@@ -13,8 +13,8 @@ from typing import Any
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from scripts.run_phase1_mcq import CONDITIONS, _build_condition_components, load_test_set
 from scripts.run_basic_glm_correctness_pilot import is_viable
+from scripts.run_phase1_mcq import CONDITIONS, _build_condition_components, load_test_set
 
 DEFAULT_TEST_SET = Path("data/eedi/test_set_200.json")
 DEFAULT_OUTPUT_DIR = Path("experiments/results/phase1_mcq/structured_generation_v1_20260810")
@@ -109,19 +109,12 @@ def run(
         existing_keys = set()
         if resume and path.exists():
             existing_rows = [
-                json.loads(line)
-                for line in path.read_text().splitlines()
-                if line.strip()
+                json.loads(line) for line in path.read_text().splitlines() if line.strip()
             ]
             if retry_failures:
                 existing_rows = [row for row in existing_rows if not row.get("generation_error")]
-                path.write_text(
-                    "".join(json.dumps(row) + "\n" for row in existing_rows)
-                )
-            existing_keys = {
-                (row["question_id"], row["run"])
-                for row in existing_rows
-            }
+                path.write_text("".join(json.dumps(row) + "\n" for row in existing_rows))
+            existing_keys = {(row["question_id"], row["run"]) for row in existing_rows}
         component_key = "fewshot_rag" if condition[3] == "fewshot_rag" else "default"
         if component_key not in component_cache:
             component_cache[component_key] = _build_condition_components(condition)
@@ -156,7 +149,9 @@ def main() -> None:
     parser.add_argument("--runs", type=int, default=3)
     parser.add_argument("--workers", type=int, default=DEFAULT_WORKERS)
     parser.add_argument("--n", type=int, default=None, help="Use only the first N test questions")
-    parser.add_argument("--viable-only", action="store_true", help="Keep numeric/equation text-only questions")
+    parser.add_argument(
+        "--viable-only", action="store_true", help="Keep numeric/equation text-only questions"
+    )
     parser.add_argument("--condition", default="", help="Run a condition name prefix")
     parser.add_argument("--results-dir", type=Path, default=DEFAULT_OUTPUT_DIR)
     parser.add_argument("--resume", action="store_true")
@@ -167,9 +162,15 @@ def main() -> None:
     if args.viable_only:
         test_set = [question for question in test_set if is_viable(question)]
     if args.n is not None:
-        test_set = test_set[:args.n]
-    conditions = [condition for condition in CONDITIONS if not args.condition or condition[0].startswith(args.condition)]
-    print(f"Structured generation: {len(conditions)} conditions, {len(test_set)} questions, {args.runs} runs")
+        test_set = test_set[: args.n]
+    conditions = [
+        condition
+        for condition in CONDITIONS
+        if not args.condition or condition[0].startswith(args.condition)
+    ]
+    print(
+        f"Structured generation: {len(conditions)} conditions, {len(test_set)} questions, {args.runs} runs"
+    )
     run(
         test_set,
         conditions,

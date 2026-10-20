@@ -10,7 +10,6 @@ import logging
 import re
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Optional
 
 import yaml
 
@@ -24,6 +23,7 @@ PROMPT_DIR = Path(__file__).resolve().parent / "prompts"
 @dataclass
 class PFExercise:
     """A generated PF exercise with parsed sections."""
+
     version: str  # V1, V2, V3
     topic: str
     grade: str
@@ -61,28 +61,40 @@ class PFGenerator:
     # ── V1: Blind (grade + topic only) ───────────────────────────────────
 
     def generate_v1(
-        self, grade: str, topic: str,
-        max_tokens: int | None = None, temperature: float = 0.7,
+        self,
+        grade: str,
+        topic: str,
+        max_tokens: int | None = None,
+        temperature: float = 0.7,
         variation_hint: str = "",
     ) -> PFExercise:
         system = self._prompts["SYSTEM_PROMPT"]
         user = self._prompts["USER_V1"].format(
-            grade=grade, topic=topic, variation_hint=variation_hint,
+            grade=grade,
+            topic=topic,
+            variation_hint=variation_hint,
         )
         response = self._chat(system, user, max_tokens=max_tokens, temperature=temperature)
         sections = self._parse_sections(response.text)
         return PFExercise(
-            version="V1", topic=topic, grade=grade,
-            raw_output=response.text, sections=sections,
-            n_misconceptions=0, metadata={"usage": response.usage},
+            version="V1",
+            topic=topic,
+            grade=grade,
+            raw_output=response.text,
+            sections=sections,
+            n_misconceptions=0,
+            metadata={"usage": response.usage},
         )
 
     # ── V2: Eedi-grounded (real misconception data) ──────────────────────
 
     def generate_v2(
-        self, grade: str, topic: str,
+        self,
+        grade: str,
+        topic: str,
         misconceptions: list[str] | None = None,
-        max_tokens: int | None = None, temperature: float = 0.7,
+        max_tokens: int | None = None,
+        temperature: float = 0.7,
         variation_hint: str = "",
     ) -> PFExercise:
         if misconceptions is None:
@@ -91,14 +103,19 @@ class PFGenerator:
         misc_text = "\n".join(f"  - {m}" for m in misconceptions)
         system = self._prompts["SYSTEM_PROMPT"]
         user = self._prompts["USER_V2"].format(
-            grade=grade, topic=topic, misconceptions=misc_text,
+            grade=grade,
+            topic=topic,
+            misconceptions=misc_text,
             variation_hint=variation_hint,
         )
         response = self._chat(system, user, max_tokens=max_tokens, temperature=temperature)
         sections = self._parse_sections(response.text)
         return PFExercise(
-            version="V2", topic=topic, grade=grade,
-            raw_output=response.text, sections=sections,
+            version="V2",
+            topic=topic,
+            grade=grade,
+            raw_output=response.text,
+            sections=sections,
             n_misconceptions=len(misconceptions),
             metadata={"usage": response.usage, "misconceptions": misconceptions},
         )
@@ -106,8 +123,11 @@ class PFGenerator:
     # ── V3: LLM-inferred (two-step) ──────────────────────────────────────
 
     def generate_v3(
-        self, grade: str, topic: str,
-        max_tokens: int | None = None, temperature: float = 0.7,
+        self,
+        grade: str,
+        topic: str,
+        max_tokens: int | None = None,
+        temperature: float = 0.7,
         misconception_max_tokens: int = 512,
         variation_hint: str = "",
     ) -> PFExercise:
@@ -124,15 +144,22 @@ class PFGenerator:
         # Step 2: generate PF exercise
         misc_text = "\n".join(f"  - {m}" for m in inferred) if inferred else "(none inferred)"
         step2 = self._prompts["USER_V3_STEP2"].format(
-            grade=grade, topic=topic, misconceptions=misc_text,
+            grade=grade,
+            topic=topic,
+            misconceptions=misc_text,
             variation_hint=variation_hint,
         )
-        resp_step2 = self._chat(self._prompts["SYSTEM_PROMPT"], step2, max_tokens=max_tokens, temperature=temperature)
+        resp_step2 = self._chat(
+            self._prompts["SYSTEM_PROMPT"], step2, max_tokens=max_tokens, temperature=temperature
+        )
         sections = self._parse_sections(resp_step2.text)
 
         return PFExercise(
-            version="V3", topic=topic, grade=grade,
-            raw_output=resp_step2.text, sections=sections,
+            version="V3",
+            topic=topic,
+            grade=grade,
+            raw_output=resp_step2.text,
+            sections=sections,
             n_misconceptions=len(inferred),
             metadata={
                 "usage_step1": resp_step1.usage,
@@ -144,15 +171,20 @@ class PFGenerator:
     # ── Helpers ──────────────────────────────────────────────────────────
 
     def _chat(
-        self, system: str, user: str,
-        max_tokens: int | None = None, temperature: float = 0.7,
+        self,
+        system: str,
+        user: str,
+        max_tokens: int | None = None,
+        temperature: float = 0.7,
     ) -> LLMResponse:
         messages = [
             {"role": "system", "content": system},
             {"role": "user", "content": user},
         ]
         return self._client.generate(
-            messages, max_tokens=max_tokens or 3072, temperature=temperature,
+            messages,
+            max_tokens=max_tokens or 3072,
+            temperature=temperature,
         )
 
     def _parse_sections(self, text: str) -> dict[str, str]:
@@ -165,10 +197,13 @@ class PFGenerator:
             r"(?:(?:\#{1,3}\s*)?(?:Step\s+[\d]+[:\)]\s*|[\d]+[\.\)]\s*)"
             r"|\#{1,3}\s+|[-•*]\s+|\*\*)?"
         )
-        patterns = {name: re.compile(
-            rf"(?:^|\n)\s*{section_prefix}\s*{re.escape(name)}\s*(?::|—|-|–)?\s*(?:\*\*)?\s*\n?",
-            re.MULTILINE | re.IGNORECASE,
-        ) for name in self.SECTION_NAMES}
+        patterns = {
+            name: re.compile(
+                rf"(?:^|\n)\s*{section_prefix}\s*{re.escape(name)}\s*(?::|—|-|–)?\s*(?:\*\*)?\s*\n?",
+                re.MULTILINE | re.IGNORECASE,
+            )
+            for name in self.SECTION_NAMES
+        }
 
         occurrences = []
         for name, pat in patterns.items():

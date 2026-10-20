@@ -33,7 +33,9 @@ def derive_reviews(review_path: Path) -> dict:
         else:
             error = None
         derived[panel_id] = {
-            "key": keys[panel_id], "review": review, "error": error,
+            "key": keys[panel_id],
+            "review": review,
+            "error": error,
             "original_status": record["status"],
             "derivation": "Same saved response; no replayed model requests.",
         }
@@ -52,13 +54,18 @@ def agreement(first: dict, second: dict) -> dict:
             if field == "approaches":
                 a, b = sorted(set(a)), sorted(set(b))
             if a != b:
-                disagreements.append({
-                    "attempt": label, "first": a, "second": b,
-                    "first_reason": first[label]["rationale"],
-                    "second_reason": second[label]["rationale"],
-                })
+                disagreements.append(
+                    {
+                        "attempt": label,
+                        "first": a,
+                        "second": b,
+                        "first_reason": first[label]["rationale"],
+                        "second_reason": second[label]["rationale"],
+                    }
+                )
         fields[field] = {
-            "compared": len(first), "agreed": len(first) - len(disagreements),
+            "compared": len(first),
+            "agreed": len(first) - len(disagreements),
             "disagreements": disagreements,
         }
     return fields
@@ -95,7 +102,8 @@ def calibration(output: Path) -> dict:
         result["model_vs_second_reader"] = agreement(second, model_coding)
     else:
         result["model_coding_coverage"] = {
-            "available": len(model_coding), "attempted": len(original),
+            "available": len(model_coding),
+            "attempted": len(original),
         }
     benchmark._write_json(cal_path / "agreement.json", result)
     return result
@@ -127,7 +135,8 @@ def report(output: Path) -> dict:
                 bucket["attempted"] += 1
                 bucket[f"math/{row['mathematics_status']}"] += 1
                 methods = (
-                    solver_methods if request["profile_id"] == "ordinary_solver"
+                    solver_methods
+                    if request["profile_id"] == "ordinary_solver"
                     else learner_methods
                 )
                 for method in set(row["approaches"]):
@@ -141,8 +150,12 @@ def report(output: Path) -> dict:
         for request_id in item["key"]["attempts"].values():
             stats[f"execution/{records[request_id]['status']}"] += 1
         results[task_id] = {
-            "family": spec["family"], "source": spec["path"], "panel_id": panel_id,
-            "review": review, "review_error": item["error"], "counts": dict(stats),
+            "family": spec["family"],
+            "source": spec["path"],
+            "panel_id": panel_id,
+            "review": review,
+            "review_error": item["error"],
+            "counts": dict(stats),
             "learner_method_occurrences": dict(learner_methods),
             "solver_method_occurrences": dict(solver_methods),
             "by_profile": {key: dict(value) for key, value in by_profile.items()},
@@ -162,10 +175,14 @@ def report(output: Path) -> dict:
         counts["unverified_evidence_fields"] += len(review["evidence_errors"])
         for item in review["feedback"]:
             counts[f"feedback/{item['attribution']}"] += 1
-            feedback.append({
-                "task_id": task_id, "source": result["source"],
-                "proposed_only": True, **item,
-            })
+            feedback.append(
+                {
+                    "task_id": task_id,
+                    "source": result["source"],
+                    "proposed_only": True,
+                    **item,
+                }
+            )
     review_usage = Counter()
     calls = 0
     for phase_path in (output / "checklist_calibration/model_review", review_path):
@@ -179,8 +196,10 @@ def report(output: Path) -> dict:
     report = {
         "status": "completed_baseline_diagnosis",
         "calibration_agreement": {
-            key: {field: {"agreed": value["agreed"], "compared": value["compared"]}
-                  for field, value in cal[key].items()}
+            key: {
+                field: {"agreed": value["agreed"], "compared": value["compared"]}
+                for field, value in cal[key].items()
+            }
             for key in ("second_reader", "model_vs_original", "model_vs_second_reader")
             if key in cal
         },
@@ -214,35 +233,60 @@ def render(output: Path, report: dict) -> None:
         text = review["summary"] if review else item["review_error"]
         findings = ""
         if review:
-            findings = "<ul>" + "".join(
-                "<li><b>" + html.escape(name.replace("_", " ")) + "</b>: "
-                + html.escape(value["status"]) + ". " + html.escape(value["reason"]) + "</li>"
-                for name, value in review["findings"].items()
-            ) + "</ul>"
+            findings = (
+                "<ul>"
+                + "".join(
+                    "<li><b>"
+                    + html.escape(name.replace("_", " "))
+                    + "</b>: "
+                    + html.escape(value["status"])
+                    + ". "
+                    + html.escape(value["reason"])
+                    + "</li>"
+                    for name, value in review["findings"].items()
+                )
+                + "</ul>"
+            )
             if review["evidence_errors"]:
-                findings += "<p><b>Unverified evidence:</b> " + html.escape(
-                    "; ".join(review["evidence_errors"])
-                ) + "</p>"
+                findings += (
+                    "<p><b>Unverified evidence:</b> "
+                    + html.escape("; ".join(review["evidence_errors"]))
+                    + "</p>"
+                )
         adjudication = report.get("feedback_adjudication", {}).get("candidates", {}).get(task_id)
         if adjudication:
             findings += (
                 "<p><b>Subsequent assistant check:</b> "
                 + html.escape(adjudication["verdict"].replace("_", " "))
-                + ". " + html.escape(adjudication["reason"]) + "</p>"
+                + ". "
+                + html.escape(adjudication["reason"])
+                + "</p>"
             )
         panels.append(
-            "<details><summary>" + html.escape(task_id) + "</summary><p>"
-            + html.escape(text or "Review unavailable") + "</p>" + findings
+            "<details><summary>"
+            + html.escape(task_id)
+            + "</summary><p>"
+            + html.escape(text or "Review unavailable")
+            + "</p>"
+            + findings
             + f"<p><a href='task_reviews/{item['panel_id']}/result.json'>Original review</a>"
             + " &middot; <a href='proposed_feedback.json'>Proposed feedback only</a></p></details>"
         )
     rows = []
     for family, counts in report["families"].items():
         rows.append(
-            "<tr><td>" + labels[family] + "</td>"
-            + "".join(f"<td>{counts.get(f'{key}/observed', 0)}/{counts['panels_attempted']}</td>"
-                      for key in ("accessible_start", "familiar_method_limit",
-                                  "distinct_approaches", "missing_or_ambiguous_information"))
+            "<tr><td>"
+            + labels[family]
+            + "</td>"
+            + "".join(
+                f"<td>{counts.get(f'{key}/observed', 0)}/{counts['panels_attempted']}</td>"
+                for key in (
+                    "accessible_start",
+                    "familiar_method_limit",
+                    "distinct_approaches",
+                    "missing_or_ambiguous_information",
+                )
+            )
             + "</tr>"
         )
     execution = report["execution"]["fresh"]
@@ -281,7 +325,8 @@ def render(output: Path, report: dict) -> None:
         "<table><tr><th>Task family</th>"
         "<th>Visible start</th><th>Familiar method reaches a limit</th>"
         "<th>Distinct methods across panel</th><th>Missing/ambiguous inputs</th></tr>"
-        + "".join(rows) + "</table>"
+        + "".join(rows)
+        + "</table>"
         "<p>These count task panels, not students or learning gains. Each panel "
         "contains ordinary-solver controls as well as hypothetical learner roles; "
         "method variety across a mixed panel is not learner-only diversity. "
@@ -291,7 +336,8 @@ def render(output: Path, report: dict) -> None:
         "<a href='checklist_calibration/agreement.json'>Reader disagreements</a> &middot; "
         "<a href='feedback_adjudication.json'>Subsequent feedback checks</a> &middot; "
         "<a href='panel/attempts.html'>Actual written attempts</a></p>"
-        + "".join(panels) + "</html>"
+        + "".join(panels)
+        + "</html>"
     )
     (output / "diagnosis.html").write_text(page, encoding="utf-8")
 
@@ -305,9 +351,13 @@ if __name__ == "__main__":
     compact = (
         {key: result[key] for key in ("calibration_agreement", "review_counts", "families")}
         if not args.calibration_only
-        else {key: {field: {"agreed": value["agreed"], "compared": value["compared"]}
-                    for field, value in result[key].items()}
-              for key in ("second_reader", "model_vs_original", "model_vs_second_reader")
-              if key in result}
+        else {
+            key: {
+                field: {"agreed": value["agreed"], "compared": value["compared"]}
+                for field, value in result[key].items()
+            }
+            for key in ("second_reader", "model_vs_original", "model_vs_second_reader")
+            if key in result
+        }
     )
     print(json.dumps(compact, indent=2))

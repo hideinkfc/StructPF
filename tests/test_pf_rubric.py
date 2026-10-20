@@ -35,17 +35,33 @@ def test_paper_anchors_and_no_target_distribution():
 
 
 def test_student_input_excludes_teacher_claims_and_condition():
-    text = student_task_text({
-        "status": "ready", "title": "Compare", "body": "A: 2, 8", "question": "Explain.",
-        "consolidation": "SECRET_SOLUTION", "version": "V2",
-    })
-    result = json.loads(judge_input(text, {
-        "grade": "10", "topic": "SECRET_TARGET",
-        "assumed_prior_knowledge": [{
-            "resource": "Mean", "taught_as": "Calculate an arithmetic mean.",
-            "student_move": "SECRET_MOVE", "falls_short_because": "SECRET_FAILURE",
-        }],
-    }))
+    text = student_task_text(
+        {
+            "status": "ready",
+            "title": "Compare",
+            "body": "A: 2, 8",
+            "question": "Explain.",
+            "consolidation": "SECRET_SOLUTION",
+            "version": "V2",
+        }
+    )
+    result = json.loads(
+        judge_input(
+            text,
+            {
+                "grade": "10",
+                "topic": "SECRET_TARGET",
+                "assumed_prior_knowledge": [
+                    {
+                        "resource": "Mean",
+                        "taught_as": "Calculate an arithmetic mean.",
+                        "student_move": "SECRET_MOVE",
+                        "falls_short_because": "SECRET_FAILURE",
+                    }
+                ],
+            },
+        )
+    )
     assert "SECRET" not in json.dumps(result)
     assert "V2" not in json.dumps(result)
     assert result["learner_context"]["assumed_prior_knowledge"][0]["resource"] == "Mean"
@@ -53,16 +69,27 @@ def test_student_input_excludes_teacher_claims_and_condition():
 
 
 def test_legacy_sections_exclude_topic_and_teacher_notes_but_keep_data():
-    assert legacy_student_text({
-        "TOPIC": "SECRET_TARGET", "NARRATIVE": "Context.", "DATA": "A: 2, 8",
-        "TASK": "Explain.", "CONSOLIDATION NOTE": "SECRET_SOLUTION",
-    }) == "Context.\n\nA: 2, 8\n\nExplain."
+    assert (
+        legacy_student_text(
+            {
+                "TOPIC": "SECRET_TARGET",
+                "NARRATIVE": "Context.",
+                "DATA": "A: 2, 8",
+                "TASK": "Explain.",
+                "CONSOLIDATION NOTE": "SECRET_SOLUTION",
+            }
+        )
+        == "Context.\n\nA: 2, 8\n\nExplain."
+    )
 
 
-@pytest.mark.parametrize("task", [
-    {"status": "blocked", "title": "A", "body": "B", "question": "C"},
-    {"status": "ready", "title": "A", "body": "", "question": "C"},
-])
+@pytest.mark.parametrize(
+    "task",
+    [
+        {"status": "blocked", "title": "A", "body": "B", "question": "C"},
+        {"status": "ready", "title": "A", "body": "", "question": "C"},
+    ],
+)
 def test_invalid_student_task_rejected(task):
     with pytest.raises(ValueError):
         student_task_text(task)

@@ -91,10 +91,7 @@ def calculate_condition(
                 names.add(name)
 
         # Validate every branch before executing; short-circuiting cannot hide syntax.
-        parsed = {
-            label: _parse(source, predicate=False)
-            for label, source in expressions.items()
-        }
+        parsed = {label: _parse(source, predicate=False) for label, source in expressions.items()}
         predicate = _parse(calculation.get("predicate"), predicate=True)
         for tree in (*parsed.values(), predicate):
             for node in ast.walk(tree):
@@ -374,7 +371,7 @@ def _arithmetic(node: ast.AST, environment: dict, source: str, units: dict) -> A
                 bits = max(int(left.p).bit_length(), int(left.q).bit_length())
                 if bits * max(1, abs(int(right.p))) > _MAX_BITS:
                     raise _CalculationError("unsupported", "power exceeds numeric bit-length limit")
-            result = left ** right
+            result = left**right
         return _checked(result)
     if isinstance(node, ast.Call):
         name = node.func.id
@@ -401,7 +398,8 @@ def _arithmetic(node: ast.AST, environment: dict, source: str, units: dict) -> A
             if not isinstance(value, list):
                 raise _CalculationError("unsupported", f"{name}() requires a list")
             return _checked(
-                Integer(len(value)) if name == "len"
+                Integer(len(value))
+                if name == "len"
                 else sum((_scalar(item) for item in value), Integer(0))
             )
         value = _scalar(value)

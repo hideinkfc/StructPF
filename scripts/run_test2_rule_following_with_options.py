@@ -219,9 +219,7 @@ def summarize(
 
     rule_following_rate = len(matched) / len(rows) if rows else None
     drop_points = (
-        (TEST1_BASELINE - rule_following_rate) * 100
-        if rule_following_rate is not None
-        else None
+        (TEST1_BASELINE - rule_following_rate) * 100 if rule_following_rate is not None else None
     )
     return {
         "calls": len(rows),
@@ -247,12 +245,8 @@ def summarize(
             else "not_measurable"
         ),
         "wall_seconds": round(wall_seconds, 3),
-        "effective_calls_per_second": round(len(rows) / wall_seconds, 3)
-        if wall_seconds
-        else None,
-        "mean_latency_seconds": round(sum(latencies) / len(latencies), 3)
-        if latencies
-        else None,
+        "effective_calls_per_second": round(len(rows) / wall_seconds, 3) if wall_seconds else None,
+        "mean_latency_seconds": round(sum(latencies) / len(latencies), 3) if latencies else None,
         "p50_latency_seconds": percentile(latencies, 50),
         "p95_latency_seconds": percentile(latencies, 95),
         "profiles": {key: group_summary(value) for key, value in sorted(by_profile.items())},

@@ -18,9 +18,7 @@ import random
 import re
 from collections import defaultdict
 from dataclasses import dataclass, field
-from pathlib import Path
 from typing import Optional
-
 
 # ── Mastery levels ──────────────────────────────────────────────────
 
@@ -33,21 +31,25 @@ LEVEL_LABELS = {MASTERED: "mastered", PARTIAL: "partial", UNMASTERED: "not maste
 
 # ── Error behaviour ─────────────────────────────────────────────────
 
+
 @dataclass
 class ErrorBehavior:
     """A concrete, systematic error a student makes for a given KC."""
-    description: str           # teacher-facing: "Sign-only-applies-to-first-term"
-    rule: str                  # student-facing procedure: "When you see a minus..."
-    example: str               # worked example of the buggy procedure
-    pct_students: int = 0      # prevalence in Eedi data (0 if LLM-generated)
-    source: str = "llm"        # "eedi" | "llm"
+
+    description: str  # teacher-facing: "Sign-only-applies-to-first-term"
+    rule: str  # student-facing procedure: "When you see a minus..."
+    example: str  # worked example of the buggy procedure
+    pct_students: int = 0  # prevalence in Eedi data (0 if LLM-generated)
+    source: str = "llm"  # "eedi" | "llm"
 
 
 # ── Knowledge component ─────────────────────────────────────────────
 
+
 @dataclass
 class KnowledgeComponent:
     """A skill a student can master, partially master, or fail."""
+
     skill_id: str
     description: str
     topic: str
@@ -63,11 +65,13 @@ class KnowledgeComponent:
 
 # ── Student profile ─────────────────────────────────────────────────
 
+
 @dataclass
 class StudentProfile:
     """A simulated student defined by per-KC mastery levels."""
+
     profile_id: str
-    ability: float                             # 0.0–1.0 overall ability
+    ability: float  # 0.0–1.0 overall ability
     kc_mastery: dict[str, float] = field(default_factory=dict)  # skill_id → mastery
     active_errors: dict[str, ErrorBehavior] = field(default_factory=dict)  # skill_id → error
 
@@ -122,12 +126,13 @@ class StudentProfile:
                     lines.append(f"- {label.upper()}: {desc}")
             elif lvl == PARTIAL:
                 lines.append(f"- PARTIAL: {desc}")
-                lines.append(f"  You can sometimes do this correctly, but you are inconsistent.")
+                lines.append("  You can sometimes do this correctly, but you are inconsistent.")
 
         return "\n".join(lines) if lines else "You have mastered all relevant skills."
 
 
 # ── Skill bank (built from scraped Eedi data) ────────────────────────
+
 
 class SkillBank:
     """Collection of KCs with their error behaviors, loaded from Eedi data."""
@@ -137,7 +142,9 @@ class SkillBank:
         self.by_topic: dict[str, list[str]] = defaultdict(list)  # topic → skill_ids
 
     @classmethod
-    def from_scraped_eedi(cls, aggregate_path: str = "data/eedi_scraped/_aggregated.json") -> "SkillBank":
+    def from_scraped_eedi(
+        cls, aggregate_path: str = "data/eedi_scraped/_aggregated.json"
+    ) -> "SkillBank":
         """Build a skill bank from scraped Eedi quiz data."""
         with open(aggregate_path) as f:
             quizzes = json.load(f)
@@ -185,16 +192,21 @@ class SkillBank:
 
                         # Deduplicate by rule text prefix
                         short = explanation[:60]
-                        existing = [e for e in bank.kcs[sid].error_behaviors
-                                    if e.rule.startswith(short[:30])]
+                        existing = [
+                            e
+                            for e in bank.kcs[sid].error_behaviors
+                            if e.rule.startswith(short[:30])
+                        ]
                         if not existing:
-                            bank.kcs[sid].error_behaviors.append(ErrorBehavior(
-                                description=f"Distractor {label}",
-                                rule=_invert_explanation_to_error_rule(explanation),
-                                example="",
-                                pct_students=pct,
-                                source="eedi",
-                            ))
+                            bank.kcs[sid].error_behaviors.append(
+                                ErrorBehavior(
+                                    description=f"Distractor {label}",
+                                    rule=_invert_explanation_to_error_rule(explanation),
+                                    example="",
+                                    pct_students=pct,
+                                    source="eedi",
+                                )
+                            )
 
         # Fill in any skill seen but not yet stored
         for sid, info in seen.items():
@@ -225,8 +237,12 @@ class SkillBank:
                 "subject": kc.subject,
                 "n_errors": len(kc.error_behaviors),
                 "errors": [
-                    {"description": e.description, "rule": e.rule,
-                     "pct_students": e.pct_students, "source": e.source}
+                    {
+                        "description": e.description,
+                        "rule": e.rule,
+                        "pct_students": e.pct_students,
+                        "source": e.source,
+                    }
                     for e in kc.error_behaviors
                 ],
             }
@@ -235,6 +251,7 @@ class SkillBank:
 
 
 # ── Profile generator ───────────────────────────────────────────────
+
 
 class ProfileGenerator:
     """Generates student profiles by sampling mastery levels over a skill bank."""
@@ -316,11 +333,14 @@ class ProfileGenerator:
             # Spread abilities evenly
             ability = 0.2 + (i / max(n - 1, 1)) * 0.75
             pid = f"{id_prefix}_{i:02d}"
-            profiles.append(self.generate(profile_id=pid, ability=ability, topic=topic, skill_ids=skill_ids))
+            profiles.append(
+                self.generate(profile_id=pid, ability=ability, topic=topic, skill_ids=skill_ids)
+            )
         return profiles
 
 
 # ── Helpers ──────────────────────────────────────────────────────────
+
 
 def _skill_to_id(desc: str) -> str:
     """Hash a skill description into a stable ID."""
@@ -333,15 +353,14 @@ def _invert_explanation_to_error_rule(explanation: str) -> str:
     Strips prefixes, percentage tails, and reformats into a
     procedural 'you believe / you do' pattern.
     """
-    import re
 
     text = explanation.replace("Common misconception", "").replace("Eedi explanation", "").strip()
     # Strip trailing "% of students on Eedi chose X" tails
-    text = re.sub(r'\d+% of students on Eedi chose\s+[A-D]\.?', '', text).strip()
+    text = re.sub(r"\d+% of students on Eedi chose\s+[A-D]\.?", "", text).strip()
     # Strip stray "5.5% of students on Eedi cho" etc
-    text = re.sub(r'\d+\.?\d*% of students.*$', '', text).strip()
+    text = re.sub(r"\d+\.?\d*% of students.*$", "", text).strip()
     # Collapse multiple spaces
-    text = re.sub(r'\s+', ' ', text)
+    text = re.sub(r"\s+", " ", text)
 
     # Truncate to first two sentences
     sentences = [s.strip() for s in text.split(". ") if s.strip()]

@@ -84,8 +84,12 @@ def main() -> None:
         raise ValueError("Judge distribution changed")
     quotes = measurement["quote_fidelity"]
     measurement_rows = [
-        (label, measurement["rates"][key]["pass"], measurement["rates"][key]["concern"],
-         measurement["rates"][key]["unknown"])
+        (
+            label,
+            measurement["rates"][key]["pass"],
+            measurement["rates"][key]["concern"],
+            measurement["rates"][key]["unknown"],
+        )
         for label, key in MEASUREMENT_ROWS
     ]
 
@@ -240,7 +244,10 @@ def main() -> None:
             + table(
                 ["Design choice", "What we did"],
                 [
-                    ["Tasks", "Five Grade 8 specifications, four repeats per arm, 60 scheduled tasks"],
+                    [
+                        "Tasks",
+                        "Five Grade 8 specifications, four repeats per arm, 60 scheduled tasks",
+                    ],
                     [
                         "Transfer status",
                         "Broader topics had been inspected earlier, so this is transfer evidence, "

@@ -272,7 +272,8 @@ def parse_evidence_audit(raw: str, text: str) -> dict:
     extras = sorted(set(payload) - expected)
     if extras:
         field_errors["_envelope"] = {
-            "type": "UnexpectedFields", "fields": extras,
+            "type": "UnexpectedFields",
+            "fields": extras,
             "raw_data": {name: payload[name] for name in extras},
         }
 
@@ -288,7 +289,8 @@ def parse_evidence_audit(raw: str, text: str) -> dict:
                 "raw_data": value,
             }
             unknown = {
-                "status": "unknown", "task_quotes": [],
+                "status": "unknown",
+                "task_quotes": [],
                 "reason": f"Field validation failed for {name}; see field_errors.",
                 "counterevidence": "",
             }
@@ -309,11 +311,13 @@ def parse_evidence_audit(raw: str, text: str) -> dict:
         audit["original_high_anchor_support"][name] = parse_field(f"anchor_{name}", value, Finding)
     if isinstance(anchors, dict) and set(anchors) - set(ANCHORS):
         field_errors["_anchor_envelope"] = {
-            "type": "UnexpectedFields", "fields": sorted(set(anchors) - set(ANCHORS)),
+            "type": "UnexpectedFields",
+            "fields": sorted(set(anchors) - set(ANCHORS)),
             "raw_data": anchors,
         }
     validated_fields = [
-        name for name in (*FINDINGS, "mathematics", *(f"anchor_{a}" for a in ANCHORS))
+        name
+        for name in (*FINDINGS, "mathematics", *(f"anchor_{a}" for a in ANCHORS))
         if name not in field_errors
     ]
     fidelity = {}
@@ -333,8 +337,11 @@ def parse_evidence_audit(raw: str, text: str) -> dict:
     ]
     return {
         "status": (
-            "field_validation_error" if not validated_fields
-            else "partially_parsed" if field_errors else "parsed"
+            "field_validation_error"
+            if not validated_fields
+            else "partially_parsed"
+            if field_errors
+            else "parsed"
         ),
         "parser_version": PARSER_VERSION,
         "field_errors": field_errors,
@@ -347,7 +354,8 @@ def parse_evidence_audit(raw: str, text: str) -> dict:
         ],
         "mathematical_concern_witness_checks": [
             check_witness(witness, text)
-            for witness in audit["mathematics"]["concerns"] if isinstance(witness, dict)
+            for witness in audit["mathematics"]["concerns"]
+            if isinstance(witness, dict)
         ],
         "math_status": audit["mathematics"]["status"],
         "scope": "computational_task_affordance_evidence_not_student_or_human_validation",
@@ -365,12 +373,16 @@ def _decision(result: dict | None, name: str) -> str:
         finding = result["audit"][name]
     if not result["quote_fidelity"][name]["all_verified"]:
         return "unknown"
-    if name == "task_specification" and finding["status"] == "not_evidenced" and (
-        result["audit"]["mathematics"]["status"] == "concern"
-        or result["audit"]["mathematics"]["concerns"]
-        or any(
-            check["status"] == "arithmetic_mismatch"
-            for check in result["mathematical_witness_checks"]
+    if (
+        name == "task_specification"
+        and finding["status"] == "not_evidenced"
+        and (
+            result["audit"]["mathematics"]["status"] == "concern"
+            or result["audit"]["mathematics"]["concerns"]
+            or any(
+                check["status"] == "arithmetic_mismatch"
+                for check in result["mathematical_witness_checks"]
+            )
         )
     ):
         return "unknown"
@@ -378,8 +390,10 @@ def _decision(result: dict | None, name: str) -> str:
         if finding["concerns"]:
             return "unknown"
         checks = result["mathematical_witness_checks"]
-        if finding["status"] == "model_recomputed" and checks and all(
-            check["status"] == "verified_arithmetic" for check in checks
+        if (
+            finding["status"] == "model_recomputed"
+            and checks
+            and all(check["status"] == "verified_arithmetic" for check in checks)
         ):
             return "pass"
         # Concern interpretation needs exact recheck and/or a human review.
@@ -426,7 +440,9 @@ def aggregate_audits(catalog: list[dict], results: list[dict], judges: list[str]
         else:
             availability = "available" if usable_judgments == 2 else "audit_unavailable"
             availability_reason = (
-                None if availability == "available" else "; ".join(
+                None
+                if availability == "available"
+                else "; ".join(
                     f"{judge}: {result.get('status', 'missing_status') if result else 'missing'}"
                     for judge, result in zip(judges, pair)
                     if not result or result.get("status") not in PARSED_STATUSES
@@ -443,9 +459,13 @@ def aggregate_audits(catalog: list[dict], results: list[dict], judges: list[str]
             name: [
                 (
                     result["audit"]["original_high_anchor_support"][name[7:]]["status"]
-                    if name.startswith("anchor_") else result["audit"][name]["status"]
-                ) if result and result.get("status") in PARSED_STATUSES
-                and name not in result.get("field_errors", {}) else None
+                    if name.startswith("anchor_")
+                    else result["audit"][name]["status"]
+                )
+                if result
+                and result.get("status") in PARSED_STATUSES
+                and name not in result.get("field_errors", {})
+                else None
                 for result in pair
             ]
             for name in decisions
@@ -455,18 +475,26 @@ def aggregate_audits(catalog: list[dict], results: list[dict], judges: list[str]
         for index in range(2):
             values = [decisions[name][index] for name in CHECKLIST]
             individual_checklists.append(
-                "concern" if "concern" in values
-                else "pass" if set(values) == {"pass"} else "unknown"
+                "concern"
+                if "concern" in values
+                else "pass"
+                if set(values) == {"pass"}
+                else "unknown"
             )
         # A concern must agree on the same component, not two different failures.
         checklist = (
-            "concern" if any(agreed[name] == "concern" for name in CHECKLIST)
-            else "pass" if all(agreed[name] == "pass" for name in CHECKLIST) else "unknown"
+            "concern"
+            if any(agreed[name] == "concern" for name in CHECKLIST)
+            else "pass"
+            if all(agreed[name] == "pass" for name in CHECKLIST)
+            else "unknown"
         )
         core_errors = [
             f"{judge}: {name}"
-            for judge, result in zip(judges, pair) if result
-            for name in CHECKLIST if name in result.get("field_errors", {})
+            for judge, result in zip(judges, pair)
+            if result
+            for name in CHECKLIST
+            if name in result.get("field_errors", {})
         ]
         if availability == "available" and checklist == "unknown" and core_errors:
             availability = "audit_unavailable"
@@ -475,32 +503,44 @@ def aggregate_audits(catalog: list[dict], results: list[dict], judges: list[str]
         property_failure_reasons = {}
         for name in decisions:
             reasons = [
-                f"{judge}: missing audit" if not result
-                else f"{judge}: {result['status']}" if result["status"] not in PARSED_STATUSES
-                else f"{judge}: invalid {name}" if name in result.get("field_errors", {})
+                f"{judge}: missing audit"
+                if not result
+                else f"{judge}: {result['status']}"
+                if result["status"] not in PARSED_STATUSES
+                else f"{judge}: invalid {name}"
+                if name in result.get("field_errors", {})
                 else None
                 for judge, result in zip(judges, pair)
             ]
             reasons = [reason for reason in reasons if reason is not None]
             property_availability[name] = (
-                "task_unavailable" if availability == "task_unavailable"
-                else "audit_unavailable" if reasons else "available"
+                "task_unavailable"
+                if availability == "task_unavailable"
+                else "audit_unavailable"
+                if reasons
+                else "available"
             )
             property_failure_reasons[name] = (
-                availability_reason if availability == "task_unavailable"
-                else "; ".join(reasons) if reasons else None
+                availability_reason
+                if availability == "task_unavailable"
+                else "; ".join(reasons)
+                if reasons
+                else None
             )
         baseline = entry.get("original_rating") or {}
         scores = baseline.get("scores") or {}
         high = isinstance(scores.get("TOTAL"), int) and scores["TOTAL"] >= HIGH_SCORE_SCREEN
         tensions = [
-            name for name in ANCHORS
+            name
+            for name in ANCHORS
             if scores.get(name) == 3 and agreed[f"anchor_{name}"] == "concern"
         ]
         extra = [name for name in FINDINGS if agreed[name] == "concern"]
         math_concerns = [
-            judge for judge, result in zip(judges, pair)
-            if result and result.get("status") in PARSED_STATUSES
+            judge
+            for judge, result in zip(judges, pair)
+            if result
+            and result.get("status") in PARSED_STATUSES
             and (
                 result["audit"]["mathematics"]["status"] == "concern"
                 or result["audit"]["mathematics"]["concerns"]
@@ -533,16 +573,19 @@ def aggregate_audits(catalog: list[dict], results: list[dict], judges: list[str]
                 "judge_statuses": raw_statuses,
                 "fixed_checklist": checklist,
                 "fixed_checklist_value": {
-                    "pass": True, "concern": False, "unknown": None,
+                    "pass": True,
+                    "concern": False,
+                    "unknown": None,
                 }[checklist],
                 "math_support_label": (
                     "model_supported_no_confirmed_concern"
-                    if agreed["mathematics"] == "pass" else "unknown_or_unresolved"
+                    if agreed["mathematics"] == "pass"
+                    else "unknown_or_unresolved"
                 ),
                 "mathematical_witness_statuses": [
-                    [
-                        check["status"] for check in result["mathematical_witness_checks"]
-                    ] if result and result.get("status") in PARSED_STATUSES else []
+                    [check["status"] for check in result["mathematical_witness_checks"]]
+                    if result and result.get("status") in PARSED_STATUSES
+                    else []
                     for result in pair
                 ],
                 "individual_checklists": individual_checklists,
@@ -565,39 +608,45 @@ def aggregate_audits(catalog: list[dict], results: list[dict], judges: list[str]
             "denominator_all_catalog_tasks": len(rows),
             "denominator_delivered_property_audits": sum(
                 (
-                    row["availability"] if name == "fixed_checklist"
+                    row["availability"]
+                    if name == "fixed_checklist"
                     else row["property_availability"][name]
-                ) == "available" for row in rows
+                )
+                == "available"
+                for row in rows
             ),
             "unknown_due_to_unavailability": sum(
-                (
-                    row["fixed_checklist"] if name == "fixed_checklist"
-                    else row["consensus"][name]
-                ) == "unknown" and (
-                    row["availability"] if name == "fixed_checklist"
+                (row["fixed_checklist"] if name == "fixed_checklist" else row["consensus"][name])
+                == "unknown"
+                and (
+                    row["availability"]
+                    if name == "fixed_checklist"
                     else row["property_availability"][name]
-                ) != "available" for row in rows
+                )
+                != "available"
+                for row in rows
             ),
             "substantive_unknown_or_disputed_available": sum(
-                (
-                    row["fixed_checklist"] if name == "fixed_checklist"
-                    else row["consensus"][name]
-                ) == "unknown" and (
-                    row["availability"] if name == "fixed_checklist"
+                (row["fixed_checklist"] if name == "fixed_checklist" else row["consensus"][name])
+                == "unknown"
+                and (
+                    row["availability"]
+                    if name == "fixed_checklist"
                     else row["property_availability"][name]
-                ) == "available" for row in rows
+                )
+                == "available"
+                for row in rows
             ),
             "pass_rate_all_tasks": counts["pass"] / len(rows) if rows else None,
             "pass_rate_known_only": (
                 counts["pass"] / (counts["pass"] + counts["concern"])
-                if counts["pass"] + counts["concern"] else None
+                if counts["pass"] + counts["concern"]
+                else None
             ),
         }
     agreement = {}
     for name in (*FINDINGS, "mathematics", *(f"anchor_{a}" for a in ANCHORS)):
-        pairs = [
-            row["individual_decisions"][name] for row in rows if row["usable_judgments"] == 2
-        ]
+        pairs = [row["individual_decisions"][name] for row in rows if row["usable_judgments"] == 2]
         exact = sum(values[0] == values[1] for values in pairs)
         known = [values for values in pairs if "unknown" not in values]
         agreement[name] = {
@@ -611,7 +660,8 @@ def aggregate_audits(catalog: list[dict], results: list[dict], judges: list[str]
             "unknown_in_either": len(pairs) - len(known),
         }
         raw_pairs = [
-            row["judge_statuses"][name] for row in rows
+            row["judge_statuses"][name]
+            for row in rows
             if all(value is not None for value in row["judge_statuses"][name])
         ]
         agreement[name]["raw_status_pair_denominator"] = len(raw_pairs)
@@ -623,13 +673,16 @@ def aggregate_audits(catalog: list[dict], results: list[dict], judges: list[str]
         )
     high_rows = [row for row in rows if row["original_high_score_screen"] is True]
     totals = [
-        row["original_scores"]["TOTAL"] for row in rows
+        row["original_scores"]["TOTAL"]
+        for row in rows
         if row["original_scores"] and row["original_scores"].get("TOTAL") is not None
     ]
     checked_quotes = [
         anchor
-        for result in results if result.get("status") in PARSED_STATUSES
-        for finding in result["quote_fidelity"].values() for anchor in finding["anchors"]
+        for result in results
+        if result.get("status") in PARSED_STATUSES
+        for finding in result["quote_fidelity"].values()
+        for anchor in finding["anchors"]
     ]
     return {
         "version": VERSION,
@@ -664,21 +717,24 @@ def aggregate_audits(catalog: list[dict], results: list[dict], judges: list[str]
         "partially_valid_judgments": sum(
             result.get("status") == "partially_parsed" for result in results
         ),
-        "field_validation_error_counts": dict(Counter(
-            name for result in results for name in result.get("field_errors", {})
-        )),
+        "field_validation_error_counts": dict(
+            Counter(name for result in results for name in result.get("field_errors", {}))
+        ),
         "missing_judgments": len(rows) * 2 - len(results),
-        "error_status_counts": dict(Counter(
-            result.get("status", "missing")
-            for result in results if result.get("status") not in PARSED_STATUSES
-        )),
+        "error_status_counts": dict(
+            Counter(
+                result.get("status", "missing")
+                for result in results
+                if result.get("status") not in PARSED_STATUSES
+            )
+        ),
         "rates": rates,
         "agreement": agreement,
         "judge_status_distributions": {
             judge: {
-                name: dict(Counter(
-                    row["judge_statuses"][name][index] or "unavailable" for row in rows
-                ))
+                name: dict(
+                    Counter(row["judge_statuses"][name][index] or "unavailable" for row in rows)
+                )
                 for name in (*FINDINGS, "mathematics", *(f"anchor_{a}" for a in ANCHORS))
             }
             for index, judge in enumerate(judges)

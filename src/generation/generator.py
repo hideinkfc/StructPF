@@ -6,6 +6,7 @@ from dataclasses import dataclass
 @dataclass
 class PFExercise:
     """A generated Productive Failure exercise."""
+
     seed_problem: str
     generated_exercise: str
     criteria_scores: dict

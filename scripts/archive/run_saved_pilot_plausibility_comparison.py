@@ -25,7 +25,13 @@ from scripts.run_basic_glm_correctness_pilot import (  # noqa: E402
     plausibility_prompt,
 )
 
-OUTPUT_PATH = PROJECT_ROOT / "experiments" / "results" / "phase1_mcq" / "basic_glm_plausibility_comparison_5.json"
+OUTPUT_PATH = (
+    PROJECT_ROOT
+    / "experiments"
+    / "results"
+    / "phase1_mcq"
+    / "basic_glm_plausibility_comparison_5.json"
+)
 SAMPLE_SIZE = 5
 SAMPLE_SEED = 42
 JUDGE_WORKERS = WORKERS
@@ -43,10 +49,14 @@ def _write_payload(payload: dict[str, Any]) -> None:
     OUTPUT_PATH.write_text(json.dumps(payload, indent=2))
 
 
-def _judge_one(task: tuple[str, dict[str, Any], int, dict[str, Any]], client: Any) -> dict[str, Any]:
+def _judge_one(
+    task: tuple[str, dict[str, Any], int, dict[str, Any]], client: Any
+) -> dict[str, Any]:
     source, record, distractor_index, distractor = task
     try:
-        result, cache_hit = cached_judge_json(plausibility_prompt(record, distractor), client=client)
+        result, cache_hit = cached_judge_json(
+            plausibility_prompt(record, distractor), client=client
+        )
         score = int(result.get("score", -1))
         if score not in (0, 1, 2):
             raise ValueError("score must be 0, 1, or 2")
@@ -71,7 +81,9 @@ def _judge_one(task: tuple[str, dict[str, Any], int, dict[str, Any]], client: An
         }
 
 
-def judge_records(records_by_source: dict[str, list[dict[str, Any]]], client: Any) -> list[dict[str, Any]]:
+def judge_records(
+    records_by_source: dict[str, list[dict[str, Any]]], client: Any
+) -> list[dict[str, Any]]:
     tasks = [
         (source, record, index, distractor)
         for source, records in records_by_source.items()
@@ -83,7 +95,9 @@ def judge_records(records_by_source: dict[str, list[dict[str, Any]]], client: An
         futures = [pool.submit(_judge_one, task, client) for task in tasks]
         for future in as_completed(futures):
             rows.append(future.result())
-    return sorted(rows, key=lambda row: (row["source"], row["question_id"], row["distractor_index"]))
+    return sorted(
+        rows, key=lambda row: (row["source"], row["question_id"], row["distractor_index"])
+    )
 
 
 def summarize_judgments(rows: list[dict[str, Any]], source: str) -> dict[str, Any]:
@@ -93,7 +107,9 @@ def summarize_judgments(rows: list[dict[str, Any]], source: str) -> dict[str, An
         "distractors_judged": len(scores),
         "mean_plausibility_score": round(mean(scores), 3) if scores else None,
         "median_plausibility_score": median(scores) if scores else None,
-        "screen_rate_score_at_least_1": round(sum(score >= 1 for score in scores) / len(scores), 3) if scores else None,
+        "screen_rate_score_at_least_1": round(sum(score >= 1 for score in scores) / len(scores), 3)
+        if scores
+        else None,
         "score_counts": {str(score): scores.count(score) for score in (0, 1, 2)},
     }
 
@@ -108,15 +124,26 @@ def compare_conditions(
     fresh_correctness = correctness_summary["fresh_glm"]["incorrectness_rate"]
     if saved["mean_plausibility_score"] is None or fresh["mean_plausibility_score"] is None:
         winner = "inconclusive"
-    elif fresh["mean_plausibility_score"] > saved["mean_plausibility_score"] and fresh_correctness >= saved_correctness:
+    elif (
+        fresh["mean_plausibility_score"] > saved["mean_plausibility_score"]
+        and fresh_correctness >= saved_correctness
+    ):
         winner = "fresh_glm"
-    elif saved["mean_plausibility_score"] > fresh["mean_plausibility_score"] and saved_correctness >= fresh_correctness:
+    elif (
+        saved["mean_plausibility_score"] > fresh["mean_plausibility_score"]
+        and saved_correctness >= fresh_correctness
+    ):
         winner = "saved"
     else:
         winner = "inconclusive"
     return {
         "winner_under_pre_registered_rule": winner,
-        "saved_mean_minus_fresh_mean": round(saved["mean_plausibility_score"] - fresh["mean_plausibility_score"], 3) if saved["mean_plausibility_score"] is not None and fresh["mean_plausibility_score"] is not None else None,
+        "saved_mean_minus_fresh_mean": round(
+            saved["mean_plausibility_score"] - fresh["mean_plausibility_score"], 3
+        )
+        if saved["mean_plausibility_score"] is not None
+        and fresh["mean_plausibility_score"] is not None
+        else None,
         "interpretation": "This is a paired exploratory comparison of two stochastic GLM draws, not a model-quality claim.",
     }
 
@@ -134,20 +161,30 @@ def main() -> None:
     payload: dict[str, Any] = {
         "status": "running",
         "expectations": EXPECTATIONS,
-        "sampling": {"source": str(RESULTS_PATH.relative_to(PROJECT_ROOT)), "seed": SAMPLE_SEED, "sample_size": SAMPLE_SIZE, "question_ids": question_ids},
+        "sampling": {
+            "source": str(RESULTS_PATH.relative_to(PROJECT_ROOT)),
+            "seed": SAMPLE_SEED,
+            "sample_size": SAMPLE_SIZE,
+            "question_ids": question_ids,
+        },
         "saved_records": selected,
     }
     _write_payload(payload)
 
     glm_client = get_client()
     with ThreadPoolExecutor(max_workers=min(WORKERS, len(questions))) as pool:
-        futures = [pool.submit(generate_distractors, question, glm_client, structured_paths=False) for question in questions]
+        futures = [
+            pool.submit(generate_distractors, question, glm_client, structured_paths=False)
+            for question in questions
+        ]
         fresh_records = [future.result() for future in futures]
     fresh_records.sort(key=lambda record: record["question_id"])
 
     judge_client = get_judge_client()
     judgment_rows = judge_records({"saved": selected, "fresh_glm": fresh_records}, judge_client)
-    judgment_summary = {source: summarize_judgments(judgment_rows, source) for source in ("saved", "fresh_glm")}
+    judgment_summary = {
+        source: summarize_judgments(judgment_rows, source) for source in ("saved", "fresh_glm")
+    }
     correctness_summary = {}
     for source, records in (("saved", selected), ("fresh_glm", fresh_records)):
         _, summary = evaluate_records(records)

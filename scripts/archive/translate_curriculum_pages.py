@@ -67,7 +67,8 @@ def _translation_pages() -> list[dict]:
         raise FileNotFoundError(f"Build the corpus first: {CORPUS_PATH}")
     chunks = json.loads(CORPUS_PATH.read_text())
     pages = [
-        chunk for chunk in chunks
+        chunk
+        for chunk in chunks
         if chunk.get("language") != "en" and chunk.get("chunk_id", "").endswith("::original")
     ]
     return sorted(pages, key=lambda chunk: (chunk["doc"], chunk["page"]))
@@ -104,7 +105,7 @@ def main() -> None:
     if args.limit is not None:
         if args.limit < 1:
             raise ValueError("--limit must be positive")
-        pending = pending[:args.limit]
+        pending = pending[: args.limit]
 
     print(f"pages needing translation: {len(pending)}")
     for number, page in enumerate(pending, 1):

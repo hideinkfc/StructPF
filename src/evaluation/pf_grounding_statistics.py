@@ -76,9 +76,7 @@ def paired_block_summary(
         availability[(case, repeat, arm)] = state
     if not slots:
         raise ValueError("No records for the requested arms")
-    incomplete = [
-        f"{case}/{repeat}" for (case, repeat), pair in slots.items() if len(pair) != 2
-    ]
+    incomplete = [f"{case}/{repeat}" for (case, repeat), pair in slots.items() if len(pair) != 2]
     if incomplete:
         raise ValueError(f"Missing scheduled arm records: {', '.join(incomplete)}")
 
@@ -99,12 +97,10 @@ def paired_block_summary(
                     for repeat, pair in block
                 ),
                 "task_unavailable": sum(
-                    availability[(case, repeat, arm)] == "task_unavailable"
-                    for repeat, _ in block
+                    availability[(case, repeat, arm)] == "task_unavailable" for repeat, _ in block
                 ),
                 "audit_unavailable": sum(
-                    availability[(case, repeat, arm)] == "audit_unavailable"
-                    for repeat, _ in block
+                    availability[(case, repeat, arm)] == "audit_unavailable" for repeat, _ in block
                 ),
             }
         t = arm_counts[treatment]

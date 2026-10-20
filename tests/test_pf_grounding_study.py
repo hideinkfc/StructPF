@@ -9,22 +9,28 @@ from scripts import run_pf_grounding_study as study
 
 
 def fake_lc_context(case, **kwargs):
-    response = [{
-        "caseIdentifierUUID": f"standard-{number}",
-        "description": f"Illustrative mathematical reference {number}; not real evidence.",
-        "author": "Illustrative author",
-        "provider": "Illustrative provider",
-        "license": "Illustrative license",
-        "attributionStatement": "Illustrative attribution",
-        "jurisdiction": "Illustrative jurisdiction",
-        "statementCode": f"TEST.{number}",
-    } for number in range(1, 4)]
+    response = [
+        {
+            "caseIdentifierUUID": f"standard-{number}",
+            "description": f"Illustrative mathematical reference {number}; not real evidence.",
+            "author": "Illustrative author",
+            "provider": "Illustrative provider",
+            "license": "Illustrative license",
+            "attributionStatement": "Illustrative attribution",
+            "jurisdiction": "Illustrative jurisdiction",
+            "statementCode": f"TEST.{number}",
+        }
+        for number in range(1, 4)
+    ]
     return {
         "schema_version": study.lc.SCHEMA_VERSION,
         "api_base_url": study.lc.BASE_URL,
         "request": {
-            "query": kwargs["query"], "academic_subject": "Mathematics",
-            "grade_levels": [], "jurisdiction": None, "limit": study.lc.SEARCH_LIMIT,
+            "query": kwargs["query"],
+            "academic_subject": "Mathematics",
+            "grade_levels": [],
+            "jurisdiction": None,
+            "limit": study.lc.SEARCH_LIMIT,
         },
         "retrieved_at_utc": "2026-10-12T22:00:00+00:00",
         "response": response,
@@ -62,9 +68,7 @@ def test_prepare_freezes_only_evidence_difference(frozen, monkeypatch):
     assert manifest["protocol"]["worst_case_scheduled_requests"] == 945
     for case in manifest["config"]["cases"]:
         inputs = output / "inputs" / case["id"]
-        contexts = {
-            arm: study.read_json(inputs / f"context_{arm}.json") for arm in study.ARMS
-        }
+        contexts = {arm: study.read_json(inputs / f"context_{arm}.json") for arm in study.ARMS}
         non_evidence = [
             {key: value for key, value in context.items() if key != study.INVENTORY_KEY}
             for context in contexts.values()
@@ -77,15 +81,17 @@ def test_prepare_freezes_only_evidence_difference(frozen, monkeypatch):
         assert inventories[1]["local_curriculum"] == inventories[2]["local_curriculum"]
         assert not inventories[1]["learning_commons_standard_descriptions"]
         assert len(inventories[2]["learning_commons_standard_descriptions"]) == 3
-        assert all(record["license"] for record in
-                   inventories[2]["learning_commons_standard_descriptions"])
+        assert all(
+            record["license"] for record in inventories[2]["learning_commons_standard_descriptions"]
+        )
         context = study.stages._prior_context_from_d1(inputs / "fixed_d1.json", case["id"])
         assert [row["resource"] for row in context["recommendations"]] == case[
             "teacher_recently_taught"
         ]
         assert "learning_commons" not in context
     monkeypatch.setattr(
-        study.lc, "retrieve_context",
+        study.lc,
+        "retrieve_context",
         lambda *args, **kwargs: pytest.fail("Resume must not retrieve again"),
     )
     assert study.prepare(study.DEFAULT_CONFIG, output) == manifest
@@ -112,14 +118,20 @@ def test_text_budget_preserves_source_hash():
 
 def test_request_boundary_has_hard_cap_and_usage(tmp_path):
     calls = []
-    usage = SimpleNamespace(model_dump=lambda **kwargs: {
-        "prompt_tokens": 11, "completion_tokens": 7, "total_tokens": 18,
-    })
+    usage = SimpleNamespace(
+        model_dump=lambda **kwargs: {
+            "prompt_tokens": 11,
+            "completion_tokens": 7,
+            "total_tokens": 18,
+        }
+    )
 
     def create(**kwargs):
         calls.append(kwargs)
         return SimpleNamespace(
-            id="fake-response", model="fake-model", usage=usage,
+            id="fake-response",
+            model="fake-model",
+            usage=usage,
             choices=[SimpleNamespace(finish_reason="stop")],
         )
 
@@ -164,38 +176,50 @@ def save_fake_completed(output, item, *, failed=False):
     directory = output / item["attempt_path"]
     directory.mkdir(parents=True)
     task = {
-        "status": "ready", "title": "Illustrative test task",
+        "status": "ready",
+        "title": "Illustrative test task",
         "body": "Illustrative task body, not measured student evidence.",
         "question": "Illustrative question?",
     }
     packet = study.read_json(inputs / "fixed_d1.json")
     packet["origin"] = "diagnostic_reused_d1"
     study.save_json(directory / "d1.json", packet)
-    study.save_json(directory / "result.json", {
-        "status": "D2_D3_failed" if failed else "completed",
-        "error": "Illustrative API error" if failed else None,
-        "case_input": study.read_json(inputs / "case.json"),
-        "stages": {"D2_D3": {"task": None if failed else task}},
-        "model_call_count": 1,
-    })
+    study.save_json(
+        directory / "result.json",
+        {
+            "status": "D2_D3_failed" if failed else "completed",
+            "error": "Illustrative API error" if failed else None,
+            "case_input": study.read_json(inputs / "case.json"),
+            "stages": {"D2_D3": {"task": None if failed else task}},
+            "model_call_count": 1,
+        },
+    )
     shared = study.read_json(inputs / f"context_{item['arm']}.json")
     record = {
-        "call_id": "test:1", "user_prompt": (
+        "call_id": "test:1",
+        "user_prompt": (
             "Illustrative task request"
             "\n\nSHARED BENCHMARK CONTEXT (use throughout this design stage):\n"
             + json.dumps(shared)
         ),
     }
     (directory / "model_calls.jsonl").write_text(
-        json.dumps({**record, "event": "model_call_started"}) + "\n"
-        + json.dumps({**record, "event": "model_call_finished"}) + "\n"
+        json.dumps({**record, "event": "model_call_started"})
+        + "\n"
+        + json.dumps({**record, "event": "model_call_finished"})
+        + "\n"
     )
     (directory / "request_usage.jsonl").write_text(
-        json.dumps({"event": "request_started", "request_number": 1}) + "\n"
-        + json.dumps({
-            "event": "request_finished", "request_number": 1,
-            "usage": {"prompt_tokens": 4, "completion_tokens": 5, "total_tokens": 9},
-        }) + "\n"
+        json.dumps({"event": "request_started", "request_number": 1})
+        + "\n"
+        + json.dumps(
+            {
+                "event": "request_finished",
+                "request_number": 1,
+                "usage": {"prompt_tokens": 4, "completion_tokens": 5, "total_tokens": 9},
+            }
+        )
+        + "\n"
     )
     study.complete_receipt(directory)
     return directory
@@ -230,7 +254,10 @@ def test_export_separates_arms_sources_and_calibration(frozen):
     assert tasks[0]["source_sha256"]
     evaluator = study.read_json(output / "evaluator_input.json")
     assert set(evaluator[0]) == {
-        "task_id", "student_task", "learner_context", "learning_target",
+        "task_id",
+        "student_task",
+        "learner_context",
+        "learning_target",
     }
     assert "arm" not in json.dumps(evaluator)
     assert len(study.read_json(output / "all_attempts.json")) == 63

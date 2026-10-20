@@ -2016,15 +2016,17 @@ def _resume_design_data(args, case, prior_context, winner, stored_source, client
         history.append(data_run)
     if not args.no_fill:
         data_run = _run_design_data(
-            client, model, case, winner, prior_context,
+            client,
+            model,
+            case,
+            winner,
+            prior_context,
             initial_proposal=None if args.replan or data_run is None else data_run["payload"],
         )
     task, raw = (None, "")
     accepted = data_run is not None and data_run["accepted"]
     if data_run is not None and data_run["payload"] is not None and not args.no_fill:
-        task, raw = _write_design_data_task(
-            client, model, case, winner, data_run, prior_context
-        )
+        task, raw = _write_design_data_task(client, model, case, winner, data_run, prior_context)
     result = {
         "schema_version": "pf-design-data/v1",
         "case": args.case,
@@ -2165,9 +2167,7 @@ def main() -> None:
             "design_data" in stored_source
             or stored_payload.get("schema_version") == "pf-design-data/v1"
         ):
-            _resume_design_data(
-                args, case, prior_context, winner, stored_source, client, model
-            )
+            _resume_design_data(args, case, prior_context, winner, stored_source, client, model)
             return
         if isinstance(stored_source.get("design_repair_attempts"), list):
             stored_repair_attempts = stored_source["design_repair_attempts"]

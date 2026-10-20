@@ -12,20 +12,35 @@ def inputs(tmp_path, monkeypatch):
     source_dir = tmp_path / "sources"
     source = source_dir / "example" / "result.json"
     source.parent.mkdir(parents=True)
-    source.write_text(json.dumps({
-        "case_id": "example", "case_input": case, "prior_context": context,
-        "model": "test",
-        "stages": {"D2_D3": {"winner": winner.to_dict(), "task": writer_payload()}},
-    }))
+    source.write_text(
+        json.dumps(
+            {
+                "case_id": "example",
+                "case_input": case,
+                "prior_context": context,
+                "model": "test",
+                "stages": {"D2_D3": {"winner": winner.to_dict(), "task": writer_payload()}},
+            }
+        )
+    )
     config_path = tmp_path / "config.json"
-    config_path.write_text(json.dumps({
-        "source_directory": "sources", "model_selector": "luna",
-        "protocol": {"calibration_cases": ["example"], "evidence_kind": "test"},
-        "cases": [{
-            "id": "example", "expected_given": "Journey records",
-            "expected_teacher_example": "None", "expected_student_job": "Compare journeys",
-        }],
-    }))
+    config_path.write_text(
+        json.dumps(
+            {
+                "source_directory": "sources",
+                "model_selector": "luna",
+                "protocol": {"calibration_cases": ["example"], "evidence_kind": "test"},
+                "cases": [
+                    {
+                        "id": "example",
+                        "expected_given": "Journey records",
+                        "expected_teacher_example": "None",
+                        "expected_student_job": "Compare journeys",
+                    }
+                ],
+            }
+        )
+    )
     monkeypatch.setattr(replay, "ROOT", tmp_path)
     monkeypatch.setattr(replay, "source_hashes", lambda path: {"config": path.read_text()})
     return config_path, source
@@ -49,16 +64,20 @@ def test_live_replay_traces_calls_and_preserves_failures(tmp_path, monkeypatch, 
     original = source.read_bytes()
     responses = iter(
         [proposal_payload(), {**writer_payload(), "body": "2, 2, 2 km; 20, 20, 40 min."}]
-        if accepted else [{}, {}, {}]
+        if accepted
+        else [{}, {}, {}]
     )
     monkeypatch.setattr(
-        replay.diagnostic, "chat_json",
+        replay.diagnostic,
+        "chat_json",
         lambda *args, **kwargs: (next(responses), "raw"),
     )
     options = []
-    monkeypatch.setattr(replay, "load_client", lambda _: (
-        SimpleNamespace(with_options=lambda **kwargs: options.append(kwargs)), "test"
-    ))
+    monkeypatch.setattr(
+        replay,
+        "load_client",
+        lambda _: (SimpleNamespace(with_options=lambda **kwargs: options.append(kwargs)), "test"),
+    )
     output = tmp_path / "output"
     result = replay.run(config, output, ["example"])
     record = json.loads((output / "example" / "result.json").read_text())

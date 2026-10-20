@@ -28,9 +28,7 @@ PROFILE_PATH = PROJECT_ROOT / "experiments" / "configs" / "functional_diversity_
 QUESTION_PATH = (
     PROJECT_ROOT / "experiments" / "configs" / "functional_diversity_test0_questions.json"
 )
-GENERATION_PATH = (
-    PROJECT_ROOT / "experiments" / "results" / "phase1_mcq" / "01_basic_direct.jsonl"
-)
+GENERATION_PATH = PROJECT_ROOT / "experiments" / "results" / "phase1_mcq" / "01_basic_direct.jsonl"
 DEFAULT_OUTPUT = (
     PROJECT_ROOT
     / "experiments"
@@ -110,9 +108,7 @@ def load_tasks(condition: str, question_ids: list[int]) -> list[dict[str, Any]]:
         generated = generated_rows[question_id]["generated"]
         generated_letters = [letter for letter in "ABCD" if letter != question["correct_option"]]
         options = {question["correct_option"]: question["correct_text"]}
-        options.update(
-            {letter: item["text"] for letter, item in zip(generated_letters, generated)}
-        )
+        options.update({letter: item["text"] for letter, item in zip(generated_letters, generated)})
         if set(options) != set("ABCD"):
             raise ValueError(f"Q{question_id} does not have four constructed options.")
         for profile in profiles[question_id]:
@@ -159,8 +155,7 @@ def summarize(rows: list[dict[str, Any]], wall_seconds: float, workers: int) -> 
     for question_id, question_rows in sorted(by_question.items()):
         generated_letters = question_rows[0]["generated_option_letters"]
         pairs = [
-            (row["profile_id"], row["selected_option"] or "UNPARSEABLE")
-            for row in question_rows
+            (row["profile_id"], row["selected_option"] or "UNPARSEABLE") for row in question_rows
         ]
         nmi = normalized_mutual_information(pairs)
         if nmi is not None:
@@ -237,9 +232,7 @@ def summarize(rows: list[dict[str, Any]], wall_seconds: float, workers: int) -> 
         if nmi_values
         else None,
         "wall_seconds": round(wall_seconds, 3),
-        "effective_calls_per_second": round(len(rows) / wall_seconds, 3)
-        if wall_seconds
-        else None,
+        "effective_calls_per_second": round(len(rows) / wall_seconds, 3) if wall_seconds else None,
         "question_matrices": matrices,
     }
 
@@ -274,11 +267,7 @@ def main() -> None:
     tasks = load_tasks(args.condition, args.question_ids)
     model = models[args.model]
     client = OpenAI(base_url=base_url, api_key=api_key, max_retries=0)
-    scheduled = [
-        (task, repeat)
-        for repeat in range(1, args.repeats + 1)
-        for task in tasks
-    ]
+    scheduled = [(task, repeat) for repeat in range(1, args.repeats + 1) for task in tasks]
     started = time.perf_counter()
     rows: list[dict[str, Any]] = []
     with ThreadPoolExecutor(max_workers=min(args.workers, len(scheduled))) as pool:

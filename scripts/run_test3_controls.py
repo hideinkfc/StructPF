@@ -28,9 +28,7 @@ from scripts.run_test2_rule_following_with_options import (  # noqa: E402
     extract_choice,
 )
 
-PROFILE_PATH = (
-    PROJECT_ROOT / "experiments" / "configs" / "functional_diversity_test1_profiles.json"
-)
+PROFILE_PATH = PROJECT_ROOT / "experiments" / "configs" / "functional_diversity_test1_profiles.json"
 DEFAULT_OUTPUT = (
     PROJECT_ROOT / "experiments" / "results" / "functional_diversity_test3_controls.json"
 )
@@ -217,18 +215,12 @@ def summarize(rows: list[dict[str, Any]], wall_seconds: float, workers: int) -> 
         "floor_calls": len(floor),
         "floor_choice_counts": dict(sorted(floor_counts.items())),
         "floor_choice_entropy_bits": entropy(floor_counts),
-        "floor_dominant_choice_share": round(
-            max(floor_counts.values()) / len(floor), 3
-        )
+        "floor_dominant_choice_share": round(max(floor_counts.values()) / len(floor), 3)
         if floor
         else None,
         "wall_seconds": round(wall_seconds, 3),
-        "effective_calls_per_second": round(len(rows) / wall_seconds, 3)
-        if wall_seconds
-        else None,
-        "mean_latency_seconds": round(sum(latencies) / len(latencies), 3)
-        if latencies
-        else None,
+        "effective_calls_per_second": round(len(rows) / wall_seconds, 3) if wall_seconds else None,
+        "mean_latency_seconds": round(sum(latencies) / len(latencies), 3) if latencies else None,
     }
 
 
@@ -251,8 +243,7 @@ def main() -> None:
     questions = load_control_questions()
     model_specs = {label: models[label] for label in ("gpt41", "gpt41mini")}
     clients = {
-        label: OpenAI(base_url=base_url, api_key=api_key, max_retries=0)
-        for label in model_specs
+        label: OpenAI(base_url=base_url, api_key=api_key, max_retries=0) for label in model_specs
     }
     scheduled = [
         (label, question, control_type, repeat)

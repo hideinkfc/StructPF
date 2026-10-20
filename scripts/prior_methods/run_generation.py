@@ -337,9 +337,7 @@ def prepare_output(
             "n_methods",
             "temperature",
         )
-        mismatches = [
-            key for key in comparable if existing_manifest.get(key) != manifest.get(key)
-        ]
+        mismatches = [key for key in comparable if existing_manifest.get(key) != manifest.get(key)]
         if mismatches:
             raise ValueError(f"Cannot resume with changed run settings: {', '.join(mismatches)}")
         records = read_records(records_path)
@@ -424,9 +422,7 @@ def main() -> None:
 
     prompts = load_prompt()
     packages = load_packages(args.concepts)
-    model_labels = (
-        ["gpt41mini", "gpt41"] if args.model == "all" else [args.model]
-    )
+    model_labels = ["gpt41mini", "gpt41"] if args.model == "all" else [args.model]
     jobs, user_prompts = build_jobs(
         packages,
         model_labels,
@@ -496,11 +492,7 @@ def main() -> None:
     records_path, existing_records = prepare_output(output_dir, manifest, args.resume)
     latest = {result_key(record): record for record in existing_records}
     if args.retry_failures:
-        latest = {
-            key: record
-            for key, record in latest.items()
-            if record.get("status") == "ok"
-        }
+        latest = {key: record for key, record in latest.items() if record.get("status") == "ok"}
         write_jsonl(records_path, list(latest.values()))
 
     pending = [job for job in jobs if result_key(job) not in latest]

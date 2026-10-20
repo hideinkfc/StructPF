@@ -5,12 +5,20 @@ from pathlib import Path
 from types import SimpleNamespace
 
 import pytest
+
+from scripts.reparse_pf_measurement_gap_study import reparse_record
 from scripts.report_pf_measurement_gap_study import review_pack
 from scripts.run_pf_measurement_gap_study import (
-    DEFAULT_BENCHMARK, DEFAULT_CONFIG, _stratified, catalog_source_provenance,
-    control_performance, judge_one, prepare_run, read_catalog, run_prepared,
+    DEFAULT_BENCHMARK,
+    DEFAULT_CONFIG,
+    _stratified,
+    catalog_source_provenance,
+    control_performance,
+    judge_one,
+    prepare_run,
+    read_catalog,
+    run_prepared,
 )
-from scripts.reparse_pf_measurement_gap_study import reparse_record
 from src.evaluation.pf_evidence_audit import ANCHORS, FINDINGS
 
 
@@ -39,18 +47,27 @@ def manifest():
     return {
         "system_prompt": "Independent task audit",
         "settings": {
-            "timeout_seconds": 240, "max_completion_tokens": 9000,
-            "gpt54_reasoning_effort": "low", "gpt41_temperature": 0,
+            "timeout_seconds": 240,
+            "max_completion_tokens": 9000,
+            "gpt54_reasoning_effort": "low",
+            "gpt41_temperature": 0,
         },
     }
 
 
 def unknown_response():
-    finding = {"status": "unknown", "task_quotes": [], "reason": "Not enough evidence.", "counterevidence": ""}
+    finding = {
+        "status": "unknown",
+        "task_quotes": [],
+        "reason": "Not enough evidence.",
+        "counterevidence": "",
+    }
     value = {name: dict(finding) for name in FINDINGS}
     value["distinct_mathematical_ideas"]["approaches"] = []
     value["mathematics"] = {
-        **finding, "witnesses": [], "concerns": [],
+        **finding,
+        "witnesses": [],
+        "concerns": [],
     }
     value["original_high_anchor_support"] = {name: dict(finding) for name in ANCHORS}
     return json.dumps(value)
@@ -65,11 +82,17 @@ class FakeClient:
     def create(self, **request):
         self.requests.append(request)
         return SimpleNamespace(
-            id="saved-response-id", model="gpt-4.1",
-            usage=SimpleNamespace(model_dump=lambda: {"prompt_tokens": 20, "completion_tokens": 40}),
-            choices=[SimpleNamespace(
-                finish_reason="stop", message=SimpleNamespace(content=self.raw),
-            )],
+            id="saved-response-id",
+            model="gpt-4.1",
+            usage=SimpleNamespace(
+                model_dump=lambda: {"prompt_tokens": 20, "completion_tokens": 40}
+            ),
+            choices=[
+                SimpleNamespace(
+                    finish_reason="stop",
+                    message=SimpleNamespace(content=self.raw),
+                )
+            ],
         )
 
     def with_options(self, **options):
@@ -79,12 +102,17 @@ class FakeClient:
 
 def test_strata_selection_is_seeded_and_has_no_score_dependency():
     import random
+
     records = [{"number": index, "task_id": str(index)} for index in range(1, 31)]
     a = _stratified(records, 2, random.Random(20261013))
     b = _stratified(records, 2, random.Random(20261013))
     assert a == b
     assert len(a) == 6
-    assert [sum(lower <= item["number"] < lower + 10 for item in a) for lower in (1, 11, 21)] == [2, 2, 2]
+    assert [sum(lower <= item["number"] < lower + 10 for item in a) for lower in (1, 11, 21)] == [
+        2,
+        2,
+        2,
+    ]
 
 
 def test_generic_catalog_array_and_object(artifact_directory):
@@ -116,7 +144,9 @@ def test_failed_catalog_entry_without_task_remains_scheduled(artifact_directory)
 
 def test_saves_response_usage_latency_and_only_blind_input(artifact_directory):
     client = FakeClient(unknown_response())
-    result = judge_one(entry(), "gpt41", "blind-1", manifest(), artifact_directory, client, "gpt-4.1")
+    result = judge_one(
+        entry(), "gpt41", "blind-1", manifest(), artifact_directory, client, "gpt-4.1"
+    )
     assert result["status"] == "parsed"
     assert result["response_id"] == "saved-response-id"
     assert result["usage"]["prompt_tokens"] == 20
@@ -130,7 +160,9 @@ def test_saves_response_usage_latency_and_only_blind_input(artifact_directory):
 
 def test_parse_failure_preserves_raw_and_never_retries(artifact_directory):
     client = FakeClient("{bad json")
-    result = judge_one(entry(), "gpt54", "blind-2", manifest(), artifact_directory, client, "gpt-5.4")
+    result = judge_one(
+        entry(), "gpt54", "blind-2", manifest(), artifact_directory, client, "gpt-5.4"
+    )
     assert result["status"] == "parse_error"
     assert result["raw_response"] == "{bad json"
     assert len(client.requests) == 1
@@ -142,7 +174,9 @@ def test_input_error_is_explicit_with_zero_calls(artifact_directory):
     invalid = entry()
     invalid["task"]["body"] = None
     client = FakeClient(unknown_response())
-    result = judge_one(invalid, "gpt41", "blind-3", manifest(), artifact_directory, client, "gpt-4.1")
+    result = judge_one(
+        invalid, "gpt41", "blind-3", manifest(), artifact_directory, client, "gpt-4.1"
+    )
     assert result["status"] == "input_error"
     assert result["model_calls"] == 0
     assert client.requests == []
@@ -152,7 +186,9 @@ def test_absent_task_is_explicit_unknown_input_with_zero_calls(artifact_director
     invalid = entry()
     invalid["task"] = None
     client = FakeClient(unknown_response())
-    result = judge_one(invalid, "gpt41", "blind-null", manifest(), artifact_directory, client, "gpt-4.1")
+    result = judge_one(
+        invalid, "gpt41", "blind-null", manifest(), artifact_directory, client, "gpt-4.1"
+    )
     assert result["status"] == "input_error"
     assert result["model_calls"] == 0
     assert client.requests == []
@@ -210,13 +246,18 @@ def test_reparse_preserves_raw_and_transport_without_loading_client(monkeypatch)
     monkeypatch.setattr("scripts.run_pf_measurement_gap_study.load_client", forbidden)
     value = json.loads(unknown_response())
     value["accessible_start"] = {
-        "status": "supported", "task_quotes": [],
-        "reason": "Missing quote in this field only.", "counterevidence": "",
+        "status": "supported",
+        "task_quotes": [],
+        "reason": "Missing quote in this field only.",
+        "counterevidence": "",
     }
     raw = json.dumps(value)
     record = {
-        "status": "parse_error", "raw_response": raw, "response_id": "immutable-id",
-        "usage": {"prompt_tokens": 5}, "error": {"type": "ValidationError"},
+        "status": "parse_error",
+        "raw_response": raw,
+        "response_id": "immutable-id",
+        "usage": {"prompt_tokens": 5},
+        "error": {"type": "ValidationError"},
     }
     result = reparse_record(record, entry())
     assert result["status"] == "partially_parsed"
@@ -232,11 +273,17 @@ def test_control_invalid_field_is_not_a_substantive_unknown_match():
     value = json.loads(unknown_response())
     del value["accessible_start"]
     from src.evaluation.pf_evidence_audit import parse_evidence_audit
+
     result = {
-        "task_id": entry()["task_id"], "judge": "gpt41",
+        "task_id": entry()["task_id"],
+        "judge": "gpt41",
         **parse_evidence_audit(json.dumps(value), "6 km in 30 minutes"),
     }
-    control = {**entry(), "role": "development_control", "expected": {"accessible_start": ["unknown"]}}
+    control = {
+        **entry(),
+        "role": "development_control",
+        "expected": {"accessible_start": ["unknown"]},
+    }
     performance = control_performance([control], [result], ["gpt41", "gpt54"])
     row = performance["rows"][0]
     assert row["observed"] is None

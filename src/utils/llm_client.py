@@ -29,6 +29,7 @@ logger = logging.getLogger(__name__)
 @dataclass
 class TokenUsage:
     """Track token usage across calls."""
+
     prompt_tokens: int = 0
     completion_tokens: int = 0
     total_calls: int = 0
@@ -47,6 +48,7 @@ class TokenUsage:
 @dataclass
 class LLMResponse:
     """Structured response from the LLM."""
+
     text: str
     usage: dict = field(default_factory=dict)
     model: str = ""
@@ -153,7 +155,7 @@ class LLMClient:
     def from_role(
         cls,
         role: Literal["generator", "embed", "judge", "structured"],
-        settings = None,
+        settings=None,
     ) -> "LLMClient":
         """Create a client for a specific role.
 
@@ -180,9 +182,9 @@ class LLMClient:
             return cls(base_url=base_url, model=model, api_key=api_key)
 
         model_map = {
-            "generator":  (settings.swissai_generator_model or SWISSAI_DEFAULT_GENERATOR),
-            "embed":      (settings.swissai_embed_model or SWISSAI_DEFAULT_EMBED),
-            "judge":      (settings.swissai_judge_model or SWISSAI_DEFAULT_JUDGE),
+            "generator": (settings.swissai_generator_model or SWISSAI_DEFAULT_GENERATOR),
+            "embed": (settings.swissai_embed_model or SWISSAI_DEFAULT_EMBED),
+            "judge": (settings.swissai_judge_model or SWISSAI_DEFAULT_JUDGE),
             "structured": (settings.swissai_judge_model or SWISSAI_DEFAULT_JUDGE),
         }
 
@@ -214,7 +216,7 @@ class LLMClient:
         for start in range(0, len(texts), 2048):
             response = self._client.embeddings.create(
                 model=model or self._model,
-                input=texts[start:start + 2048],
+                input=texts[start : start + 2048],
             )
             sorted_data = sorted(response.data, key=lambda x: x.index)
             embeddings.extend(d.embedding for d in sorted_data)
@@ -262,9 +264,7 @@ class LLMClient:
         Injects the JSON schema into the system prompt and parses the output.
         """
         schema_json = json.dumps(schema.model_json_schema(), indent=2)
-        system_suffix = (
-            f"\n\nRespond ONLY with valid JSON matching this schema:\n{schema_json}"
-        )
+        system_suffix = f"\n\nRespond ONLY with valid JSON matching this schema:\n{schema_json}"
 
         messages = list(messages)
         if messages and messages[0]["role"] == "system":
@@ -290,6 +290,7 @@ class LLMClient:
                 return schema.model_validate_json(extracted)
             raise
 
+
 # ── Helpers ──────────────────────────────────────────────────────────────────
 
 
@@ -307,7 +308,7 @@ def _strip_thinking(text: str) -> str:
     # must not be mistaken for reasoning steps.
     closing_tags = list(re.finditer(r"</think>", result, flags=re.IGNORECASE))
     if closing_tags:
-        result = result[closing_tags[-1].end():].strip()
+        result = result[closing_tags[-1].end() :].strip()
         result = re.sub(r"</?think>", "", result, flags=re.IGNORECASE).strip()
         return result if result else text.strip()
 
@@ -315,21 +316,24 @@ def _strip_thinking(text: str) -> str:
     if result.lower().startswith("<think>"):
         end_idx = result.find("</think>")
         if end_idx != -1:
-            result = result[end_idx + len("</think>"):].strip()
+            result = result[end_idx + len("</think>") :].strip()
 
     # Format 2: "Thinking Process:" header (may coexist with format 1)
     for marker in ("Thinking Process:", "Thinking process:"):
         idx = result.find(marker)
         if idx != -1:
-            rest = result[idx + len(marker):].strip()
+            rest = result[idx + len(marker) :].strip()
             # If a model omits </think>, locate the final structured answer
             # instead of using the last numbered line (which may be a valid
             # student attempt inside CONSOLIDATION NOTE).
-            section_starts = list(re.finditer(
-                r"(?im)^\s*(?:\d+[.)]\s*)?(?:\*\*)?TOPIC\b", rest,
-            ))
+            section_starts = list(
+                re.finditer(
+                    r"(?im)^\s*(?:\d+[.)]\s*)?(?:\*\*)?TOPIC\b",
+                    rest,
+                )
+            )
             for section_start in reversed(section_starts):
-                candidate = rest[section_start.start():].strip()
+                candidate = rest[section_start.start() :].strip()
                 if re.search(r"(?im)^\s*(?:\d+[.)]\s*)?(?:\*\*)?NARRATIVE\b", candidate):
                     result = candidate
                     break
@@ -341,7 +345,7 @@ def _strip_thinking(text: str) -> str:
                     if re.match(r"^\d+\.\s", line.strip()):
                         last_step = i
                 if last_step >= 0:
-                    result = "\n".join(lines[last_step + 1:]).strip()
+                    result = "\n".join(lines[last_step + 1 :]).strip()
                 else:
                     result = rest
             break
@@ -364,6 +368,7 @@ def _extract_json(text: str) -> str | None:
     Skips objects that look like JSON schemas (have "properties" key).
     Returns None if no valid JSON is found.
     """
+
     # Find all {...} object candidates using stack-based brace matching
     def _find_balanced(pairs: list[tuple[str, str]]) -> list[str]:
         """Find top-level balanced spans for the given brace pairs."""
@@ -379,7 +384,7 @@ def _extract_json(text: str) -> str | None:
                 if stack[-1][0] == expected_open:
                     _, start = stack.pop()
                     if not stack:
-                        candidates.append(text[start:i + 1])
+                        candidates.append(text[start : i + 1])
         return candidates
 
     # Collect candidates: objects first (preferred), then arrays
@@ -404,4 +409,3 @@ def _extract_json(text: str) -> str | None:
         except json.JSONDecodeError:
             continue
     return None
-

@@ -161,9 +161,7 @@ def run_attempt(
         }
     record["started_at"] = started
     record["finished_at"] = now()
-    record["effective_truncation"] = bool(
-        metadata and metadata.get("finish_reason") == "length"
-    )
+    record["effective_truncation"] = bool(metadata and metadata.get("finish_reason") == "length")
     write_json(result_path, record)
     return record
 
@@ -182,9 +180,7 @@ def run(output: Path, n: int, workers: int) -> dict[str, Any]:
         raise ValueError("Frozen user prompt changed since preparation")
     api = client()
     jobs = [
-        (model, index)
-        for index in range(1, manifest["attempts_per_model"] + 1)
-        for model in MODELS
+        (model, index) for index in range(1, manifest["attempts_per_model"] + 1) for model in MODELS
     ]
     results: list[dict[str, Any]] = []
     with ThreadPoolExecutor(max_workers=workers) as pool:

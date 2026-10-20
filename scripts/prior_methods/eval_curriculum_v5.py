@@ -54,35 +54,59 @@ def generated_methods_str(methods: list[dict]) -> str:
 
 
 def judge_coverage(client, model, prompts, package, expert_method, generated_methods):
-    user = render(prompts["V5_COVERAGE_USER"], {
-        "{concept_text}": package["concept_text"],
-        "{expert_method}": expert_method,
-        "{generated_methods}": generated_methods_str(generated_methods),
-    })
-    payload, raw = chat_json(client, model, prompts["V5_COVERAGE_SYSTEM"], user,
-                             temperature=0.0, max_tokens=COVERAGE_MAX_TOKENS)
-    if payload is None:
-        return {"matched_generated_index": None, "confidence": None,
-                "reason": f"parse fail: {raw[:120]}", "parse_ok": False}
-    idx = payload.get("matched_generated_index")
-    ok = (idx is None) or (
-        isinstance(idx, int) and 0 <= idx < len(generated_methods)
+    user = render(
+        prompts["V5_COVERAGE_USER"],
+        {
+            "{concept_text}": package["concept_text"],
+            "{expert_method}": expert_method,
+            "{generated_methods}": generated_methods_str(generated_methods),
+        },
     )
-    return {"matched_generated_index": idx, "confidence": payload.get("confidence"),
-            "reason": payload.get("reason", ""), "parse_ok": ok}
+    payload, raw = chat_json(
+        client,
+        model,
+        prompts["V5_COVERAGE_SYSTEM"],
+        user,
+        temperature=0.0,
+        max_tokens=COVERAGE_MAX_TOKENS,
+    )
+    if payload is None:
+        return {
+            "matched_generated_index": None,
+            "confidence": None,
+            "reason": f"parse fail: {raw[:120]}",
+            "parse_ok": False,
+        }
+    idx = payload.get("matched_generated_index")
+    ok = (idx is None) or (isinstance(idx, int) and 0 <= idx < len(generated_methods))
+    return {
+        "matched_generated_index": idx,
+        "confidence": payload.get("confidence"),
+        "reason": payload.get("reason", ""),
+        "parse_ok": ok,
+    }
 
 
 def judge_fitness(client, model, prompts, package, method):
-    user = render(prompts["V5_FITNESS_USER"], {
-        "{concept_text}": package["concept_text"],
-        "{topic}": package["anchor"]["topic"],
-        "{prior_method}": method.get("prior_method", ""),
-        "{taught_as}": method.get("taught_as", ""),
-        "{what_student_does}": method.get("what_student_does", ""),
-        "{falls_short_because}": method.get("falls_short_because", ""),
-    })
-    payload, raw = chat_json(client, model, prompts["V5_FITNESS_SYSTEM"], user,
-                             temperature=0.0, max_tokens=FITNESS_MAX_TOKENS)
+    user = render(
+        prompts["V5_FITNESS_USER"],
+        {
+            "{concept_text}": package["concept_text"],
+            "{topic}": package["anchor"]["topic"],
+            "{prior_method}": method.get("prior_method", ""),
+            "{taught_as}": method.get("taught_as", ""),
+            "{what_student_does}": method.get("what_student_does", ""),
+            "{falls_short_because}": method.get("falls_short_because", ""),
+        },
+    )
+    payload, raw = chat_json(
+        client,
+        model,
+        prompts["V5_FITNESS_SYSTEM"],
+        user,
+        temperature=0.0,
+        max_tokens=FITNESS_MAX_TOKENS,
+    )
     if payload is None:
         return {"fitness": None, "reason": f"parse fail: {raw[:120]}", "parse_ok": False}
     fit = payload.get("fitness")
@@ -109,16 +133,25 @@ def eval_one_file(client, judge_model, prompts, packages, path: Path):
         cov_futs, fit_futs = {}, {}
         with ThreadPoolExecutor(max_workers=WORKERS) as pool:
             for expert_index, expert_method in enumerate(expert_methods):
-                cov_futs[pool.submit(judge_coverage, client, judge_model, prompts,
-                                     package, expert_method, methods)] = expert_index
+                cov_futs[
+                    pool.submit(
+                        judge_coverage,
+                        client,
+                        judge_model,
+                        prompts,
+                        package,
+                        expert_method,
+                        methods,
+                    )
+                ] = expert_index
             for i, m in enumerate(methods):
-                fit_futs[pool.submit(judge_fitness, client, judge_model, prompts,
-                                     package, m)] = i
+                fit_futs[pool.submit(judge_fitness, client, judge_model, prompts, package, m)] = i
             cov = {cov_futs[f]: f.result() for f in cov_futs}
             fit = {fit_futs[f]: f.result() for f in fit_futs}
 
         covered = {
-            expert_index for expert_index, result in cov.items()
+            expert_index
+            for expert_index, result in cov.items()
             if result.get("parse_ok") and result.get("matched_generated_index") is not None
         }
         for expert_index, result in cov.items():
@@ -128,14 +161,15 @@ def eval_one_file(client, judge_model, prompts, packages, path: Path):
             if isinstance(generated_index, int) and 0 <= generated_index < len(methods):
                 result["matched_generated_method"] = methods[generated_index]
         n_fit = len(fit)
-        fit_counts = {k: sum(1 for v in fit.values() if v["fitness"] == k)
-                      for k in ("correct", "wrong", "vague")}
+        fit_counts = {
+            k: sum(1 for v in fit.values() if v["fitness"] == k)
+            for k in ("correct", "wrong", "vague")
+        }
         results[cid] = {
             "n_generated": len(methods),
             "n_expert_methods": len(expert_methods),
             "expert_recall": (
-                round(len(covered) / len(expert_methods), 3)
-                if expert_methods else None
+                round(len(covered) / len(expert_methods), 3) if expert_methods else None
             ),
             "covered_expert_indices": sorted(covered),
             "fitness_counts": fit_counts,
@@ -187,22 +221,31 @@ def main() -> None:
             if r.get("skipped"):
                 print(f"  {cid}: skipped ({r['reason']})")
                 continue
-            print(f"  {cid}: expert_recall={r['expert_recall']} "
-                  f"({len(r['covered_expert_indices'])}/{r['n_expert_methods']}) "
-                  f"fitness correct={r['fitness_correct_rate']} {r['fitness_counts']}")
+            print(
+                f"  {cid}: expert_recall={r['expert_recall']} "
+                f"({len(r['covered_expert_indices'])}/{r['n_expert_methods']}) "
+                f"fitness correct={r['fitness_correct_rate']} {r['fitness_counts']}"
+            )
 
     output_path = args.output
     if output_path is None:
         output_path = RESULTS / f"v5_eval_expert_first_{which}_v4.json"
     elif not output_path.is_absolute():
         output_path = ROOT / output_path
-    output_path.write_text(json.dumps(
-        {"judge_model": judge_model, "coverage_direction": "expert_to_generated",
-         "coverage_max_tokens": COVERAGE_MAX_TOKENS,
-         "fitness_max_tokens": FITNESS_MAX_TOKENS,
-         "by_generator": all_out},
-        indent=2, ensure_ascii=False
-    ) + "\n")
+    output_path.write_text(
+        json.dumps(
+            {
+                "judge_model": judge_model,
+                "coverage_direction": "expert_to_generated",
+                "coverage_max_tokens": COVERAGE_MAX_TOKENS,
+                "fitness_max_tokens": FITNESS_MAX_TOKENS,
+                "by_generator": all_out,
+            },
+            indent=2,
+            ensure_ascii=False,
+        )
+        + "\n"
+    )
     print(f"\nsaved -> {output_path.relative_to(ROOT)}")
 
 

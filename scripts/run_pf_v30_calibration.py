@@ -11,10 +11,10 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from scripts.run_pf_accessibility_sensitivity import build_chats
+from src.evaluation import pf_three_role_v30 as v30
 from src.evaluation.frozen import pf_three_role_v22 as v22
 from src.evaluation.frozen import pf_three_role_v25 as v25
 from src.evaluation.frozen import pf_three_role_v28 as v28
-from src.evaluation import pf_three_role_v30 as v30
 from src.evaluation.pf_task_measures import MEASURES
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -82,11 +82,15 @@ def run_attempt_fixture(group: dict, case_map: dict[str, dict], chat, out_dir: P
     payload = v22.role_input("attempt_judge", prepared, attempts)
     job = v30.run_judge_v30("attempt_judge", payload, chat)
     parsed = (
-        v28.parse_attempts_v28(job["output"], attempts)
-        if job["status"] == "completed"
-        else None
+        v28.parse_attempts_v28(job["output"], attempts) if job["status"] == "completed" else None
     )
-    rec = {"group_id": gid, "case_id": group["case_id"], "status": job["status"], "parsed": parsed, "job": job}
+    rec = {
+        "group_id": gid,
+        "case_id": group["case_id"],
+        "status": job["status"],
+        "parsed": parsed,
+        "job": job,
+    }
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(rec, indent=2, ensure_ascii=False) + "\n")
     return rec
@@ -117,7 +121,7 @@ def run_full_case(case: dict, chats: dict, out_dir: Path, subdir: str = "full_jo
 
             last_resp = cached_tj["calls"][-1]["response"]
             return LLMResponse(
-                text= json.dumps(cached_tj["output"], ensure_ascii=False),
+                text=json.dumps(cached_tj["output"], ensure_ascii=False),
                 model=last_resp["model"],
                 finish_reason=last_resp["finish_reason"],
                 usage=last_resp["usage"],
@@ -173,13 +177,26 @@ def main() -> None:
         for c in dev_cases:
             cid = c["case_id"]
             ms = tj_results[cid]["measures"]
-            for m in ("target_alignment", "mathematical_validity", "prior_knowledge_accessibility", "room_for_invention"):
+            for m in (
+                "target_alignment",
+                "mathematical_validity",
+                "prior_knowledge_accessibility",
+                "room_for_invention",
+            ):
                 obs = ms[m]["value"] if ms[m]["status"] == "assessed" else ms[m]["status"]
                 exp = c["references"][m]["acceptable_values"]
                 if obs in exp:
                     tj_matches[m] += 1
                 else:
-                    tj_diffs.append({"case_id": cid, "measure": m, "observed": obs, "expected": exp, "evidence": ms[m]["evidence"]})
+                    tj_diffs.append(
+                        {
+                            "case_id": cid,
+                            "measure": m,
+                            "observed": obs,
+                            "expected": exp,
+                            "evidence": ms[m]["evidence"],
+                        }
+                    )
 
         # Sensitivity cases
         sens_results = {}
@@ -223,7 +240,13 @@ def main() -> None:
             if gid == "concrete_no_start":
                 continue
             rec = fix_results[gid]
-            audits = (rec.get("parsed") or {}).get("measures", {}).get("familiar_approach_limits", {}).get("evidence", {}).get("attempts", [])
+            audits = (
+                (rec.get("parsed") or {})
+                .get("measures", {})
+                .get("familiar_approach_limits", {})
+                .get("evidence", {})
+                .get("attempts", [])
+            )
             for exp_rev in g["expected_reviews"]:
                 idx = exp_rev["attempt_index"]
                 exp_st = exp_rev["status"]
@@ -232,7 +255,15 @@ def main() -> None:
                 if obs_st == exp_st:
                     fix_matches += 1
                 else:
-                    fix_diffs.append({"group_id": gid, "index": idx, "observed": obs_st, "expected": exp_st, "reason": audits[idx]["reason"] if idx < len(audits) else None})
+                    fix_diffs.append(
+                        {
+                            "group_id": gid,
+                            "index": idx,
+                            "observed": obs_st,
+                            "expected": exp_st,
+                            "reason": audits[idx]["reason"] if idx < len(audits) else None,
+                        }
+                    )
 
         summary = {
             "version": v30.VERSION,

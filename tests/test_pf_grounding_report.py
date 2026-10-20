@@ -9,17 +9,27 @@ def fixture():
         for arm in ("A", "B", "C"):
             task_id = f"{case}-{arm}"
             outcome = arm != "A"
-            catalog.append({
-                "task_id": task_id, "case_id": case, "repeat": 1, "arm": arm,
-                "produced": True, "task": {"title": "t", "body": "b", "question": "q"}
-            })
-            rows.append({
-                "task_id": task_id, "fixed_checklist_value": outcome,
-                "availability": "available", "availability_reason": None,
-                "consensus_values": {prop: outcome for prop in PROPERTIES},
-                "property_availability": {prop: "available" for prop in PROPERTIES},
-                "property_failure_reasons": {},
-            })
+            catalog.append(
+                {
+                    "task_id": task_id,
+                    "case_id": case,
+                    "repeat": 1,
+                    "arm": arm,
+                    "produced": True,
+                    "task": {"title": "t", "body": "b", "question": "q"},
+                }
+            )
+            rows.append(
+                {
+                    "task_id": task_id,
+                    "fixed_checklist_value": outcome,
+                    "availability": "available",
+                    "availability_reason": None,
+                    "consensus_values": {prop: outcome for prop in PROPERTIES},
+                    "property_availability": {prop: "available" for prop in PROPERTIES},
+                    "property_failure_reasons": {},
+                }
+            )
     return catalog, {"rows": rows, "execution": {}, "analysis_version": "test"}
 
 

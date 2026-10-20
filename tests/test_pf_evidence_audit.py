@@ -15,20 +15,31 @@ from src.evaluation.pf_evidence_audit import (
 
 def payload(status="supported"):
     finding = {
-        "status": status, "task_quotes": ["6 km in 30 minutes"],
-        "reason": "Concrete support.", "counterevidence": "",
+        "status": status,
+        "task_quotes": ["6 km in 30 minutes"],
+        "reason": "Concrete support.",
+        "counterevidence": "",
     }
     value = {name: dict(finding) for name in FINDINGS}
     value["distinct_mathematical_ideas"] = {
-        **finding, "status": "not_evidenced", "approaches": [],
+        **finding,
+        "status": "not_evidenced",
+        "approaches": [],
     }
     value["mathematics"] = {
-        "status": "model_recomputed", "task_quotes": ["6 km in 30 minutes"],
-        "reason": "Segment rate.", "counterevidence": "", "concerns": [],
-        "witnesses": [{
-            "expression": "6 / 30", "claimed_value": "1/5",
-            "task_quotes": ["6 km in 30 minutes"], "interpretation": "km per minute",
-        }],
+        "status": "model_recomputed",
+        "task_quotes": ["6 km in 30 minutes"],
+        "reason": "Segment rate.",
+        "counterevidence": "",
+        "concerns": [],
+        "witnesses": [
+            {
+                "expression": "6 / 30",
+                "claimed_value": "1/5",
+                "task_quotes": ["6 km in 30 minutes"],
+                "interpretation": "km per minute",
+            }
+        ],
     }
     value["original_high_anchor_support"] = {name: dict(finding) for name in ANCHORS}
     return value
@@ -40,13 +51,15 @@ def entry():
         "task": {"title": "Trip", "body": "6 km in 30 minutes", "question": "Compare."},
         "learning_target": "Rates",
         "learner_context": {"grade": 7, "arm": "SECRET", "assumed_prior_knowledge": []},
-        "arm": "SECRET", "original_rating": {"scores": {"TOTAL": 15, "MR": 3}},
+        "arm": "SECRET",
+        "original_rating": {"scores": {"TOTAL": 15, "MR": 3}},
     }
 
 
 def parsed(judge, value=None):
     return {
-        "task_id": "one", "judge": judge,
+        "task_id": "one",
+        "judge": judge,
         **parse_evidence_audit(json.dumps(value or payload()), "6 km in 30 minutes"),
     }
 
@@ -58,9 +71,17 @@ def test_allowlist_hides_source_scores_and_design():
     assert "original_rating" not in str(data)
 
 
-@pytest.mark.parametrize("expression", [
-    "__import__('os').system('pwd')", "2 ** 100", "[1][0]", "True", "1e2", "2 // 1",
-])
+@pytest.mark.parametrize(
+    "expression",
+    [
+        "__import__('os').system('pwd')",
+        "2 ** 100",
+        "[1][0]",
+        "True",
+        "1e2",
+        "2 // 1",
+    ],
+)
 def test_arithmetic_rejects_code_and_unsupported_operations(expression):
     with pytest.raises(ValueError):
         exact_arithmetic(expression)
@@ -104,7 +125,9 @@ def test_distinct_ideas_separate_from_fixed_checklist_and_anchors():
     assert summary["rows"][0]["fixed_checklist_value"] is True
     assert summary["rates"]["distinct_mathematical_ideas"]["concern"] == 1
     assert summary["rows"][0]["agreed_original_anchor_tensions"] == []
-    assert summary["same_task_high_score_findings"]["additional_concern_without_anchor_tension"] == 1
+    assert (
+        summary["same_task_high_score_findings"]["additional_concern_without_anchor_tension"] == 1
+    )
 
 
 def test_original_anchor_tension_requires_same_task_high_dimension():
@@ -161,8 +184,10 @@ def test_strict_structured_math_concerns_are_preserved_not_stringified():
     value = payload()
     value["mathematics"]["status"] = "concern"
     concern = {
-        "expression": "6 / 30", "claimed_value": "1/5",
-        "task_quotes": ["6 km in 30 minutes"], "interpretation": "A specific concern.",
+        "expression": "6 / 30",
+        "claimed_value": "1/5",
+        "task_quotes": ["6 km in 30 minutes"],
+        "interpretation": "A specific concern.",
     }
     value["mathematics"]["concerns"] = [concern]
     result = parsed("a", value)
@@ -171,11 +196,14 @@ def test_strict_structured_math_concerns_are_preserved_not_stringified():
     assert result["mathematical_concern_witness_checks"][0]["status"] == "verified_arithmetic"
 
 
-@pytest.mark.parametrize("concern", [
-    {"expression": "6 / 30", "claimed_value": "1/5", "task_quotes": []},
-    {"unrelated": "cannot stringify this into evidence"},
-    7,
-])
+@pytest.mark.parametrize(
+    "concern",
+    [
+        {"expression": "6 / 30", "claimed_value": "1/5", "task_quotes": []},
+        {"unrelated": "cannot stringify this into evidence"},
+        7,
+    ],
+)
 def test_invalid_concern_object_affects_only_math_field(concern):
     value = payload()
     value["mathematics"]["concerns"] = [concern]
@@ -200,7 +228,10 @@ def test_invalid_noncore_field_does_not_make_valid_checklist_unavailable():
     summary = aggregate_audits([entry()], [parsed("a", value), parsed("b", value)], ["a", "b"])
     assert summary["rows"][0]["fixed_checklist_value"] is True
     assert summary["rows"][0]["availability"] == "available"
-    assert summary["rows"][0]["property_availability"]["distinct_mathematical_ideas"] == "audit_unavailable"
+    assert (
+        summary["rows"][0]["property_availability"]["distinct_mathematical_ideas"]
+        == "audit_unavailable"
+    )
     assert summary["rates"]["distinct_mathematical_ideas"]["unknown_due_to_unavailability"] == 1
 
 
@@ -256,11 +287,14 @@ def test_substantive_unknown_is_separate_from_unavailable_task():
     valid, missing = entry(), entry()
     missing.update(task_id="missing", task=None)
     summary = aggregate_audits(
-        [valid, missing], [parsed("a", payload("partial")), parsed("b", payload("partial"))],
+        [valid, missing],
+        [parsed("a", payload("partial")), parsed("b", payload("partial"))],
         ["a", "b"],
     )
     assert summary["availability_counts"] == {
-        "available": 1, "task_unavailable": 1, "audit_unavailable": 0,
+        "available": 1,
+        "task_unavailable": 1,
+        "audit_unavailable": 0,
     }
     assert summary["delivered_denominators"]["student_tasks_supplied"] == 1
     assert summary["rates"]["fixed_checklist"]["unknown_due_to_unavailability"] == 1

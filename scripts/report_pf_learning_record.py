@@ -19,7 +19,10 @@ from scripts import run_pf_paper_benchmark as benchmark  # noqa: E402
 from src.evaluation.pf_record_adherence import FLAGS, parse_coding  # noqa: E402
 
 PROFILES = (
-    "one_prerequisite_gap", "recent_prerequisites", "additional_learned_method", "ordinary_solver",
+    "one_prerequisite_gap",
+    "recent_prerequisites",
+    "additional_learned_method",
+    "ordinary_solver",
 )
 LABELS = {
     "one_prerequisite_gap": "Prerequisite omitted",
@@ -64,32 +67,44 @@ def summarize(output: Path) -> dict:
     for label, row in coding["attempts"].items():
         request = requests[key[label]]
         rows[key[label]] = {
-            **row, "anonymous_id": label, "task_id": request["task_id"],
-            "profile": request["profile_id"], "model": request["model"],
-            "repeat": request["repeat"], "family": tasks[request["task_id"]]["family"],
+            **row,
+            "anonymous_id": label,
+            "task_id": request["task_id"],
+            "profile": request["profile_id"],
+            "model": request["model"],
+            "repeat": request["repeat"],
+            "family": tasks[request["task_id"]]["family"],
         }
     family_groups, task_groups, model_groups = {}, {}, {}
     for family in sorted({row["family"] for row in rows.values()}):
         for profile in PROFILES:
-            subset = {key: row for key, row in rows.items()
-                      if row["family"] == family and row["profile"] == profile}
+            subset = {
+                key: row
+                for key, row in rows.items()
+                if row["family"] == family and row["profile"] == profile
+            }
             family_groups[f"{family}/{profile}"] = counts(subset)
     for task in tasks:
         for profile in PROFILES:
-            subset = {key: row for key, row in rows.items()
-                      if row["task_id"] == task and row["profile"] == profile}
+            subset = {
+                key: row
+                for key, row in rows.items()
+                if row["task_id"] == task and row["profile"] == profile
+            }
             task_groups[f"{task}/{profile}"] = counts(subset)
             for model in manifest["protocol"]["models"]:
-                model_groups[f"{task}/{profile}/{model}"] = counts({
-                    key: row for key, row in subset.items() if row["model"] == model
-                })
+                model_groups[f"{task}/{profile}/{model}"] = counts(
+                    {key: row for key, row in subset.items() if row["model"] == model}
+                )
     summary = {
         "question": manifest["protocol"]["question"],
         "evidence": "Label-hidden assistant coding of written model behavior, not human fidelity.",
         "coding_provenance": coding["provenance"],
         "execution": probe_report.summarize(panel)["phases"],
-        "family_groups": family_groups, "task_groups": task_groups,
-        "task_model_groups": model_groups, "attempts": rows,
+        "family_groups": family_groups,
+        "task_groups": task_groups,
+        "task_model_groups": model_groups,
+        "attempts": rows,
         "limitations": manifest["protocol"]["limitations"],
     }
     agreement_path = output / "coding_agreement.json"
@@ -106,16 +121,26 @@ def render(output: Path, summary: dict) -> None:
     panels = []
     for request_id, row in summary["attempts"].items():
         evidence = "".join(
-            "<p><b>" + html.escape(flag.replace("_", " ")) + "</b>: "
-            + html.escape(row[flag]) + "</p><blockquote>"
-            + html.escape("\n".join(row["evidence"][flag])) + "</blockquote>"
-            for flag in FLAGS if row[flag] != "no"
+            "<p><b>"
+            + html.escape(flag.replace("_", " "))
+            + "</b>: "
+            + html.escape(row[flag])
+            + "</p><blockquote>"
+            + html.escape("\n".join(row["evidence"][flag]))
+            + "</blockquote>"
+            for flag in FLAGS
+            if row[flag] != "no"
         )
         panels.append(
-            "<details><summary>" + html.escape(
+            "<details><summary>"
+            + html.escape(
                 f"{row['task_id']} / {LABELS[row['profile']]} / {row['model']} / "
                 f"repeat {row['repeat']}"
-            ) + "</summary><p>" + html.escape(row["rationale"]) + "</p>" + evidence
+            )
+            + "</summary><p>"
+            + html.escape(row["rationale"])
+            + "</p>"
+            + evidence
             + f"<a href='panel/fresh/{request_id}/result.json'>Original written attempt</a>"
             + "</details>"
         )
@@ -131,8 +156,12 @@ def render(output: Path, summary: dict) -> None:
         for profile in PROFILES:
             group = summary["family_groups"][f"{family}/{profile}"]
             table += "<tr><td>" + LABELS[profile] + "</td>"
-            for flag in ("prerequisite_applied", "advanced_applied",
-                         "advanced_mentioned_only", "record_bound_stop"):
+            for flag in (
+                "prerequisite_applied",
+                "advanced_applied",
+                "advanced_mentioned_only",
+                "record_bound_stop",
+            ):
                 table += f"<td>{group.get(f'{flag}/yes', 0)}/{group['attempted']}"
                 unknown = group.get(f"{flag}/unknown", 0)
                 if unknown:
@@ -149,10 +178,10 @@ def render(output: Path, summary: dict) -> None:
                 y = 20 + index * 47
                 width = 390 * yes / group["attempted"]
                 bars.append(
-                    f"<text x='10' y='{y+18}'>{LABELS[profile]}</text>"
+                    f"<text x='10' y='{y + 18}'>{LABELS[profile]}</text>"
                     f"<rect x='255' y='{y}' width='390' height='26' fill='#e0e7ee'/>"
                     f"<rect x='255' y='{y}' width='{width}' height='26' fill='#3075a6'/>"
-                    f"<text x='660' y='{y+18}'>{yes}/{group['attempted']}"
+                    f"<text x='660' y='{y + 18}'>{yes}/{group['attempted']}"
                     + (f"; {unknown} unknown" if unknown else "")
                     + "</text>"
                 )
@@ -163,8 +192,7 @@ def render(output: Path, summary: dict) -> None:
                 "LLM outputs under hypothetical records.</p>"
                 "<svg viewBox='0 0 900 215' role='img' "
                 "aria-label='Actual variance or standard-deviation use by learning record' "
-                "style='width:100%;font:16px system-ui'>"
-                + "".join(bars) + "</svg>"
+                "style='width:100%;font:16px system-ui'>" + "".join(bars) + "</svg>"
             )
     execution = summary["execution"]["fresh"]
     page = (
@@ -193,13 +221,15 @@ def render(output: Path, summary: dict) -> None:
         "and advanced-method use in 31/32. The disputed truncated allocation "
         "response remains unknown in the reported counts; both original ratings "
         "are preserved. This is assistant agreement, not human validation.</p>"
-        + "".join(charts) + "".join(tables)
+        + "".join(charts)
+        + "".join(tables)
         + "<p><a href='summary.json'>Task/model counts and full coding</a> &middot; "
         "<a href='panel/attempts.html'>Written attempts</a> &middot; "
         "<a href='record_coding.json'>Anonymous coding and evidence</a></p>"
         "<p><a href='coding_agreement.json'>Second-reader agreement</a> &middot; "
         "<a href='coding_adjudication.json'>Conservative interpretation</a></p>"
-        + "".join(panels) + "</html>"
+        + "".join(panels)
+        + "</html>"
     )
     (output / "learning_record.html").write_text(page, encoding="utf-8")
 

@@ -2171,9 +2171,16 @@ def test_fresh_cli_does_not_write_unaccepted_data(monkeypatch, tmp_path, status)
     winner, _, _ = _consistency_example()
     output = tmp_path / "output.json"
     monkeypatch.setattr(
-        runner.sys, "argv",
-        ["run_situation_skeletons.py", "--case", "example",
-         "--use-expert-resources", "--output", str(output)],
+        runner.sys,
+        "argv",
+        [
+            "run_situation_skeletons.py",
+            "--case",
+            "example",
+            "--use-expert-resources",
+            "--output",
+            str(output),
+        ],
     )
     monkeypatch.setattr(
         runner, "_load_case", lambda _: {"target_concept": "Variability", "grade": 7}
@@ -2184,9 +2191,16 @@ def test_fresh_cli_does_not_write_unaccepted_data(monkeypatch, tmp_path, status)
     monkeypatch.setattr(runner, "load_client", lambda _: (None, "model"))
     _mock_default_brief_search(monkeypatch, winner)
     monkeypatch.setattr(
-        runner, "_run_design_data",
-        lambda *a: {"status": status, "accepted": False, "error": "Exact reason",
-                    "payload": None, "check": None, "attempts": []},
+        runner,
+        "_run_design_data",
+        lambda *a: {
+            "status": status,
+            "accepted": False,
+            "error": "Exact reason",
+            "payload": None,
+            "check": None,
+            "attempts": [],
+        },
     )
     monkeypatch.setattr(
         runner, "_write_design_data_task", lambda *a: pytest.fail("Do not write unchecked data")

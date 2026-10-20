@@ -23,11 +23,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(PROJECT_ROOT))
 
 SOURCE_PATH = (
-    PROJECT_ROOT
-    / "experiments"
-    / "results"
-    / "phase1_mcq"
-    / "mcq_20_two_judge_plausibility.json"
+    PROJECT_ROOT / "experiments" / "results" / "phase1_mcq" / "mcq_20_two_judge_plausibility.json"
 )
 OUTPUT_DIR = PROJECT_ROOT / "experiments" / "results" / "phase1_mcq"
 MANUAL_COMPARISON_PATH = OUTPUT_DIR / "mcq_19_manual_vs_judges.json"
@@ -155,9 +151,7 @@ def source_records(
     if not records:
         raise ValueError("The selected source contains no records.")
     incomplete = [
-        record["question_id"]
-        for record in records
-        if len(record.get("distractors", [])) != 3
+        record["question_id"] for record in records if len(record.get("distractors", [])) != 3
     ]
     if incomplete:
         raise ValueError(f"Selected records are not complete three-distractor sets: {incomplete}")
@@ -331,9 +325,7 @@ def summarize(rows: list[dict[str, Any]], expected: int) -> dict[str, Any]:
         "mean_score": round(mean(scores), 3) if scores else None,
         "median_score": median(scores) if scores else None,
         "screen_rate_score_at_least_1": (
-            round(sum(score >= 1 for score in scores) / len(scores), 3)
-            if scores
-            else None
+            round(sum(score >= 1 for score in scores) / len(scores), 3) if scores else None
         ),
         "score_counts": {str(score): scores.count(score) for score in (0, 1, 2)},
         "cache_hits": sum(bool(row["cache_hit"]) for row in rows),
@@ -391,9 +383,7 @@ def load_reference_rows() -> tuple[dict[str, dict[tuple[int, int], Any]], str | 
 
 
 def output_path(judge: str) -> Path:
-    return OUTPUT_DIR / (
-        f"mcq_19_azure_{JUDGE_LABELS[judge]}_plausibility_{PROMPT_VERSION}.json"
-    )
+    return OUTPUT_DIR / (f"mcq_19_azure_{JUDGE_LABELS[judge]}_plausibility_{PROMPT_VERSION}.json")
 
 
 def run_one_model(

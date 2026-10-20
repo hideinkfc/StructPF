@@ -74,20 +74,13 @@ def legacy_student_text(sections: dict[str, str]) -> str:
 
 def learner_context(context: dict) -> dict:
     """Exclude proposed student moves and claims about why those moves fail."""
-    result = {
-        key: context[key]
-        for key in ("grade", "subject", "jurisdiction")
-        if key in context
-    }
+    result = {key: context[key] for key in ("grade", "subject", "jurisdiction") if key in context}
     resources = context.get("assumed_prior_knowledge")
     if resources is not None:
         if not isinstance(resources, list):
             raise ValueError("assumed_prior_knowledge must be a list")
         result["assumed_prior_knowledge"] = [
-            {
-                key: _nonempty_text(resource.get(key), key)
-                for key in ("resource", "taught_as")
-            }
+            {key: _nonempty_text(resource.get(key), key) for key in ("resource", "taught_as")}
             for resource in resources
             if isinstance(resource, dict)
         ]

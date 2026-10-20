@@ -33,13 +33,9 @@ def _counts(items: list[dict]) -> dict:
             and item["rating"]["target_preserved"] == "yes"
             for item in disclosure_free
         ),
-        **{
-            field: dict(Counter(item["rating"][field] for item in ready))
-            for field in FIELDS
-        },
+        **{field: dict(Counter(item["rating"][field] for item in ready)) for field in FIELDS},
         "invalid_or_missing_data_ready": sum(
-            item["rating"]["mathematics"] in {"invalid", "missing_essential_data"}
-            for item in ready
+            item["rating"]["mathematics"] in {"invalid", "missing_essential_data"} for item in ready
         ),
         "unknown_mathematics_ready": sum(
             item["rating"]["mathematics"] == "unknown" for item in ready
@@ -73,9 +69,7 @@ def summarize(output: Path, review_path: Path) -> dict:
     card_by_id = {row["task_id"]: row for row in cards}
     if set(by_id) != set(card_by_id) or set(by_id) != {row["task_id"] for row in mapping}:
         raise ValueError("Every scheduled task, including absent tasks, needs exactly one rating")
-    expected = {
-        row["attempt_id"] for row in manifest["schedule"] if row["phase"] == "development"
-    }
+    expected = {row["attempt_id"] for row in manifest["schedule"] if row["phase"] == "development"}
     if len(mapping) != len(expected) or {row["attempt_id"] for row in mapping} != expected:
         raise ValueError("Mapping does not cover the frozen development schedule")
     for source, digest in manifest["source_hashes"].items():
@@ -97,13 +91,18 @@ def summarize(output: Path, review_path: Path) -> dict:
         record = json.loads(result_path.read_text())
         if not record.get("finished_at") or record["status"] in comparison.UNFINISHED:
             raise ValueError("Development contains unfinished attempts")
-        if any(record.get(key) != row[key] for key in
-               ("attempt_id", "case_id", "arm", "repeat", "phase", "status")):
+        if any(
+            record.get(key) != row[key]
+            for key in ("attempt_id", "case_id", "arm", "repeat", "phase", "status")
+        ):
             raise ValueError("Mapping and attempt disagree")
         if not record["source_artifact_unchanged"] or not record["source_integrity_verified"]:
             raise ValueError("Attempt source integrity failed")
-        text = {key: record["task"][key] for key in ("title", "body", "question")} \
-            if isinstance(record.get("task"), dict) else None
+        text = (
+            {key: record["task"][key] for key in ("title", "body", "question")}
+            if isinstance(record.get("task"), dict)
+            else None
+        )
         if text != card_by_id[row["task_id"]]["task"]:
             raise ValueError("Gallery is stale relative to recorded task")
         has_text = bool(text and any(value.strip() for value in text.values()))
@@ -113,10 +112,7 @@ def summarize(output: Path, review_path: Path) -> dict:
         elif has_text or any(rating[field] != "not_available" for field in FIELDS):
             raise ValueError("Stopped attempt must remain unavailable, not a passed task")
         items.append({**row, "rating": rating, "result_sha256": comparison._sha(result_path)})
-    arms = {
-        arm: _counts([item for item in items if item["arm"] == arm])
-        for arm in comparison.ARMS
-    }
+    arms = {arm: _counts([item for item in items if item["arm"] == arm]) for arm in comparison.ARMS}
     baseline, intervention = (arms[arm] for arm in comparison.ARMS)
     protocol = manifest["config"]["protocol"]
     gain = intervention["disclosure_free_ready"] - baseline["disclosure_free_ready"]
@@ -127,8 +123,8 @@ def summarize(output: Path, review_path: Path) -> dict:
     rules = {
         "disclosure_free_gain_met": gain >= protocol["gain_minimum_disclosure_free_ready_tasks"],
         "ready_loss_within_limit": ready_change >= -protocol["maximum_ready_task_loss"],
-        "invalid_or_missing_increase_within_limit":
-            invalid_change <= protocol["maximum_increase_invalid_or_missing_data"],
+        "invalid_or_missing_increase_within_limit": invalid_change
+        <= protocol["maximum_increase_invalid_or_missing_data"],
     }
     rows = comparison._rows(output / "ledger.jsonl")
     budget = comparison.RequestBudget(output, manifest["limits"])
@@ -140,13 +136,16 @@ def summarize(output: Path, review_path: Path) -> dict:
         "arms": arms,
         "by_case": {
             case["id"]: {
-                arm: _counts([item for item in items if
-                              item["arm"] == arm and item["case_id"] == case["id"]])
+                arm: _counts(
+                    [item for item in items if item["arm"] == arm and item["case_id"] == case["id"]]
+                )
                 for arm in comparison.ARMS
-            } for case in manifest["config"]["cases"]
+            }
+            for case in manifest["config"]["cases"]
         },
         "decision": {
-            "result": "candidate_gain_requires_independent_check" if all(rules.values())
+            "result": "candidate_gain_requires_independent_check"
+            if all(rules.values())
             else "stop_no_promotion",
             "disclosure_free_ready_gain": gain,
             "ready_task_change": ready_change,
@@ -157,8 +156,9 @@ def summarize(output: Path, review_path: Path) -> dict:
             "all": comparison.usage_summary(rows),
             "by_phase": manifest["phase_usage"],
             "development_by_arm": {
-                arm: comparison.usage_summary([row for row in rows if
-                                               row["phase"] == "development" and row["arm"] == arm])
+                arm: comparison.usage_summary(
+                    [row for row in rows if row["phase"] == "development" and row["arm"] == arm]
+                )
                 for arm in comparison.ARMS
             },
             "reasoning_tokens_are_subset_of_output": True,

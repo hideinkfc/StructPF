@@ -13,9 +13,9 @@ Follows the monochrome JupyRecSys style used across Chapters 3 and 4:
 from __future__ import annotations
 
 from pathlib import Path
+
 import matplotlib.pyplot as plt
 from matplotlib.patches import FancyBboxPatch, Polygon, Rectangle
-
 
 OUT_DIR = Path(__file__).resolve().parents[1] / "thesis" / "figures"
 
@@ -153,12 +153,34 @@ def render_fig4_3() -> None:
     # Panel (a): Step 2a - Propose & Select Design Brief
     # ==========================================================================
     p1_x, p1_y, p1_w, p1_h = 0.08, 0.10, 3.35, 3.45
-    draw_rect(ax, p1_x, p1_y, p1_w, p1_h, facecolor=C_GROUP, edgecolor=C_BLACK, linewidth=0.95, zorder=1)
-    draw_rect(ax, p1_x, p1_y + p1_h - 0.42, p1_w, 0.42, facecolor=C_SUB, edgecolor=C_BLACK, linewidth=0.85, zorder=2)
-    ax.text(p1_x + p1_w / 2, p1_y + p1_h - 0.21, "(a) Step 2a: Design Brief Selection", fontsize=9.1, fontweight="bold", ha="center", va="center")
+    draw_rect(
+        ax, p1_x, p1_y, p1_w, p1_h, facecolor=C_GROUP, edgecolor=C_BLACK, linewidth=0.95, zorder=1
+    )
+    draw_rect(
+        ax,
+        p1_x,
+        p1_y + p1_h - 0.42,
+        p1_w,
+        0.42,
+        facecolor=C_SUB,
+        edgecolor=C_BLACK,
+        linewidth=0.85,
+        zorder=2,
+    )
+    ax.text(
+        p1_x + p1_w / 2,
+        p1_y + p1_h - 0.21,
+        "(a) Step 2a: Design Brief Selection",
+        fontsize=9.1,
+        fontweight="bold",
+        ha="center",
+        va="center",
+    )
 
     # LLM Process Box: Propose & Select Brief
-    draw_round_box(ax, 0.24, 2.48, 3.03, 0.50, facecolor=C_PROC, edgecolor=C_BLACK, linewidth=0.95, zorder=3)
+    draw_round_box(
+        ax, 0.24, 2.48, 3.03, 0.50, facecolor=C_PROC, edgecolor=C_BLACK, linewidth=0.95, zorder=3
+    )
     ax.text(
         1.755,
         2.73,
@@ -174,16 +196,29 @@ def render_fig4_3() -> None:
     draw_arrow(ax, 1.755, 2.48, 1.755, 2.24, lw=1.0)
 
     # Student-Facing Problem Setup card
-    draw_rect(ax, 0.24, 1.24, 3.03, 0.98, facecolor=C_WHITE, edgecolor=C_BLACK, linewidth=0.85, zorder=2)
-    draw_rect(ax, 0.24, 1.90, 3.03, 0.32, facecolor=C_SUB, edgecolor=C_BLACK, linewidth=0.8, zorder=3)
-    ax.text(1.755, 2.06, "Student-Facing Setup (To Stage 3)", fontsize=7.7, fontweight="bold", ha="center", va="center", zorder=4)
+    draw_rect(
+        ax, 0.24, 1.24, 3.03, 0.98, facecolor=C_WHITE, edgecolor=C_BLACK, linewidth=0.85, zorder=2
+    )
+    draw_rect(
+        ax, 0.24, 1.90, 3.03, 0.32, facecolor=C_SUB, edgecolor=C_BLACK, linewidth=0.8, zorder=3
+    )
+    ax.text(
+        1.755,
+        2.06,
+        "Student-Facing Setup (To Stage 3)",
+        fontsize=7.7,
+        fontweight="bold",
+        ha="center",
+        va="center",
+        zorder=4,
+    )
     ax.text(
         0.32,
         1.56,
         "• Goal: Compare two play-area floor plans\n"
         "• Rules: Identical outer boxes; A cuts a\n"
         "  slanted corner, B cuts a rectangle corner\n"
-        "• Claim: \"Same outer box = same area\"",
+        '• Claim: "Same outer box = same area"',
         fontsize=7.25,
         color=C_DARK,
         ha="left",
@@ -193,9 +228,31 @@ def render_fig4_3() -> None:
     )
 
     # Internal Design Notes card (Withheld)
-    draw_rect(ax, 0.24, 0.22, 3.03, 0.90, facecolor=C_WHITE, edgecolor=C_BLACK, linewidth=0.85, linestyle="--", zorder=2)
-    draw_rect(ax, 0.24, 0.80, 3.03, 0.32, facecolor=C_PROC, edgecolor=C_BLACK, linewidth=0.8, zorder=3)
-    ax.text(1.755, 0.96, "Internal Design Notes (Withheld)", fontsize=7.7, fontweight="bold", ha="center", va="center", zorder=4)
+    draw_rect(
+        ax,
+        0.24,
+        0.22,
+        3.03,
+        0.90,
+        facecolor=C_WHITE,
+        edgecolor=C_BLACK,
+        linewidth=0.85,
+        linestyle="--",
+        zorder=2,
+    )
+    draw_rect(
+        ax, 0.24, 0.80, 3.03, 0.32, facecolor=C_PROC, edgecolor=C_BLACK, linewidth=0.8, zorder=3
+    )
+    ax.text(
+        1.755,
+        0.96,
+        "Internal Design Notes (Withheld)",
+        fontsize=7.7,
+        fontweight="bold",
+        ha="center",
+        va="center",
+        zorder=4,
+    )
     ax.text(
         0.32,
         0.50,
@@ -217,14 +274,45 @@ def render_fig4_3() -> None:
     # Panel (b): Selected Problem Structure (6.G.A.1 Play-Area Floors)
     # ==========================================================================
     p2_x, p2_y, p2_w, p2_h = 3.72, 0.10, 4.66, 3.45
-    draw_rect(ax, p2_x, p2_y, p2_w, p2_h, facecolor=C_GROUP, edgecolor=C_BLACK, linewidth=0.95, zorder=1)
-    draw_rect(ax, p2_x, p2_y + p2_h - 0.42, p2_w, 0.42, facecolor=C_SUB, edgecolor=C_BLACK, linewidth=0.85, zorder=2)
-    ax.text(p2_x + p2_w / 2, p2_y + p2_h - 0.21, "(b) Selected Unsplit Geometry (6.G.A.1)", fontsize=9.1, fontweight="bold", ha="center", va="center")
+    draw_rect(
+        ax, p2_x, p2_y, p2_w, p2_h, facecolor=C_GROUP, edgecolor=C_BLACK, linewidth=0.95, zorder=1
+    )
+    draw_rect(
+        ax,
+        p2_x,
+        p2_y + p2_h - 0.42,
+        p2_w,
+        0.42,
+        facecolor=C_SUB,
+        edgecolor=C_BLACK,
+        linewidth=0.85,
+        zorder=2,
+    )
+    ax.text(
+        p2_x + p2_w / 2,
+        p2_y + p2_h - 0.21,
+        "(b) Selected Unsplit Geometry (6.G.A.1)",
+        fontsize=9.1,
+        fontweight="bold",
+        ha="center",
+        va="center",
+    )
 
     # Left geometry card: Design A (Right-Triangle Corner Removed)
     c1_x, c1_y, c1_w, c1_h = 3.88, 1.06, 2.10, 1.94
-    draw_rect(ax, c1_x, c1_y, c1_w, c1_h, facecolor=C_WHITE, edgecolor=C_BLACK, linewidth=0.85, zorder=2)
-    ax.text(c1_x + c1_w / 2, c1_y + c1_h - 0.20, "Design A: Slanted Corner Cut", fontsize=8.0, fontweight="bold", ha="center", va="center", zorder=4)
+    draw_rect(
+        ax, c1_x, c1_y, c1_w, c1_h, facecolor=C_WHITE, edgecolor=C_BLACK, linewidth=0.85, zorder=2
+    )
+    ax.text(
+        c1_x + c1_w / 2,
+        c1_y + c1_h - 0.20,
+        "Design A: Slanted Corner Cut",
+        fontsize=8.0,
+        fontweight="bold",
+        ha="center",
+        va="center",
+        zorder=4,
+    )
 
     # Outer rectangle for Design A: width 1.56 (12 units), height 1.04 (8 units)
     # Scale: 1 unit = 0.13 in x and y
@@ -232,7 +320,18 @@ def render_fig4_3() -> None:
     aw, ah = 1.56, 1.04  # 12 x 8
     cut_w, cut_h = 0.52, 0.39  # 4 x 3 corner at top-right
     # Dashed full outer rectangle
-    draw_rect(ax, ax0, ay0, aw, ah, facecolor=C_WHITE, edgecolor=C_BLACK, linewidth=0.8, linestyle="--", zorder=3)
+    draw_rect(
+        ax,
+        ax0,
+        ay0,
+        aw,
+        ah,
+        facecolor=C_WHITE,
+        edgecolor=C_BLACK,
+        linewidth=0.8,
+        linestyle="--",
+        zorder=3,
+    )
     # Usable floor polygon (5-sided)
     pts_a = [
         (ax0, ay0),
@@ -242,22 +341,80 @@ def render_fig4_3() -> None:
         (ax0, ay0 + ah),
     ]
     draw_poly(ax, pts_a, facecolor=C_PROC, edgecolor=C_BLACK, linewidth=1.05, zorder=4)
-    ax.text(ax0 + 0.54, ay0 + 0.38, "Usable Floor A\n(90 sq units)", fontsize=7.5, fontweight="bold", ha="center", va="center", zorder=5)
+    ax.text(
+        ax0 + 0.54,
+        ay0 + 0.38,
+        "Usable Floor A\n(90 sq units)",
+        fontsize=7.5,
+        fontweight="bold",
+        ha="center",
+        va="center",
+        zorder=5,
+    )
     # Dimension labels for Design A
     ax.text(ax0 + aw / 2, ay0 - 0.14, "12 units", fontsize=7.4, ha="center", va="center", zorder=5)
     ax.text(ax0 - 0.15, ay0 + ah / 2, "8", fontsize=7.4, ha="center", va="center", zorder=5)
-    ax.text(ax0 + aw - cut_w / 2, ay0 + ah + 0.11, "4", fontsize=7.3, fontweight="bold", ha="center", va="center", zorder=5)
-    ax.text(ax0 + aw + 0.11, ay0 + ah - cut_h / 2, "3", fontsize=7.3, fontweight="bold", ha="center", va="center", zorder=5)
-    ax.text(ax0 + aw - cut_w / 2 - 0.08, ay0 + ah - cut_h / 2 - 0.06, "5", fontsize=7.3, fontweight="bold", ha="right", va="top", zorder=5)
+    ax.text(
+        ax0 + aw - cut_w / 2,
+        ay0 + ah + 0.11,
+        "4",
+        fontsize=7.3,
+        fontweight="bold",
+        ha="center",
+        va="center",
+        zorder=5,
+    )
+    ax.text(
+        ax0 + aw + 0.11,
+        ay0 + ah - cut_h / 2,
+        "3",
+        fontsize=7.3,
+        fontweight="bold",
+        ha="center",
+        va="center",
+        zorder=5,
+    )
+    ax.text(
+        ax0 + aw - cut_w / 2 - 0.08,
+        ay0 + ah - cut_h / 2 - 0.06,
+        "5",
+        fontsize=7.3,
+        fontweight="bold",
+        ha="right",
+        va="top",
+        zorder=5,
+    )
 
     # Right geometry card: Design B (Rectangular Corner Removed)
     c2_x, c2_y, c2_w, c2_h = 6.12, 1.06, 2.10, 1.94
-    draw_rect(ax, c2_x, c2_y, c2_w, c2_h, facecolor=C_WHITE, edgecolor=C_BLACK, linewidth=0.85, zorder=2)
-    ax.text(c2_x + c2_w / 2, c2_y + c2_h - 0.20, "Design B: Rectangular Cut", fontsize=8.0, fontweight="bold", ha="center", va="center", zorder=4)
+    draw_rect(
+        ax, c2_x, c2_y, c2_w, c2_h, facecolor=C_WHITE, edgecolor=C_BLACK, linewidth=0.85, zorder=2
+    )
+    ax.text(
+        c2_x + c2_w / 2,
+        c2_y + c2_h - 0.20,
+        "Design B: Rectangular Cut",
+        fontsize=8.0,
+        fontweight="bold",
+        ha="center",
+        va="center",
+        zorder=4,
+    )
 
     bx0, by0 = 6.39, 1.40
     # Dashed full outer rectangle
-    draw_rect(ax, bx0, by0, aw, ah, facecolor=C_WHITE, edgecolor=C_BLACK, linewidth=0.8, linestyle="--", zorder=3)
+    draw_rect(
+        ax,
+        bx0,
+        by0,
+        aw,
+        ah,
+        facecolor=C_WHITE,
+        edgecolor=C_BLACK,
+        linewidth=0.8,
+        linestyle="--",
+        zorder=3,
+    )
     # Usable floor polygon (L-shaped 6-sided)
     pts_b = [
         (bx0, by0),
@@ -268,15 +425,44 @@ def render_fig4_3() -> None:
         (bx0, by0 + ah),
     ]
     draw_poly(ax, pts_b, facecolor=C_SUB, edgecolor=C_BLACK, linewidth=1.05, zorder=4)
-    ax.text(bx0 + 0.56, by0 + 0.40, "Usable Floor B\n(84 sq units)", fontsize=7.7, fontweight="bold", ha="center", va="center", zorder=5)
+    ax.text(
+        bx0 + 0.56,
+        by0 + 0.40,
+        "Usable Floor B\n(84 sq units)",
+        fontsize=7.7,
+        fontweight="bold",
+        ha="center",
+        va="center",
+        zorder=5,
+    )
     # Dimension labels for Design B
     ax.text(bx0 + aw / 2, by0 - 0.14, "12 units", fontsize=7.4, ha="center", va="center", zorder=5)
     ax.text(bx0 - 0.15, by0 + ah / 2, "8", fontsize=7.4, ha="center", va="center", zorder=5)
-    ax.text(bx0 + aw - cut_w / 2, by0 + ah + 0.11, "4", fontsize=7.3, fontweight="bold", ha="center", va="center", zorder=5)
-    ax.text(bx0 + aw + 0.11, by0 + ah - cut_h / 2, "3", fontsize=7.3, fontweight="bold", ha="center", va="center", zorder=5)
+    ax.text(
+        bx0 + aw - cut_w / 2,
+        by0 + ah + 0.11,
+        "4",
+        fontsize=7.3,
+        fontweight="bold",
+        ha="center",
+        va="center",
+        zorder=5,
+    )
+    ax.text(
+        bx0 + aw + 0.11,
+        by0 + ah - cut_h / 2,
+        "3",
+        fontsize=7.3,
+        fontweight="bold",
+        ha="center",
+        va="center",
+        zorder=5,
+    )
 
     # Bottom summary inside Panel (b)
-    draw_rect(ax, 3.88, 0.22, 4.34, 0.72, facecolor=C_WHITE, edgecolor=C_BLACK, linewidth=0.85, zorder=2)
+    draw_rect(
+        ax, 3.88, 0.22, 4.34, 0.72, facecolor=C_WHITE, edgecolor=C_BLACK, linewidth=0.85, zorder=2
+    )
     ax.text(
         6.05,
         0.58,
@@ -298,16 +484,60 @@ def render_fig4_3() -> None:
     # Panel (c): Step 2b - Number Selection & Python Math Calculator
     # ==========================================================================
     p3_x, p3_y, p3_w, p3_h = 8.67, 0.10, 3.65, 3.45
-    draw_rect(ax, p3_x, p3_y, p3_w, p3_h, facecolor=C_GROUP, edgecolor=C_BLACK, linewidth=0.95, zorder=1)
-    draw_rect(ax, p3_x, p3_y + p3_h - 0.42, p3_w, 0.42, facecolor=C_SUB, edgecolor=C_BLACK, linewidth=0.85, zorder=2)
-    ax.text(p3_x + p3_w / 2, p3_y + p3_h - 0.21, "(c) Step 2b: Calculator Verification", fontsize=9.1, fontweight="bold", ha="center", va="center")
+    draw_rect(
+        ax, p3_x, p3_y, p3_w, p3_h, facecolor=C_GROUP, edgecolor=C_BLACK, linewidth=0.95, zorder=1
+    )
+    draw_rect(
+        ax,
+        p3_x,
+        p3_y + p3_h - 0.42,
+        p3_w,
+        0.42,
+        facecolor=C_SUB,
+        edgecolor=C_BLACK,
+        linewidth=0.85,
+        zorder=2,
+    )
+    ax.text(
+        p3_x + p3_w / 2,
+        p3_y + p3_h - 0.21,
+        "(c) Step 2b: Calculator Verification",
+        fontsize=9.1,
+        fontweight="bold",
+        ha="center",
+        va="center",
+    )
 
     # Top row in Panel (c): Choose Numbers <-> Python Math Calculator
-    draw_round_box(ax, 8.83, 2.48, 1.54, 0.50, facecolor=C_PROC, edgecolor=C_BLACK, linewidth=0.95, zorder=3)
-    ax.text(9.60, 2.73, "Choose Numbers\n(≤ 2 repairs)", fontsize=7.8, fontweight="bold", ha="center", va="center", linespacing=1.18, zorder=4)
+    draw_round_box(
+        ax, 8.83, 2.48, 1.54, 0.50, facecolor=C_PROC, edgecolor=C_BLACK, linewidth=0.95, zorder=3
+    )
+    ax.text(
+        9.60,
+        2.73,
+        "Choose Numbers\n(≤ 2 repairs)",
+        fontsize=7.8,
+        fontweight="bold",
+        ha="center",
+        va="center",
+        linespacing=1.18,
+        zorder=4,
+    )
 
-    draw_round_box(ax, 10.62, 2.48, 1.54, 0.50, facecolor=C_WHITE, edgecolor=C_BLACK, linewidth=0.95, zorder=3)
-    ax.text(11.39, 2.73, "Python Math\nCalculator", fontsize=7.8, fontweight="bold", ha="center", va="center", linespacing=1.18, zorder=4)
+    draw_round_box(
+        ax, 10.62, 2.48, 1.54, 0.50, facecolor=C_WHITE, edgecolor=C_BLACK, linewidth=0.95, zorder=3
+    )
+    ax.text(
+        11.39,
+        2.73,
+        "Python Math\nCalculator",
+        fontsize=7.8,
+        fontweight="bold",
+        ha="center",
+        va="center",
+        linespacing=1.18,
+        zorder=4,
+    )
 
     # Bidirectional loop arrows between Choose Numbers and Calculator
     draw_arrow(ax, 10.37, 2.81, 10.62, 2.81, lw=0.95, style="-|>,head_length=0.20,head_width=0.13")
@@ -316,9 +546,22 @@ def render_fig4_3() -> None:
     draw_arrow(ax, 10.495, 2.48, 10.495, 2.24, lw=1.0)
 
     # Checked Conditions Box
-    draw_rect(ax, 8.83, 0.78, 3.33, 1.44, facecolor=C_WHITE, edgecolor=C_BLACK, linewidth=0.85, zorder=2)
-    draw_rect(ax, 8.83, 1.90, 3.33, 0.32, facecolor=C_SUB, edgecolor=C_BLACK, linewidth=0.8, zorder=3)
-    ax.text(10.495, 2.06, "Checked Conditions on Values (12, 8, 4, 3, 5)", fontsize=7.6, fontweight="bold", ha="center", va="center", zorder=4)
+    draw_rect(
+        ax, 8.83, 0.78, 3.33, 1.44, facecolor=C_WHITE, edgecolor=C_BLACK, linewidth=0.85, zorder=2
+    )
+    draw_rect(
+        ax, 8.83, 1.90, 3.33, 0.32, facecolor=C_SUB, edgecolor=C_BLACK, linewidth=0.8, zorder=3
+    )
+    ax.text(
+        10.495,
+        2.06,
+        "Checked Conditions on Values (12, 8, 4, 3, 5)",
+        fontsize=7.6,
+        fontweight="bold",
+        ha="center",
+        va="center",
+        zorder=4,
+    )
     ax.text(
         8.95,
         1.34,
@@ -349,7 +592,9 @@ def render_fig4_3() -> None:
     )
 
     # Bottom banner: Verified output
-    draw_rect(ax, 8.83, 0.22, 3.33, 0.44, facecolor=C_MID, edgecolor=C_BLACK, linewidth=0.85, zorder=3)
+    draw_rect(
+        ax, 8.83, 0.22, 3.33, 0.44, facecolor=C_MID, edgecolor=C_BLACK, linewidth=0.85, zorder=3
+    )
     ax.text(
         10.495,
         0.44,

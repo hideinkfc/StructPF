@@ -113,7 +113,10 @@ def _spec() -> dict:
 
 
 def prompts() -> dict:
-    if FROZEN_PROMPT_SHA256 and hashlib.sha256(PROMPT_PATH.read_bytes()).hexdigest() != FROZEN_PROMPT_SHA256:
+    if (
+        FROZEN_PROMPT_SHA256
+        and hashlib.sha256(PROMPT_PATH.read_bytes()).hexdigest() != FROZEN_PROMPT_SHA256
+    ):
         raise ValueError("Frozen v3.0 prompt changed; use a new instrument version")
     return _spec()
 
@@ -169,14 +172,20 @@ def _compose_solver_system(spec: dict, *, toolkit: bool) -> str:
 
 def task_system() -> str:
     text = _compose_task_system(prompts())
-    if FROZEN_TASK_SYSTEM_SHA256 and hashlib.sha256(text.encode("utf-8")).hexdigest() != FROZEN_TASK_SYSTEM_SHA256:
+    if (
+        FROZEN_TASK_SYSTEM_SHA256
+        and hashlib.sha256(text.encode("utf-8")).hexdigest() != FROZEN_TASK_SYSTEM_SHA256
+    ):
         raise ValueError("Frozen v3.0 task system changed; use a new instrument version")
     return text
 
 
 def attempt_system() -> str:
     text = _compose_attempt_system(prompts())
-    if FROZEN_ATTEMPT_SYSTEM_SHA256 and hashlib.sha256(text.encode("utf-8")).hexdigest() != FROZEN_ATTEMPT_SYSTEM_SHA256:
+    if (
+        FROZEN_ATTEMPT_SYSTEM_SHA256
+        and hashlib.sha256(text.encode("utf-8")).hexdigest() != FROZEN_ATTEMPT_SYSTEM_SHA256
+    ):
         raise ValueError("Frozen v3.0 attempt system changed; use a new instrument version")
     return text
 
@@ -199,7 +208,9 @@ def attempt_system_sha256() -> str:
 
 
 def solver_system_sha256(*, toolkit: bool) -> str:
-    return hashlib.sha256(_compose_solver_system(_spec(), toolkit=toolkit).encode("utf-8")).hexdigest()
+    return hashlib.sha256(
+        _compose_solver_system(_spec(), toolkit=toolkit).encode("utf-8")
+    ).hexdigest()
 
 
 def _text_v30(raw: object, task: str) -> dict:
@@ -586,9 +597,7 @@ def parse_attempts_v30(raw: dict, attempts: list[dict]) -> dict:
         and counts["meets_demands"] >= 2
         and not row["evidence"]["validation_errors"]
     ):
-        parsed["measures"]["familiar_approach_limits"] = v22._row(
-            "no", "assessed", row["evidence"]
-        )
+        parsed["measures"]["familiar_approach_limits"] = v22._row("no", "assessed", row["evidence"])
     return parsed
 
 
@@ -660,9 +669,7 @@ def evaluate_v30(
     toolkit: bool = True,
 ) -> dict:
     prepared = v25.prepare_input(task, target, context)
-    task_result = run_judge_v30(
-        "task_judge", v22.role_input("task_judge", prepared), judge_chat
-    )
+    task_result = run_judge_v30("task_judge", v22.role_input("task_judge", prepared), judge_chat)
     task_rows = (
         parse_task_v30(task_result["output"], prepared)
         if task_result["status"] == "completed"

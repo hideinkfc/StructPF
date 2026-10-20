@@ -41,16 +41,26 @@ def test_judge_input_has_setting_but_no_model_examples_or_generation_rules():
         "generator_model": "SECRET_MODEL",
     }
     context = {
-        "grade": 7, "subject": "mathematics", "jurisdiction": "USA",
-        "assumed_prior_knowledge": [{
-            "resource": "Mean", "taught_as": "Compute a mean.",
-            "student_move": "SECRET_MOVE",
-        }],
+        "grade": 7,
+        "subject": "mathematics",
+        "jurisdiction": "USA",
+        "assumed_prior_knowledge": [
+            {
+                "resource": "Mean",
+                "taught_as": "Compute a mean.",
+                "student_move": "SECRET_MOVE",
+            }
+        ],
     }
-    text = pf_rubric_setting.student_task_text({
-        "status": "ready", "title": "T", "body": "B", "question": "Q",
-        "consolidation": "SECRET_SOLUTION",
-    })
+    text = pf_rubric_setting.student_task_text(
+        {
+            "status": "ready",
+            "title": "T",
+            "body": "B",
+            "question": "Q",
+            "consolidation": "SECRET_SOLUTION",
+        }
+    )
     result = json.loads(pf_rubric_setting.judge_input(text, case, context))
     assert list(result) == ["task_setting", "learner_context", "student_task"]
     assert result["task_setting"] == {

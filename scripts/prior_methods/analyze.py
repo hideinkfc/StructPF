@@ -55,8 +55,9 @@ def recall_at(matched_error_keys, package, threshold_pct):
 
     matched_error_keys: set of matched all_errors indices for this concept+model.
     """
-    dominant = [i for i, e in enumerate(package["all_errors"])
-                if e["pct_students"] >= threshold_pct]
+    dominant = [
+        i for i, e in enumerate(package["all_errors"]) if e["pct_students"] >= threshold_pct
+    ]
     if not dominant:
         return None, 0
     covered = sum(1 for i in dominant if i in matched_error_keys)
@@ -133,8 +134,9 @@ def main() -> None:
 
         # Redundancy: distinct documented errors reached per matched method.
         # 1.0 = every match is a different error; 0.2 = five methods restate one error.
-        distinct_ratio = (len(matched_error_indices) / n_matched_methods
-                          if n_matched_methods else None)
+        distinct_ratio = (
+            len(matched_error_indices) / n_matched_methods if n_matched_methods else None
+        )
 
         # Stability: mean pairwise Jaccard of the matched-error sets across repeats.
         # 1.0 = repeats find the same errors; 0.0 = disjoint (generation is a lottery).
@@ -147,32 +149,42 @@ def main() -> None:
                     pairs.append(len(inter) / len(union))
         stability = mean(pairs) if pairs else None
 
-        rows.append({
-            "concept_id": cid,
-            "set": "core" if cid in CORE else "extended",
-            "model": model,
-            "n_candidates": n,
-            "plausibility_mean": round(mean(scores), 3) if scores else None,
-            "concept_overlap_rate": round(overlaps / n, 3) if n else None,
-            "error_recall_10": round(recall, 3) if recall is not None else None,
-            "error_recall_5": round(recall5, 3) if recall5 is not None else None,
-            "error_recall_15": round(recall15, 3) if recall15 is not None else None,
-            "error_recall_per_list": (round(mean(per_list_recalls), 3)
-                                      if per_list_recalls else None),
-            "n_dominant_errors": n_dom,
-            "n_matched_methods": n_matched_methods,
-            "n_distinct_errors_reached": len(matched_error_indices),
-            "distinct_per_matched": round(distinct_ratio, 3) if distinct_ratio else None,
-            "repeat_stability": round(stability, 3) if stability is not None else None,
-            "class_counts": {c: classes.count(c) for c in
-                             ("matches_documented_error", "valid_undocumented_strategy",
-                              "confabulation", "target_concept")},
-        })
+        rows.append(
+            {
+                "concept_id": cid,
+                "set": "core" if cid in CORE else "extended",
+                "model": model,
+                "n_candidates": n,
+                "plausibility_mean": round(mean(scores), 3) if scores else None,
+                "concept_overlap_rate": round(overlaps / n, 3) if n else None,
+                "error_recall_10": round(recall, 3) if recall is not None else None,
+                "error_recall_5": round(recall5, 3) if recall5 is not None else None,
+                "error_recall_15": round(recall15, 3) if recall15 is not None else None,
+                "error_recall_per_list": (
+                    round(mean(per_list_recalls), 3) if per_list_recalls else None
+                ),
+                "n_dominant_errors": n_dom,
+                "n_matched_methods": n_matched_methods,
+                "n_distinct_errors_reached": len(matched_error_indices),
+                "distinct_per_matched": round(distinct_ratio, 3) if distinct_ratio else None,
+                "repeat_stability": round(stability, 3) if stability is not None else None,
+                "class_counts": {
+                    c: classes.count(c)
+                    for c in (
+                        "matches_documented_error",
+                        "valid_undocumented_strategy",
+                        "confabulation",
+                        "target_concept",
+                    )
+                },
+            }
+        )
 
     def agg(subset):
         def m(key):
             vals = [r[key] for r in subset if r[key] is not None]
             return round(mean(vals), 3) if vals else None
+
         return {
             "n_concepts": len(subset),
             "candidates": sum(r["n_candidates"] for r in subset),
@@ -192,11 +204,16 @@ def main() -> None:
                 continue
             a = agg(subset)
             rec, pl = a["error_recall_10"], a["plausibility_mean"]
-            if rec is not None and rec >= RECALL_PASS and pl is not None \
-                    and pl >= PLAUSIBILITY_PASS:
+            if (
+                rec is not None
+                and rec >= RECALL_PASS
+                and pl is not None
+                and pl >= PLAUSIBILITY_PASS
+            ):
                 verdict = "C_valid_primary_source"
-            elif rec is not None and rec < RECALL_PASS and pl is not None \
-                    and pl >= PLAUSIBILITY_PASS:
+            elif (
+                rec is not None and rec < RECALL_PASS and pl is not None and pl >= PLAUSIBILITY_PASS
+            ):
                 # Plausible student methods, but they are naive strategies rather than
                 # the documented high-frequency misconceptions.
                 verdict = "strategy_heavy_low_misconception_recall"
@@ -207,14 +224,19 @@ def main() -> None:
             verdicts[f"{model}/{setname}"] = {**a, "verdict": verdict}
 
     out = {
-        "thresholds": {"recall_pass": RECALL_PASS,
-                       "plausibility_pass": PLAUSIBILITY_PASS, "dominant_pct": DOMINANT_PCT},
+        "thresholds": {
+            "recall_pass": RECALL_PASS,
+            "plausibility_pass": PLAUSIBILITY_PASS,
+            "dominant_pct": DOMINANT_PCT,
+        },
         "metric_notes": {
             "error_recall_10": (
-                "distinct dominant errors (>=10% pick rate) covered, pooled over repeats"),
+                "distinct dominant errors (>=10% pick rate) covered, pooled over repeats"
+            ),
             "error_recall_per_list": "same, but for a single 10-method list (what a user sees)",
             "distinct_per_matched": (
-                "distinct errors reached / matched methods; low = redundant paraphrases"),
+                "distinct errors reached / matched methods; low = redundant paraphrases"
+            ),
             "repeat_stability": "mean pairwise Jaccard of matched-error sets across repeats",
         },
         "per_concept": rows,
@@ -223,18 +245,24 @@ def main() -> None:
     out_path = rd / "analysis.json"
     out_path.write_text(json.dumps(out, indent=2, ensure_ascii=False) + "\n")
 
-    print(f"{'concept':16s} {'set':8s} {'model':9s} {'plaus':>6s} {'rec10':>6s} "
-          f"{'recList':>7s} {'dist/m':>7s} {'stabil':>7s} {'overlap':>7s}")
+    print(
+        f"{'concept':16s} {'set':8s} {'model':9s} {'plaus':>6s} {'rec10':>6s} "
+        f"{'recList':>7s} {'dist/m':>7s} {'stabil':>7s} {'overlap':>7s}"
+    )
     for r in rows:
-        print(f"{r['concept_id']:16s} {r['set']:8s} {r['model']:9s} "
-              f"{str(r['plausibility_mean']):>6s} {str(r['error_recall_10']):>6s} "
-              f"{str(r['error_recall_per_list']):>7s} {str(r['distinct_per_matched']):>7s} "
-              f"{str(r['repeat_stability']):>7s} {str(r['concept_overlap_rate']):>7s}")
+        print(
+            f"{r['concept_id']:16s} {r['set']:8s} {r['model']:9s} "
+            f"{str(r['plausibility_mean']):>6s} {str(r['error_recall_10']):>6s} "
+            f"{str(r['error_recall_per_list']):>7s} {str(r['distinct_per_matched']):>7s} "
+            f"{str(r['repeat_stability']):>7s} {str(r['concept_overlap_rate']):>7s}"
+        )
     print("\nAggregate verdicts:")
     for k, v in verdicts.items():
-        print(f"  {k}: recall={v['error_recall_10']} perList={v['error_recall_per_list']} "
-              f"plaus={v['plausibility_mean']} distinct/matched={v['distinct_per_matched']} "
-              f"stability={v['repeat_stability']} -> {v['verdict']}")
+        print(
+            f"  {k}: recall={v['error_recall_10']} perList={v['error_recall_per_list']} "
+            f"plaus={v['plausibility_mean']} distinct/matched={v['distinct_per_matched']} "
+            f"stability={v['repeat_stability']} -> {v['verdict']}"
+        )
     print(f"\nsaved -> {out_path.relative_to(ROOT)}")
 
 

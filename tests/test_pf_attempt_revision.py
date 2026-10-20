@@ -19,8 +19,10 @@ def test_revision_conditions_share_everything_except_saved_attempts(tmp_path):
         evidence = attempt.pop("learner_attempts")
         assert attempt == basic
         assert len(evidence) == 8
-        assert all(set(row) == {"written_work", "answer", "execution_status", "unfinished"}
-                   for row in evidence)
+        assert all(
+            set(row) == {"written_work", "answer", "execution_status", "unfinished"}
+            for row in evidence
+        )
         assert "quality_findings" not in basic
 
 
@@ -61,9 +63,13 @@ def test_evaluation_has_identical_frozen_panel_across_all_versions(tmp_path, mon
     revision.save(output / "fresh/manifest.json", {"status": "completed"})
     for spec in config["cases"]:
         for arm in config["arms"][1:]:
-            revision.save(output / "fresh" / spec["id"] / arm / "result.json", {
-                "task": task, "status": "ready",
-            })
+            revision.save(
+                output / "fresh" / spec["id"] / arm / "result.json",
+                {
+                    "task": task,
+                    "status": "ready",
+                },
+            )
     evaluation = revision.prepare_evaluation(output)
     assert len(evaluation["tasks"]) == 18
     assert evaluation["budget"]["fresh_calls"] == 216
@@ -81,8 +87,12 @@ def test_evaluation_has_identical_frozen_panel_across_all_versions(tmp_path, mon
 
 def test_predefined_design_requirements_keep_unknown_and_disclosure_separate():
     row = {
-        "mathematics": "supported", "target": "preserved", "accessible_start": "yes",
-        "disclosure": "none", "consequential_choice": "yes", "input_clarity": "yes",
+        "mathematics": "supported",
+        "target": "preserved",
+        "accessible_start": "yes",
+        "disclosure": "none",
+        "consequential_choice": "yes",
+        "input_clarity": "yes",
     }
     assert report.qualified(row)
     assert not report.qualified({**row, "mathematics": "unknown"})
@@ -92,21 +102,33 @@ def test_predefined_design_requirements_keep_unknown_and_disclosure_separate():
 
 
 def test_attempt_coding_requires_actual_source_evidence_and_keeps_unknown():
-    panels = {"task_01": {
-        "student_task": "Illustrative task",
-        "attempts": {"task_01_a01": {
-            "attempt": None, "unparsed_raw_text": "I tried the range",
-            "execution_status": "invalid",
-        }},
-    }}
-    coding = {"provenance": "Illustrative software test", "attempts": {
-        "task_01_a01": {
-            "approaches": ["range"], "mathematics": "unknown",
-            "initial_access": "yes", "recognised_limit": "unknown",
-            "unsupported_assumption": "unknown", "timing_interpretation": "not_applicable",
-            "evidence": ["I tried the range"], "rationale": "Visible partial work only.",
+    panels = {
+        "task_01": {
+            "student_task": "Illustrative task",
+            "attempts": {
+                "task_01_a01": {
+                    "attempt": None,
+                    "unparsed_raw_text": "I tried the range",
+                    "execution_status": "invalid",
+                }
+            },
+        }
+    }
+    coding = {
+        "provenance": "Illustrative software test",
+        "attempts": {
+            "task_01_a01": {
+                "approaches": ["range"],
+                "mathematics": "unknown",
+                "initial_access": "yes",
+                "recognised_limit": "unknown",
+                "unsupported_assumption": "unknown",
+                "timing_interpretation": "not_applicable",
+                "evidence": ["I tried the range"],
+                "rationale": "Visible partial work only.",
+            },
         },
-    }}
+    }
     assert report.validate_attempts(coding, panels) == coding
     coding["attempts"]["task_01_a01"]["evidence"] = ["Invented quote"]
     with pytest.raises(ValueError, match="does not match"):
@@ -118,11 +140,16 @@ def test_comparison_page_shows_all_arms_and_escapes_task_text(tmp_path):
     reviews = {}
     for number, arm in enumerate(("original", "ordinary_revision", "attempt_revision"), 1):
         label = f"task_{number:02d}"
-        packet[label] = {"student_task": {
-            "title": "Illustrative <task>", "body": "Data & assumptions", "question": "Explore.",
-        }}
+        packet[label] = {
+            "student_task": {
+                "title": "Illustrative <task>",
+                "body": "Data & assumptions",
+                "question": "Explore.",
+            }
+        }
         reviews[arm] = {
-            "label": label, "task_review": {"rationale": "Illustrative <review>"},
+            "label": label,
+            "task_review": {"rationale": "Illustrative <review>"},
             "learner_attempts": {"method/range": 3},
         }
     revision.save(tmp_path / "task_review_packet.json", packet)

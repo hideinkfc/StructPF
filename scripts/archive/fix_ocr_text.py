@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Apply manual OCR corrections to all 30 scraped quiz files."""
+
 import json
 from pathlib import Path
 
@@ -175,7 +176,7 @@ CORRECTIONS = {
     },
     "fsq8": {  # Area under a function (curves)
         1: "The velocity (v) time (t) graph shows the velocity of a ball dropped from a ledge.\nRebecca wants to estimate the distance the ball has travelled between 3 and 7 seconds.\nTo do so, she is going to draw a trapezium on the graph.\n\nWhat should she calculate?",
-        2: "The velocity (v) time (t) graph shows the velocity of a ball dropped from a ledge.\nRebecca wants to estimate the distance the ball has travelled between 3 and 7 seconds.\nTo do so, she draws a trapezium on the graph.\n\nWhat calculation gives the best estimate?\n\n[area = (a+b)h/2 with specific values]", 
+        2: "The velocity (v) time (t) graph shows the velocity of a ball dropped from a ledge.\nRebecca wants to estimate the distance the ball has travelled between 3 and 7 seconds.\nTo do so, she draws a trapezium on the graph.\n\nWhat calculation gives the best estimate?\n\n[area = (a+b)h/2 with specific values]",
         3: "The velocity (v) time (t) graph shows the velocity of a ball dropped from a ledge.\nRebecca wants to estimate the distance the ball has travelled between 3 and 7 seconds.\nTo do so, she calculates the area of a trapezium.",
         4: "The velocity (v) time (t) graph shows the velocity of a ball dropped from a ledge.\nRebecca wants to estimate the distance the ball has travelled between 3 and 7 seconds.\nTo do so, she calculates the area of strips.",
         5: "The velocity (v) time (t) graph shows the velocity of a ball dropped from a ledge.\nRebecca wants to estimate the distance the ball has travelled between 3 and 7 seconds.\nTo do so, she calculates the area of four strips.\n\nIs this an overestimate or underestimate?",
@@ -217,44 +218,60 @@ CORRECTIONS = {
     },
 }
 
+
 def clean_text(txt):
     """Remove common OCR artifacts."""
     if not txt:
         return txt
     # Remove "I= Eedi", "l= Eedi", "Eed" prefixes
-    for prefix in ["I= Eedi I", "I= Eedi iS", "I= Eedi S", "I= Eedi a", "I= Eedi Sl", 
-                   "I= Eedi x", "I= Eedi", "l= Eedi iS", "l= Eedi Sl", "l= Eedi S",
-                   "l= Eedi I", "l= Eedi", "I= Eedi i", "Eedi", "Eed"]:
+    for prefix in [
+        "I= Eedi I",
+        "I= Eedi iS",
+        "I= Eedi S",
+        "I= Eedi a",
+        "I= Eedi Sl",
+        "I= Eedi x",
+        "I= Eedi",
+        "l= Eedi iS",
+        "l= Eedi Sl",
+        "l= Eedi S",
+        "l= Eedi I",
+        "l= Eedi",
+        "I= Eedi i",
+        "Eedi",
+        "Eed",
+    ]:
         if txt.startswith(prefix):
-            txt = txt[len(prefix):].strip()
+            txt = txt[len(prefix) :].strip()
             break
     # Remove "© Eedi 2018" and similar
     import re
-    txt = re.sub(r'©\s*Eedi\s*\d{4}', '', txt)
-    txt = re.sub(r'2\s*kes2018,', '', txt)
+
+    txt = re.sub(r"©\s*Eedi\s*\d{4}", "", txt)
+    txt = re.sub(r"2\s*kes2018,", "", txt)
     # Remove leading/trailing pipes and whitespace
-    txt = txt.strip('| \n')
+    txt = txt.strip("| \n")
     # Remove "|" separators (OCR artifact from newlines)
-    txt = txt.replace(' |  | ', '\n').replace(' | ', '\n').replace('| ', '\n')
+    txt = txt.replace(" |  | ", "\n").replace(" | ", "\n").replace("| ", "\n")
     # Collapse multiple newlines
-    txt = re.sub(r'\n{3,}', '\n\n', txt)
+    txt = re.sub(r"\n{3,}", "\n\n", txt)
     return txt.strip()
 
 
 def main():
     data_dir = Path("data/eedi_scraped")
-    
+
     for json_file in sorted(data_dir.glob("*.json")):
         if json_file.name.startswith("_"):
             continue
-        
+
         with open(json_file) as f:
             quiz = json.load(f)
-        
+
         qid = quiz["quiz_id"]
         if qid not in CORRECTIONS:
             continue
-        
+
         modified = False
         for q in quiz["questions"]:
             qnum = q["question_number"]
@@ -270,12 +287,12 @@ def main():
                 if old != new:
                     q["question_text"] = new
                     modified = True
-        
+
         if modified:
             with open(json_file, "w") as f:
                 json.dump(quiz, f, indent=2, ensure_ascii=False)
             print(f"  Fixed: {qid} ({quiz['quiz_name']})")
-    
+
     # Rebuild aggregate
     all_data = []
     for f in sorted(data_dir.glob("*.json")):
@@ -283,10 +300,10 @@ def main():
             continue
         with open(f) as fh:
             all_data.append(json.load(fh))
-    
+
     with open(data_dir / "_aggregated.json", "w") as f:
         json.dump(all_data, f, indent=2, ensure_ascii=False)
-    
+
     print(f"\nDone! {len(CORRECTIONS)} quizzes corrected, aggregate rebuilt.")
 
 

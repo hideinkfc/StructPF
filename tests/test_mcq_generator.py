@@ -23,18 +23,40 @@ class FakeEmbedder:
 def make_generator() -> MCQGenerator:
     embedder = FakeEmbedder()
     bank = MisconceptionBank(embed_client=embedder)
-    bank._questions = pd.DataFrame([
-        {"QuestionId": 99, "QuestionText": "target question", "CorrectAnswer": "A",
-         "AnswerAText": "1"},
-        {"QuestionId": 1, "QuestionText": "nearest one", "CorrectAnswer": "A",
-         "AnswerAText": "1"},
-        {"QuestionId": 2, "QuestionText": "nearest two", "CorrectAnswer": "A",
-         "AnswerAText": "2"},
-        {"QuestionId": 3, "QuestionText": "nearest three", "CorrectAnswer": "A",
-         "AnswerAText": "3"},
-        {"QuestionId": 4, "QuestionText": "other question", "CorrectAnswer": "A",
-         "AnswerAText": "4"},
-    ])
+    bank._questions = pd.DataFrame(
+        [
+            {
+                "QuestionId": 99,
+                "QuestionText": "target question",
+                "CorrectAnswer": "A",
+                "AnswerAText": "1",
+            },
+            {
+                "QuestionId": 1,
+                "QuestionText": "nearest one",
+                "CorrectAnswer": "A",
+                "AnswerAText": "1",
+            },
+            {
+                "QuestionId": 2,
+                "QuestionText": "nearest two",
+                "CorrectAnswer": "A",
+                "AnswerAText": "2",
+            },
+            {
+                "QuestionId": 3,
+                "QuestionText": "nearest three",
+                "CorrectAnswer": "A",
+                "AnswerAText": "3",
+            },
+            {
+                "QuestionId": 4,
+                "QuestionText": "other question",
+                "CorrectAnswer": "A",
+                "AnswerAText": "4",
+            },
+        ]
+    )
     generator = MCQGenerator(llm=object(), bank=bank)
     generator.build_fewshot_index(embed_client=embedder, cache_key=None)
     return generator
@@ -54,12 +76,16 @@ def test_fewshot_rag_retrieves_three_nearest_training_questions_without_target()
 def test_fewshot_rag_requires_an_initialized_index():
     embedder = FakeEmbedder()
     bank = MisconceptionBank(embed_client=embedder)
-    bank._questions = pd.DataFrame([{
-        "QuestionId": 1,
-        "QuestionText": "question",
-        "CorrectAnswer": "A",
-        "AnswerAText": "1",
-    }])
+    bank._questions = pd.DataFrame(
+        [
+            {
+                "QuestionId": 1,
+                "QuestionText": "question",
+                "CorrectAnswer": "A",
+                "AnswerAText": "1",
+            }
+        ]
+    )
     generator = MCQGenerator(llm=object(), bank=bank)
 
     with pytest.raises(RuntimeError, match="build_fewshot_index"):
@@ -120,11 +146,13 @@ def test_semantic_misconceptions_use_question_metadata_and_log_gold_coverage():
 
     def fake_match(query, k=3, min_score=0.5):
         calls.append((query, k, min_score))
-        return [{
-            "misconception_id": 295,
-            "name": "Confuses mathematical instruments",
-            "score": 0.91,
-        }]
+        return [
+            {
+                "misconception_id": 295,
+                "name": "Confuses mathematical instruments",
+                "score": 0.91,
+            }
+        ]
 
     bank.match_misconception = fake_match
     generator = MCQGenerator(llm=object(), bank=bank)
@@ -158,19 +186,27 @@ def test_semantic_misconceptions_use_question_metadata_and_log_gold_coverage():
 
 def test_cot_guidance_composes_with_misconception_prompt():
     bank = MisconceptionBank(embed_client=object())
-    bank.match_misconception = lambda query, k=3, min_score=0.5: [{
-        "misconception_id": 1,
-        "name": "Uses the wrong operation",
-        "score": 0.8,
-    }]
+    bank.match_misconception = lambda query, k=3, min_score=0.5: [
+        {
+            "misconception_id": 1,
+            "name": "Uses the wrong operation",
+            "score": 0.8,
+        }
+    ]
     generator = MCQGenerator(llm=object(), bank=bank)
 
     direct = generator._build_messages(
-        "Calculate 2 + 2.", "4", Strategy.MISCONCEPTION_CONDITIONED, 3,
+        "Calculate 2 + 2.",
+        "4",
+        Strategy.MISCONCEPTION_CONDITIONED,
+        3,
         instruction_variant="direct",
     )[1]["content"]
     cot = generator._build_messages(
-        "Calculate 2 + 2.", "4", Strategy.MISCONCEPTION_CONDITIONED, 3,
+        "Calculate 2 + 2.",
+        "4",
+        Strategy.MISCONCEPTION_CONDITIONED,
+        3,
         instruction_variant="cot",
     )[1]["content"]
 

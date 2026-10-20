@@ -23,8 +23,12 @@ ROWS = [
         "boxes": [
             (WHITE, "Task + Skills + Target", "student task, listed\nskills, target concept", 1),
             (PROC, "Task Judge", "quotes the task,\nchecks with calculator", 1),
-            (WHITE, "Four Verdicts", "target alignment, mathematical validity,\n"
-                                     "accessibility, room for invention", 2),
+            (
+                WHITE,
+                "Four Verdicts",
+                "target alignment, mathematical validity,\naccessibility, room for invention",
+                2,
+            ),
         ],
     },
     {
@@ -41,14 +45,21 @@ ROWS = [
 
 
 def draw_rect(ax, x, y, w, h, facecolor=WHITE, linewidth=1.0, zorder=2):
-    ax.add_patch(Rectangle((x, y), w, h, facecolor=facecolor, edgecolor=BLACK,
-                           linewidth=linewidth, zorder=zorder))
+    ax.add_patch(
+        Rectangle(
+            (x, y), w, h, facecolor=facecolor, edgecolor=BLACK, linewidth=linewidth, zorder=zorder
+        )
+    )
 
 
 def draw_arrow(ax, x0, y0, x1, y1):
-    ax.annotate("", xy=(x1, y1), xytext=(x0, y0),
-                arrowprops=dict(arrowstyle=HEAD_STYLE, color=BLACK, lw=1.2,
-                                shrinkA=0, shrinkB=0), zorder=5)
+    ax.annotate(
+        "",
+        xy=(x1, y1),
+        xytext=(x0, y0),
+        arrowprops=dict(arrowstyle=HEAD_STYLE, color=BLACK, lw=1.2, shrinkA=0, shrinkB=0),
+        zorder=5,
+    )
 
 
 def main():
@@ -70,13 +81,30 @@ def main():
 
     for r, row in enumerate(ROWS):
         cont_y = H - 0.08 - (r + 1) * cont_h - r * cont_gap
-        draw_rect(ax, cont_x, cont_y, cont_w, cont_h, facecolor=GROUP,
-                  linewidth=1.05, zorder=1)
+        draw_rect(ax, cont_x, cont_y, cont_w, cont_h, facecolor=GROUP, linewidth=1.05, zorder=1)
         title_y = cont_y + cont_h - 0.27
-        ax.text(cont_x + 0.18, title_y, row["title"], fontsize=12.4,
-                fontweight="bold", color=BLACK, ha="left", va="center", zorder=2)
-        ax.text(cont_x + cont_w - 0.18, title_y, row["principle"], fontsize=11.4,
-                fontstyle="italic", color=BLACK, ha="right", va="center", zorder=2)
+        ax.text(
+            cont_x + 0.18,
+            title_y,
+            row["title"],
+            fontsize=12.4,
+            fontweight="bold",
+            color=BLACK,
+            ha="left",
+            va="center",
+            zorder=2,
+        )
+        ax.text(
+            cont_x + cont_w - 0.18,
+            title_y,
+            row["principle"],
+            fontsize=11.4,
+            fontstyle="italic",
+            color=BLACK,
+            ha="right",
+            va="center",
+            zorder=2,
+        )
 
         box_y = cont_y + 0.20
         box_bottoms.append(box_y)
@@ -86,19 +114,45 @@ def main():
             x = col_x[col]
             w = span * box_w + (span - 1) * arrow_gap
             draw_rect(ax, x, box_y, w, box_h, facecolor=face, linewidth=1.05, zorder=3)
-            ax.text(x + w / 2, box_y + box_h * 0.76, label, fontsize=10.8,
-                    fontweight="bold", color=BLACK, ha="center", va="center", zorder=4)
-            ax.text(x + w / 2, box_y + box_h * 0.34, detail, fontsize=10.0,
-                    color=DARK, ha="center", va="center", linespacing=1.25, zorder=4)
+            ax.text(
+                x + w / 2,
+                box_y + box_h * 0.76,
+                label,
+                fontsize=10.8,
+                fontweight="bold",
+                color=BLACK,
+                ha="center",
+                va="center",
+                zorder=4,
+            )
+            ax.text(
+                x + w / 2,
+                box_y + box_h * 0.34,
+                detail,
+                fontsize=10.0,
+                color=DARK,
+                ha="center",
+                va="center",
+                linespacing=1.25,
+                zorder=4,
+            )
             if i < len(row["boxes"]) - 1:
                 draw_arrow(ax, x + w, ym, x + w + arrow_gap, ym)
             col += span
 
     gate_x = col_x[1] + box_w / 2
     draw_arrow(ax, gate_x, box_bottoms[0], gate_x, box_bottoms[1] + box_h)
-    ax.text(gate_x + 0.12, box_bottoms[0] - 0.20 - cont_gap / 2,
-            "runs only if accessibility is Yes", fontsize=10.6, fontstyle="italic",
-            color=BLACK, ha="left", va="center", zorder=4)
+    ax.text(
+        gate_x + 0.12,
+        box_bottoms[0] - 0.20 - cont_gap / 2,
+        "runs only if accessibility is Yes",
+        fontsize=10.6,
+        fontstyle="italic",
+        color=BLACK,
+        ha="left",
+        va="center",
+        zorder=4,
+    )
 
     out_dir = Path(__file__).resolve().parents[1] / "thesis" / "figures"
     out_dir.mkdir(parents=True, exist_ok=True)

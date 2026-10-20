@@ -132,8 +132,7 @@ def main() -> None:
     examples = summaries["examples"]
     comparison = {
         "answer_rule_following_delta_percentage_points": round(
-            (examples["answer_rule_following_rate"] - baseline["answer_rule_following_rate"])
-            * 100,
+            (examples["answer_rule_following_rate"] - baseline["answer_rule_following_rate"]) * 100,
             2,
         ),
         "selected_option_expected_delta_percentage_points": round(

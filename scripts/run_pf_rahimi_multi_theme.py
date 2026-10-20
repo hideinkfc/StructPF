@@ -106,13 +106,22 @@ class Ledger:
         with self.lock:
             self.keys.add(key)
             with self.path.open("a", encoding="utf-8") as stream:
-                stream.write(json.dumps({"key": key, "deleted_at": now(), **detail},
-                                        ensure_ascii=False) + "\n")
+                stream.write(
+                    json.dumps({"key": key, "deleted_at": now(), **detail}, ensure_ascii=False)
+                    + "\n"
+                )
 
 
 def generate_one(
-    api: OpenAI, output: Path, ledger: Ledger, config: dict[str, Any], cell: dict[str, Any],
-    model: str, index: int, system: str, user: str,
+    api: OpenAI,
+    output: Path,
+    ledger: Ledger,
+    config: dict[str, Any],
+    cell: dict[str, Any],
+    model: str,
+    index: int,
+    system: str,
+    user: str,
 ) -> None:
     key = task_key(cell["cell_id"], model, index)
     path = output / "attempts" / f"{key}.json"
@@ -138,19 +147,39 @@ def generate_one(
     status, schema_error = bench._validate_task(payload)
     finish = response.choices[0].finish_reason
     path.parent.mkdir(parents=True, exist_ok=True)
-    write_json(path, {
-        "key": key, "cell_id": cell["cell_id"], "model_requested": model,
-        "model_returned": getattr(response, "model", model), "index": index,
-        "status": status, "error": schema_error, "task": payload, "raw_response": raw,
-        "finish_reason": finish, "truncated": finish == "length",
-        "settings_sent": settings, "started_at": started, "finished_at": now(),
-    })
+    write_json(
+        path,
+        {
+            "key": key,
+            "cell_id": cell["cell_id"],
+            "model_requested": model,
+            "model_returned": getattr(response, "model", model),
+            "index": index,
+            "status": status,
+            "error": schema_error,
+            "task": payload,
+            "raw_response": raw,
+            "finish_reason": finish,
+            "truncated": finish == "length",
+            "settings_sent": settings,
+            "started_at": started,
+            "finished_at": now(),
+        },
+    )
 
 
 def judge_one(
-    api: OpenAI, output: Path, ledger: Ledger, judge: dict[str, Any], blind: str,
-    key: str, cell: dict[str, Any], task: dict[str, Any], system: str,
-    deployment: str, max_tokens: int,
+    api: OpenAI,
+    output: Path,
+    ledger: Ledger,
+    judge: dict[str, Any],
+    blind: str,
+    key: str,
+    cell: dict[str, Any],
+    task: dict[str, Any],
+    system: str,
+    deployment: str,
+    max_tokens: int,
 ) -> None:
     judgment_key = f"{judge['judge_id']}__{blind}"
     path = output / "judgments" / judge["judge_id"] / f"{blind}.json"
@@ -175,20 +204,38 @@ def judge_one(
     raw = response.choices[0].message.content or ""
     try:
         parsed = pf_rubric_setting.parse_rating(raw)
-        fields: dict[str, Any] = {"status": parsed["status"], "scores": parsed["scores"],
-                                  "rating": parsed["rating"], "parse_error": None}
+        fields: dict[str, Any] = {
+            "status": parsed["status"],
+            "scores": parsed["scores"],
+            "rating": parsed["rating"],
+            "parse_error": None,
+        }
     except ValueError as error:
-        fields = {"status": "parse_error", "scores": None, "rating": None,
-                  "parse_error": str(error)[:500]}
+        fields = {
+            "status": "parse_error",
+            "scores": None,
+            "rating": None,
+            "parse_error": str(error)[:500],
+        }
     finish = response.choices[0].finish_reason
     path.parent.mkdir(parents=True, exist_ok=True)
-    write_json(path, {
-        "judge_id": judge["judge_id"], "blind_id": blind, "task_key": key,
-        "deployment": deployment, "reasoning_effort": judge["reasoning_effort"],
-        "user_input": user, "raw_response": raw, "finish_reason": finish,
-        "truncated": finish == "length", "started_at": started, "finished_at": now(),
-        **fields,
-    })
+    write_json(
+        path,
+        {
+            "judge_id": judge["judge_id"],
+            "blind_id": blind,
+            "task_key": key,
+            "deployment": deployment,
+            "reasoning_effort": judge["reasoning_effort"],
+            "user_input": user,
+            "raw_response": raw,
+            "finish_reason": finish,
+            "truncated": finish == "length",
+            "started_at": started,
+            "finished_at": now(),
+            **fields,
+        },
+    )
 
 
 def ready_keys(output: Path) -> dict[str, dict[str, Any]]:
@@ -238,14 +285,20 @@ def check_or_write_manifest(output: Path, manifest: dict[str, Any]) -> None:
         write_json(path, manifest)
         return
     frozen = read_json(path)
-    for field in ("config_sha256", "generation_prompt_sha256", "judge_prompt_sha256",
-                  "cell_messages", "attempts_per_cell_per_model"):
+    for field in (
+        "config_sha256",
+        "generation_prompt_sha256",
+        "judge_prompt_sha256",
+        "cell_messages",
+        "attempts_per_cell_per_model",
+    ):
         if frozen[field] != manifest[field]:
             raise ValueError(f"Frozen input changed since preparation: {field}")
 
 
-def generation_stage(api: OpenAI, output: Path, config: dict[str, Any],
-                     gen_prompt: dict[str, Any], attempts: int) -> None:
+def generation_stage(
+    api: OpenAI, output: Path, config: dict[str, Any], gen_prompt: dict[str, Any], attempts: int
+) -> None:
     ledger = Ledger(output)
     messages = {cell["cell_id"]: cell_messages(cell, gen_prompt) for cell in config["cells"]}
     jobs = [
@@ -294,20 +347,36 @@ def judge_stage(api: OpenAI, output: Path, config: dict[str, Any], deployment: s
     def run(job: tuple[dict[str, Any], str, str]) -> None:
         judge, blind, key = job
         record = ready[key]
-        judge_one(api, output, ledger, judge, blind, key, cells[record["cell_id"]],
-                  record["task"], system, deployment, rater["max_completion_tokens"])
+        judge_one(
+            api,
+            output,
+            ledger,
+            judge,
+            blind,
+            key,
+            cells[record["cell_id"]],
+            record["task"],
+            system,
+            deployment,
+            rater["max_completion_tokens"],
+        )
 
     with ThreadPoolExecutor(max_workers=rater["workers"]) as pool:
         list(pool.map(run, jobs))
     write_json(output / "scores.json", aggregate(output, config, plan, ready))
 
 
-def aggregate(output: Path, config: dict[str, Any], plan: dict[str, dict[str, str]],
-              ready: dict[str, dict[str, Any]]) -> dict[str, Any]:
+def aggregate(
+    output: Path,
+    config: dict[str, Any],
+    plan: dict[str, dict[str, str]],
+    ready: dict[str, dict[str, Any]],
+) -> dict[str, Any]:
     ledger = Ledger(output)
     judges = [judge["judge_id"] for judge in config["rater"]["judges"]]
-    blind_of = {judge_id: {key: blind for blind, key in plan[judge_id].items()}
-                for judge_id in judges}
+    blind_of = {
+        judge_id: {key: blind for blind, key in plan[judge_id].items()} for judge_id in judges
+    }
     tasks: dict[str, Any] = {}
     for key in sorted(ready):
         judged: dict[str, Any] = {}
@@ -318,11 +387,16 @@ def aggregate(output: Path, config: dict[str, Any], plan: dict[str, dict[str, st
             if record is None:
                 deleted = f"{judge_id}__{blind}" in ledger.keys
                 missing = "deleted_api_error" if deleted else "missing"
-                judged[judge_id] = {"blind_id": blind, "status": missing,
-                                    "total": None, "scores": None}
+                judged[judge_id] = {
+                    "blind_id": blind,
+                    "status": missing,
+                    "total": None,
+                    "scores": None,
+                }
             else:
                 judged[judge_id] = {
-                    "blind_id": blind, "status": record["status"],
+                    "blind_id": blind,
+                    "status": record["status"],
                     "total": record["scores"]["TOTAL"] if record["scores"] else None,
                     "scores": record["scores"],
                 }
@@ -333,13 +407,19 @@ def aggregate(output: Path, config: dict[str, Any], plan: dict[str, dict[str, st
         else:
             gap, final, status = None, None, "incomplete"
         tasks[key] = {
-            "cell_id": ready[key]["cell_id"], "model": ready[key]["model_requested"],
-            "judges": judged, "final": final, "gap": gap,
-            "flag_gap_5": gap is not None and gap >= 5, "status": status,
+            "cell_id": ready[key]["cell_id"],
+            "model": ready[key]["model_requested"],
+            "judges": judged,
+            "final": final,
+            "gap": gap,
+            "flag_gap_5": gap is not None and gap >= 5,
+            "status": status,
         }
-    return {"generated_at": now(),
-            "adjudication": "final = mean of the two totals; gap >= 5 flagged; no third judge",
-            "tasks": tasks}
+    return {
+        "generated_at": now(),
+        "adjudication": "final = mean of the two totals; gap >= 5 flagged; no third judge",
+        "tasks": tasks,
+    }
 
 
 def summarize(output: Path, config: dict[str, Any]) -> dict[str, Any]:
@@ -358,16 +438,22 @@ def summarize(output: Path, config: dict[str, Any]) -> dict[str, Any]:
             statuses: dict[str, int] = {}
             for row in rows:
                 statuses[row["status"]] = statuses.get(row["status"], 0) + 1
-            finals = [task["final"] for key, task in scores.items()
-                      if key.startswith(prefix) and task["final"] is not None]
+            finals = [
+                task["final"]
+                for key, task in scores.items()
+                if key.startswith(prefix) and task["final"] is not None
+            ]
             summary["by_cell_model"][f"{cell['cell_id']} | {model}"] = {
                 "attempt_files": len(rows),
                 "status_counts": statuses,
                 "deleted_generation_errors": sum(key.startswith(prefix) for key in deleted),
                 "final_scored": len(finals),
                 "mean_final": round(sum(finals) / len(finals), 2) if finals else None,
-                "flagged_gap_5": sum(bool(task["flag_gap_5"]) for key, task in scores.items()
-                                     if key.startswith(prefix)),
+                "flagged_gap_5": sum(
+                    bool(task["flag_gap_5"])
+                    for key, task in scores.items()
+                    if key.startswith(prefix)
+                ),
             }
     return summary
 
@@ -381,13 +467,17 @@ def client() -> OpenAI:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description=__doc__,
-                                     formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser = argparse.ArgumentParser(
+        description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
+    )
     parser.add_argument("--name", required=True, help="subdirectory under the result root")
     parser.add_argument("--stage", choices=["generate", "judge", "all"], default="all")
     parser.add_argument("--attempts", type=int, default=30)
-    parser.add_argument("--dry-run", action="store_true",
-                        help="build and print the frozen inputs without any API call")
+    parser.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="build and print the frozen inputs without any API call",
+    )
     args = parser.parse_args()
 
     load_dotenv(ROOT / ".env.local", override=False)

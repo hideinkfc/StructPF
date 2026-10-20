@@ -40,8 +40,9 @@ def main() -> None:
     lines.append("# V5 Prior-Method Review")
     lines.append("")
     lines.append(f"Generator: **{generator}** — edit the `Verdict` and `My note` fields.")
-    lines.append("Verdict values: `accept` / `reject` / `fix`. "
-                 "If `fix`, rewrite the falls_short line.")
+    lines.append(
+        "Verdict values: `accept` / `reject` / `fix`. If `fix`, rewrite the falls_short line."
+    )
     lines.append("")
 
     for cid, cdata in gen["concepts"].items():

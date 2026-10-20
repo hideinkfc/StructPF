@@ -37,8 +37,7 @@ def load_client() -> tuple[OpenAI, dict[str, str]]:
     if not base_url or not api_key:
         raise RuntimeError("Azure config missing from .env.local")
     models = {
-        label: os.environ.get(env, MODEL_DEFAULTS[label]).strip()
-        for label, env in MODELS.items()
+        label: os.environ.get(env, MODEL_DEFAULTS[label]).strip() for label, env in MODELS.items()
     }
     return OpenAI(base_url=base_url, api_key=api_key), models
 
@@ -103,13 +102,20 @@ def main() -> None:
             print(f"{label}: CONTRACT OK")
 
     OUT.parent.mkdir(parents=True, exist_ok=True)
-    OUT.write_text(json.dumps({
-        "concept_id": package["concept_id"],
-        "prompt_file": str(PROMPTS.relative_to(ROOT)),
-        "n_methods_requested": N_METHODS,
-        "temperature": 0.7,
-        "results": results,
-    }, indent=2, ensure_ascii=False) + "\n")
+    OUT.write_text(
+        json.dumps(
+            {
+                "concept_id": package["concept_id"],
+                "prompt_file": str(PROMPTS.relative_to(ROOT)),
+                "n_methods_requested": N_METHODS,
+                "temperature": 0.7,
+                "results": results,
+            },
+            indent=2,
+            ensure_ascii=False,
+        )
+        + "\n"
+    )
     print(f"saved -> {OUT.relative_to(ROOT)}")
 
 

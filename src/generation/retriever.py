@@ -5,7 +5,6 @@ so brute-force cosine similarity via numpy is sufficient.
 Embeddings are cached to disk to avoid re-computation.
 """
 
-import hashlib
 import pickle
 from pathlib import Path
 from typing import Any
@@ -98,10 +97,7 @@ class EmbeddingIndex:
             return []
 
         top_k = valid[np.argsort(sims[valid])[-k:]][::-1]
-        return [
-            {**self.items[i], "score": float(sims[i])}
-            for i in top_k
-        ]
+        return [{**self.items[i], "score": float(sims[i])} for i in top_k]
 
     def search_by_vector(
         self,
@@ -125,10 +121,7 @@ class EmbeddingIndex:
             return []
 
         top_k = valid[np.argsort(sims[valid])[-k:]][::-1]
-        return [
-            {**self.items[i], "score": float(sims[i])}
-            for i in top_k
-        ]
+        return [{**self.items[i], "score": float(sims[i])} for i in top_k]
 
     @property
     def size(self) -> int:

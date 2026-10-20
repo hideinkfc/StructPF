@@ -27,12 +27,25 @@ TASK_OPTIONS = {
     "input_clarity": {"yes", "no", "unknown"},
 }
 METHODS = {
-    "whole_journey_rate", "unweighted_stage_rates", "elapsed_time_comparison",
-    "construct_journey_or_schedule", "other_rate_method", "arithmetic_mean",
-    "range", "concentration", "absolute_departures", "squared_departures",
-    "maximum_departure", "pairwise_departures", "other_measure",
-    "whole_block_search", "greedy_claims_and_repairs", "equal_fraction_all_blocks",
-    "divider_chooser_extension", "other_allocation", "unknown",
+    "whole_journey_rate",
+    "unweighted_stage_rates",
+    "elapsed_time_comparison",
+    "construct_journey_or_schedule",
+    "other_rate_method",
+    "arithmetic_mean",
+    "range",
+    "concentration",
+    "absolute_departures",
+    "squared_departures",
+    "maximum_departure",
+    "pairwise_departures",
+    "other_measure",
+    "whole_block_search",
+    "greedy_claims_and_repairs",
+    "equal_fraction_all_blocks",
+    "divider_chooser_extension",
+    "other_allocation",
+    "unknown",
 }
 
 
@@ -41,8 +54,10 @@ def qualified(row: dict) -> bool:
         if row[field] not in allowed:
             raise ValueError(f"Unknown task rating: {field}")
     return (
-        row["mathematics"] == "supported" and row["target"] == "preserved"
-        and row["accessible_start"] == "yes" and row["disclosure"] == "none"
+        row["mathematics"] == "supported"
+        and row["target"] == "preserved"
+        and row["accessible_start"] == "yes"
+        and row["disclosure"] == "none"
         and row["consequential_choice"] == "yes"
     )
 
@@ -81,7 +96,8 @@ def prepare_attempt_review(output: Path) -> dict:
     save(output / "attempt_review_key.json", key)
     for family in sorted(set(families.values())):
         subset = {
-            label: panel for label, panel in panels.items()
+            label: panel
+            for label, panel in panels.items()
             if families[task_key[label]["case_id"]] == family
         }
         save(output / f"attempt_packet_{family}.json", subset)
@@ -91,7 +107,8 @@ def prepare_attempt_review(output: Path) -> dict:
 def validate_attempts(coding: dict, panels: dict) -> dict:
     expected = {
         attempt_id: entry
-        for panel in panels.values() for attempt_id, entry in panel["attempts"].items()
+        for panel in panels.values()
+        for attempt_id, entry in panel["attempts"].items()
     }
     if set(coding["attempts"]) != set(expected):
         raise ValueError("Attempt coding does not cover every fresh response")
@@ -106,13 +123,18 @@ def validate_attempts(coding: dict, panels: dict) -> dict:
         if row["mathematics"] not in {"supported", "invalid", "unknown"}:
             raise ValueError("Unknown attempt mathematics classification")
         if row["timing_interpretation"] not in {
-            "duration", "cumulative", "ambiguous", "not_applicable", "unknown",
+            "duration",
+            "cumulative",
+            "ambiguous",
+            "not_applicable",
+            "unknown",
         }:
             raise ValueError("Unknown timing interpretation")
         entry = expected[label]
         text = (
             entry["attempt"]["written_work"] + "\n" + entry["attempt"]["answer"]
-            if entry["attempt"] else entry["unparsed_raw_text"] or ""
+            if entry["attempt"]
+            else entry["unparsed_raw_text"] or ""
         )
         if not isinstance(row["evidence"], list) or not row["evidence"]:
             raise ValueError("Attempt judgment requires source-quoted evidence")
@@ -135,7 +157,8 @@ def summarize(output: Path) -> dict:
     for family in {spec["family"] for spec in config["cases"]}:
         panels = json.loads((output / f"attempt_packet_{family}.json").read_text())
         family_coding = validate_attempts(
-            json.loads((output / f"attempt_coding_{family}.json").read_text()), panels,
+            json.loads((output / f"attempt_coding_{family}.json").read_text()),
+            panels,
         )
         coding.update(family_coding["attempts"])
     arms = {arm: Counter() for arm in config["arms"]}
@@ -164,8 +187,11 @@ def summarize(output: Path) -> dict:
                 for method in set(result["approaches"]):
                     counts[f"method/{method}"] += 1
         cases.setdefault(spec["case_id"], {})[spec["arm"]] = {
-            "label": label, "task_review": row, "qualified": qualifies,
-            "learner_attempts": dict(learner), "solver_attempts": dict(solver),
+            "label": label,
+            "task_review": row,
+            "qualified": qualifies,
+            "learner_attempts": dict(learner),
+            "solver_attempts": dict(solver),
             "by_profile": {name: dict(value) for name, value in by_profile.items()},
         }
     direct, informed = arms["ordinary_revision"], arms["attempt_revision"]
@@ -187,18 +213,22 @@ def summarize(output: Path) -> dict:
                 totals.update(stats["usage"])
         usage[arm] = dict(totals)
     summary = {
-        "question": config["question"], "arms": {name: dict(value) for name, value in arms.items()},
-        "cases": cases, "task_review_provenance": ratings["provenance"],
+        "question": config["question"],
+        "arms": {name: dict(value) for name, value in arms.items()},
+        "cases": cases,
+        "task_review_provenance": ratings["provenance"],
         "attempt_coding_provenance": "Three label-hidden assistant readers, one per family.",
         "attempt_execution": student_report.summarize(output / "attempts")["phases"],
         "fresh_revision_usage": usage,
-        "predefined_gain_margin": margin, "meets_predefined_rule": meets,
+        "predefined_gain_margin": margin,
+        "meets_predefined_rule": meets,
         "decision": (
             "Descriptive advantage meets exploratory continuation rule; not learner validation."
-            if meets else
-            "No promotion: predefined advantage over ordinary revision not established."
+            if meets
+            else "No promotion: predefined advantage over ordinary revision not established."
         ),
-        "limits": config["limits"], "global_generator_changed": False,
+        "limits": config["limits"],
+        "global_generator_changed": False,
     }
     verification_path = output / "task_verification.json"
     if verification_path.exists():
@@ -217,23 +247,40 @@ def render(output: Path, summary: dict) -> None:
             review = arms[arm]
             task = task_packet[review["label"]]["student_task"]
             title = {
-                "original": "Original", "ordinary_revision": "Ordinary revision",
+                "original": "Original",
+                "ordinary_revision": "Ordinary revision",
                 "attempt_revision": "Attempt-informed revision",
             }[arm]
             content = (
-                "<article><h3>" + title + "</h3><h4>" + html.escape(task["title"])
-                + "</h4><pre>" + html.escape(task["body"]) + "</pre><b>Challenge</b><pre>"
-                + html.escape(task["question"]) + "</pre><hr><p><b>Task review:</b> "
-                + html.escape(review["task_review"]["rationale"]) + "</p>"
-                + "<p><b>Learner methods:</b> " + html.escape(", ".join(
-                    f"{key.removeprefix('method/')} ({value}/8)"
-                    for key, value in review["learner_attempts"].items()
-                    if key.startswith("method/")
-                )) + "</p></article>"
+                "<article><h3>"
+                + title
+                + "</h3><h4>"
+                + html.escape(task["title"])
+                + "</h4><pre>"
+                + html.escape(task["body"])
+                + "</pre><b>Challenge</b><pre>"
+                + html.escape(task["question"])
+                + "</pre><hr><p><b>Task review:</b> "
+                + html.escape(review["task_review"]["rationale"])
+                + "</p>"
+                + "<p><b>Learner methods:</b> "
+                + html.escape(
+                    ", ".join(
+                        f"{key.removeprefix('method/')} ({value}/8)"
+                        for key, value in review["learner_attempts"].items()
+                        if key.startswith("method/")
+                    )
+                )
+                + "</p></article>"
             )
             cards.append(content)
-        sections.append("<section><h2>" + html.escape(case_id) + "</h2><div class='row'>"
-                        + "".join(cards) + "</div></section>")
+        sections.append(
+            "<section><h2>"
+            + html.escape(case_id)
+            + "</h2><div class='row'>"
+            + "".join(cards)
+            + "</div></section>"
+        )
     rows = []
     for metric, label in (
         ("mathematics/supported", "Mathematics supported"),
@@ -243,10 +290,16 @@ def render(output: Path, summary: dict) -> None:
         ("input_clarity/yes", "Unambiguous required inputs"),
         ("supported_undisclosed_choice", "All predefined design requirements"),
     ):
-        rows.append("<tr><td>" + label + "</td>" + "".join(
-            f"<td>{summary['arms'][arm].get(metric, 0)}/6</td>"
-            for arm in ("original", "ordinary_revision", "attempt_revision")
-        ) + "</tr>")
+        rows.append(
+            "<tr><td>"
+            + label
+            + "</td>"
+            + "".join(
+                f"<td>{summary['arms'][arm].get(metric, 0)}/6</td>"
+                for arm in ("original", "ordinary_revision", "attempt_revision")
+            )
+            + "</tr>"
+        )
     page = (
         "<!doctype html><html lang='en'><meta charset='utf-8'>"
         "<meta name='viewport' content='width=device-width,initial-scale=1'>"
@@ -261,7 +314,8 @@ def render(output: Path, summary: dict) -> None:
         "<p>Six paired exercises. Same revision instructions/model/call cap; only "
         "one arm receives previous learner work. Original versions are retained. "
         "Task review hides labels and precedes fresh-attempt outcomes.</p><p><b>Decision:</b> "
-        + html.escape(summary["decision"]) + "</p>"
+        + html.escape(summary["decision"])
+        + "</p>"
         "<h2>Answer to the research question</h2>"
         "<p>This pilot does not establish that simulated-attempt feedback improves "
         "PF design more than a strong ordinary revision. The informed arm added "
@@ -274,7 +328,8 @@ def render(output: Path, summary: dict) -> None:
         "separate findings, not a single PF or learning score.</p>"
         "<table><tr><th>Separate outcome</th><th>Original</th>"
         "<th>Ordinary revision</th><th>Attempt-informed revision</th></tr>"
-        + "".join(rows) + "</table>"
+        + "".join(rows)
+        + "</table>"
         "<p>These are assistant-reviewed designs and written LLM attempts, not real "
         "student behavior or learning. One revision per arm; additional input "
         "tokens and feedback-acquisition costs are not equal. Unknown never means "
@@ -283,7 +338,8 @@ def render(output: Path, summary: dict) -> None:
         "<p><a href='summary.json'>All outcomes and request costs</a> &middot; "
         "<a href='task_ratings.json'>Label-hidden task ratings</a> &middot; "
         "<a href='attempts/attempts.html'>All written attempts</a></p>"
-        + "".join(sections) + "</html>"
+        + "".join(sections)
+        + "</html>"
     )
     (output / "comparison.html").write_text(page, encoding="utf-8")
 
@@ -298,6 +354,18 @@ if __name__ == "__main__":
         print(f"Prepared {len(result)} neutral task panels")
     else:
         result = summarize(args.output)
-        print(json.dumps({key: result[key] for key in
-                          ("arms", "predefined_gain_margin", "meets_predefined_rule",
-                           "decision", "fresh_revision_usage")}, indent=2))
+        print(
+            json.dumps(
+                {
+                    key: result[key]
+                    for key in (
+                        "arms",
+                        "predefined_gain_margin",
+                        "meets_predefined_rule",
+                        "decision",
+                        "fresh_revision_usage",
+                    )
+                },
+                indent=2,
+            )
+        )

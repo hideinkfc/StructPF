@@ -24,41 +24,67 @@ def work():
             directory.parent.rmdir()
 
 
-def inputs(work, monkeypatch, *, ids=("area_perimeter", "weighted_mean"), repeats=3,
-           total=468, per_attempt=9):
+def inputs(
+    work,
+    monkeypatch,
+    *,
+    ids=("area_perimeter", "weighted_mean"),
+    repeats=3,
+    total=468,
+    per_attempt=9,
+):
     case, winner, context = loop_inputs()
     case.update(topic="journeys", subject="mathematics")
     sources = work / "sources"
     for case_id in ids:
         source = sources / case_id / "result.json"
         source.parent.mkdir(parents=True)
-        source.write_text(json.dumps({
-            "case_id": case_id, "case_input": {**case, "id": case_id},
-            "model": "gpt-5.6-luna",
-            "prior_context": {**context, "case_id": case_id},
-            "stages": {"D1": {"must_never_be_called": True}, "D2_D3": {
-                "winner": winner.to_dict(), "task": writer_payload(),
-            }},
-        }))
+        source.write_text(
+            json.dumps(
+                {
+                    "case_id": case_id,
+                    "case_input": {**case, "id": case_id},
+                    "model": "gpt-5.6-luna",
+                    "prior_context": {**context, "case_id": case_id},
+                    "stages": {
+                        "D1": {"must_never_be_called": True},
+                        "D2_D3": {
+                            "winner": winner.to_dict(),
+                            "task": writer_payload(),
+                        },
+                    },
+                }
+            )
+        )
     baseline = work / "old_prompts.yaml"
     baseline.write_bytes(comparison.brief_stage.PROMPTS_PATH.read_bytes())
     config = {
         "schema_version": "pf-d2a-comparison/v1",
-        "model_selector": "luna", "source_directory": str(sources),
-        "baseline_prompts": str(baseline), "cases": [{"id": case_id} for case_id in ids],
-        "proposal_k": 2, "repeats": repeats, "calibration_cases": list(ids[:2]),
+        "model_selector": "luna",
+        "source_directory": str(sources),
+        "baseline_prompts": str(baseline),
+        "cases": [{"id": case_id} for case_id in ids],
+        "proposal_k": 2,
+        "repeats": repeats,
+        "calibration_cases": list(ids[:2]),
         "protocol": {
-            "max_calls_per_attempt": per_attempt, "max_calls_total": total,
-            "max_completion_tokens_per_call": 6000, "sdk_max_retries": 0,
+            "max_calls_per_attempt": per_attempt,
+            "max_calls_total": total,
+            "max_completion_tokens_per_call": 6000,
+            "sdk_max_retries": 0,
         },
     }
     path = work / "config.json"
     path.write_text(json.dumps(config))
     tracked = work / "implementation.py"
     tracked.write_text("VERSION = 1\n")
-    monkeypatch.setattr(comparison, "source_hashes", lambda config_path, baseline_path: {
-        str(path): comparison._sha(path) for path in (config_path, baseline_path, tracked)
-    })
+    monkeypatch.setattr(
+        comparison,
+        "source_hashes",
+        lambda config_path, baseline_path: {
+            str(path): comparison._sha(path) for path in (config_path, baseline_path, tracked)
+        },
+    )
     return path, work / "output", config, tracked
 
 
@@ -84,7 +110,8 @@ class FakeClient:
         return SimpleNamespace(
             choices=[SimpleNamespace(message=SimpleNamespace(content=json.dumps(payload)))],
             usage=SimpleNamespace(
-                prompt_tokens=10, completion_tokens=20,
+                prompt_tokens=10,
+                completion_tokens=20,
                 completion_tokens_details=SimpleNamespace(reasoning_tokens=5),
             ),
         )
@@ -97,11 +124,17 @@ def fake_pipeline(monkeypatch, *, winner=True):
     def search(client, model, case_input, prior_context, **kwargs):
         seen.append({"case": deepcopy(case_input), "context": deepcopy(prior_context), **kwargs})
         for _ in range(2):
-            comparison.runner.chat_json(client, model, "Design one mathematical challenge",
-                                        "Proposal input", 0.9, 10000)
-        comparison.runner.chat_json(client, model,
-                                    "Select one promising mathematical design brief",
-                                    "Selection input", 0.0, 6000)
+            comparison.runner.chat_json(
+                client, model, "Design one mathematical challenge", "Proposal input", 0.9, 10000
+            )
+        comparison.runner.chat_json(
+            client,
+            model,
+            "Select one promising mathematical design brief",
+            "Selection input",
+            0.0,
+            6000,
+        )
         return {
             "winners": [selected] if winner else [],
             "judged": [selected] if winner else [],
@@ -169,11 +202,16 @@ def test_production_source_hashes_include_transitive_math_and_all_stage_prompts(
     baseline.write_text("baseline snapshot")
     hashes = comparison.source_hashes(config, baseline)
     expected = (
-        "scripts/run_pf_d2a_comparison.py", "scripts/prior_methods/common.py",
-        "scripts/run_situation_skeletons.py", "scripts/design_brief_stage.py",
-        "scripts/design_data_stage.py", "src/generation/design_briefs.py",
-        "src/generation/design_data.py", "src/generation/design_calculator.py",
-        "src/generation/fill_check.py", "src/generation/situation_skeletons.py",
+        "scripts/run_pf_d2a_comparison.py",
+        "scripts/prior_methods/common.py",
+        "scripts/run_situation_skeletons.py",
+        "scripts/design_brief_stage.py",
+        "scripts/design_data_stage.py",
+        "src/generation/design_briefs.py",
+        "src/generation/design_data.py",
+        "src/generation/design_calculator.py",
+        "src/generation/fill_check.py",
+        "src/generation/situation_skeletons.py",
         "src/generation/prompts/design_briefs.yaml",
         "src/generation/prompts/design_data.yaml",
         "src/generation/prompts/situation_skeletons.yaml",
@@ -200,8 +238,10 @@ def test_prepare_refuses_changed_frozen_material(work, monkeypatch, changed):
     manifest = comparison.prepare(config, output)
     paths = {
         "source": Path(values["source_directory"]) / "area_perimeter" / "result.json",
-        "implementation": tracked, "baseline": Path(values["baseline_prompts"]),
-        "config": config, "snapshot": output / next(iter(manifest["snapshots"].values())),
+        "implementation": tracked,
+        "baseline": Path(values["baseline_prompts"]),
+        "config": config,
+        "snapshot": output / next(iter(manifest["snapshots"].values())),
     }
     path = paths[changed]
     path.write_text(path.read_text() + "\n")
@@ -437,10 +477,17 @@ def test_data_repair_exhaustion_produces_flagged_task_and_records_all_calls(work
     fake_pipeline(monkeypatch)
     data = proposal_payload()
     data["values"]["minutes"][0] = -20
-    client = FakeClient([
-        {}, {}, {}, data, {"values": data["values"]}, {"values": data["values"]},
-        writer_payload(),
-    ])
+    client = FakeClient(
+        [
+            {},
+            {},
+            {},
+            data,
+            {"values": data["values"]},
+            {"values": data["values"]},
+            writer_payload(),
+        ]
+    )
     install_client(monkeypatch, client)
     manifest = comparison.run(config, output, "calibration", limit=1)
     record = record_for(output, manifest["schedule"][0])
@@ -469,9 +516,14 @@ def test_resume_refuses_unfinished_attempts(work, monkeypatch, status):
 def test_unpaired_started_ledger_refuses_new_dispatch(work, monkeypatch):
     config, output, _, _ = inputs(work, monkeypatch)
     manifest = comparison.prepare(config, output)
-    comparison._append(output / "ledger.jsonl", {
-        **manifest["schedule"][0], "event": "api_request_started", "call_id": "request-000001",
-    })
+    comparison._append(
+        output / "ledger.jsonl",
+        {
+            **manifest["schedule"][0],
+            "event": "api_request_started",
+            "call_id": "request-000001",
+        },
+    )
     monkeypatch.setattr(comparison, "load_client", lambda *_: pytest.fail("Client loaded"))
     with pytest.raises(ValueError, match="Interrupted API requests"):
         comparison.run(config, output, "calibration")
@@ -485,11 +537,16 @@ def test_anonymized_gallery_has_supplied_target_and_task_text_only(work, monkeyp
     manifest = comparison.run(config, output, "calibration", limit=1)
     path = output / "attempts" / manifest["schedule"][0]["attempt_id"] / "result.json"
     record = json.loads(path.read_text())
-    record["task"].update(model="must not show", arm="must not show",
-                          target_concept="generated target must not show",
-                          key_idea="hidden key idea", naive_answer="hidden naive answer",
-                          predicted_routes=["hidden route"], schema_version="hidden version",
-                          withheld=[{"source": "brief.secret", "quote": "do not show"}])
+    record["task"].update(
+        model="must not show",
+        arm="must not show",
+        target_concept="generated target must not show",
+        key_idea="hidden key idea",
+        naive_answer="hidden naive answer",
+        predicted_routes=["hidden route"],
+        schema_version="hidden version",
+        withheld=[{"source": "brief.secret", "quote": "do not show"}],
+    )
     record["case_input"]["target_concept"] = "artifact target must not show"
     path.write_text(json.dumps(record))
     comparison.render(output, "calibration")
@@ -509,10 +566,24 @@ def test_anonymized_gallery_has_supplied_target_and_task_text_only(work, monkeyp
     page = (gallery / "tasks.html").read_text()
     target = manifest["inputs"][manifest["schedule"][0]["case_id"]]["case_input"]["target_concept"]
     assert target in page
-    for forbidden in ("baseline", "intervention", "gpt-5.6-luna", "brief.secret",
-                      "must not show", "hidden key idea", "hidden naive answer", "hidden route",
-                      "hidden version", "key_idea", "naive_answer", "predicted_routes",
-                      "result.json", "file://", "href=", "blind review"):
+    for forbidden in (
+        "baseline",
+        "intervention",
+        "gpt-5.6-luna",
+        "brief.secret",
+        "must not show",
+        "hidden key idea",
+        "hidden naive answer",
+        "hidden route",
+        "hidden version",
+        "key_idea",
+        "naive_answer",
+        "predicted_routes",
+        "result.json",
+        "file://",
+        "href=",
+        "blind review",
+    ):
         assert forbidden not in review_bytes.decode()
         assert forbidden not in page
     mapping = json.loads((output / "calibration_task_mapping.json").read_text())
@@ -537,11 +608,20 @@ def test_actual_pipeline_uses_extended_api_and_never_generates_d1(work, monkeypa
     payload = loop_inputs()[1].design_brief.to_dict()
     version = "design-brief/v1" if arm == "baseline" else "design-brief/v2"
     if arm == "intervention":
-        payload.update(schema_version=version, key_idea="Whole-journey weighting",
-                       naive_answer="Compare sections without their durations")
-    client = FakeClient([
-        payload, payload, selection_payload(), proposal_payload(), writer_payload(),
-    ])
+        payload.update(
+            schema_version=version,
+            key_idea="Whole-journey weighting",
+            naive_answer="Compare sections without their durations",
+        )
+    client = FakeClient(
+        [
+            payload,
+            payload,
+            selection_payload(),
+            proposal_payload(),
+            writer_payload(),
+        ]
+    )
     budget = comparison.RequestBudget(output, manifest["limits"])
     record = comparison.run_attempt(
         attempt, output, manifest, client=client, model=manifest["model"], budget=budget

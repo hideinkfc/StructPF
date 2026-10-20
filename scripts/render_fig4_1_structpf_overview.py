@@ -24,15 +24,23 @@ SMALL_HEAD = "-|>,head_length=0.32,head_width=0.20"
 def draw_rect(ax, x, y, w, h, facecolor=WHITE, linewidth=1.0, linestyle="-", zorder=2):
     ax.add_patch(
         Rectangle(
-            (x, y), w, h, facecolor=facecolor, edgecolor=BLACK,
-            linewidth=linewidth, linestyle=linestyle, zorder=zorder,
+            (x, y),
+            w,
+            h,
+            facecolor=facecolor,
+            edgecolor=BLACK,
+            linewidth=linewidth,
+            linestyle=linestyle,
+            zorder=zorder,
         )
     )
 
 
 def draw_arrow(ax, x0, y0, x1, y1, lw=1.2, style=HEAD_STYLE, zorder=5):
     ax.annotate(
-        "", xy=(x1, y1), xytext=(x0, y0),
+        "",
+        xy=(x1, y1),
+        xytext=(x0, y0),
         arrowprops=dict(arrowstyle=style, color=BLACK, lw=lw, shrinkA=0, shrinkB=0),
         zorder=zorder,
     )
@@ -49,19 +57,56 @@ def block(ax, x, y, w, h, title, body=None, facecolor=PROC, linewidth=1.05):
     draw_rect(ax, x, y, w, h, facecolor=facecolor, linewidth=linewidth, zorder=3)
     cx = x + w / 2
     if body is None:
-        ax.text(cx, y + h / 2, title, fontsize=12.5, fontweight="bold", color=BLACK,
-                ha="center", va="center", linespacing=1.2, zorder=4)
+        ax.text(
+            cx,
+            y + h / 2,
+            title,
+            fontsize=12.5,
+            fontweight="bold",
+            color=BLACK,
+            ha="center",
+            va="center",
+            linespacing=1.2,
+            zorder=4,
+        )
     else:
-        ax.text(cx, y + h * 0.66, title, fontsize=12.5, fontweight="bold", color=BLACK,
-                ha="center", va="center", zorder=4)
-        ax.text(cx, y + h * 0.30, body, fontsize=11.2, color=DARK,
-                ha="center", va="center", linespacing=1.2, zorder=4)
+        ax.text(
+            cx,
+            y + h * 0.66,
+            title,
+            fontsize=12.5,
+            fontweight="bold",
+            color=BLACK,
+            ha="center",
+            va="center",
+            zorder=4,
+        )
+        ax.text(
+            cx,
+            y + h * 0.30,
+            body,
+            fontsize=11.2,
+            color=DARK,
+            ha="center",
+            va="center",
+            linespacing=1.2,
+            zorder=4,
+        )
 
 
 def stage_container(ax, x, y, w, h, title):
     draw_rect(ax, x, y, w, h, facecolor=GROUP, linewidth=1.05, zorder=1)
-    ax.text(x + 0.18, y + h - 0.24, title, fontsize=11.6, fontweight="bold", color=BLACK,
-            ha="left", va="center", zorder=2)
+    ax.text(
+        x + 0.18,
+        y + h - 0.24,
+        title,
+        fontsize=11.6,
+        fontweight="bold",
+        color=BLACK,
+        ha="left",
+        va="center",
+        zorder=2,
+    )
 
 
 def revision_loop(ax, x_left, y_top, y_bottom, label, loop_x):
@@ -69,10 +114,20 @@ def revision_loop(ax, x_left, y_top, y_bottom, label, loop_x):
     draw_polyline_arrow(
         ax,
         [(x_left, y_top), (loop_x, y_top), (loop_x, y_bottom), (x_left, y_bottom)],
-        lw=1.05, style=SMALL_HEAD,
+        lw=1.05,
+        style=SMALL_HEAD,
     )
-    ax.text(loop_x - 0.14, (y_top + y_bottom) / 2, label, fontsize=10.8, color=DARK,
-            ha="right", va="center", linespacing=1.2, zorder=4)
+    ax.text(
+        loop_x - 0.14,
+        (y_top + y_bottom) / 2,
+        label,
+        fontsize=10.8,
+        color=DARK,
+        ha="right",
+        va="center",
+        linespacing=1.2,
+        zorder=4,
+    )
 
 
 def tool_call(ax, x_block, x_tool, y_mid, out_label, back_label):
@@ -82,7 +137,9 @@ def tool_call(ax, x_block, x_tool, y_mid, out_label, back_label):
     draw_arrow(ax, x_tool, down, x_block, down, lw=1.05, style=SMALL_HEAD)
     xc = (x_block + x_tool) / 2
     ax.text(xc, up + 0.16, out_label, fontsize=9.8, color=DARK, ha="center", va="center", zorder=4)
-    ax.text(xc, down - 0.17, back_label, fontsize=9.8, color=DARK, ha="center", va="center", zorder=4)
+    ax.text(
+        xc, down - 0.17, back_label, fontsize=9.8, color=DARK, ha="center", va="center", zorder=4
+    )
 
 
 def main():
@@ -116,7 +173,9 @@ def main():
     stage_container(ax, box_x, s1_y, box_w, s1_h, "Stage 1 (Sec. 4.2)")
     b1_y, b1_h = s1_y + 0.28, 0.94
     block(ax, col_x, b1_y, col_w, b1_h, "Identify Prior\nKnowledge")
-    block(ax, tool_x, b1_y, tool_w, b1_h, "Learning\nCommons\nGraph", facecolor=WHITE, linewidth=1.0)
+    block(
+        ax, tool_x, b1_y, tool_w, b1_h, "Learning\nCommons\nGraph", facecolor=WHITE, linewidth=1.0
+    )
     tool_call(ax, col_x + col_w, tool_x, b1_y + b1_h / 2, "query", "prerequisites")
     draw_arrow(ax, cx, in_y, cx, b1_y + b1_h)
 
@@ -126,9 +185,15 @@ def main():
     b2a_y, b2b_y, b2_h = s2_y + 1.94, s2_y + 0.28, 0.94
     block(ax, col_x, b2a_y, col_w, b2_h, "Step 2a: Propose &\nSelect Design Brief")
     block(ax, col_x, b2b_y, col_w, b2_h, "Step 2b: Choose &\nCheck Numbers")
-    block(ax, tool_x, b2b_y, tool_w, b2_h, "Python\nMath\nCalculator", facecolor=WHITE, linewidth=1.0)
-    revision_loop(ax, col_x, b2a_y + b2_h - 0.24, b2a_y + 0.24, "Revise brief\n(\u2264 2 times)", loop_x)
-    revision_loop(ax, col_x, b2b_y + b2_h - 0.24, b2b_y + 0.24, "Repair numbers\n(\u2264 3 calls)", loop_x)
+    block(
+        ax, tool_x, b2b_y, tool_w, b2_h, "Python\nMath\nCalculator", facecolor=WHITE, linewidth=1.0
+    )
+    revision_loop(
+        ax, col_x, b2a_y + b2_h - 0.24, b2a_y + 0.24, "Revise brief\n(\u2264 2 times)", loop_x
+    )
+    revision_loop(
+        ax, col_x, b2b_y + b2_h - 0.24, b2b_y + 0.24, "Repair numbers\n(\u2264 3 calls)", loop_x
+    )
     tool_call(ax, col_x + col_w, tool_x, b2b_y + b2_h / 2, "check", "holds / fails")
     draw_arrow(ax, cx, b1_y, cx, b2a_y + b2_h)
     draw_arrow(ax, cx, b2a_y, cx, b2b_y + b2_h)
@@ -138,7 +203,9 @@ def main():
     stage_container(ax, box_x, s3_y, box_w, s3_h, "Stage 3 (Sec. 4.4)")
     b3_y, b3_h = s3_y + 0.28, 0.94
     block(ax, col_x, b3_y, col_w, b3_h, "Write Open\nStudent Task")
-    revision_loop(ax, col_x, b3_y + b3_h - 0.24, b3_y + 0.24, "Revise draft\n(\u2264 3 calls)", loop_x)
+    revision_loop(
+        ax, col_x, b3_y + b3_h - 0.24, b3_y + 0.24, "Revise draft\n(\u2264 3 calls)", loop_x
+    )
     draw_arrow(ax, cx, b2b_y, cx, b3_y + b3_h)
 
     # Output

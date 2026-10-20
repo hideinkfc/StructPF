@@ -24,6 +24,7 @@ AZURE_DEFAULT_JUDGE = "gpt-4.1-mini"
 @dataclass(frozen=True)
 class Settings:
     """Application settings from .env."""
+
     vllm_base_url: str
     vllm_model: str
     vllm_max_tokens: int
@@ -46,13 +47,16 @@ class Settings:
             swissai_api_key=os.environ.get("CSCS_SERVING_API", ""),
             swissai_base_url=os.environ.get("SWISSAI_BASE_URL", SWISSAI_BASE_URL),
             swissai_generator_model=os.environ.get(
-                "SWISSAI_GENERATOR_MODEL", SWISSAI_DEFAULT_GENERATOR,
+                "SWISSAI_GENERATOR_MODEL",
+                SWISSAI_DEFAULT_GENERATOR,
             ),
             swissai_embed_model=os.environ.get(
-                "SWISSAI_EMBED_MODEL", SWISSAI_DEFAULT_EMBED,
+                "SWISSAI_EMBED_MODEL",
+                SWISSAI_DEFAULT_EMBED,
             ),
             swissai_judge_model=os.environ.get(
-                "SWISSAI_JUDGE_MODEL", SWISSAI_DEFAULT_JUDGE,
+                "SWISSAI_JUDGE_MODEL",
+                SWISSAI_DEFAULT_JUDGE,
             ),
         )
 

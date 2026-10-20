@@ -141,9 +141,7 @@ def bar_chart(rows: list[tuple[str, float, str, str]], maximum: float) -> str:
 
 def table(headers: list[str], rows: list[list[str]]) -> str:
     head = "".join(f"<th>{esc(item)}</th>" for item in headers)
-    body = "".join(
-        "<tr>" + "".join(f"<td>{cell}</td>" for cell in row) + "</tr>" for row in rows
-    )
+    body = "".join("<tr>" + "".join(f"<td>{cell}</td>" for cell in row) + "</tr>" for row in rows)
     return f"<table><thead><tr>{head}</tr></thead><tbody>{body}</tbody></table>"
 
 
@@ -354,8 +352,12 @@ def main() -> None:
             "Anticipating what students will try",
             '<p class="lead">Mistake pathways were realistic or varied, rarely both.</p>'
             + table(
-                ["Approach", "Match with real Eedi answers", "Plausibility (0–2)",
-                 "Distinct reasoning paths"],
+                [
+                    "Approach",
+                    "Match with real Eedi answers",
+                    "Plausibility (0–2)",
+                    "Distinct reasoning paths",
+                ],
                 [
                     ["Expert-direct baseline", "0.236", "1.46", "0.747"],
                     ["Retrieved similar questions", "<strong>0.353</strong>", "1.40", "0.776"],

@@ -31,10 +31,14 @@ MODELS = {"gpt41mini": "AZURE_OPENAI_GPT41_MINI_MODEL", "gpt41": "AZURE_OPENAI_G
 MODEL_DEFAULTS = {"gpt41mini": "gpt-4.1-mini", "gpt41": "gpt-4.1"}
 
 VERSIONS = {
-    "v3": {"user": "PRIOR_METHODS_USER",
-           "fields": ("method_name", "general_procedure", "student_thinking")},
-    "v4": {"user": "PRIOR_METHODS_USER_V4",
-           "fields": ("method_name", "rule", "student_belief", "failure_mode")},
+    "v3": {
+        "user": "PRIOR_METHODS_USER",
+        "fields": ("method_name", "general_procedure", "student_thinking"),
+    },
+    "v4": {
+        "user": "PRIOR_METHODS_USER_V4",
+        "fields": ("method_name", "rule", "student_belief", "failure_mode"),
+    },
 }
 
 
@@ -50,8 +54,12 @@ def load_client():
 
 def render(tmpl, package, n):
     out = tmpl
-    for tok, val in {"{grade}": str(package["grade"]), "{topic}": package["anchor"]["topic"],
-                     "{concept_text}": package["concept_text"], "{n_methods}": str(n)}.items():
+    for tok, val in {
+        "{grade}": str(package["grade"]),
+        "{topic}": package["anchor"]["topic"],
+        "{concept_text}": package["concept_text"],
+        "{n_methods}": str(n),
+    }.items():
         out = out.replace(tok, val)
     return out
 
@@ -61,8 +69,11 @@ def one_call(client, model, system, user, fields):
         r = client.chat.completions.create(
             model=model,
             messages=[{"role": "system", "content": system}, {"role": "user", "content": user}],
-            temperature=0.7, max_tokens=4000,
-            response_format={"type": "json_object"}, timeout=120)
+            temperature=0.7,
+            max_tokens=4000,
+            response_format={"type": "json_object"},
+            timeout=120,
+        )
         text = r.choices[0].message.content or ""
         methods = json.loads(text).get("methods", [])
         problems = []
@@ -90,8 +101,9 @@ def main():
                 jobs.append((ver, label, model, rep, user, cfg["fields"]))
 
     njobs = len(jobs)
-    print(f"{njobs} calls on {CONCEPT} "
-          f"({len(VERSIONS)} vers x {len(models)} models x {REPEATS} reps)")
+    print(
+        f"{njobs} calls on {CONCEPT} ({len(VERSIONS)} vers x {len(models)} models x {REPEATS} reps)"
+    )
     results = []
     with ThreadPoolExecutor(max_workers=12) as pool:
         futs = {}
@@ -105,8 +117,9 @@ def main():
             print(f"  {ver} {label:9s} rep{rep}: {len(res['methods'])} methods {status}")
 
     OUT.parent.mkdir(parents=True, exist_ok=True)
-    OUT.write_text(json.dumps({"concept": CONCEPT, "results": results},
-                              indent=2, ensure_ascii=False) + "\n")
+    OUT.write_text(
+        json.dumps({"concept": CONCEPT, "results": results}, indent=2, ensure_ascii=False) + "\n"
+    )
     print(f"saved -> {OUT.relative_to(ROOT)}")
 
     # print one full raw list per version+model (repeat 0) for inspection

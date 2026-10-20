@@ -50,9 +50,7 @@ def verify(generation: Path, audit: Path) -> dict:
         history_per_case[case] = actual
         if set(sent) != {"learning_target", "learner_context", "student_task"}:
             raise ValueError("Private condition metadata reached the auditor")
-    judgments = [
-        json.loads(path.read_text()) for path in (audit / "judgments").glob("*/*.json")
-    ]
+    judgments = [json.loads(path.read_text()) for path in (audit / "judgments").glob("*/*.json")]
     pairs = [(record["task_id"], record["judge"]) for record in judgments]
     if len(pairs) != len(set(pairs)) or len(pairs) != 2 * len(tasks):
         raise ValueError("Every original task needs two recorded, nonduplicate judge attempts")

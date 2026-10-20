@@ -62,9 +62,7 @@ def audit_payload(profile="unknown"):
             "supported" if supported or intentional_open or display_only else status
         ),
         "prior_resource_start": finding(
-            "supported"
-            if supported or negative or intentional_open or display_only
-            else "unknown"
+            "supported" if supported or negative or intentional_open or display_only else "unknown"
         ),
         "useful_contrast": finding(
             "supported"
@@ -215,9 +213,7 @@ def test_openness_does_not_require_multiple_numeric_answers():
     average = next(
         item for item in controls if item["case_id"] == "synthetic_positive_average_speed"
     )
-    narrow = next(
-        item for item in controls if item["case_id"] == "synthetic_narrow_yes_no_display"
-    )
+    narrow = next(item for item in controls if item["case_id"] == "synthetic_narrow_yes_no_display")
     assert average["illustrative_signals"]["task_openness"] == "partial"
     assert "Choose a table, graph, or equation" in narrow["student_task"]
     assert "speculate about what might make using this pace unsafe" in narrow["student_task"]

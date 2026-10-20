@@ -43,14 +43,20 @@ def validate_coding(payload: dict, packet: dict) -> dict:
         raise ValueError("Reference coding must cover every fresh response")
     for label, row in payload["responses"].items():
         if set(row) != {
-            "categories", "mentioned_only", "evidence", "unsuccessful_work",
-            "unsuccessful_evidence", "final_result", "rationale",
+            "categories",
+            "mentioned_only",
+            "evidence",
+            "unsuccessful_work",
+            "unsuccessful_evidence",
+            "final_result",
+            "rationale",
         }:
             raise ValueError(f"Unexpected reference coding fields: {label}")
         for field in ("categories", "mentioned_only"):
             items = row[field]
             if (
-                not isinstance(items, list) or set(items) - set(CATEGORY_LABELS)
+                not isinstance(items, list)
+                or set(items) - set(CATEGORY_LABELS)
                 or len(set(items)) != len(items)
             ):
                 raise ValueError(f"Unknown or repeated source category: {label}")
@@ -65,7 +71,11 @@ def validate_coding(payload: dict, packet: dict) -> dict:
             raise ValueError("Unknown unsuccessful-work classification")
         _quotes(row["unsuccessful_evidence"], text, required=row["unsuccessful_work"] == "yes")
         if row["final_result"] not in {
-            "correct", "incorrect", "unfinished", "not_applicable", "unknown",
+            "correct",
+            "incorrect",
+            "unfinished",
+            "not_applicable",
+            "unknown",
         }:
             raise ValueError("Unknown final-result classification")
         if (
@@ -97,7 +107,9 @@ def exact_check() -> dict:
     if mira != leon or not 0 < x < distance or not x / 150 < x / 50:
         raise ValueError("Normalized reference task fails independent feasibility check")
     return {
-        "handover_metres": str(x), "mira_minutes": str(mira), "leon_minutes": str(leon),
+        "handover_metres": str(x),
+        "mira_minutes": str(mira),
+        "leon_minutes": str(leon),
         "bike_available_before_leon_arrives": True,
         "scope": (
             "Exact arithmetic for the normalized constant-rate task, not an original worksheet."
@@ -159,14 +171,16 @@ def summarize(output: Path) -> dict:
         "exact_check": exact_check(),
         "category_coverage": {
             kind: {
-                "all_reference_categories": sum(counts.get(f"category/{c}", 0) > 0
-                                                for c in CATEGORY_LABELS),
+                "all_reference_categories": sum(
+                    counts.get(f"category/{c}", 0) > 0 for c in CATEGORY_LABELS
+                ),
                 "algorithm_categories": sum(counts.get(f"category/{c}", 0) > 0 for c in ALGORITHMS),
                 "warning": "Union presence is not a human classroom probability or quality score.",
             }
             for kind, counts in groups.items()
         },
-        "responses": rows, "limitations": manifest["protocol"]["limits"],
+        "responses": rows,
+        "limitations": manifest["protocol"]["limits"],
     }
     verification_path = output / "coding_verification.json"
     if verification_path.exists():
@@ -180,21 +194,30 @@ def summarize(output: Path) -> dict:
 def render(output: Path, summary: dict, packet: dict, key: dict) -> None:
     table = []
     for category, label in CATEGORY_LABELS.items():
-        table.append("<tr><td>" + label + "</td>" + "".join(
-            f"<td>{summary['groups'][kind].get(f'category/{category}', 0)}/"
-            f"{summary['groups'][kind]['responses']}</td>"
-            for kind in ("learner", "solver", "prediction")
-        ) + "</tr>")
+        table.append(
+            "<tr><td>"
+            + label
+            + "</td>"
+            + "".join(
+                f"<td>{summary['groups'][kind].get(f'category/{category}', 0)}/"
+                f"{summary['groups'][kind]['responses']}</td>"
+                for kind in ("learner", "solver", "prediction")
+            )
+            + "</tr>"
+        )
     panels = []
     for label, entry in packet.items():
         row = summary["responses"][key[label]]
         panels.append(
-            "<details><summary>" + html.escape(
-                f"{row['kind']} / {label} / {row['final_result']}"
-            ) + "</summary><p><b>Categories:</b> "
-            + html.escape(", ".join(row["categories"])) + "</p><p>"
-            + html.escape(row["rationale"]) + "</p><pre>"
-            + html.escape(response_text(entry)) + "</pre></details>"
+            "<details><summary>"
+            + html.escape(f"{row['kind']} / {label} / {row['final_result']}")
+            + "</summary><p><b>Categories:</b> "
+            + html.escape(", ".join(row["categories"]))
+            + "</p><p>"
+            + html.escape(row["rationale"])
+            + "</p><pre>"
+            + html.escape(response_text(entry))
+            + "</pre></details>"
         )
     task = json.loads((output / "manifest.json").read_text())["protocol"]["task"]
     learners = summary["groups"]["learner"]
@@ -217,25 +240,28 @@ def render(output: Path, summary: dict, packet: dict, key: dict) -> None:
         "the simulator is incapable of useful task diagnosis.</p>"
     )
     bars = []
-    for index, (category, label) in enumerate((
-        ("algebra_single_variable", "Single-variable algebra"),
-        ("trial_bruteforce", "Numerical trial and checking"),
-        ("ratios", "Ratio partition"),
-        ("lcm_hcf", "LCM/HCF partition"),
-    )):
+    for index, (category, label) in enumerate(
+        (
+            ("algebra_single_variable", "Single-variable algebra"),
+            ("trial_bruteforce", "Numerical trial and checking"),
+            ("ratios", "Ratio partition"),
+            ("lcm_hcf", "LCM/HCF partition"),
+        )
+    ):
         count = learners.get(f"category/{category}", 0)
         y = 18 + 44 * index
         bars.append(
-            f"<text x='10' y='{y+18}'>{label}</text>"
+            f"<text x='10' y='{y + 18}'>{label}</text>"
             f"<rect x='280' y='{y}' width='400' height='25' fill='#dfe7ee'/>"
-            f"<rect x='280' y='{y}' width='{400*count/learners['responses']}' "
+            f"<rect x='280' y='{y}' width='{400 * count / learners['responses']}' "
             f"height='25' fill='#3276a5'/>"
-            f"<text x='700' y='{y+18}'>{count}/{learners['responses']} attempts</text>"
+            f"<text x='700' y='{y + 18}'>{count}/{learners['responses']} attempts</text>"
         )
     chart = (
         "<svg viewBox='0 0 920 202' role='img' style='width:100%;font:16px system-ui' "
         "aria-label='Actual algorithm coverage in24 model learner attempts'>"
-        + "".join(bars) + "</svg>"
+        + "".join(bars)
+        + "</svg>"
         "<p>Measured written model outputs. Algebra and trials overlap in one reply. "
         "These are not observed human-student frequencies.</p>"
     )
@@ -252,13 +278,13 @@ def render(output: Path, summary: dict, packet: dict, key: dict) -> None:
         "<p>24 unprompted learner attempts, four ordinary-solver controls and two "
         "prediction-only responses. Four execution controls are separate. "
         "The nine category names were kept out of model prompts.</p>"
-        + overview + chart
+        + overview
+        + chart
         + "<details><summary>Source-normalized task, not the original worksheet</summary><pre>"
         + html.escape(task["title"] + "\n\n" + task["body"] + "\n\n" + task["question"])
         + "</pre></details><h2>Source-category coverage</h2><table>"
         "<tr><th>Category documented in real group work</th><th>Learner attempts</th>"
-        "<th>Ordinary solvers</th><th>Predictions only</th></tr>"
-        + "".join(table) + "</table>"
+        "<th>Ordinary solvers</th><th>Predictions only</th></tr>" + "".join(table) + "</table>"
         "<p>These count written model responses containing each category, not real "
         "student frequencies. Predictions anticipate categories; they do not perform "
         "them. Insights and diagrams are not extra algorithms. Failed intermediate "
@@ -270,7 +296,8 @@ def render(output: Path, summary: dict, packet: dict, key: dict) -> None:
         "<p><a href='summary.json'>Counts and limitations</a> &middot; "
         "<a href='coding_verification.json'>Category correction and evidence checks</a> &middot; "
         "<a href='pathway_coding.json'>Anonymous source-quoted coding</a></p>"
-        + "".join(panels) + "</html>"
+        + "".join(panels)
+        + "</html>"
     )
     (output / "reference.html").write_text(page, encoding="utf-8")
 

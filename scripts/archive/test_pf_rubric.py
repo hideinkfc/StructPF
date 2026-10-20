@@ -19,7 +19,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 import numpy as np
 
-from src.evaluation.mcq_metrics import MCQEvaluator, ConditionResults, PFRubricScores
+from src.evaluation.mcq_metrics import MCQEvaluator
 from src.generation.mcq_generator import MCQGenerator
 from src.generation.misconception_bank import MisconceptionBank
 
@@ -27,17 +27,18 @@ from src.generation.misconception_bank import MisconceptionBank
 def main():
     parser = argparse.ArgumentParser(description="Test PF rubric evaluation")
     parser.add_argument("--n", type=int, default=30, help="Number of questions to evaluate")
-    parser.add_argument("--condition", type=str, default="02_expert_direct",
-                        help="Which condition to run")
+    parser.add_argument(
+        "--condition", type=str, default="02_expert_direct", help="Which condition to run"
+    )
     args = parser.parse_args()
 
     N = min(args.n, 200)
 
     print("=" * 70)
-    print(f"Family 3 — Rahimi et al. (2025) PF Rubric Test")
+    print("Family 3 — Rahimi et al. (2025) PF Rubric Test")
     print(f"  Questions: {N}")
     print(f"  Condition: {args.condition}")
-    print(f"  Model: meta-llama/Llama-3.3-70B-Instruct")
+    print("  Model: meta-llama/Llama-3.3-70B-Instruct")
     print("=" * 70)
 
     # Load
@@ -59,7 +60,8 @@ def main():
         "07_expert_mc_names": ("expert", "direct", "misconception_conditioned", "", "names"),
     }
     sys_var, inst_var, strat, fs, mc_d = cond_map.get(
-        args.condition, ("expert", "direct", "zero_shot", "", ""))
+        args.condition, ("expert", "direct", "zero_shot", "", "")
+    )
 
     # Run
     all_metrics = []
@@ -103,8 +105,11 @@ def main():
         elapsed = time.time() - t0
         avg_t = elapsed / (i + 1)
         eta = avg_t * (N - i - 1)
-        print(f"\r  [{i+1}/{N}] {elapsed:.0f}s elapsed, {avg_t:.0f}s/q, ETA {eta:.0f}s",
-              end="", flush=True)
+        print(
+            f"\r  [{i + 1}/{N}] {elapsed:.0f}s elapsed, {avg_t:.0f}s/q, ETA {eta:.0f}s",
+            end="",
+            flush=True,
+        )
 
     print()
 
@@ -115,26 +120,28 @@ def main():
 
     apk_vals = [p.activation_prior_knowledge for p in pf_scores]
     ssc_vals = [p.sweet_spot_calibration for p in pf_scores]
-    ae_vals  = [p.affective_engagement for p in pf_scores]
-    mr_vals  = [p.multiple_representations for p in pf_scores]
-    oe_vals  = [p.open_endedness for p in pf_scores]
+    ae_vals = [p.affective_engagement for p in pf_scores]
+    mr_vals = [p.multiple_representations for p in pf_scores]
+    oe_vals = [p.open_endedness for p in pf_scores]
     fin_vals = [p.final_score for p in pf_scores]
 
     print(f"\n{'Dimension':<35s} {'Mean':>8s} {'Std':>8s} {'Min':>6s} {'Max':>6s}")
     print(f"{'─' * 65}")
     for name, vals in [
         ("Activation of Prior Knowledge (APK)", apk_vals),
-        ("Sweet Spot Calibration (SSC)",       ssc_vals),
-        ("Affective Engagement (AE)",          ae_vals),
-        ("Multiple Representations (MR)",      mr_vals),
-        ("Open-Endedness (OE)",                oe_vals),
-        ("FINAL SCORE (sum, 5–15)",           fin_vals),
+        ("Sweet Spot Calibration (SSC)", ssc_vals),
+        ("Affective Engagement (AE)", ae_vals),
+        ("Multiple Representations (MR)", mr_vals),
+        ("Open-Endedness (OE)", oe_vals),
+        ("FINAL SCORE (sum, 5–15)", fin_vals),
     ]:
-        print(f"{name:<35s} {np.mean(vals):>8.2f} {np.std(vals):>8.2f} "
-              f"{min(vals):>6.1f} {max(vals):>6.1f}")
+        print(
+            f"{name:<35s} {np.mean(vals):>8.2f} {np.std(vals):>8.2f} "
+            f"{min(vals):>6.1f} {max(vals):>6.1f}"
+        )
 
     # Distribution of final scores
-    print(f"\nFinal Score Distribution:")
+    print("\nFinal Score Distribution:")
     for lo in range(5, 16):
         cnt = sum(1 for v in fin_vals if lo <= v < lo + 1)
         bar = "█" * cnt
@@ -150,8 +157,10 @@ def main():
     print(f"  F1 — PM:        {np.mean(pm_vals):.1%} ± {np.std(pm_vals):.1%}")
     print(f"  F2 — Validity:  {np.mean(val_vals):.1%} ± {np.std(val_vals):.1%}")
     print(f"  F2 — Diversity: {np.mean(div_vals):.1%} ± {np.std(div_vals):.1%}")
-    print(f"  F3 — PF Final:  {np.mean(fin_vals):.1f}/15 ± {np.std(fin_vals):.1f} "
-          f"({np.mean(fin_vals)/15:.1%})")
+    print(
+        f"  F3 — PF Final:  {np.mean(fin_vals):.1f}/15 ± {np.std(fin_vals):.1f} "
+        f"({np.mean(fin_vals) / 15:.1%})"
+    )
 
     elapsed = time.time() - t0
     print(f"\nTotal time: {elapsed:.0f}s ({elapsed / max(1, len(all_metrics)):.0f}s/q)")

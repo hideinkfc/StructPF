@@ -193,12 +193,16 @@ def _cell_matches(case: dict[str, Any], cell: dict[str, Any]) -> bool:
     if jurisdiction and jurisdiction not in cell_country and cell_country not in jurisdiction:
         return False
 
-    query_terms = set(re.findall(r"[a-z0-9]+", _normalise(
-        f"{case.get('topic', '')} {case.get('target_concept', '')}"
-    )))
-    cell_terms = set(re.findall(r"[a-z0-9]+", _normalise(
-        f"{cell.get('id', '')} {cell.get('target_concept', '')}"
-    )))
+    query_terms = set(
+        re.findall(
+            r"[a-z0-9]+", _normalise(f"{case.get('topic', '')} {case.get('target_concept', '')}")
+        )
+    )
+    cell_terms = set(
+        re.findall(
+            r"[a-z0-9]+", _normalise(f"{cell.get('id', '')} {cell.get('target_concept', '')}")
+        )
+    )
     useful_terms = {term for term in query_terms if len(term) > 2}
     return not useful_terms or bool(useful_terms & cell_terms)
 
@@ -216,9 +220,7 @@ def _source_for_resource(cell: dict[str, Any], resource: dict[str, Any]) -> dict
     for source in sources:
         if isinstance(source, dict):
             name = str(source.get("name", "")).lower()
-            if resource_source and (
-                resource_source in name or name in resource_source
-            ):
+            if resource_source and (resource_source in name or name in resource_source):
                 return source
     return next((source for source in sources if isinstance(source, dict)), {})
 
@@ -284,18 +286,18 @@ def _curated_evidence(case: dict[str, Any]) -> list[dict[str, Any]]:
                 evidence=evidence,
             )
             evidence_id = f"curated:{cell['id']}:{index}"
-            records.append({
-                "evidence_id": evidence_id,
-                "resource": name,
-                "taught_as": str(resource.get("taught_as") or name),
-                "relevance": str(resource.get("relevance") or ""),
-                "provenance": provenance,
-                "excerpt": str(
-                    resource.get("section_text")
-                    or resource.get("paper_crosscheck")
-                    or ""
-                ),
-            })
+            records.append(
+                {
+                    "evidence_id": evidence_id,
+                    "resource": name,
+                    "taught_as": str(resource.get("taught_as") or name),
+                    "relevance": str(resource.get("relevance") or ""),
+                    "provenance": provenance,
+                    "excerpt": str(
+                        resource.get("section_text") or resource.get("paper_crosscheck") or ""
+                    ),
+                }
+            )
     return records
 
 
@@ -318,30 +320,30 @@ def _curriculum_evidence(case: dict[str, Any], k: int) -> list[dict[str, Any]]:
     for chunk in chunks:
         key = (str(chunk["doc"]), str(chunk["page"]))
         current = by_page.get(key)
-        if current is None or (
-            chunk.get("language") == "en" and current.get("language") != "en"
-        ):
+        if current is None or (chunk.get("language") == "en" and current.get("language") != "en"):
             by_page[key] = chunk
 
     records = []
     for chunk in by_page.values():
         evidence_id = f"curriculum:{chunk['chunk_id']}"
         page = chunk["page"]
-        records.append({
-            "evidence_id": evidence_id,
-            "resource": "",
-            "taught_as": "",
-            "relevance": "",
-            "provenance": Provenance(
-                type="curriculum",
-                source=str(chunk["doc_title"]),
-                page=page,
-                document=str(chunk["doc"]),
-                source_url=chunk.get("source_url"),
-                evidence=f"{chunk['jurisdiction']} {chunk.get('language', 'unknown')} page chunk",
-            ),
-            "excerpt": str(chunk["text"])[:1800],
-        })
+        records.append(
+            {
+                "evidence_id": evidence_id,
+                "resource": "",
+                "taught_as": "",
+                "relevance": "",
+                "provenance": Provenance(
+                    type="curriculum",
+                    source=str(chunk["doc_title"]),
+                    page=page,
+                    document=str(chunk["doc"]),
+                    source_url=chunk.get("source_url"),
+                    evidence=f"{chunk['jurisdiction']} {chunk.get('language', 'unknown')} page chunk",
+                ),
+                "excerpt": str(chunk["text"])[:1800],
+            }
+        )
     return records[:k]
 
 
@@ -351,12 +353,14 @@ def _prompt_evidence(records: list[dict[str, Any]]) -> str:
     rendered = []
     for record in records:
         provenance = record["provenance"]
-        rendered.append({
-            "evidence_id": record["evidence_id"],
-            "source": provenance.source,
-            "page": provenance.page,
-            "excerpt": record["excerpt"],
-        })
+        rendered.append(
+            {
+                "evidence_id": record["evidence_id"],
+                "source": provenance.source,
+                "page": provenance.page,
+                "excerpt": record["excerpt"],
+            }
+        )
     return json.dumps(rendered, indent=2, ensure_ascii=False)
 
 
@@ -427,7 +431,9 @@ def _reference_selection_prompts(
         return system, user
     return (
         system + "\n\n" + prompts["LEARNING_COMMONS_SELECTION_SYSTEM"],
-        user + "\n\n" + _render(
+        user
+        + "\n\n"
+        + _render(
             prompts["LEARNING_COMMONS_SELECTION_USER"],
             {"learning_commons_references": prompt_candidates(learning_commons)},
         ),
@@ -475,13 +481,15 @@ def _ungrounded_resources(
     for item in payload["resources"]:
         if not isinstance(item, dict):
             raise ValueError("Ungrounded resources must be objects")
-        candidates.append(ResourceCandidate(
-            resource=_required_string(item, "resource"),
-            taught_as=_required_string(item, "taught_as"),
-            relevance=_required_string(item, "relevance"),
-            provenance=provenance,
-            confidence=_confidence(item),
-        ))
+        candidates.append(
+            ResourceCandidate(
+                resource=_required_string(item, "resource"),
+                taught_as=_required_string(item, "taught_as"),
+                relevance=_required_string(item, "relevance"),
+                provenance=provenance,
+                confidence=_confidence(item),
+            )
+        )
     candidates = _deduplicate_candidates(candidates)
     candidates, _ = _filter_excluded_candidates(candidates, case)
     return candidates
@@ -542,9 +550,9 @@ def _grounded_resources(
         if unknown:
             raise ValueError(f"Grounded resource cited unknown evidence IDs: {unknown}")
         cited = [evidence_by_id[value] for value in ids]
-        cited.sort(key=lambda record: {"paper": 0, "curriculum": 1, "model": 2}[
-            record["provenance"].type
-        ])
+        cited.sort(
+            key=lambda record: {"paper": 0, "curriculum": 1, "model": 2}[record["provenance"].type]
+        )
         primary = cited[0]
         primary_provenance = primary["provenance"]
         provenance = Provenance(
@@ -553,19 +561,20 @@ def _grounded_resources(
             page=primary_provenance.page,
             document=primary_provenance.document,
             source_url=primary_provenance.source_url,
-            evidence=(
-                f"{primary_provenance.evidence or ''}; "
-                f"evidence_ids={','.join(ids)}"
-            ).strip("; "),
+            evidence=(f"{primary_provenance.evidence or ''}; evidence_ids={','.join(ids)}").strip(
+                "; "
+            ),
         )
-        mapped_candidates.append(ResourceCandidate(
-            resource=_required_string(item, "resource"),
-            taught_as=_required_string(item, "taught_as"),
-            relevance=_required_string(item, "relevance"),
-            provenance=provenance,
-            confidence=_confidence(item),
-            evidence_ids=tuple(ids),
-        ))
+        mapped_candidates.append(
+            ResourceCandidate(
+                resource=_required_string(item, "resource"),
+                taught_as=_required_string(item, "taught_as"),
+                relevance=_required_string(item, "relevance"),
+                provenance=provenance,
+                confidence=_confidence(item),
+                evidence_ids=tuple(ids),
+            )
+        )
     retrieval["status"] = "mapped"
     retrieval["preserved_curated_records"] = 0
     candidates = _deduplicate_candidates(mapped_candidates)
@@ -754,8 +763,9 @@ def main() -> None:
     parser.add_argument("--compare-expert", action="store_true")
     parser.add_argument("--list-cases", action="store_true")
     parser.add_argument("--condition", choices=("grounded", "ungrounded", "both"), default="both")
-    parser.add_argument("--model", default="gpt41mini",
-                        choices=("gpt41mini", "gpt41", "gpt54", "luna"))
+    parser.add_argument(
+        "--model", default="gpt41mini", choices=("gpt41mini", "gpt41", "gpt54", "luna")
+    )
     parser.add_argument("--evidence-k", type=int, default=6)
     parser.add_argument(
         "--max-resources",
@@ -769,7 +779,8 @@ def main() -> None:
     )
     parser.add_argument("--output")
     parser.add_argument(
-        "--learning-commons", action="store_true",
+        "--learning-commons",
+        action="store_true",
         help="Select mathematical references in the existing call; not evidence of prior teaching.",
     )
     parser.add_argument(
@@ -778,7 +789,8 @@ def main() -> None:
     )
     parser.add_argument("--learning-commons-cache-dir", type=Path, default=DEFAULT_CACHE_DIR)
     parser.add_argument(
-        "--refresh-learning-commons", action="store_true",
+        "--refresh-learning-commons",
+        action="store_true",
         help="Fetch a fresh snapshot without overwriting earlier cached responses.",
     )
     parser.add_argument("--target-concept")
@@ -814,15 +826,17 @@ def main() -> None:
     else:
         if not args.target_concept or not args.topic:
             raise ValueError("Provide --case, --compare-expert, or direct target/topic arguments")
-        selected = [{
-            "id": "ad_hoc",
-            "target_concept": args.target_concept,
-            "topic": args.topic,
-            "grade": int(args.grade) if args.grade and args.grade.isdigit() else args.grade,
-            "jurisdiction": args.jurisdiction,
-            "subject": args.subject,
-            "teacher_skills": args.teacher_skill,
-        }]
+        selected = [
+            {
+                "id": "ad_hoc",
+                "target_concept": args.target_concept,
+                "topic": args.topic,
+                "grade": int(args.grade) if args.grade and args.grade.isdigit() else args.grade,
+                "jurisdiction": args.jurisdiction,
+                "subject": args.subject,
+                "teacher_skills": args.teacher_skill,
+            }
+        ]
         label = "ad_hoc"
     if args.learning_commons_query and len(selected) != 1:
         parser.error("--learning-commons-query requires exactly one selected case")
@@ -876,11 +890,13 @@ def main() -> None:
         if args.compare_expert or len(condition_names) == 2:
             output_records.append(_comparison_record(case, results))
         else:
-            output_records.append({
-                "case_id": case["id"],
-                "condition": condition_names[0],
-                "result": results[condition_names[0]],
-            })
+            output_records.append(
+                {
+                    "case_id": case["id"],
+                    "condition": condition_names[0],
+                    "result": results[condition_names[0]],
+                }
+            )
 
     path = reference_output_path or _output_path(args.output, label, model)
     path.parent.mkdir(parents=True, exist_ok=True)

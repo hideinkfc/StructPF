@@ -10,17 +10,25 @@ def item(status="ready", **kwargs):
     return {
         "status": status,
         "rating": {
-            "disclosure": "absent", "mathematics": "valid", "accessible_start": "yes",
-            "consequential_choice": "no", "target_preserved": "yes", **kwargs,
+            "disclosure": "absent",
+            "mathematics": "valid",
+            "accessible_start": "yes",
+            "consequential_choice": "no",
+            "target_preserved": "yes",
+            **kwargs,
         },
     }
 
 
 def test_stops_remain_in_denominator_and_unknowns_do_not_pass():
-    counts = _counts([
-        item(), item(mathematics="unknown"), item(mathematics="missing_essential_data"),
-        item(status="brief_not_selected"),
-    ])
+    counts = _counts(
+        [
+            item(),
+            item(mathematics="unknown"),
+            item(mathematics="missing_essential_data"),
+            item(status="brief_not_selected"),
+        ]
+    )
     assert counts["attempts"] == 4
     assert counts["ready"] == 3
     assert counts["disclosure_free_ready"] == 3
@@ -29,20 +37,27 @@ def test_stops_remain_in_denominator_and_unknowns_do_not_pass():
     assert counts["unknown_mathematics_ready"] == 1
 
 
-@pytest.mark.parametrize("field,value", [
-    ("disclosure", "present"), ("mathematics", "unknown"),
-    ("accessible_start", "unknown"), ("target_preserved", "unknown"),
-])
+@pytest.mark.parametrize(
+    "field,value",
+    [
+        ("disclosure", "present"),
+        ("mathematics", "unknown"),
+        ("accessible_start", "unknown"),
+        ("target_preserved", "unknown"),
+    ],
+)
 def test_qualified_success_requires_all_checks(field, value):
     assert _counts([item(**{field: value})])["disclosure_free_valid_accessible_ready"] == 0
 
 
 def test_choice_does_not_imply_disclosure_free_or_valid():
-    counts = _counts([
-        item(consequential_choice="yes", disclosure="present"),
-        item(consequential_choice="yes", mathematics="invalid"),
-        item(consequential_choice="yes"),
-    ])
+    counts = _counts(
+        [
+            item(consequential_choice="yes", disclosure="present"),
+            item(consequential_choice="yes", mathematics="invalid"),
+            item(consequential_choice="yes"),
+        ]
+    )
     assert counts["consequential_choice"] == {"yes": 3}
     assert counts["consequential_choice_valid_accessible_ready"] == 2
     assert counts["disclosure_free_valid_accessible_ready"] == 1
@@ -62,15 +77,22 @@ def report_files(tmp_path):
     schedule, mapping, cards, ratings = [], [], [], []
     for arm in comparison.ARMS:
         attempt = {
-            "attempt_id": f"development--case--{arm}--1", "case_id": "case",
-            "arm": arm, "repeat": 1, "phase": "development",
+            "attempt_id": f"development--case--{arm}--1",
+            "case_id": "case",
+            "arm": arm,
+            "repeat": 1,
+            "phase": "development",
         }
         schedule.append(attempt)
         task_id = f"task-{arm}"
         task = {"title": "Task", "body": "A problem.", "question": "What follows?"}
         record = {
-            **attempt, "status": "ready", "finished_at": "2026-10-11",
-            "source_artifact_unchanged": True, "source_integrity_verified": True, "task": task,
+            **attempt,
+            "status": "ready",
+            "finished_at": "2026-10-11",
+            "source_artifact_unchanged": True,
+            "source_integrity_verified": True,
+            "task": task,
         }
         directory = output / "attempts" / attempt["attempt_id"]
         directory.mkdir(parents=True)
@@ -102,7 +124,8 @@ def report_files(tmp_path):
     review_path = output / "assistant_review.json"
     review = {
         "schema_version": "pf-d2a-assistant-review/v1",
-        "evidence_kind": "assistant_reading", "ratings": ratings,
+        "evidence_kind": "assistant_reading",
+        "ratings": ratings,
     }
     comparison._write_json(review_path, review)
     return output, review_path, review

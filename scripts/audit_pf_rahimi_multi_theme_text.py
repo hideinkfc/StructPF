@@ -81,11 +81,17 @@ def main() -> None:
         if attempt["status"] != "ready":
             continue
         key = attempt["key"]
-        rows.append({
-            "key": key, "cell": attempt["cell_id"], "model": attempt["model_requested"],
-            "final": scores[key]["final"], "judge_math_concerns": concerns[key],
-            "title": attempt["task"]["title"], **flags(attempt["task"], attempt["cell_id"]),
-        })
+        rows.append(
+            {
+                "key": key,
+                "cell": attempt["cell_id"],
+                "model": attempt["model_requested"],
+                "final": scores[key]["final"],
+                "judge_math_concerns": concerns[key],
+                "title": attempt["task"]["title"],
+                **flags(attempt["task"], attempt["cell_id"]),
+            }
+        )
     summary: dict[str, dict] = {}
     for model in ("gpt-5-mini", "gpt-4.1"):
         group = [row for row in rows if row["model"] == model]
@@ -111,14 +117,22 @@ def main() -> None:
             titles = Counter(row["title"] for row in group if row["cell"] == cell)
             entry[f"distinct_titles__{cell}"] = f"{len(titles)}/{sum(titles.values())}"
         summary[model] = entry
-    OUT.write_text(json.dumps({
-        "method": "Regular-expression heuristics over student-facing task text; see PATTERNS. "
-                  "Approximate counts, not human coding.",
-        "patterns": {name: pattern for name, (_, pattern) in PATTERNS.items()},
-        "target_patterns": {cell: pattern for cell, (_, pattern) in TARGET_NAMED.items()},
-        "summary": summary,
-        "tasks": rows,
-    }, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    OUT.write_text(
+        json.dumps(
+            {
+                "method": "Regular-expression heuristics over student-facing task text; see PATTERNS. "
+                "Approximate counts, not human coding.",
+                "patterns": {name: pattern for name, (_, pattern) in PATTERNS.items()},
+                "target_patterns": {cell: pattern for cell, (_, pattern) in TARGET_NAMED.items()},
+                "summary": summary,
+                "tasks": rows,
+            },
+            ensure_ascii=False,
+            indent=2,
+        )
+        + "\n",
+        encoding="utf-8",
+    )
     print(json.dumps(summary, indent=2))
 
 
