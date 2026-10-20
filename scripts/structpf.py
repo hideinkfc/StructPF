@@ -207,7 +207,9 @@ def _print_generation_summary(res: dict[str, Any], out_dir: Path) -> None:
     stages = res.get("stages") or {}
     d2_d3 = stages.get("D2_D3") or {}
     winner = d2_d3.get("original_winner") or {}
-    selected_brief = winner.get("brief") if isinstance(winner, dict) else {}
+    selected_brief = (
+        (winner.get("design_brief") or winner.get("brief")) if isinstance(winner, dict) else {}
+    )
     if isinstance(selected_brief, dict) and selected_brief.get("goal"):
         print(f"\n[Stage 2a] Selected Design Brief Goal:\n  {selected_brief['goal']}")
 

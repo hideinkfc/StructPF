@@ -47,11 +47,17 @@ To see all shortcut commands at any time:
 make help
 ```
 
----
+## 2. Interactive Demo & Everyday Commands (`make` & `structpf` CLI)
 
-## 2. Everyday Commands (`make` & `structpf` CLI)
+### 2.0 End-to-End Jupyter Notebook Showcase
 
-You can use either `make` shortcuts or `./.venv/bin/python scripts/structpf.py` (also installed as `.venv/bin/structpf` after `make setup`).
+For an interactive, pre-executed walkthrough with rendered tables, student task cards, `SymPy` calculator checks, solver attempts, and benchmark charts, open **[notebooks/09_structpf_showcase_demo.ipynb](notebooks/09_structpf_showcase_demo.ipynb)**:
+
+- **Use Case 1 — Curriculum-to-Classroom PF Task Authoring:** Traces **Grade 6 Polygon Area (`6.G.A.1`)** across Stage 1 Learning Commons retrieval, Stage 2a design-brief selection, Stage 2b `SymPy` calculator verification, and Stage 3 open student task writing.
+- **Use Case 2 — Screening Out `"15 / 15"` Impostor Tasks:** Compares one-shot tasks (including a $15.0 / 15$ rubric task with a geometric contradiction) against expert and `StructPF` tasks across all five `pf-three-role/v3.0` measures.
+- **Use Case 3 — Diagnosing & Repairing a Draft Problem:** Runs the **Gate 1 & Gate 2** progression checks across 30 topics and demonstrates live `SymPy` calculator repair on a shortcut-solvable linear-function draft.
+
+You can also run all workflows from the terminal using either `make` shortcuts or `./.venv/bin/python scripts/structpf.py` (installed as `.venv/bin/structpf` after `make setup`).
 
 ### 2.1 Browse Topics and Benchmark Cases (Offline)
 
@@ -134,6 +140,7 @@ make format                # Auto-format code with ruff
 | Directory | Contents |
 |---|---|
 | `scripts/structpf.py` | Unified CLI entry point (`list`, `generate`, `evaluate`, `inspect`, `figures`) |
+| `notebooks/09_structpf_showcase_demo.ipynb` | Pre-executed showcase notebook walking through all 3 generation, evaluation, and repair use cases |
 | `src/generation/` | Stage 1–3 generators, design briefs (`D2a`), SymPy calculator (`D2b`), retrieval, and YAML prompts |
 | `src/evaluation/` | Three-role requirement evaluator (`v3.0`), 5-measure parser, 5D rubric judge, and MCQ metrics |
 | `src/evaluation/frozen/` | Frozen evaluator versions `v2.2`–`v2.9`, kept byte-identical to reproduce earlier runs |
