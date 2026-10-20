@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Dry-run all 11 conditions on N questions with progress bar."""
+"""Dry-run the main condition grid on N questions with progress bar."""
 
 import json, sys
 from pathlib import Path
@@ -7,36 +7,19 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from tqdm import tqdm
-from src.generation.misconception_bank import MisconceptionBank
-from src.generation.mcq_generator import MCQGenerator
-from src.evaluation.mcq_metrics import MCQEvaluator, ConditionResults
+from scripts.run_phase1_mcq import CONDITIONS, _build_condition_components
+from src.evaluation.mcq_metrics import ConditionResults
 
 N = 3
-
-CONDITIONS = [
-    ("01_lower_bound",       "basic",       "direct", "zero_shot",                 "", ""),
-    ("02_baseline",          "expert",      "direct", "zero_shot",                 "", ""),
-    ("03_pedagogical",       "pedagogical", "direct", "zero_shot",                 "", ""),
-    ("04_cot",               "expert",      "cot",    "zero_shot",                 "", ""),
-    ("05_self_critique",     "expert",      "self_critique", "zero_shot",          "", ""),
-    ("06_lookalike",         "lookalike",   "direct", "zero_shot",                 "", ""),
-    ("07_mc_names",          "expert",      "direct", "misconception_conditioned", "", "names"),
-    ("08_mc_taxonomy",       "expert",      "direct", "misconception_conditioned", "", "taxonomy"),
-    ("09_fewshot_static",    "expert",      "direct", "fewshot_static",            "rationale", ""),
-    ("10_fewshot_rag",       "expert",      "direct", "fewshot_rag",               "rationale", ""),
-    ("11_kitchen_sink",      "pedagogical", "cot",    "misconception_conditioned", "", "taxonomy"),
-]
 
 base = Path(__file__).resolve().parents[1]
 results_dir = base / "experiments" / "results" / "phase1_mcq"
 results_dir.mkdir(parents=True, exist_ok=True)
 
-bank = MisconceptionBank().load()
 with open(base / "data" / "eedi" / "test_set_200.json") as f:
     test_set = json.load(f)
 
-gen = MCQGenerator(bank=bank)
-evaluator = MCQEvaluator(bank)
+component_cache = {}
 questions = test_set[:N]
 
 total = len(CONDITIONS) * N
@@ -46,6 +29,12 @@ all_results = []
 per_q = []
 
 for name, sys_var, inst, strat, fs, mc_d in CONDITIONS:
+    component_key = "fewshot_rag" if strat == "fewshot_rag" else "default"
+    if component_key not in component_cache:
+        component_cache[component_key] = _build_condition_components(
+            (name, sys_var, inst, strat, fs, mc_d)
+        )
+    _, gen, evaluator = component_cache[component_key]
     cond_metrics = []
     for q in questions:
         cl = q["CorrectAnswer"]
@@ -59,6 +48,7 @@ for name, sys_var, inst, strat, fs, mc_d in CONDITIONS:
                 system_variant=sys_var, instruction_variant=inst,
                 fewshot_mode=fs or "rationale",
                 mc_cond_depth=mc_d or "names",
+                question_metadata=q,
             )
             m = evaluator.evaluate_generation(
                 question_id=qid,
@@ -72,6 +62,7 @@ for name, sys_var, inst, strat, fs, mc_d in CONDITIONS:
                 "misconceptions": [d.target_misconception for d in r.distractors],
                 "pm": m.pm,
                 "validity": m.validity, "diversity": m.diversity,
+                "conditioning": getattr(r, "model_extra", {}).get("conditioning_metadata", {}),
             })
             pbar.set_postfix_str(f"{name} Q{qid} PM={m.pm:.2f}")
         except Exception as e:
@@ -85,10 +76,14 @@ for name, sys_var, inst, strat, fs, mc_d in CONDITIONS:
 pbar.close()
 
 # Save
-with open(results_dir / "dry_run_per_question.json", "w") as f:
+with open(results_dir / "dry_run_with_fewshot_rag_per_question.json", "w") as f:
     json.dump(per_q, f, indent=2)
-with open(results_dir / "dry_run_aggregated.json", "w") as f:
-    json.dump([{"condition": c.condition_name, "n": c.n_questions, **c.summary()} for c in all_results], f, indent=2)
+with open(results_dir / "dry_run_with_fewshot_rag_aggregated.json", "w") as f:
+    summaries = [
+        {"condition": c.condition_name, "n": c.n_questions, **c.summary()}
+        for c in all_results
+    ]
+    json.dump(summaries, f, indent=2)
 
 # Print table
 print(f"\n{'Condition':<25} {'PM':>8} {'Valid':>8} {'Div':>8}")
@@ -97,4 +92,4 @@ for cr in all_results:
     s = cr.summary()
     print(f"{s['condition']:<25} {s['PM']:>8.3f} {s['Validity']:>8.3f} {s['Diversity']:>8.3f}")
 print("-" * 58)
-print("Saved to experiments/results/phase1_mcq/dry_run_*.json")
+print("Saved to experiments/results/phase1_mcq/dry_run_with_fewshot_rag_*.json")
