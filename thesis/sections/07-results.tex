@@ -1,0 +1,194 @@
+\chapter{Experiment Setup and Results}
+\label{chap:results}
+
+Chapter~\ref{chap:oneshot} showed that one-shot prompting produces polished tasks that often break the PF requirements, and Chapter~\ref{chap:eval-framework} introduced \textsc{PF Eval}, which tests each requirement separately. We now combine both to address G4 and compare \textsc{StructPF} with one-shot generation across two studies.
+
+\section{Experiment Setup}
+\label{sec:res-setup}
+
+In both studies, we represent what students already know through earlier-grade curriculum skills, since multiple-choice error logs mostly record one-step slips made after teaching, and simulated students did not reproduce the approaches observed in a real PF classroom (Section~\ref{sec:res-negative-signals}). The two studies test the two points where PF task generation can fail, namely designing a task for a given student background and identifying that student background in the first place.
+
+\textbf{Study~(a).} To test whether staged task and number design outperforms a single prompt when both start from the same student background, the first study reuses the four Grade~7 settings from Chapter~\ref{chap:oneshot} on music distributions, basketball ratios, shopping discounts, and composite garden areas (Figure~\ref{fig:res-setup-a}). In each setting, both generators receive the same target concept and two Common Core standards from earlier units as prior knowledge, taken from Rahimi et al.~\cite{rahimi2025} for basketball and chosen by us for the other three settings. We evaluate all ready one-shot tasks from Chapter~\ref{chap:oneshot}, namely 118 from GPT-5 mini and 120 from GPT-4.1, alongside 120 tasks from \textsc{StructPF} generated with GPT-5 mini at 30 tasks per setting with Stage~1 fixed to the given prior knowledge. All 358 tasks are evaluated in Sections~\ref{sec:res-oneshot} and~\ref{sec:res-progression} with the five measures of \textsc{PF Eval} from Chapter~\ref{chap:eval-framework}, pooling solver attempts from GPT-5.6-luna and GPT-4.1.
+
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.92\textwidth]{figures/fig6_1a_study_a_setup.pdf}
+    \caption{Setup of Study~(a) on the Four Grade~7 Settings with Fixed Prior Knowledge}
+    \label{fig:res-setup-a}
+\end{figure}
+
+\textbf{Study~(b).} In practice, a teacher or authoring tool usually provides only the target topic rather than a list of prerequisite standards. To test how well generators identify what students already know across grades, Section~\ref{sec:res-grounding} gives only a target concept from 30 Common Core topics in Grades~5 to~10 and compares three GPT-5 mini generators with 30 tasks each, namely the one-shot prompt, \textsc{StructPF} without grounding, where Stage~1 proposes prior knowledge from the model alone, and \textsc{StructPF} with grounding, where Stage~1 retrieves prerequisites from the Learning Commons knowledge graph (Section~\ref{subsec:d1-learning-commons}). In each run, the generator outputs both the student task and its proposed prior skills, stating what students previously learned to compute and what first step they take on the task. Because a generator might list the target formula itself as prior knowledge, we evaluate each run with the Two-Step Check shown in Figure~\ref{fig:res-setup-b} using GPT-5.6-luna in two sequential steps.
+\begin{enumerate}
+    \item \textbf{Prior-Knowledge Check.} A curriculum judge compares each proposed skill against the official prerequisite standards in the Learning Commons graph and classifies it as valid, irrelevant, or a target leak. A run passes only if it has no target leaks and at least one valid starting skill.
+    \item \textbf{Method-Failure Check.} A target-blind solver applies only the valid proposed skills to the task numbers, and an attempt judge checks whether those familiar calculations hit a tie or gap that requires the target concept rather than solving the task directly.
+\end{enumerate}
+
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=\textwidth]{figures/fig6_1b_study_b_setup.pdf}
+    \caption{Setup of Study~(b) Across 30 Curriculum Topics and the Two-Step Check}
+    \label{fig:res-setup-b}
+\end{figure}
+
+\section{One-Shot Tasks under \textsc{PF Eval}}
+\label{sec:res-oneshot}
+
+We first apply the five measures of \textsc{PF Eval} to the 238 ready one-shot tasks from Study~(a) to identify which PF requirement breaks down most often.
+
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=\textwidth]{figures/fig6_2_oneshot_outcomes.pdf}
+    \caption{Chapter~3 Surface Rubric versus \textsc{PF Eval} on the 238 One-Shot Tasks}
+    \label{fig:res-oneshot-outcomes}
+\end{figure}
+
+Figure~\ref{fig:res-oneshot-outcomes} compares the Chapter~\ref{chap:oneshot} surface rubric (Figure~\ref{fig:res-oneshot-outcomes}a) directly against \textsc{PF Eval} (Figure~\ref{fig:res-oneshot-outcomes}b) on the 238 one-shot tasks. Most tasks pass the soundness and accessibility checks, and on room for invention GPT-4.1 even overtakes GPT-5 mini ($86\%$ versus $72\%$), reversing the rubric's open-endedness scores ($1.82$ versus $2.69$ out of 3) because GPT-5 mini's multi-part worksheets narrow the student's procedure. The sharpest discrepancy is on whether familiar methods fall short. Whereas the surface rubric rates sweet spot calibration near the ceiling at $2.95$ and $2.54$ out of 3, testing the tasks with the solver shows that familiar methods fall short on only 12 of 118 GPT-5 mini tasks ($10\%$) and 13 of 120 GPT-4.1 tasks ($11\%$).
+
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=\textwidth]{figures/fig6_3_number_tie_example.pdf}
+    \caption{Untied One-Shot Numbers versus Tied PF Numbers in the Music Setting}
+    \label{fig:res-number-tie-example}
+\end{figure}
+
+Figure~\ref{fig:res-number-tie-example} illustrates why familiar methods succeed on almost $90\%$ of these one-shot tasks. In the music setting, students already know from Grade~6 how to compute the average of a list of numbers. When a one-shot task gives Band~A an average of $417.5$~seconds and Band~B an average of $359.0$~seconds (Figure~\ref{fig:res-number-tie-example}a), taking the average picks Band~A right away, so students never need to examine spread or outliers. Making that familiar average fall short requires giving both bands the exact same average while skewing one band with an outlier, as in the $3.0 = 3.0$~minute tie in Figure~\ref{fig:res-number-tie-example}b, which a single prompt that writes the story and chooses the numbers at once rarely produces.
+
+\section{\textsc{StructPF} under \textsc{PF Eval}}
+\label{sec:res-progression}
+
+We next evaluate the 120 tasks generated by \textsc{StructPF} on the same four Grade~7 settings. In Table~\ref{tab:res-structpf-fixed}, the top rows compare \textsc{StructPF} with the two one-shot baselines, and the bottom rows break \textsc{StructPF} down by setting.
+
+\begin{table}[!htb]
+    \centering
+    \caption{Evaluation of One-Shot Prompting and \textsc{StructPF} on the Four Grade~7 Settings}
+    \label{tab:res-structpf-fixed}
+    \footnotesize
+    \setlength{\tabcolsep}{4.2pt}
+    \begin{tabular}{@{}lccccccc@{}}
+        \toprule
+        & & & \multicolumn{2}{c}{\textbf{Task Soundness}} & \multicolumn{3}{c}{\textbf{PF Requirements}} \\
+        \cmidrule(lr){4-5} \cmidrule(l){6-8}
+        \textbf{Generator / Setting} & \textbf{Ready} & \textbf{Rubric} & \textbf{Align.} & \textbf{Valid.} & \textbf{Access.} & \textbf{Limits} & \textbf{Invention} \\
+        \midrule
+        One-Shot (GPT-4.1) & 120 & 12.8 & 73 ($61\%$) & 68 ($57\%$) & 118 ($98\%$) & 13 ($10.8\%$) & 103 ($86\%$) \\
+        One-Shot (GPT-5 mini) & 118 & 14.6 & 117 ($99\%$) & 108 ($92\%$) & 118 ($100\%$) & 12 ($10.2\%$) & 85 ($72\%$) \\
+        \textsc{StructPF} (GPT-5 mini) & 120 & 12.1 & \textbf{120 ($100\%$)} & \textbf{114 ($95\%$)} & 117 ($98\%$) & \textbf{96 ($80.0\%$)} & \textbf{88 ($73\%$)} \\
+        \midrule
+        \quad Music distributions & 30 & 13.2 & 30 & 30 & 30 & 27 ($90.0\%$) & 28 ($93\%$) \\
+        \quad Composite garden area & 30 & 10.8 & 30 & 25 & 30 & 25 ($83.3\%$) & 23 ($77\%$) \\
+        \quad Basketball ratios & 30 & 12.3 & 30 & 29 & 30 & 23 ($76.7\%$) & 20 ($67\%$) \\
+        \quad Shopping discounts & 30 & 12.1 & 30 & 30 & 27 & 21 ($70.0\%$) & 17 ($57\%$) \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+Two main findings stand out in Table~\ref{tab:res-structpf-fixed}. First, while both GPT-5 mini generators pass the soundness and accessibility checks on nearly every task ($92\%$ to $100\%$) and reach the same overall level on room for invention ($73\%$ versus $72\%$), \textsc{StructPF} increases the share of tasks where familiar methods fall short nearly eightfold, from 12 of 118 ($10.2\%$) to 96 of 120 ($80.0\%$), holding between $70.0\%$ and $90.0\%$ across all four settings. Second, the Chapter~\ref{chap:oneshot} surface rubric moves in the opposite direction, rating \textsc{StructPF} lower than one-shot GPT-5 mini at $12.1$ versus $14.6$ out of 15. This lower rubric score comes almost entirely from open-endedness ($1.38$ versus $2.69$) and multiple representations ($2.13$ versus $2.93$). Because the one-shot prompt receives the Chapter~\ref{chap:oneshot} rubric in its prompt, it explicitly asks students for multiple representations and open sub-questions, whereas \textsc{StructPF} fixes the given quantities around a single comparison so that Stage~2 can verify the numerical trap, which the rubric judge penalizes as having fixed values and a single comparison goal.
+
+Taken over all five measures, 68 of the 120 \textsc{StructPF} tasks ($57\%$) pass every measure, compared with 10 of 118 one-shot GPT-5 mini tasks ($8.5\%$) and 4 of 120 one-shot GPT-4.1 tasks ($3.3\%$). Figure~\ref{fig:res-structpf-examples} shows two of these tasks, which follow the same idea as the music task in Figure~\ref{fig:res-number-tie-example}b. In the basketball task, both drills score 20 points in 10 minutes, so the overall rate from Grade~6 cannot tell them apart, and students have to discover that a proportional relationship needs the same rate in every segment. In the shopping task, adding the two discounts gives the same price at both stores, so students have to notice that the second discount applies to the already reduced price. In both tasks, the familiar method ends in a tie, while the task still leaves the key idea to the student.
+
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=\textwidth]{figures/fig6_3b_structpf_examples.pdf}
+    \caption[Two \textsc{StructPF} Tasks Passing All Five Measures]{Two \textsc{StructPF} Tasks Passing All Five \textsc{PF Eval} Measures in the Basketball and Shopping Settings (Task Text Shortened)}
+    \label{fig:res-structpf-examples}
+\end{figure}
+
+Although \textsc{StructPF} improves the PF requirements, it still misses a measure on some of the 120 tasks. Most of these misses come from two causes.
+
+\begin{enumerate}[leftmargin=0.6cm,label=\textbf{\arabic*.},itemsep=0.6em,topsep=0.4em]
+    \item \textbf{The Task Gives Away the Route (32 Tasks)}\\[0.2em]
+    The task states the calculation route that students should find themselves, so room for invention is rated only \emph{Partly} or \emph{No}. Shopping Task~17, for example, tells students that ``the first discount reduces the current price, then the next discount applies to that reduced price'', which is the key idea of successive percent change.
+
+    \item \textbf{A Familiar Method Still Solves the Task (21 Tasks)}\\[0.2em]
+    The numbers do not make the simpler method fail, so a one-step calculation already reaches the right decision. In Shopping Task~10, Store~A lists a jacket at $\$140$ with $30\%$ off and $9\%$ tax, while Store~B lists it at $\$120$ with $20\%$ off and $7\%$ tax. After the discount alone, Store~B is already cheaper ($\$96$ versus $\$98$), and its tax rate is lower as well ($7\%$ versus $9\%$). A student who stops after the single discount, or who simply adds the discount and tax percentages, still picks Store~B, so the multistep percent calculation never changes the answer.
+\end{enumerate}
+
+Neither cause comes from a missing rule in the prompts or the pipeline design. The Stage~2a prompts already tell the model not to state the method in the student-facing text and to reject a design where the simplest familiar calculation already settles the question. The model simply does not always follow these instructions. Because the Stage~2 rules were refined after an initial run on these same four settings, the gain in Table~\ref{tab:res-structpf-fixed} should still be tested on unseen settings in future work.
+
+\section{Curriculum Grounding under the Two-Step Check}
+\label{sec:res-grounding}
+
+Study~(b) goes one step deeper than Study~(a). Instead of receiving what students already know, the generator has to work it out on its own, and we ask whether the resulting task still makes those familiar methods fall short. Across both steps of the Two-Step Check, grounded \textsc{StructPF} passes on 19 of the 30 topics, ungrounded \textsc{StructPF} on 16, and the one-shot prompt on 6. We now look at each step separately to see where the remaining runs fail.
+
+\subsection{Target Leaks in Proposed Prior Knowledge}
+\label{subsec:res-gate1}
+
+The Prior-Knowledge Check sorts each proposed skill into one of three groups.
+\begin{itemize}
+    \item \textbf{Valid.} The skill comes before the target on the learning progression, such as one of the prerequisite standards, and students can try it on the numbers in the task.
+    \item \textbf{Irrelevant.} The skill is mathematically wrong, belongs to an unrelated topic, or cannot be tried on the task at all.
+    \item \textbf{Target leak.} The skill already teaches or carries out the target concept itself, for example computing a slope as $(y_2 - y_1)/(x_2 - x_1)$ when students are meant to construct the idea of slope.
+\end{itemize}
+A leak is the most harmful of these misjudgments, because students would arrive with the key idea already in hand and the task would leave nothing for them to invent.
+
+Without curriculum data, the models often make this misjudgment. Figure~\ref{fig:res-gate1} counts every proposed skill across the 30 topics. More than a quarter of the skills proposed by the one-shot prompt are leaks, which affect more than half of its topics. Ungrounded \textsc{StructPF} leaks far less often, and grounded \textsc{StructPF} never leaks, since almost all of its skills are valid prerequisites.
+
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.9\textwidth]{figures/fig6_4a_prior_knowledge_check.pdf}
+    \caption[Proposed Prior Skills by Generator]{Proposed Prior Skills by Generator on 30 Curriculum Topics, as Classified by the Prior-Knowledge Check}
+    \label{fig:res-gate1}
+\end{figure}
+
+\subsection{Testing Tasks with the Proposed Prior Skills}
+\label{subsec:res-gate2}
+
+A correct judgment of prior knowledge does not guarantee that the task resists it. For the runs that pass the first step, the Method-Failure Check sorts each task into one of three outcomes.
+\begin{itemize}
+    \item \textbf{Familiar methods fall short and need the target.} None of the valid prior skills solves the task on its own, and trying them produces a tie, conflict, or gap that requires the target concept.
+    \item \textbf{Bypassed by a familiar method.} At least one valid prior skill already reaches the right answer on the task numbers, or the task text states the target procedure directly.
+    \item \textbf{Falls short for an unrelated reason.} The solver gets stuck because of missing data or inconsistent numbers rather than the mathematical gap to the target concept.
+\end{itemize}
+
+Figure~\ref{fig:res-gate2} shows that once the prior skills are valid, both \textsc{StructPF} variants make those skills fall short on roughly two thirds of their eligible runs ($67\%$ without grounding and $63\%$ with grounding), compared with under half for the one-shot prompt ($46\%$). Most of the remaining runs across all three generators are bypassed by a familiar method, while only a few fail for an unrelated reason.
+
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.9\textwidth]{figures/fig6_4b_method_failure_check.pdf}
+    \caption[Method-Failure Check Outcomes by Generator]{Method-Failure Check Outcomes by Generator, among Runs That Passed the Prior-Knowledge Check}
+    \label{fig:res-gate2}
+\end{figure}
+
+Taken together, Figures~\ref{fig:res-gate1} and~\ref{fig:res-gate2} show why generating a Productive Failure task requires both curriculum grounding and staged task design, as summarized in three findings.
+\begin{enumerate}[leftmargin=0.6cm,label=\textbf{\arabic*.},itemsep=0.35em,topsep=0.35em]
+    \item \textbf{Without curriculum grounding, the generator misjudges prior knowledge (Step~1).} When the model guesses what students already know from the target topic alone, it often lists the target concept itself as a prerequisite. The task then fails before students even begin, which eliminates 17 of the 30 topics for the one-shot prompt and 6 of the 30 for ungrounded \textsc{StructPF}.
+    \item \textbf{Without staged design, valid prior skills still solve the task (Step~2).} Getting the prior skills right is not enough on its own. Even on the 13 topics where the one-shot prompt passes Step~1, more than half of its tasks are bypassed in Step~2, leaving only 6 of 30 passing tasks overall, whereas staged design in \textsc{StructPF} raises the Step~2 pass rate to roughly two thirds.
+    \item \textbf{Combining both produces the most working tasks overall.} Grounded \textsc{StructPF} shows a slightly lower percentage in Figure~\ref{fig:res-gate2} ($63\%$ versus $67\%$) only because it brings all 30 topics into Step~2, including the 6 harder topics where ungrounded \textsc{StructPF} already failed in Step~1. Across the full set of 30 topics, combining curriculum grounding with staged design raises the number of passing tasks from 6 (one-shot) and 16 (ungrounded \textsc{StructPF}) to 19 (grounded \textsc{StructPF}).
+\end{enumerate}
+
+\section{Negative Results with Simulated Students}
+\label{sec:res-negative-signals}
+
+While developing \textsc{StructPF} and \textsc{PF Eval}, we also tested two other ways to build and evaluate Productive Failure tasks. Both attempts produced negative results, yet they are worth reporting because they revealed important pitfalls and steered our design toward the final pipeline.
+
+\subsection{Reproduction of Classroom Solution Pathways}
+\label{subsec:res-kapur-pathways}
+
+\textbf{Motivation.} Unlike one-shot prompting, which treats Productive Failure as a surface-level writing task, our goal is to design tasks around the deep mathematical structure of Productive Failure by choosing numbers on which students' actual attempts break down in a way that points to the target concept. Prior work on simulated students reported that LLMs given a knowledge profile can imitate student responses well in domains such as interface design and reading~\cite{lu2024,scarlatos2025smart}, whereas mathematics studies warned that models often default back to expert calculations instead of staying within a student's prior knowledge~\cite{liu2023novice,srivatsa2025abilities}. Before relying on external curriculum data, we therefore tested whether an LLM role-playing a student can think like a student and reproduce the diverse student pathways observed in a real Productive Failure classroom. If it worked, we would already have solved the hardest structural problem of Productive Failure design and could use those generated student pathways directly to generate good Productive Failure tasks, instead of grounding Stage~1 on real-world curriculum data.
+
+\textbf{Setup.} To test this against real classroom ground truth, we used Kapur and Bielaczyc's Grade~7 bicycle-handover problem~\cite{kapur2012}, where the paper documents six distinct calculation strategies and error pathways produced by real student groups. We collected 24 independent attempts from LLM student personas (across GPT-4.1 and GPT-4.1-mini under two prerequisite profiles) without giving them the solution or forcing a specific error, and coded which of the six classroom pathways they actually used.
+
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.88\textwidth]{figures/fig6_5a_kapur_pathways.pdf}
+    \caption[Kapur Classroom Pathways Enacted by Simulated Students]{Classroom Student Solution and Error Pathways from Kapur and Bielaczyc~\cite{kapur2012} Enacted across 24 Simulated Student Attempts (One Attempt Uses Both Algebra and Trial)}
+    \label{fig:res-kapur-pathways}
+\end{figure}
+
+\textbf{Finding.} Figure~\ref{fig:res-kapur-pathways} shows that 19 of the 24 simulated student attempts ($79\%$) jumped straight to the canonical single-variable algebra equation (and 21 of the 24 solved the problem completely), while 6 ($25\%$) tried brute-force numerical guessing. None of the 24 attempts ($0\%$) enacted the ratio-based partition or common-multiple (LCM/HCF) partition error pathways that real Grade~7 groups used in the classroom, nor did any attempt draw the journey diagram documented in the paper. Because an LLM role-playing a student defaults to expert algebra instead of producing the diverse student error pathways seen in real classrooms, we cannot rely on LLM-generated pathways on their own, which is why Stage~1 of \textsc{StructPF} grounds prior methods on the real-world curriculum graph instead.
+
+\subsection{Task Revision from Simulated Student Feedback}
+\label{subsec:res-virtual-classroom}
+
+\textbf{Motivation.} Even when Stage~1 and Stage~2 use curriculum grounding, we cannot be sure how students will react to a generated task until someone attempts it. We therefore wanted to test whether a virtual classroom of simulated LLM students could serve as an automatic refinement loop after Stage~3, where simulated student attempts are fed back into the generator to rewrite tasks that missed an intended approach.
+
+\textbf{Setup.} Because any revision step might improve a draft simply by giving the model a second pass to polish its own work, we compared two matched revision paths across six generated tasks using the exact same revision prompt and call budget (Figure~\ref{fig:res-virtual-classroom}a). In the self-review baseline, the rewriter sees only the task text (with no simulated students), whereas in the virtual-classroom loop, the rewriter receives the exact same task text plus eight simulated student attempts.
+
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=\textwidth]{figures/fig6_5b_virtual_classroom_feedback.pdf}
+    \caption[Virtual-Classroom Feedback Loop versus Self-Review]{Matched Revision Setup~(a) and Tasks Meeting All PF Requirements~(b) across Six Tasks}
+    \label{fig:res-virtual-classroom}
+\end{figure}
+
+\textbf{Finding.} As shown in Figure~\ref{fig:res-virtual-classroom}b, adding the simulated student attempts actually reduced the number of valid PF tasks from 5 of 6 to 4 of 6 while using more than four times as many tokens ($60{,}365$ versus $13{,}572$), whereas self-review without simulated students passed all 6 of 6. Because the simulated students skipped naive shortcuts and solved the original tasks directly, their attempts made the tasks look too easy, pushing the rewriter to add extra constraints that narrowed the problem or broke its mathematical assumptions. We therefore dropped the post-Stage~3 feedback loop and evaluate tasks in \textsc{PF Eval} with a calculator-checked prior-knowledge solver instead.

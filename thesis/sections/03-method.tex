@@ -1,15 +1,15 @@
 \section{Method}
 
-% TODO: Detail the three-phase pipeline
+The method chapter follows the research chronology while distinguishing historical studies from the current implementation. An initial direct-generation diagnostic motivated an MCQ error-pathway study. The current PF route starts with familiar resources, selects a complete design brief, checks its concrete data, and writes the task last. Error pathways remain a diagnostic instrument rather than mandatory input to the PF writer. The simulation and feedback component now includes bounded computational pilots and intended-path diagnostics; none is a completed student-outcome experiment. Historical October 10 continuations and the subsequent October 11--12 research closure are reported separately.
 
-\subsection{Phase 1: Exercise Generation}
+\subsection{The Direct Approach and Its Limitation}
 
-We generate full Productive Failure (PF) exercises with a single generator (prompt, model, and output schema held fixed) that varies only in what it is told about student misconceptions. This isolates the effect of misconception knowledge from confounds such as prompt wording or narrative style. We compare three conditions:
+We first tried the obvious thing: ask an LLM to write a complete PF exercise in one pass, varying what it is told about student misconceptions. This historical diagnostic used a common exercise-writing prompt, model, and output schema under three conditions; V3 additionally made a misconception-inference call:
 
 \begin{itemize}
-    \item \textbf{V1 — Blind.} No misconception information is provided; the generator relies only on the PF task definition and grade/topic.
-    \item \textbf{V2 — Eedi-grounded.} The generator is given a set of real, human-annotated misconceptions from the Eedi diagnostic-questions dataset~\cite{wang2021eedi} for the target topic.
-    \item \textbf{V3 — LLM-inferred.} A two-step process: the model first infers plausible misconceptions for the topic itself, then generates the exercise conditioned on its own inferred list.
+    \item \textbf{V1 (Blind).} No misconception information is provided. The generator works only from the PF task definition and the grade and topic.
+    \item \textbf{V2 (Eedi-grounded).} The generator is given a set of real, human-annotated misconceptions from the Eedi diagnostic-questions dataset~\cite{wang2021eedi} for the target topic.
+    \item \textbf{V3 (LLM-inferred).} A two-step process: the model first infers plausible misconceptions for the topic itself, then generates the exercise conditioned on its own inferred list.
 \end{itemize}
 
 \begin{figure}[h]
@@ -20,9 +20,9 @@ We generate full Productive Failure (PF) exercises with a single generator (prom
     every path/.style={-{Latex[length=2mm]}}
 ]
     \node[box] (input) {Grade + topic\\(7th grade, ratios \& proportional relationships)};
-    \node[box, below left=of input] (v1) {V1 — Blind\\no misconceptions};
-    \node[box, below=of input] (v2) {V2 — Eedi-grounded\\real misconceptions};
-    \node[box, below right=of input] (v3) {V3 — LLM-inferred\\self-generated misconceptions};
+    \node[box, below left=of input] (v1) {V1: Blind\\no misconceptions};
+    \node[box, below=of input] (v2) {V2: Eedi-grounded\\real misconceptions};
+    \node[box, below right=of input] (v3) {V3: LLM-inferred\\self-generated misconceptions};
     \node[box, below=of v1] (e1) {PF exercise};
     \node[box, below=of v2] (e2) {PF exercise};
     \node[box, below=of v3] (e3) {PF exercise};
@@ -34,13 +34,13 @@ We generate full Productive Failure (PF) exercises with a single generator (prom
     \draw (v2) -- (e2);
     \draw (v3) -- (e3);
 \end{tikzpicture}
-\caption{The three generation conditions share the same generator and output format; only the misconception input differs.}
+\caption{The three generation conditions share the same generator and output format. Only the misconception input differs.}
 \label{fig:generation-conditions}
 \end{figure}
 
-\paragraph{Hypotheses.} (a) V2 and V3 outperform V1 on Sweet Spot Calibration (SSC) and Activation of Prior Knowledge (APK), since misconception awareness should help the generator ``rig'' the data trap and target the right prior knowledge. (b) V2 and V3 perform similarly, if LLMs already encode enough pedagogical content knowledge to infer reasonable misconceptions without external data. (c) V1, V2, and V3 perform similarly on Affective Engagement (AE) and Multiple Representations and Solutions (MR), since narrative craft and format variety should be largely orthogonal to misconception knowledge.
+\paragraph{Historical hypotheses.} (a) V2 and V3 would outperform V1 on Sweet Spot Calibration (SSC) and Activation of Prior Knowledge (APK), if misconception awareness helped calibrate the challenge. (b) V2 and V3 would perform similarly if the model could infer useful misconceptions without external data. (c) Affective Engagement (AE) and Multiple Representations and Solutions (MR) would change less. These were proposed expectations, not validated mechanisms.
 
-\paragraph{Fixed output format.} All three conditions produce the same five-part structure, derived from common patterns across hand-designed PF exercises in the literature~\cite{kapur2012,loibl2014,rahimi2025} (Table~\ref{tab:output-schema}). Keeping this schema identical across V1/V2/V3 ensures that any score differences we observe are attributable to the misconception-grounding manipulation rather than to structural or formatting differences.
+\paragraph{Fixed output format.} All three historical conditions use the same five-part schema, informed by patterns across hand-designed PF exercises~\cite{kapur2012,loibl2014,rahimi2025} (Table~\ref{tab:output-schema}). Its task requirements describe intended output, not a guarantee that generated tasks are open-ended. A common schema reduces formatting differences without independently establishing causality or pedagogy.
 
 \begin{table}[h]
 \centering
@@ -62,11 +62,11 @@ Consolidation Note & Teacher-facing explanation of the critical conceptual \\
 \label{tab:output-schema}
 \end{table}
 
-\subsection{PF Exercise Evaluation}
+\paragraph{Evaluating the direct approach.} The historical diagnostic used an adaptation of Rahimi et al.'s five-dimension PF rubric~\cite{rahimi2025}: Activation of Prior Knowledge, Sweet Spot Calibration, Affective Engagement, Multiple Representations and Solutions, and Open-Endedness, each scored 1--3 for a total between 5 and 15. The archived initial Llama-3.3-70B-Instruct execution gave the maximum 15 to six of nine development exercises; the earlier prose count of eight did not match the saved execution. This motivated a participant-scoring interface, but the separate saved 21-exercise results are a single agent-review pass. These two pools do not establish that high scores and diagnosed concerns occur on the same tasks. Human participant ratings have not been established by either artifact. Later model evaluations use separately frozen paper-aligned rubric prompts, rather than treating the initial judge as calibrated.
 
-\paragraph{LLM-as-judge did not discriminate quality.} Our first evaluation attempt scored a small set of exercises with an LLM judge (Llama-3.3-70B-Instruct) on the five-dimension PF rubric of Rahimi et al.~\cite{rahimi2025} (Activation of Prior Knowledge, Sweet Spot Calibration, Affective Engagement, Multiple Representations and Solutions, Open-Endedness; each scored 1--3, total 5--15). The judge showed a strong ceiling effect: 8 of 9 test exercises received the maximum score of 15/15, giving near-zero discrimination between a genuinely open-ended PF exercise and an ordinary word problem phrased with a verb like ``design''. Likely causes include the absence of a calibration baseline, no explicit reasoning step before scoring, and the conflation of surface-level structural completeness with pedagogical quality. Chain-of-thought scoring, following G-Eval~\cite{liu2023geval}, and reference-anchored scoring~\cite{zheng2023judging} are documented mitigations for this failure mode, but given the severity of the ceiling effect we opted to move to expert/human rubric scoring for this evaluation instead of further tuning the automatic judge.
+\paragraph{Fixed evaluation pool.} We generated a fixed pool of 21 exercises, seven design briefs under each of the three conditions, for a single topic and grade level, using DeepSeek-V4-Flash as the generator. Every candidate is checked automatically before it enters the pool. It must meet a minimum narrative and task length, it must not leak teacher-facing content such as the consolidation note into the student-facing text, and it must not duplicate an exercise already in the pool. Failures are regenerated.
 
-\paragraph{Fixed evaluation pool.} We generated a fixed pool of 21 exercises (7 design briefs $\times$ 3 conditions) for a single topic and grade level (7th grade, ratios \& proportional relationships), using DeepSeek-V4-Flash as the generator. Each candidate exercise is automatically checked before being accepted into the pool (minimum narrative/task length, and no leakage of teacher-facing content such as the consolidation note into the student-facing text) and is regenerated on failure; exact duplicates are also rejected and regenerated. The seven design briefs (Table~\ref{tab:design-briefs}) were chosen to sample structurally distinct PF setups rather than to support a large-sample statistical comparison. At this stage, the goal is a diagnostic first pass: identifying systematic, structural weaknesses (e.g.\ a dimension scoring at floor across nearly all exercises) that would be visible even at small $n$, rather than establishing statistically significant condition differences, which would require a substantially larger sample and, ideally, multiple independent raters.
+The seven design briefs (Table~\ref{tab:design-briefs}) were chosen to sample structurally different PF setups, not to support a large-sample statistical comparison. The goal at this stage is a diagnostic first pass. We want to find systematic weaknesses that are visible even at small $n$, such as a dimension scoring at the floor across nearly all exercises. Establishing significant differences between conditions would need a much larger sample and ideally several independent raters.
 
 \begin{table}[h]
 \centering
@@ -88,25 +88,117 @@ Consolidation Note & Teacher-facing explanation of the critical conceptual \\
 \label{tab:design-briefs}
 \end{table}
 
-\paragraph{Blind scoring interface.} Each of the 21 exercises is scored by a human rater on all five rubric dimensions through a purpose-built interface that presents exercises one at a time, in randomized order, with the generation condition hidden to preserve blind scoring. The rater selects a score (1--3) per dimension; scores are saved immediately and the next exercise is shown automatically, with an undo option to revise the previous rating.
+\paragraph{Participant-scoring interface and saved review.} A purpose-built interface can present exercises one at a time in random order with the generation condition hidden. It supports scores from 1 to 3 per dimension, immediate saving, and revision of the previous rating. The existing result file, \texttt{agent\_scores\_round1\_deepseek.csv}, contains agent review rather than participant responses. Building a blinded interface does not establish completed blinded human evaluation.
+
+\paragraph{What the direct approach showed.} As Section~\ref{sec:results-pf} reports, the agent review assigned the minimum Multiple Representations and Solutions score in all three conditions. This motivated checking the task's mathematical design before writing its narrative. It is a finding about this pool, not proof that direct prompting cannot work. Later paper-setting comparisons use a different direct prompt and do not reproduce this floor.
+
+\subsection{Generating Error Pathways}
+
+Before writing a PF exercise around student errors, we first need those errors in a usable form. We treat this as a separate generation problem and study it on multiple-choice questions, where every wrong answer is a candidate student error and where the Eedi dataset gives us human-written wrong answers to compare against. The point is not to build a better multiple-choice generator. The point is to find out which prompting strategy produces error pathways that are wrong, believable, and different from each other, because those are the pathways we later want to design an exercise around.
+
+We compare eleven conditions, grouped by what kind of guidance the generator receives (Table~\ref{tab:mcq-conditions}). Six of them change only the role or the reasoning instruction. Four supply misconception labels, either drawn at random as a control or retrieved semantically for the question at hand. One retrieves similar questions from the Eedi training split and shows them as few-shot examples, following the retrieval idea of Feng et al.~\cite{feng2024}. Condition 2 is the baseline that every other condition is read against.
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{@{}clll@{}}
+\toprule
+\textbf{\#} & \textbf{Condition} & \textbf{Guidance} & \textbf{What it tests} \\
+\midrule
+1 & Basic, direct & none & lower bound with a minimal role prompt \\
+2 & Expert, direct & none & baseline for all comparisons \\
+3 & Pedagogical, direct & none & error-category framing \\
+4 & Expert, CoT & none & enumerate errors before choosing \\
+5 & Expert, self-critique & none & draft, review, revise in one prompt \\
+6 & Lookalike, direct & none & imitate an actual student \\
+7 & Expert, MC random & random labels & control for forced label use \\
+8 & Expert, MC names & retrieved labels & semantic grounding, no causal link \\
+9 & Expert, MC causal & retrieved labels & label must produce the answer \\
+10 & Pedagogical, CoT, MC causal & retrieved labels & all three combined \\
+11 & Few-shot RAG & similar questions & retrieval-augmented examples \\
+\bottomrule
+\end{tabular}
+\caption{The eleven distractor-generation conditions. Conditions 1--6 vary only the prompt, 7--10 vary how misconception labels are supplied, and 11 retrieves similar training questions.}
+\label{tab:mcq-conditions}
+\end{table}
+
+Condition 7 deserves a note. It hands the generator misconception labels sampled at random from the Eedi bank, with no relation to the question. It exists so that we can tell the difference between ``retrieving the right misconception helped'' and ``being forced to use any label at all changed the output''. Without that control, a diversity gain from misconception conditioning would be impossible to interpret.
+
+All eleven conditions use the same generator model, the same output schema, and the same held-out question set, so differences in the results come from the guidance and not from the model or the format.
+
+\subsection{Evaluation Metrics}
+
+The metrics in this section apply to MCQ candidates. Coherence and pathway diversity are relevant when structured pathways support PF design or diversity claims, not universal requirements for every wrong answer. They do not define the current PF data-check gate. Exercise-level rubric judgments are separate from these answer-level measures.
+
+\paragraph{Where the metrics come from.} Our evaluation starts from the distractor-generation framework of Feng et al.~\cite{feng2024}, who evaluate generated distractors both against human-written references and on whether a student would plausibly select them. We keep that basic split, but we do not adopt their metrics unchanged. Our goal is different: we are not trying to reproduce human distractors as closely as possible, we are trying to find \emph{concrete error pathways} that can later seed a PF exercise. A distractor is useful to us when it is genuinely wrong, when a real student could arrive at it, and when the path leading to it differs from the other distractors. Reference overlap alone cannot tell us any of that. We therefore split the evaluation into two families of claims and never collapse them into a single quality score (Figure~\ref{fig:metric-pipeline}).
 
 \begin{figure}[h]
-    \centering
-    \includegraphics[width=0.75\textwidth]{human_evaluation_total_scores_round1_deepseek.png}
-    \caption{Total PF quality score (5--15) by generation condition, first diagnostic evaluation pass (7 exercises per condition).}
-    \label{fig:pf-total-scores}
+\centering
+\begin{tikzpicture}[
+    node distance=1.0cm and 1.6cm,
+    box/.style={draw, rounded corners, align=center, minimum width=3.8cm, minimum height=1.0cm},
+    every path/.style={-{Latex[length=2mm]}}
+]
+    \node[box] (dist) {Structured distractor\\(answer + faulty step + steps)};
+    \node[box, below left=of dist] (f1) {Family 1: answer and\\reference checks};
+    \node[box, below right=of dist] (f2) {Family 2: student error\\and pathway checks};
+    \node[box, below=of f1, minimum width=3.8cm] (f1m) {Incorrectness\\PM normalized, LLM-verified PM};
+    \node[box, below=of f2, minimum width=3.8cm] (f2m) {Plausibility (0--2)\\Path coherence, Pathway diversity};
+
+    \draw (dist) -- (f1);
+    \draw (dist) -- (f2);
+    \draw (f1) -- (f1m);
+    \draw (f2) -- (f2m);
+\end{tikzpicture}
+\caption{The two evaluation families are computed on the same structured distractor but answer different questions. Family 1 asks whether the answer is wrong and how well it lines up with human references. Family 2 asks whether a student could produce it and whether its pathway is coherent and distinct.}
+\label{fig:metric-pipeline}
 \end{figure}
 
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=\textwidth]{human_evaluation_dimensions_round1_deepseek.png}
-    \caption{Per-dimension PF quality scores by generation condition, first diagnostic evaluation pass.}
-    \label{fig:pf-dimension-scores}
-\end{figure}
+\paragraph{Basic and structured output.} The generator supports a basic object with \texttt{text}, \texttt{target\_misconception}, and \texttt{error\_rationale}. Structured mode adds a \texttt{faulty\_step}, naming the first departure from a correct solution, and ordered \texttt{reasoning\_steps}. The completed eleven-condition run uses structured mode; the historical ten-question basic pilot does not. Without a usable structured path, coherence and pathway diversity are unavailable, not zero. Different answer strings can arise from the same mistake.
 
-\subsection{Phase 2: Simulated Student Evaluation}
+\paragraph{Family 1: answer and reference checks.}
+\begin{itemize}
+    \item \textbf{Incorrectness:} a deterministic check that labels each generated answer as \texttt{incorrect}, \texttt{correct}, \texttt{unknown}, or \texttt{unusable}. The reported rate uses only the decisive \texttt{incorrect} and \texttt{correct} cases. Answers we cannot safely decide stay \texttt{unknown} and are never counted as wrong.
+    \item \textbf{Proportional match (PM):} secondary one-to-one reference alignment with human Eedi distractors. Raw, normalized, and typed matching retain different equivalence rules. The main table reports normalized PM after formatting and mathematical-text normalization; a useful novel distractor can score zero.
+    \item \textbf{LLM-verified PM:} an additional historical experimental measure in which a judge checks contextual answer equivalence before one-to-one matching. Unknown pairs receive no credit and remain visible. It is not a substitute for mathematical validity or a primary PF outcome.
+\end{itemize}
 
-The first diagnostic evaluation pass (Figures~\ref{fig:pf-total-scores}--\ref{fig:pf-dimension-scores}) shows that Multiple Representations and Solutions scores at or near the floor across all three generation conditions, and that Open-Endedness is similarly weak: generated exercises are largely single-path, text-only tasks rather than tasks that admit genuinely different solution methods. Since prompt-level interventions alone showed limited effect in the MCQ distractor-generation experiments (Phase 1a), we do not expect further prompt tuning of the generator to resolve this on its own. Table~\ref{tab:first-shot-problems} summarizes the concrete evidence, drawn from both the PF and MCQ generation pipelines, that motivates moving from prompt tuning to a feedback-driven loop.
+\paragraph{Family 2: student error and pathway checks.}
+\begin{itemize}
+    \item \textbf{Student plausibility:} a separate model-estimated score from 0 to 2, inspired by Feng et al. Higher scores indicate a more recognizable, task-related error, not a measured probability of student selection. The judge sees only the question, correct answer, and distractor text, not the generator's rationale or pathway. We retain the continuous score; $\text{score} \geq 1$ is only a broad screening flag, not human validation.
+    \item \textbf{Path coherence:} an optional judge check of whether the supplied \texttt{faulty\_step} and \texttt{reasoning\_steps} reach the stated answer without correcting the mistake. This separates internal consistency from student plausibility. Unknown or failed checks remain unknown; missing paths are not classified as incoherent.
+    \item \textbf{Pathway diversity:} for each question we take only the distractors that are incorrect, plausible ($\text{score} \geq 1$), and coherent. Every remaining pair is compared by a judge that decides whether the two come from the same underlying faulty step. Those decisions form a graph, connected components count as error classes, and the class count maps to 0, 0.5, or 1. If fewer than two distractors survive the filter, the question is reported as \emph{not measurable} rather than scored as zero.
+\end{itemize}
+
+\paragraph{What we changed and why.} Three changes matter most compared to our earlier pilot and to the metrics used in prior distractor work. First, incorrectness is now checked separately and deterministically, so a ``valid'' distractor can no longer secretly be the correct answer in disguise. Second, the plausibility judge is blinded to the generator's rationale, which removes an obvious way for the generator to score its own work. Third, diversity is built from pairwise comparisons of faulty steps instead of one judge call over the whole set, so each decision is recorded and can be checked afterwards. Together these make it possible to say which part of a distractor is good and which part is not, instead of reporting a single number that hides the difference.
+
+\paragraph{Metrics we tried and dropped.}
+\begin{itemize}
+    \item \textbf{Misconception recall:} we tried to match the generator's free-text misconception label back to a specific Eedi misconception ID by embedding both and checking the top-3 nearest entries. Across 93 labels we got 0\% exact-ID matches even though the mean cosine similarity was 0.82. The labels describe the same errors in different words, for example ``Confuses division with multiplication'' against ``uses the same operation rather than the inverse''. Aligning free-form pedagogical labels to a fixed taxonomy is its own research problem, so we dropped the metric and report the failure in~\S\ref{sec:mc-recall-limitation}.
+    \item \textbf{Self-label fidelity:} a word-overlap check between the generator's label and a judge's independent label for the same distractor. It reported 0\% agreement, but only because the two sides use different vocabulary for the same error. The metric measured phrasing, not agreement.
+    \item \textbf{Cosine diversity:} embedding-based diversity groups all distractors of one question together, because they share the topic. Three clearly different off-by-$N$ time errors ($13{:}05$, $12{:}55$, $13{:}25$) came out at $\cos = 0.97$, which would have counted as almost no diversity. We replaced it with the pairwise faulty-step comparison described above.
+    \item \textbf{Text and embedding similarity to human distractors:} both measure surface closeness to a reference answer, which tells us little about whether the underlying error is useful for PF design. We kept PM for reference alignment and dropped the similarity scores.
+\end{itemize}
+
+\subsection{Decomposed PF Generation}
+
+The initial diagnostic suggested designing the mathematical situation before writing its narrative. An early proposal was to verify an error portfolio and write a task around it. That proposal is not the current production route, and a full MCQ-pathway-to-PF experiment has not been completed. Current design starts from familiar resources, including correct-but-insufficient methods, rather than requiring a portfolio of wrong answers.
+
+\paragraph{D1: anticipate familiar resources.} A grounded recommender maps curriculum or textbook excerpts to previously taught resources and adds hypotheses about possible first moves and limitations. An ungrounded condition proposes resources from the target description. Curated expert-resource lists are held outside the current generation prompt for comparison. Both saved August 24 comparisons supplied and preserved curated records; they demonstrate historical propagation, not independent resource recovery by the current curriculum-only implementation. Provenance and coverage limits are retained. Optional Learning Commons references supply selected mathematical descriptions separately from assumed prior knowledge; enabling them does not establish prior teaching or improve task quality by itself.
+
+\paragraph{D2a: propose and select a design brief.} The default \texttt{design\_brief} route specifies a complete goal, relationships, permitted actions, possible approaches, and learning opportunity before concrete numbers are generated. A numerical contrast between a familiar method and a successful route is optional; qualitative, representational, and partial approaches need not be forced into formulas.
+
+\paragraph{D2b: generate, check, and repair data.} One model response proposes concrete data, conditions relevant to the selected brief, and useful calculations. Exact checks use a restricted calculator, not execution of generated Python. After the first valid proposal, quantity meanings, units, data sizes, formulas, and conditions are frozen. Failed essential numerical conditions can trigger a values-only repair and recheck. All proposal-schema retries and numerical repairs share a maximum of three data-stage model calls; there is no separate retry allowance. Original numerical requirements cannot be silently dropped or made non-essential.
+
+An exact result verifies the supplied predicate, not whether the model translated the intended condition correctly. Declared-unit checks compare metadata rather than performing general dimensional analysis. Uncomputed textual conditions retain a model judgment, supporting supplied wording, and a scope explanation. A textual \texttt{holds} judgment is \texttt{model\_judged}, not exact verification. Under the October 11 draft-first policy, numerical failures trigger bounded values-only repair, while textual conflicts and unsupported cases remain findings. After the budget, available data can proceed to writing even if findings remain unresolved. Mathematical acceptance and availability for draft delivery are separate; a produced task is not relabeled mathematically valid.
+
+\paragraph{D3: write the student-facing task last.} The writer receives the selected design, fixed data, and teacher-only check evidence. It must preserve givens and necessary assumptions without turning unsupported conclusions, predicted approaches, or solutions into student-facing facts. Historical quantity-translation, mathematical-plan review, and fill/check routes remain available for explicit legacy protocols and saved results; they are no longer the default.
+
+\paragraph{Implementation boundary.} D2b is complete and frozen for the agreed October 10 scope. Its regression tests and fixed-design continuations establish software behavior and delivery, not independent textual-judgment accuracy, actual approach diversity, or learning. Improving student-facing design and testing elicited approaches against direct generation and expert references remain the next research steps.
+
+\subsection{Simulated Student Evaluation}
+
+The historical agent review (Table~\ref{tab:pf-results}) reports low approach variety and open-endedness in the first pool. These observations motivate a behavioral test: do learners actually produce distinct approaches? Table~\ref{tab:first-shot-problems} records the initial diagnostic motivation for a feedback loop, not evidence that simulation-driven refinement has already improved PF exercises.
 
 \begin{table}[h]
 \centering
@@ -118,18 +210,22 @@ The first diagnostic evaluation pass (Figures~\ref{fig:pf-total-scores}--\ref{fi
 Round-1 DeepSeek pool & Multiple Representations and Solutions scored 1/3 in every condition. & Exercises remained mostly prose-based and procedural. \\
 Round-1 DeepSeek pool & Open-Endedness was weak, especially in V2. & ``Design'' / ``explain'' verbs alone did not produce genuinely multiple pathways. \\
 First Qwen pool & 21 records contained only four unique visible exercises. & The first-shot prompt did not create enough variation. \\
-MCQ distractor experiments (Phase 1a) & Adding instructions, reasoning steps, or a student persona did not guarantee authentic errors or sufficient diversity. & Prompting alone has a limited ceiling; the generator needs concrete response-based feedback. \\
+MCQ distractor experiments & Added instructions or a student persona did not guarantee plausible, distinct error hypotheses. & Response-based feedback is a proposed intervention to test, not an established remedy. \\
 \bottomrule
 \end{tabular}
 \caption{Evidence motivating a feedback-driven refinement loop instead of further one-shot prompt tuning.}
 \label{tab:first-shot-problems}
 \end{table}
 
-We therefore treat student simulation not as a pre-test of already-finished exercises, but as a \emph{feedback-driven refinement loop}: a simulated attempt at an exercise is used to surface where the exercise is too rigid, then that feedback is fed back into a second generation pass. This framing is supported by prior work showing that (a) explicit pedagogical intent labels increase the number of representations and solution methods (RSMs) elicited from students, with Puech et al.~\cite{puech2025} reporting a mean RSM count of 2.6 under an intent-labeled condition versus 1.0 without intent labeling, and (b) LLM-simulated student profiles correlate with real student response patterns closely enough to be diagnostically useful, with Lu \& Wang~\cite{lu2024} reporting $r = 0.72$ between simulated and real student performance on multiple-choice items.
+The proposed role of student simulation is a \emph{feedback-driven refinement loop}: attempts would reveal where the task is too rigid, and structured feedback would guide a later generation pass. Work on pedagogically steered tutoring~\cite{puech2025} and simulated students~\cite{lu2024} motivates investigating this role, but does not establish that our simulator or refinement loop is valid for open-ended PF tasks. Lu and Wang's study evaluates knowledge-component-conditioned responses to usability MCQs, not mathematical PF reasoning. Recent mathematical-dialogue work separates correctness, errors, language, and estimated knowledge change~\cite{scarlatos2026simstudents}; history-derived profiles~\cite{duan2026history} and student-specific training~\cite{yang2026studentsim} are candidate methods, not validation of solution-blind PF attempts.
 
-We are currently designing this component along two lines: (1) the \emph{student prompt}, so that the simulated learner behaves like a plausible student attempting the exercise for the first time rather than an idealized solver, drawing on the simulated-student literature~\cite{lu2024}; and (2) the \emph{feedback prompt}, which turns a simulated attempt into structured, actionable feedback for the generator (e.g.\ which representations were missing, whether the failure was productive or simply confusing) rather than a numeric pass/fail signal. As a further calibration check, we plan to compare the distribution of error types produced by simulated students against the real error-type distribution in the Eedi dataset~\cite{wang2021eedi}, to assess whether simulated failures are qualitatively similar to real student errors.
+The proposed component has two parts. A \emph{student prompt} would elicit a plausible first attempt rather than an idealized solution. A \emph{feedback prompt} would identify missing representations or confusing demands for the generator to address. Whether these prompts yield realistic behavior or useful refinement remains to be tested on the current PF route.
 
-\subsection{Phase 3: Iterative Refinement}
+An exploratory notebook comparison used five MCQs with published Eedi response percentages. Its non-LLM probabilistic sampler reproduces answer-choice rankings and the dominant wrong option on all five questions, using Eedi-linked error data. Later adjustments to the simulated population were evaluated on the same sample. This is an in-sample sampler check, not validation of LLM-student reasoning or transfer to open-ended PF tasks. A separate short roleplay demonstration supplies an error rule and task-specific examples, includes visibly incomplete outputs, and lacks a complete request ledger. No real student attempts or learning outcomes were collected in these PF generation experiments.
+
+\paragraph{October 11 diagnostic extension.} A separately frozen, solution-blind probe made 48 fresh requests on two consistency and two fair-division exercises, using GPT-4.1-mini and GPT-4.1, three conditions (ordinary solver, recent prerequisites, and one omitted prerequisite), and two repetitions. Eight arithmetic controls were kept separate. All requests completed without API errors; 42 fresh replies were complete and six were token-truncated, with raw partial work retained. Label-hidden assistant coding found named variance or standard-deviation use in 7/8 ordinary-solver consistency attempts and 0/16 learner-role attempts. However, some gap-profile replies still computed a mean omitted from their learning record. The evidence is prompt-sensitive written mathematical behavior, not diagnosed missing knowledge, human learner fidelity, productive failure, or learning. No prompt tuning or simulator-driven exercise refinement followed this round.
+
+\subsection{Iterative Refinement}
 
 \begin{figure}[h]
 \centering
@@ -156,73 +252,17 @@ We are currently designing this component along two lines: (1) the \emph{student
 \label{fig:refinement-loop}
 \end{figure}
 
-The planned loop (Figure~\ref{fig:refinement-loop}) is: generate an exercise, simulate several diverse learner attempts, identify where the exercise fails to elicit distinct solution methods or produces unproductive rather than productive failure, turn this into structured feedback, and regenerate the exercise conditioned on that feedback — repeating before a final human evaluation. Simulation acts only as a feedback source for the generator; final judgment of exercise quality continues to rely on the human rubric-based evaluation described above. This phase, and the re-evaluation of refined exercises against the round-1 diagnostic scores, is in progress.
+The loop in Figure~\ref{fig:refinement-loop} remains an educational proposal, not a validated teaching-and-learning intervention. A later bounded computational comparison instantiated task rewriting with and without raw simulated attempts; it did not show a general benefit of attempt evidence. Subsequent design-level feedback uses a different, explicitly versioned package. Independent human evaluation and student outcomes remain uncollected. Agent reviews, software tests, numerical repairs and additional model methods are not human learning validation.
 
-\subsection{Evaluation Metrics}
+\subsection{Intended-Path Coverage as a Diagnostic}
+\label{sec:path-coverage-method}
 
-Two families, five metrics total. Family 1 metrics are computed directly against a bank of human-written distractors and require no LLM call; Family 2 metrics use an LLM judge to assess pedagogical properties that a purely reference-based comparison cannot capture (Figure~\ref{fig:metric-pipeline}).
+The design brief records candidate mathematical approaches before its task is written. We treat each as a design hypothesis, not an observed learner response. An operational path specifies the action needed to count it as reached, for example actually averaging segment speeds rather than mentioning that averaging could be wrong. The response may enact an unsuccessful start, subsequently correct it, or follow an unexpected valid route. Reached, not observed and unknown are therefore separate from correctness.
 
-\begin{figure}[h]
-\centering
-\begin{tikzpicture}[
-    node distance=1.0cm and 1.6cm,
-    box/.style={draw, rounded corners, align=center, minimum width=3.6cm, minimum height=1.0cm},
-    every path/.style={-{Latex[length=2mm]}}
-]
-    \node[box] (dist) {Generated distractor};
-    \node[box, below left=of dist] (f1) {Family 1 — reference-based\\(no LLM call)};
-    \node[box, below right=of dist] (f2) {Family 2 — misconception-grounded\\(LLM judge)};
-    \node[box, below=of f1, minimum width=3.6cm] (f1m) {PM, Text sim., Embed sim.\\vs.\ human distractor bank};
-    \node[box, below=of f2, minimum width=3.6cm] (f2m) {Validity, Diversity\\vs.\ error-type reasoning};
+We distinguish algorithms, conceptual insights, representations and compound paths. A timeline and a total-distance-to-total-time calculation may express the same mathematical idea; they are not automatically distinct algorithms. Likewise, finding a common denominator while solving algebra does not enact the LCM-based partition heuristic in Kapur and Bielaczyc's observed student work. Source quotations permit inspection of the coding, but do not independently establish its interpretation.
 
-    \draw (dist) -- (f1);
-    \draw (dist) -- (f2);
-    \draw (f1) -- (f1m);
-    \draw (f2) -- (f2m);
-\end{tikzpicture}
-\caption{Two evaluation families computed on the same generated distractor: reference-based (Family 1) and misconception-grounded LLM-judge (Family 2).}
-\label{fig:metric-pipeline}
-\end{figure}
+A retrospective audit maps nine saved pipeline tasks to eight learner-role responses per task. A subsequent prospective codebook defines the revised variants' actions before fresh attempts and preserves its hash with the input snapshots. Intended paths stay outside learner prompts and are visible only to the feedback or coding side. Changed path sets are displayed with their own denominators: simply inventing fewer intended paths cannot make a coverage ratio an educational gain.
 
-\paragraph{Family 1 — Reference-based (computed, no LLM).}
-\begin{itemize}
-    \item \textbf{PM} — fraction exact-matching a human distractor after LaTeX normalization
-    \item \textbf{Text sim.} — ROUGE-L F1 to best human distractor (character-level; note limitation)
-    \item \textbf{Embed sim.} — cosine similarity to closest human distractor (normalized text, Arctic-embed-l-v2.0)
-\end{itemize}
+Profile-conditional counts are primary. Weighted mixtures of hypothetical prerequisite profiles are sensitivity analyses, not inferred classroom distributions. We have no individual student histories or category-frequency ground truth for these tasks. The source-normalized Kapur task provides a narrow group-method reference, with substantial differences in wording, interaction and opportunity.
 
-\paragraph{Family 2 — Misconception-grounded (LLM judge + computed, our contribution).}
-\begin{itemize}
-    \item \textbf{Validity} — teacher-primed judge: \textit{``wrong but on-pathway?''}~Error-first reasoning (list common student errors, then judge each distractor). Binary per distractor, 3-call self-consistency, majority vote.
-    \item \textbf{Diversity} — teacher judge: \textit{``how many distinct error types?''}~Trichotomous (1/2/3 types), normalized to 0.0/0.5/1.0. 3-call self-consistency, median. Captures pedagogical distinctness, not surface-form similarity.
-\end{itemize}
-
-\begin{table}[h]
-\centering
-\small
-\begin{tabular}{@{}clccccc@{}}
-\toprule
-\textbf{\#} & \textbf{Condition (system, instruction)} & \textbf{PM} & \textbf{Text sim.} & \textbf{Embed sim.} & \textbf{Validity} & \textbf{Diversity} \\
-\midrule
-1 & Basic, direct & 20.4 & 60.2 & 76.4 & 82.4 & 31.4 \\
-2 & Expert, direct (baseline) & 20.6 & 59.6 & 76.4 & 81.5 & 32.6 \\
-3 & Pedagogical, direct & 21.9 & 60.6 & 77.0 & 81.5 & 32.0 \\
-4 & Expert, CoT & 20.3 & 58.7 & 75.1 & 81.8 & 29.4 \\
-5 & Expert, self-critique & 20.8 & 59.3 & 76.2 & 83.0 & 34.2 \\
-6 & Lookalike, direct & 21.1 & 60.4 & 76.9 & 82.2 & 34.9 \\
-7 & Expert, MC names & 16.8 & 53.5 & 73.0 & 73.5 & 43.8 \\
-8 & Expert, MC taxonomy & 14.6 & 52.3 & 71.8 & 75.8 & 42.1 \\
-9 & Pedagogical, CoT + MC taxonomy & 16.0 & 54.8 & 73.5 & 75.9 & 37.6 \\
-\bottomrule
-\end{tabular}
-\caption{Family 1 and Family 2 metrics (\%) across all nine MCQ generation conditions ($n \approx 590$ questions per condition). Shown here to illustrate the metrics defined above; full analysis is deferred to the Results chapter.}
-\label{tab:mcq-metrics}
-\end{table}
-
-\paragraph{Dropped metrics (for reference).}
-% TODO: expand each into full justification paragraphs
-\begin{itemize}
-    \item \textbf{Misconception Recall} — embedding generator's free-text label against Eedi bank (2,587 entries) to find exact ID match. Result: 0\% matches across 93 labels (11 conditions), despite mean cos = 0.82. Cause: free-form labels (``Confuses division with multiplication'') and Eedi entries (``uses the same operation rather than the inverse'') describe identical concepts in different vocabulary. Pedagogical entity linking is an open problem outside our scope. Noted qualitatively in~\S\ref{sec:mc-recall-limitation}.
-    \item \textbf{Self-label Fidelity} — word-overlap heuristic between generator's self-label and judge's independent classification of the same distractor. Result: 0\% agreement on sampled data. Cause: generator uses verbose pedagogical phrasing, judge uses terse operational labels (e.g., ``Confuses inverse operations'' vs.\ ``Multiplication instead division''), zero significant-word overlap despite describing the same error. Embedding-based matching would improve this but was not pursued.
-    \item \textbf{Cosine-based Diversity} — replaced with LLM-judge conceptual diversity because embedding cosine clusters all distractors for one question together (topic-level grouping), inflating similarity scores even for mathematically distinct errors (e.g., $13{:}05$, $12{:}55$, $13{:}25$ gave $\cos=0.97$, Div~$=0.03$, but are pedagogically distinct off-by-$N$ errors).
-\end{itemize}
+The final design-level pilot compares the original task, a specific task-review restructuring and restructuring with that same review plus the path audit. It uses the existing bounded design/data/writer route, not merely a rewrite of finished prose. The final computational study ends after one declared round regardless of outcome. Claims are limited to observable model behavior and educational-design hypotheses; realistic student populations, learning effects, independent expert validation and state-of-the-art performance are outside the completed component.

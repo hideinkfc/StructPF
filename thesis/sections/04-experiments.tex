@@ -1,9 +1,71 @@
 \section{Experiments}
 
-% TODO: Describe experimental setup
-
 \subsection{Data}
 
-\subsection{Baselines and Ablations}
+\paragraph{Eedi diagnostic questions.} The MCQ study uses the Eedi dataset from the NeurIPS 2020 Education Challenge~\cite{wang2021eedi}. Each question is a four-option item with teacher-written wrong options and associated misconception labels. After filtering, the study uses 1{,}869 training questions, a bank of 2{,}587 misconception labels, and 200 frozen held-out questions shared across its eleven conditions and three runs. These MCQ subsets are not the specifications used in later PF comparisons.
 
-\subsection{Evaluation Metrics}
+The dataset is useful here for two reasons. The wrong answers are written by people who teach the topic, so they give us a reference point that is not model-generated. And the misconception labels let us retrieve error types for a question instead of inventing them.
+
+\paragraph{Scraped Eedi quizzes.} For the student-simulation work we additionally scraped 30 publicly visible Eedi quizzes, giving 150 questions and 600 answer choices. Unlike the challenge dataset, these pages also show the percentage of students who chose each option and a teacher-facing explanation for every wrong answer. Those explanations are what we convert into executable error rules for simulated students.
+
+\paragraph{Historical PF design briefs.} The first 21-exercise diagnostic pool used seven supplied design briefs for Grade 7 ratios and proportional relationships, each instantiated under V1, V2, and V3. These supplied topic setups are not the current model-proposed D2a design-brief stage. Later experiments use their own frozen specifications rather than reusing this pool.
+
+\paragraph{Prior-resource evidence.} The current recommender uses page-level curriculum or textbook evidence, with expert-task resource lists reserved for comparison. Kapur and Bielaczyc's prior-resource list is a normalized transcription of their paper, and their nine student-method categories were observed and coded in that study. Model-generated first moves are not those observed artifacts. Optional Learning Commons descriptions are reference context rather than proof of prior instruction. The Loibl consistency reference is a reconstruction without its complete original numerical table.
+
+\paragraph{Historical D1 comparison provenance.} Both saved comparisons dated August 24, 2026, \texttt{expert\_comparison\_gpt41mini\_capped.json} and \texttt{expert\_comparison\_gpt56luna.json}, record supplied and preserved curated resources. Neither is an independent holdout recovery test of the current curriculum-only recommender. That evaluation remains separate work; updating the implementation does not retroactively change these outputs' provenance.
+
+\subsection{Setup}
+
+\paragraph{Completed MCQ error-pathway study.} Every one of the eleven conditions was run over all 200 held-out questions with three independent runs per question, giving 6{,}600 question-runs and 19{,}800 generated distractors in the August 10 saved structured artifact. Generation and its judge calls used Azure GPT-4.1-mini. Retrieval used \texttt{text-embedding-3-small-EU}. These counts describe this study, not later PF development runs.
+
+Sampling temperature is 0.7. Each generation asks for exactly three distractors and is rejected and retried if the model returns a different number or leaves a pathway field empty. Eleven generations failed on the first pass and were recovered by a retry, so the final artifact contains 6{,}600 complete records.
+
+\paragraph{Evaluation.} Evaluation runs separately from generation and reads the saved records, so we can change a metric without paying for generation again. The full pass produced 19{,}800 plausibility judgments, 19{,}800 coherence judgments, 4{,}109 pairwise pathway comparisons, and 6{,}600 LLM-verified PM records. The pairwise count is much smaller than the others because pathway diversity is only computed when at least two distractors pass the incorrectness, plausibility, and coherence filter.
+
+\paragraph{Historical direct PF generation.} The first pool contains 21 DeepSeek-V4-Flash exercises: seven supplied briefs per condition. Its entry checks concern length, teacher-note leakage, and duplication; they are not the current mathematical data checks. Failed entry checks were regenerated within that pool's protocol.
+
+\paragraph{Completed paper-setting comparisons.} The September 23 v1 and exploratory v4 benchmarks each scheduled 30 attempts under V1, V2, V3, and PIPELINE. All used GPT-5.6-luna for generation and final judging, the Grade 7 proportional-relationships setting, basketball context, and a common prior-instruction specification. The direct prompt reconstructed Rahimi et al.'s six described components with five attributed expert-task adaptations; the exact published prompt and its examples were unavailable. PIPELINE used the historical mathematical-plan route, not October 10 D2b. This compares complete methods with different call costs, not decomposition at equal compute. Failed attempts were retained rather than replaced.
+
+The frozen final judge saw only student-facing text and common learner context in a shuffled, method-blind order. The v1 run produced 107 ready tasks and v4 produced 112, all rated once. The later anchor-preserving v2.1 rubric rerated the same 112 v4 tasks; these are new model judgments, not new exercises. Original results remain unchanged. Direct tasks lack equivalent deterministic generation-time checks and are therefore not checked by that instrument, not automatically invalid.
+
+\paragraph{October 10 fixed-design continuations.} The final claim-policy prompt was frozen before continuing three saved designs: average speed, consistency, and fair division. The selected designs, learner context, and prior references were preserved while data and student-facing wording were regenerated. These are development continuations, not fresh end-to-end generation or a held-out comparison. Four preceding live calibrations used eight calls and are reported separately from the final runs.
+
+Offline rechecks and mock values-only repairs reuse the same eight saved proposals. Repeated replay phases do not create 24 independent cases. The affected software suite passed 551 tests; the full repository suite was not run. Software checks, model judgments, and student-outcome evidence are separate evidence types.
+
+\subsection{What We Compare Against}
+
+For the distractor stage, the natural comparison point is Feng et al.~\cite{feng2024}, who report a best match rate of 38.5\% with a retrieval-based method and roughly 23.6\% for zero-shot prompting. Their numbers are not directly comparable to ours, because they use exact string matching on a different question sample while we match after normalization, and because our questions are drawn from a different split. We use their results as a rough sanity check rather than a benchmark: if our retrieval condition landed far below zero-shot prompting, something would be wrong with our implementation.
+
+For PF, Rahimi et al.~\cite{rahimi2025} provide a prior automatic-generation study and the prompt setting reconstructed for our later direct baseline. We compare complete methods under a common specification, not against the paper's original model outputs or human scores. Expert-authored tasks provide design references, not a measured upper bound on the present systems.
+
+\subsection{Evaluation Procedure}
+
+The MCQ evaluation is automatic and follows the separate incorrectness, plausibility, coherence, and conditional-diversity contract. PF evaluation has several distinct instruments: the initial ceiling-prone LLM judge, one historical agent-review pass, a built but not established completed participant-rating interface, and later frozen model-rubric comparisons. None is evidence of student learning.
+
+The 21-exercise results are historical diagnostic agent ratings. Later benchmarks and October 10 continuations are reported separately below. Participant agreement, held-out simulation accuracy on open-ended PF tasks, and learning outcomes remain unmeasured in these generation comparisons.
+
+\subsection{Bounded LLM-Student and Feedback Studies}
+
+The later computational studies use frozen student-facing tasks and independent requests. The learner role receives only task text and a hypothetical prior-learning record; ordinary solver controls receive task text without a learner role. No intended pathway, correct answer, numerical verification record or generator rating is supplied to learners. Missing prerequisites are omissions from an instruction record, not evidence that the underlying model cannot construct the idea. GPT-4.1 and GPT-4.1-mini requests use temperature 0.7, a 2,400-completion-token limit, no transport retries and explicit output persistence. Token-truncated responses remain execution failures or partial outputs, not simulated student failure.
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{@{}p{5.6cm}rrp{4.1cm}@{}}
+\toprule
+\textbf{Study} & \textbf{Fresh calls} & \textbf{Separate controls} & \textbf{Interpretation} \\
+\midrule
+Initial four-task learner probe & 48 & 8 & Prompt-sensitive written methods \\
+Eighteen-task diagnosis & 216 & 8 & Provisional attempt-based feedback \\
+Omitted/present/added learning record & 96 & 8 & Actual method use, not mastery \\
+Six-case matched task rewriting & 216 & 8 & Plus 12 fresh and 4 calibration revision calls \\
+Source-normalized Kapur pathway check & 30 & 4 & 24 learner, 4 solver, 2 prediction requests \\
+\bottomrule
+\end{tabular}
+\caption{Separately identified computational studies. Repeated calls are not independent human participants; historical outputs are not pooled as one validation sample. Controls check execution, not student fidelity.}
+\label{tab:simulation-studies}
+\end{table}
+
+The matched rewriting study compares unchanged tasks, a strong task-review-only rewrite and the same rewrite with eight saved learner attempts, using identical revision instructions, model and request limits. The informed arm has more input tokens and incurs earlier feedback-acquisition costs; equal request caps are not equal total compute. Task review hides version labels and precedes inspection of fresh outcomes. Coarse assistant coding examines applied mathematical actions and exact evidence, rather than the automated fine-method labels that showed weak calibration agreement.
+
+The final structural package audits nine original pipeline designs retrospectively, then compares original, specific design review and that review with an operational coverage audit on three inspected task-family cases. It has one excluded calibration case per revision arm, at most 15 stage requests per pipeline attempt and no quality-based delivery gate. Fresh evaluation additionally uses GPT-5.4, which is another model series but not independent human evidence. Prospective path definitions are hashed before collecting responses. The maximum is 294 requests for one final round; no further tuning follows its result. All case selection, feedback, source snapshots and failures are recorded in the canonical experiment artifacts.

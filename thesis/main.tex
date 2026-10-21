@@ -1,40 +1,94 @@
-\documentclass[11pt,a4paper]{article}
-\usepackage[margin=2.5cm]{geometry}
+\documentclass[11pt,oneside,openany,headsepline]{book}
+\usepackage[margin=1in,headheight=13.6pt]{geometry}
+
+\usepackage[T1]{fontenc}
+\usepackage{paralist}
+\usepackage{color}
+\usepackage{times}
+\usepackage{amsfonts}
+\usepackage{amsmath,amssymb}
+\usepackage{latexsym}
+\usepackage{graphicx}
+\usepackage{mydefs}
+\usepackage{fancyhdr}
 \usepackage{setspace}
 \usepackage{parskip}
 \usepackage{enumitem}
 \usepackage{cite}
-\usepackage{graphicx}
-\usepackage{hyperref}
-\usepackage{amsmath}
+\usepackage{xcolor}
 \usepackage{booktabs}
 \usepackage{array}
+\usepackage{tabularx}
 \usepackage{tikz}
 \usetikzlibrary{arrows.meta, positioning}
-\setstretch{1.1}
+\usepackage[hypertexnames=false,colorlinks=true,linkcolor=blue!60!black,citecolor=blue!60!black,urlcolor=blue!60!black]{hyperref}
+\setstretch{1.15}
+\emergencystretch=1.5em
 
 \graphicspath{{figures/}}
 
+\renewcommand{\MakeUppercase}{\scshape}
+
+\fancyhead{}
+\fancyhead[RO, LE]{\leftmark}
+\fancyfoot{}
+\fancyfoot[RO, LE]{\thepage}
+
 \begin{document}
 
-\begin{center}
-    {\LARGE \textbf{Master Thesis}}\\[0.3cm]
-    {\large \textbf{PF Generation: Can an LLM pipeline with simulated-student-driven refinement generate Productive Failure exercises that approach expert quality?}}
-\end{center}
+\pagestyle{empty}
 
-\vspace{1cm}
+\fancypagestyle{plain}{
+  \renewcommand{\headrulewidth}{0.0pt}
+  \fancyfoot{}
+  \fancyhead{}
+}
 
-\input{sections/00-proposal}
+\input{title.tex}
+\cleardoublepage
 
-\clearpage
+\input{abstract.tex}
+\input{ack.tex}
+\cleardoublepage
+\newpage
+
+\fancypagestyle{plain}{
+  \renewcommand{\headrulewidth}{0.0pt}
+  \fancyfoot{}
+  \fancyfoot[RO, LE]{\thepage}
+  \fancyhead{}
+}
+
+\pagestyle{fancy}
+\pagenumbering{Roman}
+
+\tableofcontents
+
+\listoffigures
+\cleardoublepage
+
+\listoftables
+\cleardoublepage
+
+\newpage
+
+\pagenumbering{arabic}
 
 \input{sections/01-introduction}
 \input{sections/02-background}
-\input{sections/03-method}
-\input{sections/04-experiments}
-\input{sections/05-results}
+\input{sections/03-oneshot-replication}
+\input{sections/04-structpf-method}
+\input{sections/05-eval-framework}
+\input{sections/07-results}
+\input{sections/08-discussion}
 
-\bibliographystyle{unsrt}
+\appendix
+\input{sections/appendix-a-mcq}
+\input{sections/appendix-b-rubrics}
+\input{sections/appendix-b-structpf-prompts}
+
+\bibliographystyle{plain}
 \bibliography{references}
 
 \end{document}
+

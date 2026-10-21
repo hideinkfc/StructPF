@@ -1,21 +1,178 @@
 \section{Results and Discussion}
 
-% TODO: Present results
+\subsection{Completed MCQ Error-Pathway Study}
 
-\subsection{Automatic Evaluation}
+\paragraph{No condition wins on everything.} Table~\ref{tab:mcq-results} shows that retrieval-augmented generation has the highest normalized reference match, 0.353 against 0.236 for the direct expert baseline, about a 50\% relative gain in this secondary metric. Its conditional pathway diversity is 0.776, below the random misconception control's 0.855. Misconception-conditioned conditions generally have higher diversity and lower reference alignment. These objectives do not identify a single winner, and neither measures PF outcomes.
 
-\subsection{Human Expert Evaluation}
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{@{}lcccccc@{}}
+\toprule
+\textbf{Condition} & \textbf{Incorr.} & \textbf{Plaus.} & \textbf{Coher.} & \textbf{Divers.} & \textbf{$n$} & \textbf{PM} \\
+\midrule
+01 Basic, direct              & 0.961 & 1.455 & 0.927 & 0.725 & 193 & 0.237 \\
+02 Expert, direct             & 0.951 & 1.455 & 0.932 & 0.747 & 192 & 0.236 \\
+03 Pedagogical, direct        & 0.944 & 1.433 & 0.933 & 0.726 & 184 & 0.229 \\
+04 Expert, CoT                & 0.925 & 1.354 & 0.918 & 0.785 & 179 & 0.202 \\
+05 Expert, self-critique      & 0.911 & 1.422 & 0.918 & 0.762 & 185 & 0.238 \\
+06 Lookalike, direct          & 0.943 & 1.447 & 0.916 & 0.760 & 185 & 0.235 \\
+07 Expert, MC random          & 0.929 & 1.221 & 0.944 & \textbf{0.855} & 172 & 0.167 \\
+08 Expert, MC names           & 0.869 & 1.141 & 0.938 & 0.827 & 153 & 0.168 \\
+09 Expert, MC causal          & 0.903 & 1.176 & 0.949 & 0.811 & 153 & 0.171 \\
+10 Pedagogical, CoT, MC causal & 0.862 & 1.129 & \textbf{0.950} & 0.805 & 151 & 0.167 \\
+11 Few-shot RAG               & \textbf{0.961} & 1.402 & 0.923 & 0.776 & 190 & \textbf{0.353} \\
+\bottomrule
+\end{tabular}
+\caption{Saved August structured results: 600 question-runs per condition from 200 questions and 3 runs. Incorrectness, coherence, diversity, and normalized PM are in $[0,1]$; model-estimated plausibility is in $[0,2]$. Higher values favor each metric's own objective, not overall PF quality. $n$ counts question-runs with measurable diversity, out of 600. Unknown correctness judgments are excluded from the incorrectness rate.}
+\label{tab:mcq-results}
+\end{table}
 
-\subsection{Ablation Analysis}
+Figure~\ref{fig:tradeoff} makes the shape of the trade-off visible. The conditions fall into two clusters with almost no overlap. The unconstrained prompts sit high on plausibility and reference agreement and low on diversity. The misconception-conditioned prompts sit low on plausibility and reference agreement and high on diversity. The few-shot retrieval condition sits alone, high on agreement and mid on diversity, which is what makes it interesting.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.85\textwidth]{mcq_pm_pathway_tradeoff.png}
+\caption{Reference agreement against pathway diversity. Conditions separate into an unconstrained cluster (high agreement, low diversity) and a misconception-conditioned cluster (low agreement, high diversity). Few-shot retrieval sits off both clusters.}
+\label{fig:tradeoff}
+\end{figure}
+
+\paragraph{Interpreting the trade-off.} Reference imitation and diverse error hypotheses are different objectives. A possible explanation is that supplied labels push the generator away from its default mistakes, increasing measured variety but reducing the plausibility judge's scores. The experiment does not establish actual student frequencies or a causal mechanism for this pattern.
+
+For PF design, useful candidate pathways must ultimately lead to distinct approaches being elicited. Conditional model-judged diversity is a design signal, not that behavioral outcome. PM is only secondary reference alignment: matching an Eedi option does not independently establish plausibility or PF usefulness.
+
+\paragraph{The combined condition has lower measured incorrectness.} Condition 10 stacks a pedagogical role, chain-of-thought reasoning, and causal misconception conditioning. Its incorrectness rate is 0.862 against 0.951 for the plain expert baseline, where higher means more wrong answers among decisive cases. Both conditions leave approximately 63\% of distractors unknown to the checker. The measured difference should therefore not be generalized to all generated answers or described as proof that more guidance always worsens generation.
+
+Prompt demands competing with the basic requirement to produce a wrong answer are one possible explanation, not a verified cause. Condition 10 has the highest path-coherence rate, 0.950, but conditions 7 and 9 are within 0.006 while scoring higher on measured incorrectness. These are descriptive comparisons of this saved study.
+
+\paragraph{Pathway diversity is conditional on usable pathways.} The saved artifact counts measured question-runs, not unique questions. The direct baseline has measurable diversity in 192 of 600 question-runs; conditions 8, 9, and 10 have 153, 153, and 151. Thus condition 8's diversity of 0.827 describes about one quarter of its runs, while the baseline's 0.747 describes about one third. The screening gate requires decisive incorrectness, plausibility score at least 1, and coherence; it does not validate student behavior. Unmeasurable diversity remains unavailable, not zero.
+
+\subsection{Historical Direct PF Diagnostic}
+\label{sec:results-pf}
+
+\paragraph{The agent review identifies the same weakness in all three conditions.} The historical 21-exercise pool received one agent-review pass on five rubric dimensions. Multiple Representations and Solutions is 1.00 out of 3.00 in every condition, the minimum score. These are not human participant ratings, even though a blinded participant-scoring interface exists.
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{@{}lccccc c@{}}
+\toprule
+\textbf{Condition} & \textbf{APK} & \textbf{SSC} & \textbf{AE} & \textbf{MR} & \textbf{OE} & \textbf{Total} \\
+\midrule
+V1 Blind            & 2.29 & 2.00 & 2.00 & 1.00 & 1.71 & 9.00 \\
+V2 Eedi-grounded    & 2.14 & 1.57 & 2.00 & 1.00 & 1.43 & 8.14 \\
+V3 LLM-inferred     & 2.29 & 2.00 & 2.14 & 1.00 & 1.86 & 9.29 \\
+\bottomrule
+\end{tabular}
+\caption{Historical agent-review scores over 21 exercises, seven per condition. APK = activation of prior knowledge, SSC = challenge calibration, AE = affective engagement, MR = multiple representations and solutions, OE = open-endedness. Dimensions range from 1 to 3 and totals from 5 to 15; higher means a stronger agent rating, not more measured learning.}
+\label{tab:pf-results}
+\end{table}
+
+This diagnostic suggested that fluent wording and a plausible context were not enough: the review found predominantly procedural tasks. It motivated separating design, data checks, and writing. The floor is a property of this review and pool, not evidence that every direct method fails or that no student could produce a distinct approach.
+
+\paragraph{Misconception labels did not lift the approach-variety rating in this pool.} V2 has the lowest total, 8.14, against V1's 9.00 and V3's 9.29 out of 15. One agent pass over seven tasks per condition does not support a reliable ordering. The clearer diagnostic observation is that MR did not move, not that grounding was proven harmful.
+
+A label such as ``confuses part-to-part with part-to-whole ratios'' does not specify an action on concrete data. This motivated inspecting possible approaches and designing data before prose. The current resource-grounded route also includes correctly learned methods that become insufficient; it does not force every candidate approach to be a wrong-answer pathway.
+
+\subsection{Later Paper-Setting Benchmarks}
+
+The September benchmarks do not support a PF-quality advantage for the historical mathematical-plan pipeline. Table~\ref{tab:paper-benchmark} separates the original v1 generation run, exploratory v4 revision, and v2.1 rerating of the same v4 tasks. Scores are conditional on ready tasks; unproduced tasks are not assigned zero.
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{@{}lccccc@{}}
+\toprule
+\textbf{Condition} & \textbf{v1 ready} & \textbf{v1 total} & \textbf{v4 ready} & \textbf{v4 total} & \textbf{v4 rerated} \\
+\midrule
+V1       & 30/30 & 14.43 & 30/30 & 14.40 & 14.03 \\
+V2       & 30/30 & 14.27 & 30/30 & 14.03 & 14.00 \\
+V3       & 30/30 & 14.07 & 30/30 & 14.20 & 13.83 \\
+PIPELINE & 17/30 & 10.47 & 22/30 & 11.82 & 10.91 \\
+\bottomrule
+\end{tabular}
+\caption{Historical paper-setting generation comparisons, not the October 10 default. Ready counts are delivered tasks per scheduled attempts. Totals range from 5 to 15; higher means a stronger Luna rubric judgment. The last column is the anchor-preserving v2.1 rerating of the same 112 ready v4 tasks, not new generation or human evaluation.}
+\label{tab:paper-benchmark}
+\end{table}
+
+The v4 pipeline delivered 22 of 30 tasks, versus 17 in v1, but rated below the concurrent direct V1 baseline under both model rubrics. Its eight non-ready attempts comprise one planning-review stop and seven API timeouts, not eight confirmed bad tasks. The v2.1 totals differ by 3.12 points in V1's favor on 30 versus 22 rated tasks. Different ready subsets, post-hoc prompt changes, and the same model generating and judging limit interpretation. The high direct scores also demonstrate why the first pool's MR floor cannot be generalized to all direct generation. No benchmark result measures student approaches or learning.
+
+\subsection{Current Data-and-Check Development Evidence}
+
+With the final October 10 claim-policy prompt frozen, three saved designs produced three ready tasks using five data-stage calls and three writer calls. The two extra data calls were schema retries for omitted textual judgments; there were no numerical repairs. The three-call data budget was respected. Four preliminary live runs used eight calls separately and include a preserved blocked fair-division writer output. Neither batch is fresh end-to-end or held-out generation.
+
+Offline continuation checks accepted the same eight saved proposals, and deliberately altered values were repaired by mock restoration without changing conditions or quantity metadata. These are software replays, not model-generated new exercises. The affected suite passed 551 software tests, not the full repository suite. Final live outputs contain three textual \texttt{holds} judgments; uncertain and known-failure routing was tested in software, not balanced live judgment calibration. Exact calculations check supplied predicates, not their independent alignment with a natural-language requirement.
+
+\paragraph{Delivery is not yet PF quality.} Qualitative assistant inspection found three remaining design concerns. The speed task compares fixed journeys rather than requiring the expert task's unknown bicycle-handover decision. The consistency task invites measure invention but announces equal averages and extremes. The fair-division task supplies fair-share and successful-allocation values, reducing what students must establish. These are design diagnoses, not human ratings or observed student failures. D2b is frozen for its agreed implementation scope; the next proposed work is to trace solution-revealing information through the design, data, and writer, improve the task without hiding necessary givens, and test elicited approaches.
+
+\subsection{LLM-Student Simulation and Feedback Findings}
+\label{sec:student-feedback-results}
+
+\paragraph{Prior-learning records steer method use, not necessarily mastery.}
+On two consistency tasks, actual averaging appeared in 8/12 usual-prerequisite responses and 1/12 mean-omitted responses. Adding variance and standard deviation to the record changed actual application from 0/12 to 12/12; ordinary solvers also used these methods in 12/12. These are source-quoted assistant judgments of calculations, not keyword counts. Method names can prime existing model knowledge, so the contrast is not a demonstration of learning. The added-method fair-division condition performed a relevant procedure in 7/12 responses, mentioned one without performance in 4/12, and left one truncated response unknown. Only three of the seven applications had supported written mathematics. Method use and correct execution are different outcomes.
+
+\paragraph{Automated fine-method classification was unreliable.}
+A second label-hidden assistant reader agreed with the original on exact method sets in 42/48 prior attempts and mathematics in 45/48. A separate automated panel reviewer agreed on exact method sets in only 16/48 and mathematics in 37/48. Quotations also sometimes failed source matching. The later diagnostic retains usable coding, isolates unverified findings as unknown and does not use the fine labels as a validated diversity score. Agreement between assistant readers is not independent human agreement.
+
+\paragraph{Raw attempt feedback did not outperform strong task review.}
+The six-case matched rewriting study produced eighteen task versions and 216 fresh attempts, of which 209 were complete and seven were token-truncated. Label-hidden task review found five original, six ordinary-revision and four attempt-informed tasks meeting the predefined conjunction of supported mathematics, preserved target, accessible start, undisclosed central method and consequential choice. The informed-minus-ordinary margin was $-2$, missing the predefined $+2$ exploratory continuation rule. One informed task broadened fairness to arbitrary additive valuations without ensuring value divisibility; another weakened the demand for a fair procedure. This does not prove general inferiority: case selection, a single stochastic rewrite per arm and assistant ratings limit the comparison.
+
+On speed tasks, fresh learner-role responses used the same whole-journey method across versions, and the earlier timestamp misreading did not recur on the originals. Both revisions clarified timings but also changed data, so neither an incremental clarity advantage nor a causal wording effect was established. Across all six cases, supported learner-role mathematics occurred in 43/48 original, 36/48 ordinary and 37/48 informed attempts. Those counts are not PF quality or student success rates: making a task harder can lower correctness without improving productive failure. Additional feedback input increased recorded fresh revision tokens from 13,572 to 60,365, excluding prior acquisition of the learner work.
+
+\paragraph{Predicting a path differs from enacting it.}
+On the source-normalized Kapur bicycle task, 24 learner-role attempts produced 19 single-variable algebra applications and six numerical trial sequences, with one response using both. Twenty-one finished correctly, two unfinished and one incorrectly. Seven showed rejected trials or an algebraic error before the final result. All four ordinary solvers used correct algebra. No actual learner ratio-partition, LCM-partition or spatial diagram appeared, although both prediction-only calls anticipated those categories. The learner union covered four of nine source categories, but only two were algorithms. Clearing fractions using a common denominator was initially misclassified as an LCM partition strategy; the original and corrected codings are both retained.
+
+This reference demonstrates that the learner prompts did not always produce direct expert solutions, but it does not reproduce an empirical class distribution. Normalized individual text calls differ from the paper's group work, and routine rejected trial guesses do not establish conceptual failure or later learning. Missing paths can reflect the task, model competence, prompt framing or limited sampling.
+
+\paragraph{Intended-path coverage is a traceable diagnostic.}
+The retrospective nine-task audit links each saved candidate action to eight learner-role responses, with 38 path/reference definitions and 304 path-attempt classifications. All 24 pipeline speed attempts used whole-journey rates, while none enacted the expected stage-average approach. All 24 consistency attempts calculated range, but no attempt enacted the intended signed-cancellation or squared-departure route. Other valid measures and local allocation procedures appeared. Reached, not observed and unknown outcomes must therefore be read alongside novel approaches and simulator limitations, not as a quality gate.
+
+\paragraph{Final structural feedback did not establish an added advantage.}
+One final round compared original tasks, restructuring from a specific task-only review, and the same restructuring with path-coverage evidence on three selected directions. All six revised tasks were delivered, with prospective definitions frozen before 162 fresh requests; 158 responses were complete and four token-truncated. Twelve execution controls were separate. Label-hidden student-text-only review gives the outcomes in Table~\ref{tab:final-path-feedback}. Coverage feedback's $+1$ design margin misses the predefined $+2$ continuation requirement. The difference depends on a tiny literal-decimal inconsistency in the review-only division task, not a general lack of feasible fair allocation. If the values are interpreted as approximations, the comparison becomes a tie. No ratings were silently repaired.
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{@{}p{5.6cm}ccc@{}}
+\toprule
+\textbf{Task-review outcome} & \textbf{Original} & \textbf{Review only} & \textbf{Review + coverage} \\
+\midrule
+Mathematics supported & 3/3 & 2/3 & 3/3 \\
+Target preserved & 3/3 & 3/3 & 3/3 \\
+Accessible start & 3/3 & 3/3 & 3/3 \\
+Central discovery not supplied & 3/3 & 3/3 & 3/3 \\
+Consequential mathematical choice & 2/3 & 3/3 & 3/3 \\
+All predefined design requirements & 2/3 & 2/3 & 3/3 \\
+\bottomrule
+\end{tabular}
+\caption{Final bounded computational pilot, based on label-hidden assistant review, not human ratings or a validated PF score. One exact-input discrepancy affects review-only mathematics; intended task feasibility survives it. The small selected sample does not support statistical or general superiority claims.}
+\label{tab:final-path-feedback}
+\end{table}
+
+Both new speed tasks introduce a genuine route and maximal-rest decision, unlike the fixed-rate original. However, all fresh speed replies use the aggregate distance/time idea; intended leg-rate heuristics and numerical searches remain unobserved. Task decision space and observed method variety are therefore different outcomes. Consistency continues to admit alternative center and departure measures. Exact operational definitions may not count a median-centered or unnormalized calculation as the specified mean-based average; valid alternatives are recorded rather than treated as errors.
+
+The clearest transfer finding is model-conditional reachability. On the unchanged division task, its intended trimming structure appears in 0/8 GPT-4.1 learner replies and 4/4 GPT-5.4 learner replies. Substantial execution can still contain errors or unsupported guarantees, so reach is not success. Because the task is unchanged, absence in one simulator cohort does not identify a task defect or predict a human frequency. The new model series remains in the same provider lineage and is not independent classroom validation.
+
+\paragraph{Completed boundary and educational implication.}
+The simulation/feedback component ends as a bounded computational study: source-quoted intended-path diagnosis, observed prompt sensitivity, reference-category limitations and two matched feedback comparisons without an established general added benefit. It does not end as a validated artificial class or a learning-outcome system. The optional feedback hook and offline reports are implemented and tested, while global prompt promotion is withheld. The final campaign used 238 of 294 maximum requests, including calibration. Real first-attempt collections, empirically grounded profile mixtures, independent educational ratings and equivalent consolidation with retention/transfer measures are future studies, not outcomes inferred from these model traces.
 
 \subsection{Limitations of Automated Misconception-ID Matching}
 \label{sec:mc-recall-limitation}
 
-% TODO: expand from bullet points
-\begin{itemize}
-    \item Attempted embedding-based ID matching: generator free-text label $\to$ Eedi bank (2,587 entries) $\to$ check top-3 cosine match against human-assigned ID
-    \item Result: 0\% exact-ID matches across 93 labels (11 conditions), despite mean cos = 0.82
-    \item Cause: lexically different surface forms for same error concept (e.g., ``Confuses division with multiplication'' vs.\ ``uses the same operation rather than the inverse'')
-    \item Implication: free-form misconception labeling resists automated taxonomy alignment without human annotation or structured output
-    \item Decision: dropped as a metric; report Validity, Self-label Fidelity, Diversity as primary F2 measures
-\end{itemize}
+We initially tried to check whether a generated distractor targeted the same misconception as the human-written one, by embedding the generator's free-text misconception label and matching it against the 2{,}587-entry Eedi bank. The idea was to take the top three cosine matches and see whether the human-assigned ID was among them.
+
+It did not work. Across 93 labels drawn from all eleven conditions, the exact-ID match rate was 0\%, even though the mean cosine similarity was 0.82. The reason is that the same error concept is written in lexically different ways. A generator writing ``confuses division with multiplication'' and an Eedi label reading ``uses the same operation rather than the inverse'' describe the same student behaviour and embed to a similar but not identical place, and top-3 retrieval over a bank of that size is not precise enough to recover the exact entry.
+
+The lesson is that free-form misconception labelling resists automated taxonomy alignment without either human annotation or a constrained output vocabulary. We dropped the metric rather than report a number we could not defend, and rely instead on the answer-level and pathway-level measures, which do not depend on aligning label text.
+
+\subsection{Threats to Validity}
+
+\paragraph{Shared generator and judge.} The completed MCQ study uses GPT-4.1-mini for generation and judging; later paper-setting PF comparisons use GPT-5.6-luna for both. Rationale blinding and method-blind task inputs remove some leakage, not shared-model bias. Rubric revisions remain separately versioned rather than replacing the original scores.
+
+\paragraph{No completed independent human PF validation.} The 21-exercise scores come from one agent review. Its floor finding still depends on that reviewer's interpretation. Later model ratings do not supply independent participant agreement, and none of these comparisons tests productive failure, consolidation, or learning with students.
+
+\paragraph{Plausibility and continuation are screening decisions.} The 0--2 plausibility score has not been validated against student choices; a score of at least 1 is broad screening only. Similarly, accepted D2b data can contain unverified warnings, and model-judged textual support is not proof. The final live textual judgments all say \texttt{holds}, leaving live discrimination of false or unsupported claims unestablished.
+
+\paragraph{Coverage and provenance.} The historical MR floor concerns one Grade 7 ratio pool. Later development includes speed, consistency, and fair division, but those fixed-design continuations are not topic-general validation. Repeated offline phases reuse eight inputs, and the five-question simulation check was adjusted in sample. Neither repeated replay nor completion counts create independent student evidence.
+
+\paragraph{Simulator and path-codebook dependence.} The later studies condition an LLM on hypothetical prior instruction, not a diagnosed student's knowledge. Method priming, memorized task structures, short individual responses, model defaults and the choice of operational definitions can all affect path coverage. The reference study compares normalized text attempts with published group artifacts rather than predicting individual choices. A failed or unobserved path must not be assigned a causal task defect solely from its count. Successful-looking student prose and exact quote matching likewise do not establish cognition or learning.

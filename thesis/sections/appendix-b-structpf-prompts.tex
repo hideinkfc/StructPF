@@ -1,0 +1,118 @@
+\section{StructPF Prompt Structure}
+\label{app:structpf-prompts}
+
+Tables~\ref{tab:app-structpf-2a-propose} to~\ref{tab:app-structpf-3-write} summarize the StructPF prompts for Stages~2a, 2b, and~3, one table per prompt. Each prompt has a system message with the rules and output format, and a user message with the case-specific inputs. Stage~1 is a database query and has no prompt. The full text is in \texttt{src/generation/prompts/} (\texttt{design\_briefs.yaml} and \texttt{design\_data.yaml}).
+
+\begin{table}[!htb]
+\centering
+\caption[Stage 2a brief proposal prompt structure (\texttt{PROPOSE\_BRIEF})]{Stage~2a brief proposal prompt structure (\texttt{PROPOSE\_BRIEF}).}
+\label{tab:app-structpf-2a-propose}
+\footnotesize
+\setlength{\tabcolsep}{4.5pt}
+\renewcommand{\arraystretch}{1.16}
+\begin{tabular}{@{} >{\raggedright\arraybackslash}p{0.20\textwidth} >{\raggedright\arraybackslash}p{0.72\textwidth} @{}}
+\toprule
+\textbf{Field} & \textbf{Summary} \\
+\midrule
+Purpose & Propose one internal design brief that gives students a challenge without stating the target concept. \\
+Key rules & Name the intended discovery and one plausible first answer before writing the student-facing goal. \newline Write the goal as a decision or construction students must make, not as a demonstration of the key idea. \newline Keep the needed data visible and do not announce the target conclusion. \newline Describe at least one defensible route to the goal. \\
+Inputs & \texttt{target\_concept}, \texttt{topic}, \texttt{grade}, \texttt{subject}, \texttt{prior\_context}; \texttt{rubric\_guidance} and \texttt{proposal\_feedback} (system) \\
+Output & JSON brief with \texttt{goal}, \texttt{key\_idea}, \texttt{naive\_answer}, \texttt{situation\_and\_rules}, \texttt{student\_question}, \texttt{approaches}, \texttt{successful\_route}, \texttt{limitation}, and \texttt{number\_requirements} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[!htb]
+\centering
+\caption[Stage 2a brief selection prompt structure (\texttt{SELECT\_BRIEF})]{Stage~2a brief selection prompt structure (\texttt{SELECT\_BRIEF}).}
+\label{tab:app-structpf-2a-select}
+\footnotesize
+\setlength{\tabcolsep}{4.5pt}
+\renewcommand{\arraystretch}{1.16}
+\begin{tabular}{@{} >{\raggedright\arraybackslash}p{0.20\textwidth} >{\raggedright\arraybackslash}p{0.72\textwidth} @{}}
+\toprule
+\textbf{Field} & \textbf{Summary} \\
+\midrule
+Purpose & Choose the most promising candidate brief for these learners, or name the concern that most needs revision. \\
+Key rules & A successful familiar route is not a rejection reason. \newline Flag a candidate whose student-facing fields announce the discovery, prescribe the target claim, or presuppose it. \newline Do not invent missing assumptions to rescue a candidate. \newline If every candidate discloses the idea, choose the best and name the specific revision needed. \\
+Inputs & \texttt{candidates}, \texttt{target\_concept}, \texttt{grade}, \texttt{prior\_context}; \texttt{rubric\_guidance} (system) \\
+Output & Selected candidate, reasons, and \texttt{main\_concern} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[!htb]
+\centering
+\caption[Stage 2a quantity translation prompt structure (\texttt{TRANSLATE\_BRIEF})]{Stage~2a quantity translation prompt structure (\texttt{TRANSLATE\_BRIEF}).}
+\label{tab:app-structpf-2a-translate}
+\footnotesize
+\setlength{\tabcolsep}{4.5pt}
+\renewcommand{\arraystretch}{1.16}
+\begin{tabular}{@{} >{\raggedright\arraybackslash}p{0.20\textwidth} >{\raggedright\arraybackslash}p{0.72\textwidth} @{}}
+\toprule
+\textbf{Field} & \textbf{Summary} \\
+\midrule
+Purpose & Encode the selected brief as technical quantities and checkable conditions, without redesigning it. \\
+Key rules & Preserve the whole goal, assumptions, and allowed actions. \newline Do not shrink an allocation to one recipient or replace an invention goal with a prescribed formula. \newline Declare the given inputs and derived quantities that the relationships need. \newline Instantiate one concrete case with fixed positive list lengths when counts are open. \\
+Inputs & \texttt{design\_brief}, \texttt{selection}, \texttt{target\_concept}, \texttt{grade}, \texttt{prior\_context}, \texttt{translation\_feedback}; \texttt{quantity\_contract} and \texttt{checker\_contract} (system) \\
+Output & JSON quantity objects and an optional \texttt{prior\_contrast} intent, with \texttt{status} and \texttt{reason} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[!htb]
+\centering
+\caption[Stage 2b number proposal prompt structure (\texttt{PROPOSE\_DATA})]{Stage~2b number proposal prompt structure (\texttt{PROPOSE\_DATA}).}
+\label{tab:app-structpf-2b-propose}
+\footnotesize
+\setlength{\tabcolsep}{4.5pt}
+\renewcommand{\arraystretch}{1.16}
+\begin{tabular}{@{} >{\raggedright\arraybackslash}p{0.20\textwidth} >{\raggedright\arraybackslash}p{0.72\textwidth} @{}}
+\toprule
+\textbf{Field} & \textbf{Summary} \\
+\midrule
+Purpose & Choose concrete numbers, and calculator conditions that check them, for the selected design. \\
+Key rules & Choose numbers only; preserve the goal, relationships, allowed actions, and question. \newline Link each essential requirement to a condition with an executable calculation and predicate. \newline Use lowercase quantity names and finite numeric values. \\
+Inputs & \texttt{design\_brief}, \texttt{requirements}, \texttt{student\_context}, \texttt{prior\_context}, \texttt{feedback} \\
+Output & JSON with \texttt{quantities}, \texttt{values}, and \texttt{conditions} (statement, requirement indices, calculation, reasoning) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[!htb]
+\centering
+\caption[Stage 2b number repair prompt structure (\texttt{REPAIR\_DATA})]{Stage~2b number repair prompt structure (\texttt{REPAIR\_DATA}).}
+\label{tab:app-structpf-2b-repair}
+\footnotesize
+\setlength{\tabcolsep}{4.5pt}
+\renewcommand{\arraystretch}{1.16}
+\begin{tabular}{@{} >{\raggedright\arraybackslash}p{0.20\textwidth} >{\raggedright\arraybackslash}p{0.72\textwidth} @{}}
+\toprule
+\textbf{Field} & \textbf{Summary} \\
+\midrule
+Purpose & Adjust only the numerical values after the calculator reports exact results. \\
+Key rules & Keep names, units, list sizes, design, formulas, and predicates unchanged. \newline Do not remove a failed condition or change the successful route to pass a check. \newline Return actual numbers, not formulas. \\
+Inputs & \texttt{design\_brief}, \texttt{proposal} (frozen), \texttt{feedback} (exact results) \\
+Output & JSON \texttt{values} object containing every original name \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[!htb]
+\centering
+\caption[Stage 3 task writing prompt structure (\texttt{WRITE\_DATA\_TASK})]{Stage~3 task writing prompt structure (\texttt{WRITE\_DATA\_TASK}).}
+\label{tab:app-structpf-3-write}
+\footnotesize
+\setlength{\tabcolsep}{4.5pt}
+\renewcommand{\arraystretch}{1.16}
+\begin{tabular}{@{} >{\raggedright\arraybackslash}p{0.20\textwidth} >{\raggedright\arraybackslash}p{0.72\textwidth} @{}}
+\toprule
+\textbf{Field} & \textbf{Summary} \\
+\midrule
+Purpose & Write the student-facing task from the verified setup and checked data. \\
+Key rules & Keep the situation, units, and rules needed to define the problem. \newline Withhold teacher-only discovery content and record each withheld item with its source and quote. \newline Always return a complete task; unresolved concerns go to \texttt{blocking\_issues}, not an empty task. \newline A ready status means a draft was produced, not that it is validated. \\
+Inputs & \texttt{student\_context}, \texttt{prior\_context}, \texttt{student\_draft}, \texttt{do\_not\_state}, \texttt{check}, \texttt{proposal} \\
+Output & JSON with \texttt{status}, \texttt{blocking\_issues}, \texttt{title}, \texttt{body}, \texttt{question}, and a \texttt{withheld} list (kind, source, quote, reason) \\
+\bottomrule
+\end{tabular}
+\end{table}
