@@ -18,27 +18,27 @@ HEAD_STYLE = "-|>,head_length=0.42,head_width=0.26"
 
 ROWS = [
     {
-        "title": "Reading the Task",
+        "title": "(a) Reading the Task",
         "principle": "Does not see the solver\u2019s attempts",
         "boxes": [
             (WHITE, "Task + Skills + Target", "student task, listed\nskills, target concept", 1),
             (PROC, "Task Judge", "quotes the task,\nchecks with calculator", 1),
             (
                 WHITE,
-                "Four Verdicts",
+                "Four Outcomes",
                 "target alignment, mathematical validity,\naccessibility, room for invention",
                 2,
             ),
         ],
     },
     {
-        "title": "Trying Familiar Methods",
+        "title": "(b) Trying Familiar Methods",
         "principle": "Only the solver is blind to the target",
         "boxes": [
             (WHITE, "Task + Skills", "target concept\nwithheld", 1),
             (PROC, "Solver", "2 to 4 complete attempts,\nfamiliar methods first", 1),
             (PROC, "Attempt Judge", "also sees the target,\nlabels each attempt", 1),
-            (WHITE, "Limits Verdict", "derived in code\nfrom the labels", 1),
+            (WHITE, "Limits Outcome", "derived in code\nfrom the labels", 1),
         ],
     },
 ]

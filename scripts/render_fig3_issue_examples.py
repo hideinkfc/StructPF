@@ -198,7 +198,7 @@ def render_fig3_3() -> None:
     ax.text(
         6.325,
         2.79,
-        "(b) GPT-4.1 Garden Task 2 (Score: 10.0 / 15)",
+        "(b) Generated Garden Task",
         fontsize=9.2,
         fontweight="bold",
         ha="center",
@@ -336,7 +336,7 @@ def render_fig3_3() -> None:
 # Figure 3.4: Wording Gives Away Target & Method (GPT-5 mini Basketball Task 21)
 # ==============================================================================
 def render_fig3_4() -> None:
-    W, H = 12.4, 3.20
+    W, H = 12.4, 3.10
     fig, ax = plt.subplots(figsize=(W, H), dpi=300)
     ax.set_xlim(0, W)
     ax.set_ylim(0, H)
@@ -344,69 +344,33 @@ def render_fig3_4() -> None:
 
     # Left container: Generated Task Excerpts
     draw_rect(
-        ax, 0.10, 0.10, 7.35, 3.00, facecolor=C_GROUP, edgecolor=C_BLACK, linewidth=0.95, zorder=1
+        ax, 0.10, 0.10, 6.75, 2.90, facecolor=C_GROUP, edgecolor=C_BLACK, linewidth=0.95, zorder=1
     )
     draw_rect(
-        ax, 0.10, 2.68, 7.35, 0.42, facecolor=C_SUB, edgecolor=C_BLACK, linewidth=0.85, zorder=2
+        ax, 0.10, 2.58, 6.75, 0.42, facecolor=C_SUB, edgecolor=C_BLACK, linewidth=0.85, zorder=2
     )
     ax.text(
-        3.775,
-        2.89,
-        "(a) GPT-5 mini Basketball Task 21 Prompt Text (Rubric Score: 15.0 / 15)",
+        3.475,
+        2.79,
+        "(a) Generated Basketball Prompt",
         fontsize=9.2,
         fontweight="bold",
         ha="center",
         va="center",
     )
 
-    # Small data card at left
-    draw_rect(
-        ax, 0.26, 0.26, 2.15, 2.26, facecolor=C_WHITE, edgecolor=C_BLACK, linewidth=0.85, zorder=2
-    )
-    draw_rect(
-        ax, 0.26, 2.14, 2.15, 0.38, facecolor=C_PROC, edgecolor=C_BLACK, linewidth=0.8, zorder=3
-    )
-    ax.text(
-        1.335,
-        2.33,
-        "Given Drill Data",
-        fontsize=8.5,
-        fontweight="bold",
-        ha="center",
-        va="center",
-        zorder=4,
-    )
-    ax.text(
-        1.335,
-        1.20,
-        "Drill A (Spot-Up 3s):\n"
-        "  6 min → 9 shots\n"
-        " 12 min → 18 shots\n"
-        " 18 min → 27 shots\n\n"
-        "Drill B (Off-Dribble):\n"
-        "  5 min → 8 shots\n"
-        " 10 min → 15 shots\n"
-        " 15 min → 22 shots",
-        fontsize=8.0,
-        color=C_DARK,
-        ha="center",
-        va="center",
-        linespacing=1.24,
-        zorder=4,
-    )
-
     # Three quoted giveaway boxes in the prompt
-    bx, bw = 2.56, 4.72
-    # Box 1: Classroom cue
+    bx, bw = 0.28, 6.39
+    # Box 1: Opening paragraph cue
     draw_rect(
-        ax, bx, 1.92, bw, 0.60, facecolor=C_WHITE, edgecolor=C_BLACK, linewidth=0.85, zorder=2
+        ax, bx, 1.84, bw, 0.60, facecolor=C_WHITE, edgecolor=C_BLACK, linewidth=0.85, zorder=2
     )
     ax.text(
-        bx + 0.14,
-        2.22,
-        'Body: "You have recently practiced computing unit rates...\n'
+        bx + 0.16,
+        2.14,
+        'Opening Paragraph: "You have recently practiced computing unit rates...\n'
         'not yet teaching you a formal rule for proportional relationships."',
-        fontsize=8.0,
+        fontsize=8.1,
         color=C_BLACK,
         ha="left",
         va="center",
@@ -414,13 +378,13 @@ def render_fig3_4() -> None:
         zorder=3,
     )
     # Box 2: Target giveaway
-    draw_rect(ax, bx, 1.12, bw, 0.64, facecolor=C_PROC, edgecolor=C_BLACK, linewidth=0.95, zorder=2)
+    draw_rect(ax, bx, 1.06, bw, 0.62, facecolor=C_PROC, edgecolor=C_BLACK, linewidth=0.95, zorder=2)
     ax.text(
-        bx + 0.14,
-        1.44,
+        bx + 0.16,
+        1.37,
         'Question Part 1: "For each drill (A, B, and C), decide whether\n'
         'the number of made 3s is proportional to the time."',
-        fontsize=8.1,
+        fontsize=8.2,
         fontweight="bold",
         color=C_BLACK,
         ha="left",
@@ -429,52 +393,51 @@ def render_fig3_4() -> None:
         zorder=3,
     )
     # Box 3: Method list giveaway
-    draw_rect(ax, bx, 0.26, bw, 0.70, facecolor=C_PROC, edgecolor=C_BLACK, linewidth=0.95, zorder=2)
+    draw_rect(ax, bx, 0.24, bw, 0.66, facecolor=C_PROC, edgecolor=C_BLACK, linewidth=0.95, zorder=2)
     ax.text(
-        bx + 0.14,
-        0.61,
-        'Question Part 2: "Possible representations include: unit-rate\n'
-        "calculations, tables of equivalent pairs, repeated addition,\n"
-        'number-line reasoning, or a sketched graph."',
-        fontsize=8.0,
+        bx + 0.16,
+        0.57,
+        'Question Part 2: "Possible representations include: unit-rate calculations,\n'
+        'tables of equivalent pairs, repeated addition, number-line reasoning, or a graph."',
+        fontsize=8.1,
         fontweight="bold",
         color=C_BLACK,
         ha="left",
         va="center",
-        linespacing=1.22,
+        linespacing=1.24,
         zorder=3,
     )
 
     # Arrows to right container
-    draw_arrow(ax, bx + bw, 2.22, 7.80, 2.22, lw=1.05)
-    draw_arrow(ax, bx + bw, 1.44, 7.80, 1.44, lw=1.05)
-    draw_arrow(ax, bx + bw, 0.61, 7.80, 0.61, lw=1.05)
+    draw_arrow(ax, 6.85, 2.14, 7.25, 2.14, lw=1.05)
+    draw_arrow(ax, 6.85, 1.37, 7.25, 1.37, lw=1.05)
+    draw_arrow(ax, 6.85, 0.57, 7.25, 0.57, lw=1.05)
 
-    # Right container: Diagnosis & Rubric Effect
+    # Right container: Why It Removes Student Invention
     draw_rect(
-        ax, 7.80, 0.10, 4.50, 3.00, facecolor=C_GROUP, edgecolor=C_BLACK, linewidth=0.95, zorder=1
+        ax, 7.25, 0.10, 5.05, 2.90, facecolor=C_GROUP, edgecolor=C_BLACK, linewidth=0.95, zorder=1
     )
     draw_rect(
-        ax, 7.80, 2.68, 4.50, 0.42, facecolor=C_SUB, edgecolor=C_BLACK, linewidth=0.85, zorder=2
+        ax, 7.25, 2.58, 5.05, 0.42, facecolor=C_SUB, edgecolor=C_BLACK, linewidth=0.85, zorder=2
     )
     ax.text(
-        10.05,
-        2.89,
-        "(b) Effect on Student vs. Rubric Judge",
+        9.775,
+        2.79,
+        "(b) Why It Removes Student Invention",
         fontsize=9.2,
         fontweight="bold",
         ha="center",
         va="center",
     )
 
-    rx, rw = 7.98, 4.14
+    rx, rw = 7.43, 4.69
     draw_rect(
-        ax, rx, 1.92, rw, 0.60, facecolor=C_WHITE, edgecolor=C_BLACK, linewidth=0.85, zorder=2
+        ax, rx, 1.84, rw, 0.60, facecolor=C_WHITE, edgecolor=C_BLACK, linewidth=0.85, zorder=2
     )
     ax.text(
         rx + rw / 2,
-        2.22,
-        "1. Classroom Practice Cue\nTells student which prior skill to apply",
+        2.14,
+        "1. Announces Prior Skill and Target\nTells students to apply unit rates to proportionality",
         fontsize=8.2,
         ha="center",
         va="center",
@@ -483,32 +446,31 @@ def render_fig3_4() -> None:
     )
 
     draw_rect(
-        ax, rx, 1.12, rw, 0.64, facecolor=C_WHITE, edgecolor=C_BLACK, linewidth=0.85, zorder=2
+        ax, rx, 1.06, rw, 0.62, facecolor=C_WHITE, edgecolor=C_BLACK, linewidth=0.85, zorder=2
     )
     ax.text(
         rx + rw / 2,
-        1.44,
-        "2. Target Concept Giveaway\nNames proportionality instead of asking\nfor an open comparison of consistency",
-        fontsize=8.1,
+        1.37,
+        "2. Turns Target into a Guided Step\nAsks a direct yes-or-no check instead of an open comparison",
+        fontsize=8.2,
         ha="center",
         va="center",
-        linespacing=1.22,
+        linespacing=1.24,
         zorder=3,
     )
 
-    draw_rect(ax, rx, 0.26, rw, 0.70, facecolor=C_MID, edgecolor=C_BLACK, linewidth=0.9, zorder=2)
+    draw_rect(ax, rx, 0.24, rw, 0.66, facecolor=C_MID, edgecolor=C_BLACK, linewidth=0.9, zorder=2)
     ax.text(
         rx + rw / 2,
-        0.61,
-        "3. Method Menu Rewards the Rubric\n"
-        "Removes invention, yet judge cites this list\n"
-        "to award MR = 3/3 and Total = 15.0 / 15",
-        fontsize=8.1,
+        0.57,
+        "3. Prescribes Five Representations\n"
+        "Removes student invention, yet rubric rewards the list",
+        fontsize=8.2,
         fontweight="bold",
         color=C_WHITE,
         ha="center",
         va="center",
-        linespacing=1.22,
+        linespacing=1.24,
         zorder=3,
     )
 
@@ -714,7 +676,7 @@ def render_fig3_6() -> None:
     ax.text(
         2.975,
         2.79,
-        "(a) GPT-5 mini Garden Task 28 Text (Score: 15.0 / 15)",
+        "(a) Generated Garden Task Text",
         fontsize=9.2,
         fontweight="bold",
         ha="center",
@@ -727,7 +689,7 @@ def render_fig3_6() -> None:
     ax.text(
         0.42,
         2.00,
-        "Paragraph 1 (Story Layout):\n"
+        "Opening Story:\n"
         '"three main parts in a row: a central rectangle, a right triangle attached\n'
         'to one long side... and a trapezoid attached to the opposite long side."',
         fontsize=8.0,
@@ -744,8 +706,8 @@ def render_fig3_6() -> None:
     ax.text(
         0.42,
         0.85,
-        "Measurement Bullets (Contradiction):\n"
-        "• Rectangle R: 12 ft (long) by 10 ft (wide).\n"
+        "Measurement List (Contradicts Story):\n"
+        "• Rectangle R: 12 ft (long) by 10 ft (short).\n"
         '• Right triangle T: "attached along one of the 10-ft sides of R"\n'
         '• Trapezoid P: "attached along the opposite 12-ft side of R"',
         fontsize=8.1,
@@ -781,12 +743,12 @@ def render_fig3_6() -> None:
     )
 
     # Central Rectangle R (12 ft horizontal x 10 ft vertical)
-    rx, ry, rw, rh = 8.18, 1.04, 1.86, 0.78
+    rx, ry, rw, rh = 7.82, 1.06, 2.08, 0.76
     draw_rect(ax, rx, ry, rw, rh, facecolor=C_SUB, edgecolor=C_BLACK, linewidth=1.0, zorder=3)
     ax.text(
         rx + rw / 2,
-        ry + rh / 2,
-        "Rectangle R\n12 ft × 10 ft",
+        ry + rh / 2 + 0.06,
+        "Rectangle R",
         fontsize=8.3,
         fontweight="bold",
         ha="center",
@@ -795,9 +757,19 @@ def render_fig3_6() -> None:
     )
     ax.text(
         rx + rw / 2,
-        ry - 0.14,
-        "Opposite 12-ft long side (empty)",
-        fontsize=7.7,
+        ry + rh / 2 - 0.14,
+        "12 ft (long) × 10 ft (short)",
+        fontsize=7.6,
+        color=C_DARK,
+        ha="center",
+        va="center",
+        zorder=4,
+    )
+    ax.text(
+        rx + rw / 2,
+        ry - 0.13,
+        "Opposite 12-ft long side (left empty)",
+        fontsize=7.6,
         color=C_DARK,
         ha="center",
         va="center",
@@ -808,15 +780,15 @@ def render_fig3_6() -> None:
     trap_pts = [
         (rx, ry + rh),
         (rx + rw, ry + rh),
-        (rx + rw - 0.15, ry + rh + 0.46),
-        (rx + 0.15, ry + rh + 0.46),
+        (rx + rw - 0.10, ry + rh + 0.46),
+        (rx + 0.10, ry + rh + 0.46),
     ]
     draw_poly(ax, trap_pts, facecolor=C_PROC, edgecolor=C_BLACK, linewidth=0.95, zorder=3)
     ax.text(
         rx + rw / 2,
         ry + rh + 0.23,
-        "Trapezoid P (12-ft base)",
-        fontsize=7.8,
+        "Trapezoid P (12-ft side)",
+        fontsize=7.6,
         fontweight="bold",
         ha="center",
         va="center",
@@ -824,32 +796,32 @@ def render_fig3_6() -> None:
     )
 
     # Left Triangle T on 10-ft short side (adjacent, NOT opposite!)
-    tri_pts = [(rx, ry), (rx, ry + rh), (rx - 0.82, ry)]
+    tri_pts = [(rx, ry), (rx, ry + rh), (rx - 0.74, ry)]
     draw_poly(
         ax, tri_pts, facecolor=C_PROC, edgecolor=C_BLACK, linewidth=0.95, linestyle="--", zorder=3
     )
     ax.text(
-        6.98,
-        1.62,
-        "Triangle T\n(10-ft base\non short side)",
-        fontsize=7.8,
+        6.92,
+        1.64,
+        "Triangle T\n(on 10-ft\nshort side)",
+        fontsize=7.6,
         fontweight="bold",
         ha="center",
         va="center",
         zorder=4,
     )
 
-    # Callout on right inside white box
+    # Callout on right inside white box pointing to the 90-degree corner
     ax.text(
-        11.08,
-        1.56,
-        "10-ft side and\n12-ft side are\nadjacent (90°),\nnot opposite!",
-        fontsize=8.2,
+        11.02,
+        1.60,
+        "10-ft and 12-ft sides\nmeet at a 90° corner,\nso T and P are adjacent,\nnot on opposite sides",
+        fontsize=7.8,
         fontweight="bold",
         color=C_BLACK,
         ha="center",
         va="center",
-        linespacing=1.26,
+        linespacing=1.24,
         zorder=4,
     )
 
@@ -859,8 +831,8 @@ def render_fig3_6() -> None:
     ax.text(
         9.25,
         0.44,
-        "Judge logs the side mismatch as a concern, yet still awards 15.0 / 15",
-        fontsize=8.3,
+        "Result: Contradictory layout, yet rubric judge still awards a high score",
+        fontsize=8.2,
         fontweight="bold",
         color=C_WHITE,
         ha="center",

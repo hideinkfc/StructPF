@@ -1,11 +1,11 @@
-\section{StructPF Prompt Structure}
+\section{\textsc{StructPF} Prompt Structure}
 \label{app:structpf-prompts}
 
-Tables~\ref{tab:app-structpf-2a-propose} to~\ref{tab:app-structpf-3-write} summarize the StructPF prompts for Stages~2a, 2b, and~3, one table per prompt. Each prompt has a system message with the rules and output format, and a user message with the case-specific inputs. Stage~1 is a database query and has no prompt. The full text is in \texttt{src/generation/prompts/} (\texttt{design\_briefs.yaml} and \texttt{design\_data.yaml}).
+Tables~\ref{tab:app-structpf-2a-propose} to~\ref{tab:app-structpf-3-write} summarize the \textsc{StructPF} prompts for Steps~2a and~2b of Stage~2 and for Stage~3, one table per prompt. Each prompt has a system message with the rules and output format, and a user message with the case-specific inputs. The full text is in \texttt{src/generation/prompts/} (\texttt{design\_briefs.yaml} and \texttt{design\_data.yaml}).
 
 \begin{table}[!htb]
 \centering
-\caption[Stage 2a brief proposal prompt structure (\texttt{PROPOSE\_BRIEF})]{Stage~2a brief proposal prompt structure (\texttt{PROPOSE\_BRIEF}).}
+\caption[Step 2a Brief Proposal Prompt (\texttt{PROPOSE\_BRIEF})]{Step~2a Brief Proposal Prompt (\texttt{PROPOSE\_BRIEF})}
 \label{tab:app-structpf-2a-propose}
 \footnotesize
 \setlength{\tabcolsep}{4.5pt}
@@ -24,7 +24,7 @@ Output & JSON brief with \texttt{goal}, \texttt{key\_idea}, \texttt{naive\_answe
 
 \begin{table}[!htb]
 \centering
-\caption[Stage 2a brief selection prompt structure (\texttt{SELECT\_BRIEF})]{Stage~2a brief selection prompt structure (\texttt{SELECT\_BRIEF}).}
+\caption[Step 2a Brief Selection Prompt (\texttt{SELECT\_BRIEF})]{Step~2a Brief Selection Prompt (\texttt{SELECT\_BRIEF})}
 \label{tab:app-structpf-2a-select}
 \footnotesize
 \setlength{\tabcolsep}{4.5pt}
@@ -43,7 +43,7 @@ Output & Selected candidate, reasons, and \texttt{main\_concern} \\
 
 \begin{table}[!htb]
 \centering
-\caption[Stage 2a quantity translation prompt structure (\texttt{TRANSLATE\_BRIEF})]{Stage~2a quantity translation prompt structure (\texttt{TRANSLATE\_BRIEF}).}
+\caption[Step 2a Quantity Translation Prompt (\texttt{TRANSLATE\_BRIEF})]{Step~2a Quantity Translation Prompt (\texttt{TRANSLATE\_BRIEF})}
 \label{tab:app-structpf-2a-translate}
 \footnotesize
 \setlength{\tabcolsep}{4.5pt}
@@ -62,7 +62,7 @@ Output & JSON quantity objects and an optional \texttt{prior\_contrast} intent, 
 
 \begin{table}[!htb]
 \centering
-\caption[Stage 2b number proposal prompt structure (\texttt{PROPOSE\_DATA})]{Stage~2b number proposal prompt structure (\texttt{PROPOSE\_DATA}).}
+\caption[Step 2b Number Proposal Prompt (\texttt{PROPOSE\_DATA})]{Step~2b Number Proposal Prompt (\texttt{PROPOSE\_DATA})}
 \label{tab:app-structpf-2b-propose}
 \footnotesize
 \setlength{\tabcolsep}{4.5pt}
@@ -81,7 +81,7 @@ Output & JSON with \texttt{quantities}, \texttt{values}, and \texttt{conditions}
 
 \begin{table}[!htb]
 \centering
-\caption[Stage 2b number repair prompt structure (\texttt{REPAIR\_DATA})]{Stage~2b number repair prompt structure (\texttt{REPAIR\_DATA}).}
+\caption[Step 2b Number Repair Prompt (\texttt{REPAIR\_DATA})]{Step~2b Number Repair Prompt (\texttt{REPAIR\_DATA})}
 \label{tab:app-structpf-2b-repair}
 \footnotesize
 \setlength{\tabcolsep}{4.5pt}
@@ -100,7 +100,7 @@ Output & JSON \texttt{values} object containing every original name \\
 
 \begin{table}[!htb]
 \centering
-\caption[Stage 3 task writing prompt structure (\texttt{WRITE\_DATA\_TASK})]{Stage~3 task writing prompt structure (\texttt{WRITE\_DATA\_TASK}).}
+\caption[Stage 3 Task Writing Prompt (\texttt{WRITE\_DATA\_TASK})]{Stage~3 Task Writing Prompt (\texttt{WRITE\_DATA\_TASK})}
 \label{tab:app-structpf-3-write}
 \footnotesize
 \setlength{\tabcolsep}{4.5pt}
@@ -110,7 +110,7 @@ Output & JSON \texttt{values} object containing every original name \\
 \textbf{Field} & \textbf{Summary} \\
 \midrule
 Purpose & Write the student-facing task from the verified setup and checked data. \\
-Key rules & Keep the situation, units, and rules needed to define the problem. \newline Withhold teacher-only discovery content and record each withheld item with its source and quote. \newline Always return a complete task; unresolved concerns go to \texttt{blocking\_issues}, not an empty task. \newline A ready status means a draft was produced, not that it is validated. \\
+Key rules & Keep the situation, units, and rules needed to define the problem. \newline Withhold internal design notes and solutions, and record each withheld item with its source and quote. \newline Always return a complete task; unresolved concerns go to \texttt{blocking\_issues}, not an empty task. \newline A ready status means a draft was produced, not that it is validated. \\
 Inputs & \texttt{student\_context}, \texttt{prior\_context}, \texttt{student\_draft}, \texttt{do\_not\_state}, \texttt{check}, \texttt{proposal} \\
 Output & JSON with \texttt{status}, \texttt{blocking\_issues}, \texttt{title}, \texttt{body}, \texttt{question}, and a \texttt{withheld} list (kind, source, quote, reason) \\
 \bottomrule

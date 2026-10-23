@@ -134,7 +134,7 @@ def main():
     # Centered column headers at top
     leg_y = 10.88
     stage_headers = [
-        (s1_x + 0.76 + (s1_w - 0.76) / 2, "1. Curriculum Topics"),
+        (s1_x + 0.76 + (s1_w - 0.76) / 2, "1. Grade 7 Settings"),
         (s2_x + s2_w / 2, "2. Six-Part One-Shot Prompt"),
         (s3_x + s3_w / 2, "3. LLM Generation"),
         (s4_x + s4_w / 2, "4. Tasks & Evaluation"),
@@ -174,7 +174,7 @@ def main():
     ax.text(
         0.28,
         top_y + top_h - 0.30,
-        "(a) Prior Study: Rahimi et al. (2025, 2026) (Single Topic & Unreleased Artifacts)",
+        "(a) Prior Study: Rahimi et al. (2025, 2026) (Single Setting & Unreleased Artifacts)",
         fontsize=10.2,
         fontweight="bold",
         color=c_black,
@@ -296,7 +296,7 @@ def main():
     ax.text(
         brk_x - 0.06,
         a_mid_y,
-        "Single\nTopic\nOnly",
+        "Single\nSetting\nOnly",
         fontsize=8.2,
         fontweight="bold",
         color=c_black,
@@ -484,8 +484,8 @@ def main():
     trans_mid = (trans_y_top + trans_y_bot) / 2
 
     transitions = [
-        (cell_x + 0.45, "Keep 1 + Add 3 Topics", "left", 0.12),
-        (s2_x + 0.55, "Reconstruct Prompt (Table B.1)", "left", 0.12),
+        (cell_x + 0.45, "Keep 1 + Add 3 Settings", "left", 0.12),
+        (s2_x + 0.55, "Reconstruct Prompt (Table A.1)", "left", 0.12),
         (s3_x + 0.30, "Scale to 4 × 2 × 30 Runs", "left", 0.12),
         (s4_x + 0.30, "Save & Inspect 240 Tasks", "left", 0.12),
     ]
@@ -521,7 +521,7 @@ def main():
     ax.text(
         0.28,
         bot_y + bot_h - 0.32,
-        "(b) Our Study: Reconstructed Prompt & Multi-Theme Expansion (4 Grade 7 Topics × 2 Models × 30 Runs = 240 Saved Tasks)",
+        "(b) Our Study: Reconstructed Prompt & Multi-Theme Expansion (4 Grade 7 Settings × 2 Models × 30 Runs = 240 Saved Tasks)",
         fontsize=10.2,
         fontweight="bold",
         color=c_black,
@@ -610,8 +610,8 @@ def main():
     ax.text(
         brk_x - 0.06,
         cell_ys[0] + cell_h / 2,
-        "Shared\nBaseline\n(1 Topic)",
-        fontsize=8.1,
+        "Shared\nBaseline\n(1 Setting)",
+        fontsize=8.0,
         fontweight="bold",
         color=c_black,
         ha="right",
@@ -619,13 +619,13 @@ def main():
         linespacing=1.28,
     )
 
-    # Bracket for Cells 2-4 (+3 Extended Topics)
+    # Bracket for Cells 2-4 (+3 Extended Settings)
     draw_v_bracket(ax, brk_x, cell_ys[3] + 0.06, cell_ys[1] + cell_h - 0.06, tick=0.06, lw=1.0)
     ax.text(
         brk_x - 0.06,
         (cell_ys[3] + cell_ys[1] + cell_h) / 2,
-        "Added\nin Our\nStudy\n(+3 Topics)",
-        fontsize=8.1,
+        "Added in\nOur Study\n(3 Settings)",
+        fontsize=8.0,
         fontweight="bold",
         color=c_black,
         ha="right",
@@ -634,7 +634,7 @@ def main():
     )
 
     # ------------------------------------------------------------------
-    # (b) Stage 2: Reconstructed Six-Part Prompt (Solid container, Table B.1)
+    # (b) Stage 2: Reconstructed Six-Part Prompt (Solid container, Table A.1)
     # ------------------------------------------------------------------
     draw_rect(
         ax,
@@ -661,7 +661,7 @@ def main():
     ax.text(
         s2_x + s2_w / 2,
         b_box_y + b_box_h - 0.22,
-        "Reconstructed Prompt (Table B.1)",
+        "Reconstructed Prompt (Table A.1)",
         fontsize=9.2,
         fontweight="bold",
         color=c_black,
@@ -801,7 +801,7 @@ def main():
     ax.text(
         p_in_x + 0.10,
         b3_y + b3_h - 0.18,
-        "Per-Cell Input & Output Schema (Parts 5–6)",
+        "Setting Input & Output Schema (Parts 5–6)",
         fontsize=8.3,
         fontweight="bold",
         color=c_black,
@@ -813,7 +813,7 @@ def main():
         p_in_x + 0.10,
         b3_y + (b3_h - 0.36) / 2,
         "(5) Supplies Grade 7, Target, Prior Knowledge &\n"
-        "     Student Interest for Topic Cell 1–4\n"
+        "     Student Interest for Setting 1–4\n"
         "(6) Returns JSON task (title, body, question)",
         fontsize=8.0,
         color=c_dark,
@@ -877,7 +877,7 @@ def main():
     ax.text(
         m_x + m_w / 2,
         b_mid_y + 0.50,
-        "4 topics × 30 runs\n= 120 tasks",
+        "4 settings × 30 runs\n= 120 tasks",
         fontsize=8.1,
         color=c_dark,
         ha="center",
@@ -911,7 +911,7 @@ def main():
     ax.text(
         m_x + m_w / 2,
         b_mid_y - 0.90,
-        "4 topics × 30 runs\n= 120 tasks",
+        "4 settings × 30 runs\n= 120 tasks",
         fontsize=8.1,
         color=c_dark,
         ha="center",
@@ -1032,7 +1032,7 @@ def main():
     ax.text(
         s4_x + s4_w / 2,
         ev_proc_y + 0.38,
-        "2 independent judge passes\nVerbatim 1–3 anchors (Table B.2)",
+        "2 independent judge passes\nVerbatim 1–3 anchors (Table A.2)",
         fontsize=7.95,
         color=c_black,
         ha="center",

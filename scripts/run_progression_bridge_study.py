@@ -1210,12 +1210,14 @@ def main() -> None:
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
     parser.add_argument("--cases", nargs="*", default=None)
     parser.add_argument("--model", default="luna")
+    parser.add_argument("--judge-model", default=None)
     parser.add_argument("--max-workers", type=int, default=6)
     parser.add_argument("--three-arms", action="store_true")
     parser.add_argument("--skip-v29", action="store_true")
     parser.add_argument("--rejudge-bridge-only", action="store_true")
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args()
+    judge_model = args.judge_model or args.model
 
     dataset = load_progression_bridge_dataset(args.dataset)
     cases = dataset["cases"]
@@ -1260,14 +1262,14 @@ def main() -> None:
     if args.three_arms:
         print(f"Starting 3-arm Gate 1 + Gate 2 evaluations for {len(cases)} cases...")
         eval_records_3: list[dict[str, Any]] = []
-        with ThreadPoolExecutor(max_workers=min(args.max_workers, 4)) as pool:
+        with ThreadPoolExecutor(max_workers=args.max_workers) as pool:
             futs = {
                 pool.submit(
                     evaluate_case_three_arms,
                     case,
                     {arm: gen_by_case_arm[(case["id"], arm)] for arm in THREE_ARMS},
                     output,
-                    args.model,
+                    judge_model,
                     args.rejudge_bridge_only,
                 ): case["id"]
                 for case in cases
@@ -1289,6 +1291,7 @@ def main() -> None:
             "generated_at": now(),
             "dataset_path": str(args.dataset),
             "model_selector": args.model,
+            "judge_model_selector": judge_model,
             "summary": summarize_three_arm_study(eval_records_3),
             "per_case": [
                 {

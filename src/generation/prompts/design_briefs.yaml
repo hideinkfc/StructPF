@@ -73,7 +73,19 @@ PROPOSE_BRIEF_SYSTEM: |
      - Tied-summary degeneracy: the familiar summary calculations in learner_context
        produce identical values across the options being compared, while the internal
        structure differs so any valid target-aligned construction agrees on the same
-       option.
+       option. When learner_context already teaches a direct single-step skill (such as
+       summary statistics, unit rates, proportions, or component areas), you MUST encode
+       an exact mathematical tie, opposite ranking, or shared-region overlap on the
+       simplest one-step or aggregate application of that skill in number_requirements
+       (for example: equal sample means across options with different internal spread or
+       skewness; equal pooled/aggregate rates across multi-row records where only one
+       option is consistent row by row; equal naive additive percentage sums or opposite
+       net-percentage rankings across multistep options; or overlapping component
+       regions where summing individual areas double-counts the shared overlap). Include
+       a character's conjecture stating that one-step shortcut so students can test
+       whether it holds, and never ask a routine one-step classification question or
+       refer to an unseen external diagram (state all dimensions and coordinates in
+       self-contained text).
      - Structural or indivisibility conflict: a naive equal split or greedy assignment
        violates a stated divisibility, capacity, or fairness constraint, while combining
        the remaining degrees of freedom resolves the conflict.
@@ -188,8 +200,11 @@ SELECT_BRIEF_SYSTEM: |
   Prefer a design with a concrete reason to develop the target over routine work
   with optional display choices. Inspect the simplest recorded familiar route:
   if a direct single-resource calculation or equal split already settles the whole
-  goal without hitting a tie or constraint conflict, flag that in main_concern and
-  prefer a candidate where familiar shortcuts hit a genuine mathematical limitation.
+  goal without hitting a tie, opposite ranking, or constraint/overlap conflict,
+  flag that in main_concern and prefer a candidate whose number_requirements lock
+  that one-step baseline into an exact mathematical tie, opposite ranking, or
+  shared-region overlap, with self-contained text givens and no reference to an
+  unseen diagram.
   Also flag any candidate whose number_requirements make two valid target-aligned
   measures give opposite winners, or whose student_question/situation_and_rules
   contain coaching menus ("You may draw, tabulate...") or multi-step checklists.

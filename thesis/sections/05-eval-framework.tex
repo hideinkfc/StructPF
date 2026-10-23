@@ -1,17 +1,17 @@
-\chapter{\textsc{PF Eval}: Evaluating PF Tasks}
+\chapter{\textsc{PF Eval}: Measures, Judges, and Validation}
 \label{chap:eval-framework}
 
-\section{From Expert Task Review to Requirement Checks}
+\section{From Expert Review to Automated Checks}
 \label{sec:eval-overview}
 
-In Chapter~\ref{chap:oneshot}, the rubric judge gave one-shot GPT-5 mini tasks an average score of $14.56$ out of $15$, even though many of these tasks could be solved with familiar methods, named the method students should use, or contained mathematical contradictions. An expert teacher would notice these problems when reviewing the tasks by hand, but such a review does not scale to the hundreds of tasks that an LLM can generate (Section~\ref{sec:intro-limitations}). We therefore need an automatic evaluation that tests whether a generated task works as a PF task, rather than how convincing its text reads.
+As shown in Chapter~\ref{chap:oneshot}, a surface rubric judge cannot tell whether a generated problem actually works as a PF task. An expert teacher can spot missing impasses, method giveaways, and mathematical errors by hand, but manual review does not scale across hundreds of generated tasks. We therefore introduce \textsc{PF Eval}, an automated evaluation framework that tests whether a generated task satisfies the underlying requirements of Productive Failure rather than how convincing its text reads.
 
-To decide what this evaluation should test, we follow how a human designer checks a PF task (Section~\ref{sec:structpf-overview}). Instead of judging the task text as a whole, we turn the three PF requirements from Section~\ref{sec:intro-motivation} into separate questions, each with its own outcome, as decomposed checklists such as CheckEval~\cite{lee2025checkeval} and TICK~\cite{cook2024tick} do to make LLM judges more reliable. Figure~\ref{fig:eval-overview} summarizes these four designer questions and the automated checks that answer them.
+Just as \textsc{StructPF} mirrors the four decisions a human designer makes to construct a PF task (Section~\ref{sec:structpf-overview}), \textsc{PF Eval} turns the PF requirements from Section~\ref{sec:intro-motivation} into the separate questions an expert asks when reviewing a finished task. Each question receives its own outcome, following decomposed checklist evaluations such as CheckEval~\cite{lee2025checkeval} and TICK~\cite{cook2024tick}. Figure~\ref{fig:eval-overview} summarizes these four review questions and the automated checks that answer them.
 
 \begin{figure}[!htb]
     \centering
-    \includegraphics[width=0.92\textwidth]{figures/fig5_2_eval_overview.pdf}
-    \caption[Mapping human PF designer questions to our five automated checks]{Mapping the four questions a human PF designer asks about a task to the five automated checks in \textsc{PF Eval}.}
+    \includegraphics[width=0.92\textwidth]{figures/fig5_1_eval_overview.pdf}
+    \caption[Mapping Human PF Design Questions to the Five \textsc{PF Eval} Checks]{Mapping Human PF Design Questions to the Five \textsc{PF Eval} Checks}
     \label{fig:eval-overview}
 \end{figure}
 
@@ -19,19 +19,19 @@ Three of the four questions in Figure~\ref{fig:eval-overview} can be checked dir
 
 \begin{figure}[!htb]
     \centering
-    \includegraphics[width=0.92\textwidth]{figures/fig5_1_simstudent_vs_solver.pdf}
-    \caption[Simulated student persona versus our prior-knowledge solver on consistency]{Comparison of (a)~a role-play simulated student and (b)~our target-blind prior-knowledge solver on the illustrative consistency task.}
+    \includegraphics[width=0.92\textwidth]{figures/fig5_2_simstudent_vs_solver.pdf}
+    \caption[Role-Play Simulated Student (a) versus Target-Blind Prior-Knowledge Solver (b)]{Role-Play Simulated Student~(a) versus Target-Blind Prior-Knowledge Solver~(b)}
     \label{fig:eval-simstudent-vs-solver}
 \end{figure}
 
 \section{Five Task-Design Measures}
 \label{sec:eval-five-measures}
 
-To evaluate a generated task against the questions in Figure~\ref{fig:eval-overview}, we need measures that show which requirement holds and which fails. We have chosen to evaluate each question as a separate measure with its own outcome (\emph{Yes}, \emph{No}, or \emph{Unclear}) rather than summing points into a single score, because a high total can hide a failure on one requirement, as we saw with the $14.56 / 15$ rubric average in Chapter~\ref{chap:oneshot}. Table~\ref{tab:eval-five-measures} defines the five measures. The first two measures verify that the problem addresses the target concept with consistent mathematics, since a task that teaches the wrong concept or contradicts itself cannot be productive, while the remaining three test Requirements~1 to~3 directly.
+To evaluate a generated task against the questions in Figure~\ref{fig:eval-overview}, we need measures that show which requirement holds and which fails. We have chosen to evaluate each question as a separate measure with its own outcome (\emph{Yes}, \emph{No}, or \emph{Unclear}) rather than summing points into a single score, because a high total can hide a failure on one requirement. Table~\ref{tab:eval-five-measures} defines the five measures, grouped into two task soundness checks and three PF requirement checks. The two task soundness measures verify that the problem addresses the target concept with consistent mathematics, since a task that teaches the wrong concept or contradicts itself cannot be productive, while the remaining three test PF Requirements~1 to~3 directly.
 
 \begin{table}[!htb]
 \centering
-\caption[Definitions of the five task-design measures in \textsc{PF Eval}]{Definitions of the five task-design measures testing target alignment, mathematical validity, and PF Requirements~1 to~3.}
+\caption[The Five Task-Design Measures in \textsc{PF Eval}]{The Five Task-Design Measures in \textsc{PF Eval}}
 \label{tab:eval-five-measures}
 \vspace{0.5em}
 \footnotesize
@@ -41,46 +41,54 @@ To evaluate a generated task against the questions in Figure~\ref{fig:eval-overv
 \toprule
 \textbf{Measure} & \textbf{Definition} \\
 \midrule
-Target alignment & Solving the task's central problem requires the target concept, even when the task never names it \\
+Target alignment & Solving the task's central problem requires the target concept, even when the task never names it. \\
 \addlinespace[5pt]
-Mathematical validity & The givens are consistent with each other, and the task has at least one solution \\
+Mathematical validity & The givens are consistent with each other, and the task has at least one solution. \\
 \cmidrule(l{0pt}r{0pt}){1-2}
-Prior-knowledge accessibility (Req.~1) & A student can make a meaningful start on the task using the listed prior skills and basic arithmetic \\
+Prior-knowledge accessibility (Req.~1) & A student can make a meaningful start on the task using the listed prior skills and basic arithmetic. \\
 \addlinespace[5pt]
-Limits of familiar approaches (Req.~2) & A familiar method, carried out correctly, falls short for the reason that the target concept resolves \\
+Limits of familiar approaches (Req.~2) & A familiar method, carried out correctly, falls short for the reason that the target concept resolves. \\
 \addlinespace[5pt]
-Room for invention (Req.~3) & The task leaves its central construction, such as a measure, model or fair rule, for students to build \\
+Room for invention (Req.~3) & The task leaves its central construction, such as a measure, model or fair rule, for students to build. \\
 \bottomrule
 \end{tabularx}
 \end{table}
 
-Evaluating a PF task on these measures differs from reviewing a standard textbook exercise, where the prompt usually names the method to apply and admits a single prescribed procedure. In a PF task, withholding the target concept and leaving the comparison rule open, such as letting students decide how to measure consistency in Figure~\ref{fig:eval-simstudent-vs-solver}, are deliberate design features rather than omissions or ambiguities. This is why the definition of target alignment in Table~\ref{tab:eval-five-measures} does not require the task to name the target concept, and why we treat an intended open choice of method as mathematically valid rather than underspecified. In order to distinguish prompts that give away the entire method from prompts that only narrow the student's search, we also include a middle outcome (\emph{Partly}) for room for invention when a task states a hint or target criterion while still leaving a secondary decision open.
+We evaluate the five measures in a fixed order so that a failed task soundness check or an incomplete problem statement is not confused with a failed PF requirement. In particular, we check mathematical validity only when a task is aligned with the target concept, and we test the limits of familiar approaches only when the task is accessible with prior knowledge, because a familiar method cannot meaningfully fall short on a problem that students cannot even start. When an earlier check fails, the dependent measure is recorded as \emph{not assessed} rather than \emph{No}. Similarly, when essential context such as a referenced diagram is missing, we return \emph{Unclear} so that uncertainty in the judge is not counted as a confirmed flaw in the task.
 
-We also need to ensure that a failed prerequisite check or an incomplete problem statement is not confused with a failed PF mechanism. We have therefore chosen to evaluate the five measures in a fixed order and to keep \emph{Unclear} separate from \emph{No}. In particular, we check mathematical validity only when a task is aligned with the target concept, and we test the limits of familiar approaches only when the task is accessible with prior knowledge, because a familiar method cannot meaningfully fall short on a problem that students cannot even start. When an earlier check fails, the dependent measure is recorded as \emph{not assessed} rather than \emph{No}. Similarly, when essential context such as a referenced diagram is missing, we return \emph{Unclear} so that uncertainty in the judge is not counted as a confirmed flaw in the task.
-
-\section{Prior-Knowledge Solver and Evaluation Judges}
+\section{Evaluation Judges and Prior-Knowledge Solver}
 \label{sec:eval-three-roles}
 
-The five measures are answered by three LLM roles, which we separate by what each role must not see. The task judge does not see the solver's attempts, so that its outcomes rest on the task text rather than on how one solver happened to perform. The solver does not see the target concept, because a model that knows the goal would steer towards it, and its attempts would no longer show what the familiar methods achieve on their own. Only the attempt judge sees everything, because it must decide whether an attempt falls short for the reason that the target concept resolves.
-
-An illustration of the entire process is shown in Figure~\ref{fig:eval-three-roles}. Every task undergoes this process, which has two parts. First, the task judge reads the task and returns the outcomes for four of the five measures. Second, if the task is accessible, the solver attempts it with the listed skills, and the attempt judge labels each attempt, from which the outcome for the limits of familiar approaches follows.
+To score the five measures, \textsc{PF Eval} divides the evaluation across the three LLM roles shown in Figure~\ref{fig:eval-three-roles}, where the task judge evaluates the four text-based measures (Figure~\ref{fig:eval-three-roles}a) and the prior-knowledge solver and attempt judge together evaluate the \textbf{limits of familiar approaches} (Figure~\ref{fig:eval-three-roles}b). In our experiments, the task judge and attempt judge use GPT 5.6 Luna, while the prior-knowledge solver pools attempts from GPT 5.6 Luna and GPT-4.1.
 
 \begin{figure}[!htb]
     \centering
     \includegraphics[width=0.92\textwidth]{figures/fig5_3_three_roles.pdf}
-    \caption[Information separation across the task judge, solver, and attempt judge]{Information separation across the three evaluation roles: the task judge~(top) and the target-blind solver plus attempt judge~(bottom).}
+    \caption[Information Separation in \textsc{PF Eval}: (a) Task Judge and (b) Solver with Attempt Judge]{Information Separation in \textsc{PF Eval}: (a)~Task Judge and (b)~Solver with Attempt Judge}
     \label{fig:eval-three-roles}
 \end{figure}
 
 \subsection{Task Judge}
 \label{subsec:eval-task-judge}
 
-For target alignment, accessibility, and room for invention, we require the task judge to quote the exact phrases from the student task that support its outcome, and our evaluation code verifies that every quoted phrase appears in the task text. Grounding each outcome in verbatim quotes prevents the judge from inferring support or hints that are not written in the prompt. For mathematical validity, the judge translates numerical claims in the problem into checks for the \texttt{SymPy} calculator from Section~\ref{subsec:d2b-numbers}, so that conditions such as two equal means are computed exactly rather than estimated by the language model.
+The task judge takes the student task, the listed prior skills, and the target concept as input without seeing any solver attempts, and outputs an outcome of \emph{Yes}, \emph{No}, or \emph{Unclear} together with a brief explanation and supporting evidence for four of the five measures in Table~\ref{tab:eval-five-measures} (Figure~\ref{fig:eval-three-roles}a).
+\begin{enumerate}[leftmargin=0.6cm,itemsep=0.4em,topsep=0.4em]
+    \item \textbf{Target Alignment}\\[0.2em]
+    Checks whether answering the task's central question requires the target concept.
+    \item \textbf{Prior-Knowledge Accessibility}\\[0.2em]
+    Checks whether a student can take at least one concrete mathematical step toward the requested answer using the listed prior skills and basic arithmetic, or whether even the first step requires an untaught concept.
+    \item \textbf{Room for Invention}\\[0.2em]
+    Checks whether the prompt leaves the central mathematical construction open for students to build or states the target formula or step-by-step recipe in the text.
+    \item \textbf{Mathematical Validity}\\[0.2em]
+    Checks whether the given numbers and conditions are consistent and admit a solution by verifying the numerical claims with the \texttt{SymPy} calculator from Section~\ref{subsec:d2b-numbers}.
+\end{enumerate}
+
+For the first three text-based measures, the judge must also output verbatim quotes from the student task that support its explanation, and our evaluation code verifies that every quote appears word for word in the task text so the judge cannot claim a starting step or a hint that is not written in the prompt.
 
 \subsection{Prior-Knowledge Solver}
 \label{subsec:eval-solver}
 
-On tasks that pass the accessibility check, the prior-knowledge solver generates between two and four complete attempts that each answer every part of the task. We divide these attempts into two ordered tiers because a single familiar method and a combined strategy test different aspects of the task design.
+On tasks that pass the accessibility check, the prior-knowledge solver receives the student task and the listed prior skills while the target concept is withheld, so that it cannot steer towards the untaught formula (Figure~\ref{fig:eval-three-roles}b). It generates between two and four complete attempts that each answer every part of the task. We divide these attempts into two groups because a single familiar method and a combined strategy test different aspects of the task design.
 \begin{enumerate}[leftmargin=0.6cm,itemsep=0.4em,topsep=0.4em]
     \item \textbf{Familiar Methods}\\[0.2em]
     The first attempts apply a single listed method on its own, such as comparing only the means or only the ranges in the consistency task, and record where that method falls short.
@@ -93,51 +101,31 @@ When the listed prior skills already include a procedure that solves the task di
 \subsection{Attempt Judge}
 \label{subsec:eval-attempt-judge}
 
-Because the solver is blind to the target concept, a separate attempt judge inspects each attempt against the target concept and assigns one of the five labels in Table~\ref{tab:eval-attempt-labels}.
+Because the solver is blind to the target concept, a separate attempt judge inspects each attempt against the target concept to evaluate the \textbf{limits of familiar approaches} and assigns one of the five labels shown in Figure~\ref{fig:eval-attempt-labels}a.
 
-\begin{table}[!htb]
-\centering
-\caption[Attempt-judge labels and their effect on the familiar-limits outcome]{Attempt-judge labels assigned to each solver attempt and their effect on the outcome for the limits of familiar approaches.}
-\label{tab:eval-attempt-labels}
-\vspace{0.5em}
-\footnotesize
-\setlength{\tabcolsep}{8pt}
-\renewcommand{\arraystretch}{1.2}
-\begin{tabularx}{\linewidth}{@{} >{\raggedright\arraybackslash}p{0.15\linewidth} >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}p{0.18\linewidth} @{}}
-\toprule
-\textbf{Label} & \textbf{When Assigned} & \textbf{Example Attempt} & \textbf{Effect on Outcome} \\
-\midrule
-Target limit & A correct familiar method falls short for the reason that the target concept resolves & Compares the means, 10 and 10, and finds a tie that only a measure of spread can break & Yes, even if other attempts solve the task \\
-\addlinespace[5pt]
-Meets demands & Correct reasoning with the listed skills answers the task & Adds each score's distance from 10, giving 14 for A and 16 for B, so A is more consistent & No, if no attempt is a target limit \\
-\addlinespace[5pt]
-Unresolved & The attempt stops after a setup step, or its start cannot be checked & Sorts each player's scores and stops before comparing the players & Unclear, if no attempt is a target limit \\
-\cmidrule(l{0pt}r{0pt}){1-4}
-Unrelated shortfall & The attempt falls short for a reason that the target concept does not address & Stops because the task misstates A's mean as 11 & None, since the flaw lies outside the target \\
-\addlinespace[5pt]
-Unsupported & The attempt uses an unlisted concept, misreads the numbers, or makes no mathematical move & Applies the standard deviation formula, which is not a listed skill & None, since the attempt leaves the listed skills \\
-\bottomrule
-\end{tabularx}
-\end{table}
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.96\textwidth]{figures/fig5_3b_attempt_labels.pdf}
+    \caption[Attempt-Judge Labels and Priority Rule for the Limits of Familiar Approaches]{Attempt-Judge Labels~(a) and Priority Rule for the Limits of Familiar Approaches~(b)}
+    \label{fig:eval-attempt-labels}
+\end{figure}
 
-Code then derives the outcome for the limits of familiar approaches from the rules in the last column of Table~\ref{tab:eval-attempt-labels}: a single \emph{Target limit} is enough for \emph{Yes} even if a later constructed attempt also \emph{Meets demands}, whereas a routine task where familiar methods reach \emph{Meets demands} directly without any \emph{Target limit} receives \emph{No}.
-
-Finally, two practical boundaries of this three-role design should be noted before we validate \textsc{PF Eval} in Section~\ref{sec:eval-validation}. First, because the solver explores at most four approaches per run, a missing \emph{Target limit} can occasionally reflect an approach the solver did not try rather than a flaw in the task. Second, the attempt judge can only flag an untaught concept when that concept is visible in the solver's written steps. We therefore interpret the resulting outcomes as evidence about the task's mathematical structure under the listed skills, rather than as a prediction of classroom behavior.
+Code then derives the outcome for the \textbf{limits of familiar approaches} using the priority rule in Figure~\ref{fig:eval-attempt-labels}b. After setting aside any \emph{Unrelated shortfall} or \emph{Unsupported} attempts, a single \emph{Target limit} is enough for \emph{Yes} even if a later constructed attempt also \emph{Meets demands}, whereas a routine task where familiar methods reach \emph{Meets demands} directly without any \emph{Target limit} receives \emph{No}.
 
 \section{Validating \textsc{PF Eval}}
 \label{sec:eval-validation}
 
-Since every outcome in \textsc{PF Eval} comes from LLM roles, we need to show that these outcomes can be trusted before we use them to compare generators in Chapter~\ref{chap:results}. A low pass rate could mean that the generated tasks are weak, but it could equally mean that \textsc{PF Eval} is too strict, and a high pass rate could likewise come from a lenient \textsc{PF Eval}. We therefore validate \textsc{PF Eval} in two steps matching the two subsections below: first, we test whether the prior-knowledge solver finds the expected student approaches on its own (Section~\ref{subsec:val-solver}), and second, we test whether \textsc{PF Eval} as a whole accepts published PF tasks and rejects flawed tasks for the right reason (Section~\ref{subsec:val-known-tasks}).
+\textsc{PF Eval} relies on the prior-knowledge solver and the assumption that its attempts cover the familiar methods a student can try with the listed skills. If the solver overlooks a familiar method that falls short, \textsc{PF Eval} would reject a working PF task, and if it misses a direct solution from prior knowledge, \textsc{PF Eval} would accept a routine exercise. Beyond the solver, the two judges must also apply the five measures accurately on the finished task. Before comparing generators in Chapter~\ref{chap:results}, we therefore validate \textsc{PF Eval} in two steps, testing first whether the prior-knowledge solver recovers the expected approaches on its own (Section~\ref{subsec:val-solver}) and second whether \textsc{PF Eval} as a whole accepts published PF tasks and rejects flawed tasks for the right reason (Section~\ref{subsec:val-known-tasks}).
 
-\subsection{Testing the Solver on Expected Approaches}
+\subsection{Solver Recall on Expected Approaches}
 \label{subsec:val-solver}
 
-\textsc{PF Eval} can only return \emph{Yes} on the limits of familiar approaches when the solver actually tries a familiar method that falls short, and it can only return \emph{No} on a routine task when the solver finds the routine solution (the first boundary in Section~\ref{sec:eval-three-roles}). To test the solver separately from the rest of \textsc{PF Eval}, we built a benchmark of 76 tasks and recorded 256 expected approaches before running the solver, covering student solutions from the PF literature for published PF tasks, standard solutions for routine and control tasks, and the planned Step~2a approaches (Section~\ref{subsec:d2a-brief}) for pipeline-generated tasks. We run the solver exactly as in \textsc{PF Eval}, pooling attempts from GPT-5.6-luna and GPT-4.1 without tuning on this benchmark, and use a matching judge to check whether each expected approach is carried out.
+In \textsc{PF Eval}, the prior-knowledge solver receives only the student task and the listed prior skills and generates only two to four attempts per model. We therefore need to verify whether this small sample is sufficient to surface the specific approaches a task is built around. To test this across both human-written and generated problems, we constructed a benchmark of 76 tasks with 256 expected approaches recorded in advance. The benchmark spans three task types, namely 12 published PF tasks with 28 student approaches documented in classroom studies, 12 routine and control tasks with 19 standard solutions, and 52 \textsc{StructPF} tasks with 209 approaches planned in Stage~2a (Section~\ref{subsec:d2a-brief}). We run the solver exactly as in \textsc{PF Eval}, pooling attempts from GPT 5.6 Luna and GPT-4.1 without tuning on this benchmark, and use a matching judge to check whether each expected approach is carried out.
 
 \begin{figure}[!htb]
     \centering
     \includegraphics[width=0.9\textwidth]{figures/fig5_4_solver_recall.pdf}
-    \caption[Recovery of expected student approaches by the prior-knowledge solver]{Proportion of 256 expected approaches recovered by the pooled prior-knowledge solver across 76 benchmark tasks ($85.5\%$ overall).}
+    \caption[Recall of Expected Student Approaches]{Recall of Expected Student Approaches}
     \label{fig:val-solver-recall}
 \end{figure}
 
@@ -148,11 +136,11 @@ As shown in Figure~\ref{fig:val-solver-recall}, the solver recovers $85.5\%$ of 
 \label{subsec:val-good-pass}
 \label{subsec:val-flawed-fail}
 
-To test \textsc{PF Eval} as a whole, we collected the 29 reference tasks summarized in Table~\ref{tab:eval-known-tasks}, which pair published PF tasks~\cite{puech2025} against routine textbook versions~\cite{kapur2012}, flawed one-shot tasks from Chapter~\ref{chap:oneshot}, single-flaw control tasks, and two \textsc{StructPF} tasks, with expected outcomes fixed from the source papers and task text. Figure~\ref{fig:val-reference-outcomes} reports the resulting non-passing counts by group, where an empty cell means every assessed task in that group received \emph{Yes}.
+Knowing that the solver finds the expected approaches is only half of the validation. We also need to verify that the five measures and three roles work together as a complete evaluator, so that \textsc{PF Eval} is neither too strict to pass real PF tasks nor too lenient to catch specific design flaws. We therefore evaluate \textsc{PF Eval} on the 29 reference tasks with known expected outcomes in Table~\ref{tab:eval-known-tasks}, and Figure~\ref{fig:val-reference-outcomes} reports the resulting non-passing counts by group.
 
 \begin{table}[!htb]
 \centering
-\caption[Reference task groups used to validate \textsc{PF Eval}]{Reference task groups ($N = 29$) with known strengths and flaws used to validate \textsc{PF Eval}.}
+\caption[Reference Task Groups for Validating \textsc{PF Eval}]{Reference Task Groups for Validating \textsc{PF Eval}}
 \label{tab:eval-known-tasks}
 \vspace{0.5em}
 \footnotesize
@@ -162,15 +150,15 @@ To test \textsc{PF Eval} as a whole, we collected the 29 reference tasks summari
 \toprule
 \textbf{Group} & \textbf{Tasks} & \textbf{Example} & \textbf{Expected Outcome} \\
 \midrule
-Published PF tasks & 12 & Design a measure of consistency for three football players~\cite{puech2025} & Yes on all five measures, with Unclear validity for one task \\
+Published PF tasks & 12 & Design a measure of consistency for three football players~\cite{puech2025}. & Yes on all five measures, with Unclear validity for one task. \\
 \addlinespace[5pt]
-Routine versions & 3 & Find a ship's average speed over a journey with two parts~\cite{kapur2012} & No on limits and room for invention \\
+Routine versions & 3 & Find a ship's average speed over a journey with two parts~\cite{kapur2012}. & No on limits and room for invention. \\
 \addlinespace[5pt]
-One-shot tasks & 5 & The garden task in Figure~\ref{fig:oneshot-math-error-example} & No on limits, and a failing outcome for each further flaw \\
+One-shot tasks & 5 & The garden task in Figure~\ref{fig:oneshot-math-error-example}. & No on limits, and a failing outcome for each further flaw. \\
 \addlinespace[5pt]
-Control tasks & 7 & Show a rectangle of 3~cm by 2~cm with an area of 5~cm$^2$ & No or Unclear on the measure that each task breaks \\
+Control tasks & 7 & Show a rectangle of 3~cm by 2~cm with an area of 5~cm$^2$. & No or Unclear on the measure that each task breaks. \\
 \addlinespace[5pt]
-\textsc{StructPF} tasks & 2 & Invent a consistent rule for multiplying negative numbers & Yes on all five measures for one task, No on limits for the other \\
+\textsc{StructPF} tasks & 2 & Invent a consistent rule for multiplying negative numbers. & Yes on all five measures for one task, No on limits for the other. \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -178,7 +166,7 @@ Control tasks & 7 & Show a rectangle of 3~cm by 2~cm with an area of 5~cm$^2$ & 
 \begin{figure}[!htb]
     \centering
     \includegraphics[width=0.9\textwidth]{figures/fig5_5_reference_outcomes.pdf}
-    \caption[\textsc{PF Eval} outcomes across the 29 reference tasks by task group]{Non-passing measure counts and overall pass counts across the five reference task groups ($N = 29$ tasks; empty cells indicate all tasks pass).}
+    \caption[\textsc{PF Eval} Outcomes on Reference Tasks by Group]{\textsc{PF Eval} Outcomes on Reference Tasks by Group}
     \label{fig:val-reference-outcomes}
 \end{figure}
 
@@ -189,7 +177,7 @@ The outcomes in Figure~\ref{fig:val-reference-outcomes} confirm both requirement
     As shown in the top row of Figure~\ref{fig:val-reference-outcomes}, all published PF tasks pass every measure except for one \emph{Unclear} validity outcome on the hummingbird migration task. Because that task gives each bird's wing beats per minute only as an interval (such as 70 to 80), the resulting daily distances overlap and the winner depends on which values a student picks, so returning \emph{Unclear} rather than \emph{No} matches the task's actual mathematical structure.
 
     \item \textbf{Rejecting Flawed Tasks for the Right Reason}\\[0.2em]
-    Across the lower rows of Figure~\ref{fig:val-reference-outcomes}, none of the flawed tasks passes all five measures, and each group fails on the specific measure its flaw targets. For example, when the published consistency task is modified only by spelling out the variance rule step by step, the task judge quotes \emph{``use exactly this rule''} to return \emph{No} on room for invention and the solver applies that rule directly to return \emph{No} on the limits of familiar approaches, while the $15 / 15$-rated one-shot Garden task~28 (Figure~\ref{fig:oneshot-math-error-example}) is rejected on both familiar limits and mathematical validity.
+    Across the lower rows of Figure~\ref{fig:val-reference-outcomes}, none of the flawed tasks passes all five measures, and each group fails on the specific measure its flaw targets. For example, when the published consistency task is modified only by spelling out the variance rule step by step, the task judge quotes \emph{``use exactly this rule''} to return \emph{No} on room for invention and the solver applies that rule directly to return \emph{No} on the limits of familiar approaches, while the one-shot garden task with a geometric contradiction (Figure~\ref{fig:oneshot-math-error-example}) is rejected on both familiar limits and mathematical validity.
 \end{enumerate}
 
-Across all 29 reference tasks, \textsc{PF Eval} matches every expected outcome, accepting the published PF tasks while rejecting the routine, one-shot, and control tasks on the exact measures they violate. One limitation of this check is that the 29 tasks and their expected outcomes were compiled from the source papers and used while refining the judge prompts, rather than being rated by an independent group of teachers on an unseen test set. Having verified that the solver finds expected familiar approaches (Section~\ref{subsec:val-solver}) and that the three roles separate working PF tasks from flawed ones, we use \textsc{PF Eval} in Chapter~\ref{chap:results} to compare \textsc{StructPF} against one-shot generation.
+Across all 29 reference tasks, \textsc{PF Eval} matches every expected outcome, accepting the published PF tasks while rejecting the routine, one-shot, and control tasks on the exact measures they violate. Having verified that the solver finds expected familiar approaches (Section~\ref{subsec:val-solver}) and that the three roles separate working PF tasks from flawed ones, we use \textsc{PF Eval} in Chapter~\ref{chap:results} to compare \textsc{StructPF} against one-shot generation.

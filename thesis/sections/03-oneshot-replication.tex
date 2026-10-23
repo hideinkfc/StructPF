@@ -7,7 +7,7 @@
 \begin{figure}[t]
     \centering
     \includegraphics[width=\textwidth]{fig3_1_oneshot_setup.pdf}
-    \caption[Single-topic study in Rahimi et al.\ versus our four-topic one-shot study]{Experimental setup comparing (a)~the single-topic one-shot study in Rahimi et al.~\cite{rahimi2025} with (b)~our four-topic expansion ($4 \times 2 \times 30 = 240$ tasks).}
+    \caption[One-Shot Replication: (a) Single Setting in Rahimi et al.\ versus (b) Four Settings]{One-Shot Replication: (a)~Single Setting in Rahimi et al.~\cite{rahimi2025} versus (b)~Four Settings}
     \label{fig:oneshot-setup}
 \end{figure}
 
@@ -15,13 +15,13 @@ The high rubric scores reported by Rahimi et al.~\cite{rahimi2025} ($13.38$ out 
 
 \subsection{Multi-Theme Generation Setup}
 \label{subsec:oneshot-gen-setup}
-Answering this question requires inspecting the generated tasks and their rubric ratings directly. Because Rahimi et al.~\cite{rahimi2025} did not release their prompt text, their five in-prompt examples, or their generated problems, and tested only a single basketball topic, we reconstruct their six-part prompt using five published human PF tasks from the \textsc{StratL} collection~\cite{puech2025} (Table~\ref{tab:app-oneshot-prompt}) and extend the experiment from their grade~7 basketball ratio setting to three additional grade~7 cells covering percents, random-sample distributions, and composite area (Figure~\ref{fig:oneshot-setup}b).
+Answering this question requires inspecting the generated tasks and their rubric ratings directly. Rahimi et al.~\cite{rahimi2025} published the six-part structure of their prompt, the verbatim five-dimension rubric, and the Grade~7 basketball setting inputs, but did not release the exact prompt wording, the five in-prompt examples, or the generated tasks. We therefore reconstruct the six-part prompt from their published specification and rubric using five human-written PF tasks from the \textsc{StratL} collection~\cite{puech2025} (Table~\ref{tab:app-oneshot-prompt}), and extend the experiment from their single Grade~7 basketball ratio setting to three additional Grade~7 settings covering percents, random-sample distributions, and composite area (Figure~\ref{fig:oneshot-setup}b).
 
-While Rahimi et al.~\cite{rahimi2025} compared GPT-4o against an early 3.8B small language model (Phi-3 mini), compact models have since gained built-in chain-of-thought reasoning. We therefore compare a compact reasoning model (GPT-5 mini) against a standard flagship chat model (GPT-4.1) to test whether a smaller model with internal reasoning can match or exceed a larger non-reasoning model under the same one-shot prompt. In each of the four topic cells, we generate 30 tasks with GPT-5 mini and 30 tasks with GPT-4.1 under default sampling without retries, yielding 240 generation runs in total.
+While Rahimi et al.~\cite{rahimi2025} compared GPT-4o against an early 3.8B small language model (Phi-3 mini), compact models have since gained built-in chain-of-thought reasoning. We therefore compare a compact reasoning model (GPT-5 mini) against a standard flagship chat model (GPT-4.1) to test whether a smaller model with internal reasoning can match or exceed a larger non-reasoning model under the same one-shot prompt. In each of the four Grade~7 settings, we generate 30 tasks with GPT-5 mini and 30 tasks with GPT-4.1 under default sampling without retries, yielding 240 generation runs in total.
 
 \subsection{Automated Rubric Judge Setup}
 \label{subsec:oneshot-judge-setup}
-To evaluate all 240 generated tasks consistently, we use an LLM judge built from the five dimensions and 1--3 scoring anchors of Rahimi et al.~\cite{rahimi2025} (full prompt in Appendix~\ref{app:oneshot-judge}, Table~\ref{tab:app-oneshot-judge}). We have chosen an LLM judge because scoring 240 tasks across four topics requires an automated evaluator, and Rahimi et al.~\cite{rahimi2025productivemath} also used GPT-4o to rate problems with this rubric alongside human raters in \emph{ProductiveMath}. We keep their wording unchanged so that our results reflect how the original rubric behaves without extra rules or score tuning. As in their human study, the judge is blinded to which model created each task, but receives the student-facing problem together with the topic cell's target concept, prior knowledge, and student interest so that it can judge whether the difficulty and story fit the intended grade~7 students. Each task is rated in two independent passes, and the two total scores from 5 to 15 are averaged to obtain the final score.
+To evaluate all 240 generated tasks consistently, we use an LLM judge (GPT 5.6 Luna) built from the five dimensions and 1--3 scoring anchors of Rahimi et al.~\cite{rahimi2025} (full prompt in Appendix~\ref{app:oneshot-judge}, Table~\ref{tab:app-oneshot-judge}), following their use of an automated LLM rubric judge in \emph{ProductiveMath}~\cite{rahimi2025productivemath}. We keep their rubric wording unchanged so that our results reflect how the original rubric behaves without extra rules or score tuning. Each task is scored in two independent passes without revealing which model generated it, and the two 5--15 totals are averaged to obtain the final score.
 
 \subsection{Rubric Evaluation Results}
 \label{subsec:oneshot-results}
@@ -29,119 +29,98 @@ To evaluate all 240 generated tasks consistently, we use an LLM judge built from
 \begin{figure}[t]
     \centering
     \includegraphics[width=\textwidth]{fig3_2_rubric_comparison.pdf}
-    \caption[One-shot rubric scores by dimension and topic for GPT-5 mini and GPT-4.1]{Automated rubric scores across four grade~7 topics for GPT-5 mini ($n = 117$) and GPT-4.1 ($n = 120$) by (a)~dimension and (b)~topic cell.}
+    \caption[One-Shot Rubric Scores for GPT-5 mini and GPT-4.1 by (a) Dimension and (b) Setting]{One-Shot Rubric Scores for GPT-5 mini and GPT-4.1 by (a)~Dimension and (b)~Setting}
     \label{fig:oneshot-rubric-results}
 \end{figure}
 
-Out of the 240 generation runs, 238 returned valid tasks ($118$ from GPT-5 mini and $120$ from GPT-4.1), with $117$ and $120$ tasks fully scored after one judge call timed out. Across all four topics combined, GPT-5 mini achieves a mean total score of $14.56 \pm 0.49$ out of $15$, outperforming GPT-4.1 at $12.82 \pm 1.23$ with a large effect size ($d = 1.83$). Both models therefore reach or exceed the $13.38$ total score reported for GPT-4o in Table~\ref{tab:bg-rahimi-results}.
+Out of the 240 generation runs, 238 returned valid tasks ($118$ from GPT-5 mini and $120$ from GPT-4.1), with $117$ and $120$ tasks fully scored after one judge call timed out. Across all four settings combined, GPT-5 mini achieves a mean total score of $14.56 \pm 0.49$ out of $15$, outperforming GPT-4.1 at $12.82 \pm 1.23$ with a large effect size ($d = 1.83$). Both models therefore score in the same high range as the $13.38$ total reported for GPT-4o in Table~\ref{tab:bg-rahimi-results}, with GPT-5 mini approaching the 15-point ceiling.
 
-As shown in Figure~\ref{fig:oneshot-rubric-results}a, both models hit the $3.0$ ceiling on affective engagement and activation of prior knowledge, showing that any task written around the assigned theme and prerequisites satisfies these two criteria. Consistent with the human ratings in Rahimi et al.~\cite{rahimi2025}, the gap between the two models comes almost entirely from open-endedness ($2.69$ vs.\ $1.82$), multiple representations ($2.93$ vs.\ $2.50$), and sweet spot calibration ($2.95$ vs.\ $2.54$). Across the four topic cells in Figure~\ref{fig:oneshot-rubric-results}b, GPT-5 mini stays near the 15-point ceiling on every topic, whereas GPT-4.1 scores above $13.0$ on three topics but drops to $11.35$ on home and garden composite area due to lower open-endedness and sweet spot ratings. Taken at face value, these rubric scores suggest that one-shot prompting with a current reasoning model solves PF task generation across topics, which motivates inspecting the generated tasks directly in the next section.
+As shown in Figure~\ref{fig:oneshot-rubric-results}a, both models hit the $3.0$ ceiling on affective engagement and activation of prior knowledge, showing that any task written around the assigned theme and prerequisites satisfies these two criteria. Consistent with the human ratings in Rahimi et al.~\cite{rahimi2025}, the gap between the two models comes almost entirely from open-endedness ($2.69$ vs.\ $1.82$), multiple representations ($2.93$ vs.\ $2.50$), and sweet spot calibration ($2.95$ vs.\ $2.54$). Across the four Grade~7 settings in Figure~\ref{fig:oneshot-rubric-results}b, GPT-5 mini stays near the 15-point ceiling on every setting, whereas GPT-4.1 scores above $13.0$ on three settings but drops to $11.35$ on Home and Garden because it ignores the PF design principles in the prompt and gives away the solution setup directly in the task text. At first glance, these high rubric scores suggest that one-shot prompting with a current reasoning model solves PF task generation across settings, which motivates inspecting the generated tasks directly in the next section.
 
 \section{Failure Modes of One-Shot PF Tasks}
 \label{sec:oneshot-biases}
 
-The rubric scores do not tell us whether a generated problem actually works as a Productive Failure task. We therefore inspect the 238 valid tasks from our rerun ($118$ from GPT-5 mini and $120$ from GPT-4.1) against the PF design requirements from Section~\ref{sec:intro-motivation}. Three failure modes recur across the four topics, even on tasks that receive near-ceiling rubric scores. First, the problem setup and numbers often let students solve the task directly with familiar methods, breaking the second PF requirement. Second, the prompt wording removes student invention (the third PF requirement), either by naming the target concept and methods directly or by turning the task into a step-by-step worksheet. Third, many tasks fail basic prerequisite checks by leaving out part of the target standard or giving contradictory measurements. To measure how often each pattern appears across the 238 tasks, we combine simple text and structure counts with the separate mathematical-concerns list returned by our Section~\ref{subsec:oneshot-judge-setup} judge (Table~\ref{tab:app-oneshot-judge}), and note why each failure mode requires a dedicated check in Chapter~\ref{chap:eval-framework}.
+To see whether these high-scoring problems actually work as Productive Failure tasks, we inspect all 238 generated tasks against the PF design requirements from Section~\ref{sec:intro-motivation}. Despite the high rubric scores in Section~\ref{subsec:oneshot-results}, three failure modes recur across all four settings. The following three subsections introduce each failure mode with a concrete task example, measure how often it appears across the 238 tasks, and explain why it motivates the dedicated checks in Chapter~\ref{chap:eval-framework}.
 
 \subsection{Tasks Solvable by Familiar Methods}
 \label{subsec:routine-story-bias}
-In the variance example from Section~\ref{sec:intro-motivation}, three players share the same mean and range, so students who compare averages cannot decide who is most consistent. Many one-shot tasks lack such a deliberate setup, so a routine prior-knowledge method solves the task right away without exposing any limitation. In Home and Garden, for instance, students have already learned in Grade~6 to find the area of rectangles and right triangles. As illustrated in Figure~\ref{fig:oneshot-impasse-example}, GPT-4.1 task~2 ($10.0 / 15$) presents the garden directly as three separate pieces with all bases and side lengths given, so students simply add the three familiar formulas ($60 + 12 + 9 = 81\text{ m}^2$) without facing an unpartitioned figure or a missing dimension.
+The first failure mode is that many one-shot tasks lack a setup where familiar methods fall short, so a routine procedure from an earlier grade solves the problem right away. In the Home and Garden setting, for instance, students have already learned in Grade~6 to find the area of rectangles and right triangles. As illustrated in Figure~\ref{fig:oneshot-impasse-example}, the generated task presents the garden directly as three separate pieces with all bases and side lengths given, so students simply add the three familiar formulas without facing an unpartitioned figure or a missing dimension.
 
 \begin{figure}[!htb]
     \centering
     \includegraphics[width=\textwidth]{figures/fig3_3_impasse_example.pdf}
-    \caption[One-shot task solvable directly with familiar Grade 6 area formulas]{One-shot task solvable directly with familiar Grade~6 area formulas (GPT-4.1 Home and Garden task~2, rubric score $10.0 / 15$).}
+    \caption[One-Shot Task Solvable by Familiar Methods in the Home and Garden Setting]{One-Shot Task Solvable by Familiar Methods in the Home and Garden Setting}
     \label{fig:oneshot-impasse-example}
 \end{figure}
 
-As summarized in Table~\ref{tab:oneshot-routine-counts}, every Home and Garden task from both models already presents the garden as named rectangles and triangles rather than an unpartitioned figure, and GPT-4.1 repeats this routine template so closely that only $19 / 30$ tasks have distinct titles. Despite this, the judge still gives the GPT-5 mini Garden tasks an average of $2.87$ out of $3$ on sweet spot calibration (and $1.72$ for the shorter GPT-4.1 tasks), because the rubric only asks whether a task looks challenging and manageable on the page rather than whether familiar methods fail. Moreover, a text search can only spot this issue when a geometry prompt names the simple shapes outright. In numerical topics such as Basketball or Shopping, looking at the words alone cannot tell us whether a familiar calculation already solves the problem. Testing that requires working through the given numbers using only the students' prior knowledge, which motivates the prior-knowledge solver we introduce in Chapter~\ref{chap:eval-framework}.
+Across all 60 Home and Garden tasks, every single task from both models already presents the garden as named rectangles and triangles rather than an unpartitioned figure, yet the rubric still rates sweet spot calibration high because it only asks whether a task looks challenging and manageable on the page rather than whether familiar methods fail. Moreover, a text search can only spot this issue when a geometry prompt names the simple shapes outright. In numerical topics such as Basketball or Shopping, looking at the words alone cannot tell us whether a familiar calculation already solves the problem. Testing that requires working through the given numbers using only the students' prior knowledge, which motivates the prior-knowledge solver we introduce in Chapter~\ref{chap:eval-framework}.
 
-\begin{table}[!htb]
-\centering
-\caption[Pre-split shapes and title repetition in one-shot Home and Garden tasks]{Frequency of pre-split shapes and repeated titles across the 60 one-shot Home and Garden tasks ($n = 30$ per model).}
-\label{tab:oneshot-routine-counts}
-\footnotesize
-\setlength{\tabcolsep}{4.5pt}
-\renewcommand{\arraystretch}{1.16}
-\begin{tabular}{@{} >{\raggedright\arraybackslash}p{0.34\textwidth} c c >{\raggedright\arraybackslash}p{0.19\textwidth} @{}}
-\toprule
-\textbf{Observed Issue Pattern} & \textbf{GPT-5 mini ($n = 30$)} & \textbf{GPT-4.1 ($n = 30$)} & \textbf{Measure Method} \\
-\midrule
-Garden described with named rectangles and triangles & $30 / 30$ ($100.0\%$) & $30 / 30$ ($100.0\%$) & Shape terms in task body \\
-Distinct task titles in Home \& Garden cell & $29 / 30$ unique & $19 / 30$ unique & Exact title count per cell \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\subsection{Method Giveaways and Step-by-Step Worksheets}
+\subsection{Step-by-Step Worksheets and Prescribed Representations}
 \label{subsec:helpful-tutor-bias}
 \label{subsec:worksheet-bias}
-In the variance task, the prompt only asks who is the most consistent player and leaves students to decide what to calculate and how to organize their work. One-shot tasks break this openness requirement in two closely related ways, primarily in GPT-5 mini: they give away the target concept or methods in the text, and they break the open challenge into a step-by-step worksheet. Figure~\ref{fig:oneshot-giveaway-example} illustrates a direct wording giveaway in GPT-5 mini Basketball task~21 ($15.0 / 15$), which announces the untaught lesson topic in the opening paragraph, turns proportionality into a direct yes-or-no question in Part~1, and lists five representations for students to use in Part~2. Figure~\ref{fig:oneshot-worksheet-example} shows how GPT-5 mini Home and Garden task~1 ($14.0 / 15$) goes further by turning the problem into a $722$-word, four-part worksheet that explains how to avoid double-counting the corner overlap before walking students through four prescribed sub-tasks.
+The second failure mode is that the prompt guides students through the solution instead of leaving the approach open for them to invent, primarily in GPT-5 mini. As illustrated in Figure~\ref{fig:oneshot-giveaway-example}, the generated basketball task announces the untaught target concept in the opening paragraph and splits the question into a three-part worksheet that tells students what to check in Part~1 and lists five specific representations for them to draw in Part~2.
 
 \begin{figure}[!htb]
     \centering
     \includegraphics[width=\textwidth]{figures/fig3_4_giveaway_example.pdf}
-    \caption[One-shot task that gives away the target concept and lists five representations]{One-shot task that names the target concept as the question and prescribes five representations (GPT-5 mini Basketball task~21, rubric score $15.0 / 15$).}
+    \caption[One-Shot Concept Giveaway and Multi-Part Worksheet in the Basketball Setting]{One-Shot Concept Giveaway and Multi-Part Worksheet in the Basketball Setting}
     \label{fig:oneshot-giveaway-example}
 \end{figure}
 
-\begin{figure}[!htb]
-    \centering
-    \includegraphics[width=\textwidth]{figures/fig3_5_worksheet_example.pdf}
-    \caption[One-shot task structured as a four-part step-by-step worksheet]{One-shot task that resolves the corner-overlap trap up front and prescribes a four-part worksheet (GPT-5 mini Home and Garden task~1, rubric score $14.0 / 15$).}
-    \label{fig:oneshot-worksheet-example}
-\end{figure}
-
-As shown in Table~\ref{tab:oneshot-hint-worksheet-counts}, GPT-5 mini regularly coaches students through both hints and worksheet structure. On the hint side, over $80\%$ of its topic questions directly name the target concept or strategy to use, and $83.1\%$ of all GPT-5 mini questions suggest specific math tools or representations (compared with only $2.5\%$ for GPT-4.1). On the worksheet side, $84.7\%$ of GPT-5 mini tasks split the question into three or more numbered parts whereas none of the GPT-4.1 tasks do so, roughly doubling the median task length and frequently instructing students to show two or more methods ($59.3\%$ vs.\ $6.7\%$). Because both models receive the evaluation rubric inside the generation prompt (Table~\ref{tab:app-oneshot-prompt}), GPT-5 mini satisfies the top anchors for multiple representations and open-endedness literally by naming representations and stacking multi-part questions. Since keyword counts and part counts are only surface proxies for over-guidance, Chapter~\ref{chap:eval-framework} evaluates directly whether a task leaves the core method open for student invention.
+As shown in Table~\ref{tab:oneshot-hint-worksheet-counts}, GPT-5 mini regularly coaches students through both hints and worksheet structure. Over $80\%$ of its questions name the target concept or suggest specific representations, and $84.7\%$ split the question into three or more numbered parts, more than doubling the median task length to $422.5$ words. Because the generation prompt includes the evaluation rubric (Table~\ref{tab:app-oneshot-prompt}), GPT-5 mini satisfies the top anchors for multiple representations and open-endedness literally by naming representations and stacking multi-part questions. Instead of penalizing this over-guidance, the rubric rewards it with higher scores, which motivates a dedicated check in Chapter~\ref{chap:eval-framework} for whether a task leaves the solution method open to the student.
 
 \begin{table}[!htb]
 \centering
-\caption[Frequency of method hints and multi-part worksheets in 238 one-shot tasks]{Frequency of wording hints and multi-part worksheet structure across the 238 valid one-shot tasks.}
+\caption[Method Giveaways and Worksheets in One-Shot Tasks]{Method Giveaways and Worksheets in One-Shot Tasks}
 \label{tab:oneshot-hint-worksheet-counts}
 \footnotesize
-\setlength{\tabcolsep}{4.5pt}
-\renewcommand{\arraystretch}{1.16}
-\begin{tabular}{@{} >{\raggedright\arraybackslash}p{0.34\textwidth} c c >{\raggedright\arraybackslash}p{0.19\textwidth} @{}}
+\setlength{\tabcolsep}{10pt}
+\renewcommand{\arraystretch}{1.35}
+\begin{tabular}{@{} >{\raggedright\arraybackslash}p{0.48\textwidth} c c @{}}
 \toprule
-\textbf{Observed Issue Pattern} & \textbf{GPT-5 mini ($n = 118$)} & \textbf{GPT-4.1 ($n = 120$)} & \textbf{Measure Method} \\
+\textbf{Observed Issue Pattern} & \textbf{GPT-5 mini ($n = 118$)} & \textbf{GPT-4.1 ($n = 120$)} \\
 \midrule
-Basketball questions naming \emph{``proportional''} & $24 / 30$ ($80.0\%$) & $0 / 30$ ($0.0\%$) & Target term in question \\
-Music questions naming center or spread measures & $25 / 29$ ($86.2\%$) & $8 / 30$ ($26.7\%$) & Measure terms in question \\
-Garden tasks cueing the splitting of shapes & $30 / 30$ ($100.0\%$) & $16 / 30$ ($53.3\%$) & Splitting terms in text \\
-Questions suggesting math tools or representations & $98 / 118$ ($83.1\%$) & $3 / 120$ ($2.5\%$) & Tool/rep list in question \\
-Questions asking for $\ge 2$ methods or representations & $70 / 118$ ($59.3\%$) & $8 / 120$ ($6.7\%$) & $\ge 2$-method phrase in question \\
-Questions split into $\ge 3$ numbered parts & $100 / 118$ ($84.7\%$) & $0 / 120$ ($0.0\%$) & Count of part markers \\
-Median task length (words) & $422.5$ words & $200.5$ words & Word count of student task \\
+Basketball questions naming \emph{``proportional''} & $24 / 30$ ($80.0\%$) & $0 / 30$ ($0.0\%$) \\
+\addlinespace[3pt]
+Music questions naming center or spread measures & $25 / 29$ ($86.2\%$) & $8 / 30$ ($26.7\%$) \\
+\addlinespace[3pt]
+Questions prescribing specific representations or tools & $98 / 118$ ($83.1\%$) & $3 / 120$ ($2.5\%$) \\
+\addlinespace[3pt]
+Questions split into a multi-part worksheet ($\ge 3$ parts) & $100 / 118$ ($84.7\%$) & $0 / 120$ ($0.0\%$) \\
+\addlinespace[3pt]
+Median task length (words) & $422.5$ words & $200.5$ words \\
 \bottomrule
 \end{tabular}
 \end{table}
 
 \subsection{Off-Target Prompts and Mathematical Contradictions}
 \label{subsec:offtarget-math-bias}
-Even before evaluating PF pedagogy, a usable classroom task must match the assigned curriculum standard and keep its numbers and geometry consistent. One-shot tasks frequently omit required elements of the target standard or contain internal mathematical contradictions. As illustrated in Figure~\ref{fig:oneshot-math-error-example}, GPT-5 mini Home and Garden task~28 ($15.0 / 15$) states in its opening paragraph that a right triangle~$T$ and a trapezoid~$P$ are attached to opposite long sides of a $12\text{ ft} \times 10\text{ ft}$ rectangle~$R$, but its measurement list attaches $T$ to a $10\text{-ft}$ short side and $P$ to an adjacent $12\text{-ft}$ long side, describing a layout that cannot be drawn consistently.
+The third failure mode is that generated tasks often miss part of the target concept or contain contradictions in their numbers and geometry. In the garden task shown in Figure~\ref{fig:oneshot-math-error-example}, students are asked to find the area and outer border of a garden made of a central $12\text{ ft} \times 10\text{ ft}$ rectangle with a triangle and a trapezoid attached to its sides. The opening story says that the triangle and the trapezoid sit on opposite long sides of the rectangle, but the measurement list below it attaches the triangle to a $10\text{-ft}$ short side and the trapezoid to a $12\text{-ft}$ long side (Figure~\ref{fig:oneshot-math-error-example}a). Because a $10\text{-ft}$ side and a $12\text{-ft}$ side meet at a corner rather than facing each other, the two shapes cannot be on opposite sides, so students cannot draw the garden or find its border consistently (Figure~\ref{fig:oneshot-math-error-example}b).
 
 \begin{figure}[!htb]
     \centering
     \includegraphics[width=\textwidth]{figures/fig3_6_math_error_example.pdf}
-    \caption[One-shot task with a geometric side-attachment contradiction]{Top-rated one-shot task containing a geometric side-attachment contradiction (GPT-5 mini Home and Garden task~28, rubric score $15.0 / 15$).}
+    \caption[One-Shot Mathematical Contradiction in the Home and Garden Setting]{One-Shot Mathematical Contradiction in the Home and Garden Setting}
     \label{fig:oneshot-math-error-example}
 \end{figure}
 
-Table~\ref{tab:oneshot-offtarget-math-counts} reports the counts for both prerequisite issues. Off-target generation is clearest in Music, where the Grade~7 standard requires comparing two populations from random samples: $90.0\%$ of GPT-4.1 tasks omit random-sample framing and simply present two fixed playlists, yet still average $13.63$ out of $15$ (compared with $6.9\%$ for GPT-5 mini). Across all four cells, the rubric judge itself logs at least one entry in its separate mathematical-concerns list (Table~\ref{tab:app-oneshot-judge}) on over $90\%$ of tasks from both models, including the side contradiction in task~28, without lowering the rubric score. Because a single concern list mixes genuine contradictions like task~28 with minor wording notes and never lowers the rubric score, Chapter~\ref{chap:eval-framework} introduces dedicated prerequisite checks for target alignment and mathematical validity.
+Table~\ref{tab:oneshot-offtarget-math-counts} reports the counts for both task soundness issues. Missing the target concept is clearest in the Music setting, where the Grade~7 goal is to draw conclusions about two large catalogs from small random samples, whereas $90.0\%$ of GPT-4.1 tasks never mention sampling and only ask students to compare two short lists directly, turning the problem back into a Grade~6 exercise. Across all four settings, the rubric judge itself logs at least one entry in its separate mathematical-concerns list (Table~\ref{tab:app-oneshot-judge}) on over $90\%$ of tasks from both models without lowering the rubric score. Because a single concern list mixes genuine contradictions with minor wording notes and never lowers the rubric score, Chapter~\ref{chap:eval-framework} introduces dedicated task soundness checks for target alignment and mathematical validity.
 
 \begin{table}[!htb]
 \centering
-\caption[Missing target requirements and judge-logged math concerns in 238 one-shot tasks]{Frequency of omitted random-sample framing and judge-logged mathematical concerns across the 238 valid one-shot tasks.}
+\caption[Off-Target Prompts and Mathematical Concerns in One-Shot Tasks]{Off-Target Prompts and Mathematical Concerns in One-Shot Tasks}
 \label{tab:oneshot-offtarget-math-counts}
 \label{tab:oneshot-failure-counts}
 \footnotesize
-\setlength{\tabcolsep}{4.5pt}
-\renewcommand{\arraystretch}{1.16}
-\begin{tabular}{@{} >{\raggedright\arraybackslash}p{0.34\textwidth} c c >{\raggedright\arraybackslash}p{0.19\textwidth} @{}}
+\setlength{\tabcolsep}{10pt}
+\renewcommand{\arraystretch}{1.35}
+\begin{tabular}{@{} >{\raggedright\arraybackslash}p{0.48\textwidth} c c @{}}
 \toprule
-\textbf{Observed Issue Pattern} & \textbf{GPT-5 mini ($n = 118$)} & \textbf{GPT-4.1 ($n = 120$)} & \textbf{Measure Method} \\
+\textbf{Observed Issue Pattern} & \textbf{GPT-5 mini ($n = 118$)} & \textbf{GPT-4.1 ($n = 120$)} \\
 \midrule
-Music tasks omitting random-sample framing & $2 / 29$ ($6.9\%$) & $27 / 30$ ($90.0\%$) & Sampling terms in task text \\
-Tasks with $\ge 1$ judge-logged mathematical concern & $111 / 118$ ($94.1\%$) & $108 / 120$ ($90.0\%$) & Judge concern list (Table~\ref{tab:app-oneshot-judge}) \\
+Music tasks omitting random-sample framing & $2 / 29$ ($6.9\%$) & $27 / 30$ ($90.0\%$) \\
+\addlinespace[3pt]
+Tasks with $\ge 1$ judge-logged mathematical concern & $111 / 118$ ($94.1\%$) & $108 / 120$ ($90.0\%$) \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -149,14 +128,14 @@ Tasks with $\ge 1$ judge-logged mathematical concern & $111 / 118$ ($94.1\%$) & 
 \section{Limitations of Surface Rubric Scoring}
 \label{sec:oneshot-surface-rubric}
 
-The gap between the high rubric scores in Section~\ref{sec:oneshot-replication} ($14.56$ out of $15$ for GPT-5 mini and $12.82$ for GPT-4.1) and the flaws in Tables~\ref{tab:oneshot-routine-counts}--\ref{tab:oneshot-offtarget-math-counts} comes from how the five 1--3 scoring anchors are written (Table~\ref{tab:app-oneshot-judge}). Because the anchors describe general impressions of the text rather than concrete mathematical checks, a generated task can satisfy all five dimensions on the surface while failing the three PF requirements from Section~\ref{sec:intro-motivation} for two main reasons:
+The gap between the high rubric scores in Section~\ref{sec:oneshot-replication} and the flaws in Section~\ref{sec:oneshot-biases} comes from how the five 1--3 scoring anchors are written (Table~\ref{tab:app-oneshot-judge}). Because the anchors describe general impressions of the text rather than concrete mathematical and structural checks, a generated task can satisfy all five dimensions on the surface while failing the three PF requirements from Section~\ref{sec:intro-motivation} for two main reasons.
 
 \begin{enumerate}[leftmargin=0.6cm,label=\textbf{\arabic*.},itemsep=0.6em,topsep=0.4em]
     \item \textbf{Wording Anchors Reward Hints and Worksheets}\\[0.2em]
-    Affective engagement and activation of prior knowledge only require a realistic story and two prerequisite skills, so both reach the $3.0$ ceiling even when a task omits part of the target standard or gives away the formula. For multiple representations (MR) and open-endedness (OE), the rubric actively rewards the wrong behavior, in line with known length and formatting biases in LLM judges~\cite{zheng2023judging,wang2024fairevaluators}. Because the top MR and OE anchors ask for a wide range of representations and multiple variables, GPT-5 mini outscores GPT-4.1 on both dimensions simply by naming which representations students should use and splitting the prompt into a multi-part worksheet. The very instructions that remove student invention are therefore rewarded with higher rubric scores.
+    Affective engagement and activation of prior knowledge only require a realistic story and two prerequisite skills, so both reach the ceiling even when a task omits part of the target standard or gives away the formula. For multiple representations and open-endedness, the rubric actively rewards the wrong behavior, in line with known length and formatting biases in LLM judges~\cite{zheng2023judging,wang2024fairevaluators}. Because the top anchors ask for a wide range of representations and multiple variables, a model can raise its score simply by naming which representations students should use and splitting the prompt into a multi-part worksheet. The very instructions that remove student invention are therefore rewarded with higher rubric scores.
 
     \item \textbf{Text-Only Scoring Never Tests the Math or Familiar Methods}\\[0.2em]
-    A second limitation is that the rubric judge only reads the problem text and never works through the numbers or geometry. The sweet spot calibration (SSC) anchor only asks whether a task looks challenging but manageable on the page, without testing whether familiar methods actually fail. As a result, even though every Home and Garden task already names the component rectangles and triangles directly, the GPT-5 mini Garden tasks still average $2.87$ out of $3$ on SSC. Reading the text alone also allows tasks with impossible geometry, such as GPT-5 mini Garden task~28 ($15.0 / 15$), to receive a perfect score even when the judge records an issue in its separate mathematical-concerns list.
+    A second limitation is that the rubric judge only reads the problem text and never works through the numbers or geometry. The sweet spot calibration anchor only asks whether a task looks challenging but manageable on the page, without testing whether familiar methods actually fail. As a result, tasks that already name the component rectangles and triangles directly or contain impossible geometry (Figure~\ref{fig:oneshot-math-error-example}) still receive high rubric scores even when the judge records an issue in its separate mathematical-concerns list.
 \end{enumerate}
 
-Together, these findings answer our first research goal (G1): even with modern chat and reasoning models (GPT-4.1 and GPT-5 mini), one-shot generation and holistic rubric scoring still treat Productive Failure as a writing style rather than a mathematical design problem. When a single prompt asks a model to write a story, pick the numbers, and follow the rubric at once, even a stronger reasoning model simply optimizes for surface features that are easy to write and easy for a text-only judge to reward. Addressing both issues requires breaking task design and evaluation into separate, checkable steps. In the next chapter (Chapter~\ref{chap:structpf}), we introduce \textsc{StructPF} (G2) to address the generation side by separating prior-knowledge grounding, choosing and checking numbers where familiar methods fail, and writing the final task without hints, before introducing \textsc{PF Eval} (G3), our requirement-based evaluation, in Chapter~\ref{chap:eval-framework}.
+Together, these findings answer our first research goal (G1). Even with modern chat and reasoning models, one-shot generation and direct rubric scoring still treat Productive Failure as a writing style rather than a mathematical design problem. When a single prompt asks a model to write a story, pick the numbers, and follow the rubric at once, even a stronger reasoning model simply optimizes for surface features that are easy to write and easy for a text-only judge to reward. Addressing both issues requires breaking task design and evaluation into separate, checkable steps. In Chapter~\ref{chap:structpf}, we introduce \textsc{StructPF} (G2) to address the generation side by separating prior-knowledge grounding, choosing and checking numbers where familiar methods fail, and writing the final task without hints, before introducing \textsc{PF Eval} (G3), our requirement-based evaluation, in Chapter~\ref{chap:eval-framework}.

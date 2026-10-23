@@ -37,7 +37,9 @@ from scripts.learning_commons_local import load_snapshot, summarize_node
 from scripts.run_pf_accessibility_sensitivity import build_chats
 from src.evaluation import pf_rubric, pf_rubric_setting
 from src.evaluation import pf_three_role_v30 as v30
+from src.evaluation import pf_three_role_v31 as v31
 from src.evaluation.pf_task_measures import MEASURES
+from src.utils.llm_client import LLMResponse
 
 ROOT = Path(__file__).resolve().parents[1]
 SETTING_PATH = ROOT / "experiments/configs/pf_rahimi_multi_theme_setting.json"
@@ -355,7 +357,9 @@ def _build_cell_inputs(
     return case, grounding_evidence, shared_context
 
 
-def ensure_cell_fixed_d1(cell: dict[str, Any], out_dir: Path) -> Path:
+def ensure_cell_fixed_d1(
+    cell: dict[str, Any], out_dir: Path, gen_model: str = "luna"
+) -> Path:
     """Generate and freeze Stage D1 once per cell in an isolated process."""
     cell_id = cell["cell_id"]
     d1_file = out_dir / "rahimi_cells_generation" / cell_id / "fixed_d1.json"
@@ -366,7 +370,7 @@ def ensure_cell_fixed_d1(cell: dict[str, Any], out_dir: Path) -> Path:
         shutil.rmtree(seed_dir)
     seed_dir.mkdir(parents=True, exist_ok=True)
     case, grounding_evidence, shared_context = _build_cell_inputs(cell, f"{cell_id}__d1_seed")
-    client, model = diagnostic.load_client("luna")
+    client, model = diagnostic.load_client(gen_model)
     import scripts.run_prior_recommendations as d1_runner
 
     frozen_records = diagnostic._frozen_grounding_records(grounding_evidence)
@@ -401,7 +405,7 @@ def ensure_cell_fixed_d1(cell: dict[str, Any], out_dir: Path) -> Path:
 
 
 def generate_rahimi_cell_pipeline_task(
-    cell: dict[str, Any], repeat: int, out_dir: Path
+    cell: dict[str, Any], repeat: int, out_dir: Path, gen_model: str = "luna"
 ) -> dict[str, Any]:
     cell_id = cell["cell_id"]
     key = f"{cell_id}__pipeline_lc__{repeat:03d}"
@@ -423,33 +427,40 @@ def generate_rahimi_cell_pipeline_task(
         d1_data["records"][0]["case_id"] = key
         save_json(reused_d1_for_key, d1_data)
 
-    try:
-        res = diagnostic.run_case_worker(
-            key,
-            str(attempt_dir),
-            "luna",
-            2,
-            str(reused_d1_for_key) if reused_d1_for_key.exists() else None,
-            case_override=case,
-            shared_context=shared_context,
-            evidence_k=6,
-            max_resources=4,
-            d1_condition="grounded",
-            grounding_evidence=grounding_evidence if not reused_d1_for_key.exists() else None,
-        )
-    finally:
-        if reused_d1_for_key.exists():
-            reused_d1_for_key.unlink()
+    for _attempt in range(3):
+        if attempt_dir.exists():
+            shutil.rmtree(attempt_dir)
+        try:
+            res = diagnostic.run_case_worker(
+                key,
+                str(attempt_dir),
+                gen_model,
+                2,
+                str(reused_d1_for_key) if reused_d1_for_key.exists() else None,
+                case_override=case,
+                shared_context=shared_context,
+                evidence_k=6,
+                max_resources=4,
+                d1_condition="grounded",
+                grounding_evidence=grounding_evidence if not reused_d1_for_key.exists() else None,
+            )
+            if ((res.get("stages") or {}).get("D2_D3") or {}).get("task"):
+                break
+        except Exception as exc:
+            res = {"status": "error", "error": f"{type(exc).__name__}: {exc}"}
+    if reused_d1_for_key.exists():
+        reused_d1_for_key.unlink()
     return {"key": key, "cell_id": cell_id, "repeat": repeat, "result": res}
 
 
 def _has_v30_api_error(res: dict[str, Any]) -> bool:
-    if (res.get("task_judge") or {}).get("status") == "api_error":
+    if (res.get("task_judge") or {}).get("status") != "completed":
         return True
-    if (res.get("attempt_judge") or {}).get("status") == "api_error":
+    aj_status = (res.get("attempt_judge") or {}).get("status")
+    if aj_status not in (None, "completed", "not_run"):
         return True
     for s in (res.get("solvers") or {}).values():
-        if s.get("status") == "api_error":
+        if s.get("status") in ("api_error", "truncated", "invalid_response"):
             return True
     return False
 
@@ -460,20 +471,50 @@ def evaluate_rahimi_cell_v30(
     student_task: str,
     chats: dict[str, Any],
     out_dir: Path,
+    *,
+    subdir: str = "rahimi_cells_v30",
+    solvers: tuple[str, ...] = ("luna", "gpt41"),
+    eval_ver: str = "v30",
+    tj_cache_dir: Path | None = None,
 ) -> dict[str, Any]:
-    out_path = out_dir / "rahimi_cells_v30" / f"{key}.json"
+    out_path = out_dir / subdir / f"{key}.json"
     if out_path.exists():
         saved = json.loads(out_path.read_text(encoding="utf-8"))
         if saved.get("status") == "completed" and not _has_v30_api_error(saved.get("result") or {}):
             return saved
+    cached_tj = None
+    if tj_cache_dir is not None:
+        cp = tj_cache_dir / f"{key}.json"
+        if cp.exists():
+            try:
+                cd = json.loads(cp.read_text(encoding="utf-8"))
+                tj = (cd.get("result") or {}).get("task_judge")
+                if tj and tj.get("status") == "completed":
+                    cached_tj = tj
+            except Exception:
+                pass
+
+    def judge_chat_fn(messages):
+        if cached_tj is not None and '"attempts"' not in messages[1]["content"]:
+            last_resp = cached_tj["calls"][-1]["response"]
+            return LLMResponse(
+                text=json.dumps(cached_tj["output"], ensure_ascii=False),
+                model=last_resp["model"],
+                finish_reason=last_resp["finish_reason"],
+                usage=last_resp["usage"],
+            )
+        return chats["luna"](messages)
+
+    eval_fn = v31.evaluate_v31 if eval_ver == "v31" else v30.evaluate_v30
     res = None
+    solver_chats = {s: chats[s] for s in solvers}
     for attempt in range(3):
-        res = v30.evaluate_v30(
+        res = eval_fn(
             student_task,
             cell["case"]["target_concept"],
             copy.deepcopy(cell["learner_context"]),
-            solver_chats={"luna": chats["luna"]},
-            judge_chat=chats["luna"],
+            solver_chats=solver_chats,
+            judge_chat=judge_chat_fn,
         )
         if not _has_v30_api_error(res):
             break
@@ -500,13 +541,19 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "--phase",
-        choices=["saved_cohorts", "rahimi_cells", "all"],
+        choices=["saved_cohorts", "rahimi_cells", "main30_oneshot", "all"],
         default="all",
     )
+    parser.add_argument("--gen-model", default="luna")
+    parser.add_argument("--eval-version", choices=["v30", "v31"], default="v30")
+    parser.add_argument("--solvers", default="luna,gpt41")
+    parser.add_argument("--oneshot-models", default="gpt-5-mini,gpt-4.1")
     parser.add_argument("--repeats-per-cell", type=int, default=3)
     parser.add_argument("--workers", type=int, default=6)
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
     args = parser.parse_args()
+    solver_tuple = tuple(s.strip() for s in args.solvers.split(",") if s.strip())
+    oneshot_models = [m.strip() for m in args.oneshot_models.split(",") if m.strip()]
 
     out_dir = args.output.resolve()
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -518,7 +565,12 @@ def main() -> None:
     summary_out.update(
         {
             "generated_at": now(),
-            "v30_prompt_sha256": v30.fingerprint(),
+            "gen_model": args.gen_model,
+            "eval_version": args.eval_version,
+            "v30_solvers": list(solver_tuple),
+            "v30_prompt_sha256": (
+                v31.fingerprint() if args.eval_version == "v31" else v30.fingerprint()
+            ),
         }
     )
 
@@ -562,7 +614,8 @@ def main() -> None:
         # Step 1: Ensure fixed_d1.json per cell in isolated processes
         with ProcessPoolExecutor(max_workers=4) as pool:
             d1_futs = {
-                pool.submit(ensure_cell_fixed_d1, cell, out_dir): cell["cell_id"] for cell in cells
+                pool.submit(ensure_cell_fixed_d1, cell, out_dir, args.gen_model): cell["cell_id"]
+                for cell in cells
             }
             for fut in as_completed(d1_futs):
                 d1_p = fut.result()
@@ -573,7 +626,9 @@ def main() -> None:
         gen_records: list[dict[str, Any]] = []
         with ProcessPoolExecutor(max_workers=args.workers) as pool:
             futs = {
-                pool.submit(generate_rahimi_cell_pipeline_task, cell, rep, out_dir): (
+                pool.submit(
+                    generate_rahimi_cell_pipeline_task, cell, rep, out_dir, args.gen_model
+                ): (
                     cell["cell_id"],
                     rep,
                 )
@@ -623,6 +678,8 @@ def main() -> None:
                     st_text,
                     chats,
                     out_dir,
+                    solvers=solver_tuple,
+                    eval_ver=args.eval_version,
                 ): key
                 for key, cell, st_text in ready_items
             }
@@ -685,6 +742,134 @@ def main() -> None:
                 k: v["mean_final"] for k, v in main30_ref.items()
             },
         }
+        save_json(out_dir / "summary.json", summary_out)
+
+    if args.phase in ("main30_oneshot", "all"):
+        setting = json.loads(SETTING_PATH.read_text(encoding="utf-8"))
+        cells_by_id = {c["cell_id"]: c for c in setting["cells"]}
+        attempts_dir = ROOT / "experiments/results/pf_rahimi_multi_theme_20261013/main_30/attempts"
+
+        # Seed the 16 already-saved two-solver calibration jobs if solvers == ('luna', 'gpt41')
+        if solver_tuple == ("luna", "gpt41"):
+            cat_path = ROOT / "experiments/results/pf_measure_campaign_20261014/catalog.json"
+            cal_jobs = (
+                ROOT / "experiments/results/pf_v31_calibration_20261021/main30_16_jobs"
+                if args.eval_version == "v31"
+                else ROOT / "experiments/results/pf_v30_calibration_20261015/generated_jobs"
+            )
+            if cat_path.exists() and cal_jobs.exists():
+                cat = {
+                    c["case_id"]: c
+                    for c in json.loads(cat_path.read_text(encoding="utf-8"))["cases"]
+                }
+                for jf in sorted(cal_jobs.glob("*.json")):
+                    cid = jf.stem
+                    occ = (cat.get(cid) or {}).get("occurrences") or []
+                    if not occ:
+                        continue
+                    att_id = occ[0].get("attempt_id", "")
+                    att_file = attempts_dir / f"{att_id}.json"
+                    dst_file = out_dir / "main30_oneshot_v30" / f"{att_id}.json"
+                    if att_file.exists() and not dst_file.exists():
+                        jdata = json.loads(jf.read_text(encoding="utf-8"))
+                        att_data = json.loads(att_file.read_text(encoding="utf-8"))
+                        save_json(
+                            dst_file,
+                            {
+                                "key": att_id,
+                                "cell_id": att_data["cell_id"],
+                                "model_requested": att_data["model_requested"],
+                                "status": "completed",
+                                "result": jdata["result"],
+                                "reused_from": str(jf.relative_to(ROOT)),
+                                "finished_at": jdata.get("finished_at", now()),
+                            },
+                        )
+
+        oneshot_items = []
+        for af in sorted(attempts_dir.glob("*.json")):
+            adata = json.loads(af.read_text(encoding="utf-8"))
+            if adata.get("status") != "ready" or adata.get("model_requested") not in oneshot_models:
+                continue
+            tobj = adata.get("task") or {}
+            st_text = "\n\n".join(
+                str(tobj.get(k, "")).strip()
+                for k in ("title", "body", "question")
+                if tobj.get(k)
+            )
+            if st_text:
+                oneshot_items.append(
+                    (
+                        adata["key"],
+                        adata["model_requested"],
+                        cells_by_id[adata["cell_id"]],
+                        st_text,
+                    )
+                )
+
+        oneshot_items.sort(key=lambda x: (oneshot_models.index(x[1]), x[0]))
+        oneshot_recs: list[tuple[str, dict[str, Any]]] = []
+        v30_os_cache = (
+            ROOT / "experiments/results/pf_newest_pipeline_rahimi_eval_gpt5mini_20261021/main30_oneshot_v30"
+        )
+        with ThreadPoolExecutor(max_workers=args.workers) as pool:
+            futs = {
+                pool.submit(
+                    evaluate_rahimi_cell_v30,
+                    key,
+                    cell,
+                    st_text,
+                    chats,
+                    out_dir,
+                    subdir="main30_oneshot_v30",
+                    solvers=solver_tuple,
+                    eval_ver=args.eval_version,
+                    tj_cache_dir=v30_os_cache if v30_os_cache.exists() else None,
+                ): (key, model_req)
+                for key, model_req, cell, st_text in oneshot_items
+            }
+            for fut in as_completed(futs):
+                key, model_req = futs[fut]
+                r = fut.result()
+                oneshot_recs.append((model_req, r))
+                ms = r["result"]["measures"]
+                all5 = all(ms[m]["value"] == "yes" for m in MEASURES)
+                print(
+                    f"[main30-oneshot-v30] {key} ({len(oneshot_recs)}/{len(oneshot_items)}): all5={all5} limits={ms['familiar_approach_limits']['value']}",
+                    flush=True,
+                )
+
+        by_model_summary: dict[str, Any] = {}
+        for m_req in oneshot_models:
+            m_recs = [r for mr, r in oneshot_recs if mr == m_req]
+            if not m_recs:
+                continue
+            m_counts = {m: Counter() for m in MEASURES}
+            m_all5 = 0
+            m_by_cell: dict[str, dict[str, Any]] = defaultdict(
+                lambda: {"n": 0, "all_5_yes": 0, "limits_yes": 0}
+            )
+            for r in m_recs:
+                cid = r["cell_id"]
+                ms = r["result"]["measures"]
+                m_by_cell[cid]["n"] += 1
+                for m in MEASURES:
+                    val = ms[m]["value"] if ms[m]["status"] == "assessed" else ms[m]["status"]
+                    m_counts[m][str(val)] += 1
+                if ms["familiar_approach_limits"]["value"] == "yes":
+                    m_by_cell[cid]["limits_yes"] += 1
+                if all(ms[m]["value"] == "yes" for m in MEASURES):
+                    m_all5 += 1
+                    m_by_cell[cid]["all_5_yes"] += 1
+            by_model_summary[m_req] = {
+                "n_evaluated": len(m_recs),
+                "all_5_yes": m_all5,
+                "all_5_yes_pct": round(100.0 * m_all5 / max(1, len(m_recs)), 1),
+                "measures": {m: dict(c) for m, c in m_counts.items()},
+                "by_cell_v30": dict(m_by_cell),
+            }
+        existing_os = summary_out.get("main30_oneshot_v30") or {}
+        summary_out["main30_oneshot_v30"] = {**existing_os, **by_model_summary}
         save_json(out_dir / "summary.json", summary_out)
 
     print(json.dumps(summary_out, indent=2))

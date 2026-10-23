@@ -144,8 +144,8 @@ def main():
 
     out_dir = Path(__file__).resolve().parents[1] / "thesis" / "figures"
     out_dir.mkdir(parents=True, exist_ok=True)
-    pdf_path = out_dir / "fig5_2_eval_overview.pdf"
-    png_path = out_dir / "fig5_2_eval_overview.png"
+    pdf_path = out_dir / "fig5_1_eval_overview.pdf"
+    png_path = out_dir / "fig5_1_eval_overview.png"
     fig.savefig(pdf_path, bbox_inches="tight", pad_inches=0.04)
     fig.savefig(png_path, dpi=300, bbox_inches="tight", pad_inches=0.04)
     plt.close(fig)

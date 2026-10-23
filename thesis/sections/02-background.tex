@@ -1,12 +1,12 @@
 \chapter{Background and Related Work}
 \label{chap:background}
 
-\section{Principles and Mechanisms of Productive Failure}
+\section{Foundations of Productive Failure}
 \label{sec:bg-pf-theory}
 
 \subsection{Empirical Evidence for Productive Failure}
 \label{subsec:bg-pf-evidence}
-Kapur first introduced Productive Failure in a study on Newtonian kinematics~\cite{kapur2008}, where grade~11 students worked in small groups on either ill-structured physics problems, which have missing information and several possible solutions, or well-structured problems. The groups working on ill-structured problems produced poorer solutions at first, but afterward they solved new problems of both types better than the other groups. Later studies moved from comparing two kinds of problems to comparing two whole teaching procedures, namely PF and direct instruction, where the formula is taught first. Kapur and Bielaczyc made this comparison for average speed~\cite{kapur2012}, and Kapur repeated it for variance~\cite{kapur2014}. These studies showed that the time spent struggling did not come at a cost: PF students calculated with the formula as well as students who had been taught it first, and they were even better at explaining why the formula works. A meta-analysis by Sinha and Kapur~\cite{sinha2021} confirmed this advantage across many studies and found it to be larger when the problem-solving phase closely follows PF design principles. 
+Kapur first introduced Productive Failure in a study on Newtonian kinematics~\cite{kapur2008}, where Grade~11 students worked in small groups on either ill-structured physics problems, which have missing information and several possible solutions, or well-structured problems. The groups working on ill-structured problems produced poorer solutions at first, but afterward they solved new problems of both types better than the other groups. Later studies moved from comparing two kinds of problems to comparing two whole teaching procedures, namely PF and direct instruction, where the formula is taught first. Kapur and Bielaczyc made this comparison for average speed~\cite{kapur2012}, and Kapur repeated it for variance~\cite{kapur2014}. These studies showed that the time spent struggling did not come at a cost: PF students calculated with the formula as well as students who had been taught it first, and they were even better at explaining why the formula works. A meta-analysis by Sinha and Kapur~\cite{sinha2021} confirmed this advantage across many studies and found it to be larger when the problem-solving phase closely follows PF design principles. 
 
 \subsection{Learning Mechanisms and Design Principles}
 \label{subsec:bg-pf-mechanisms}
@@ -18,16 +18,16 @@ Kapur and Bielaczyc~\cite{kapur2012} explain why PF works through four interdepe
     \item \emph{Assembling these features into the target concept:} Students organize these features into the target concept, which mainly happens when the teacher compares their solutions with the canonical one.
 \end{enumerate}
 
-Loibl and Rummel~\cite{loibl2014} examine how this awareness of knowledge gaps develops across the two phases. When students try to solve the problem before instruction, they notice in a general way that their current methods are not enough to solve it, but they cannot yet tell what specifically is wrong with their attempts. Across two experiments, students only recognized the exact flaws in their ideas when the teacher later compared typical student solutions with the canonical solution, and this comparison was the most important factor for learning. Together with the finding of Kapur, Saba, and Roll~\cite{kapur2023inventive} that students learn more when they generate more solutions during problem solving, this shows that a PF problem must elicit several distinct attempts whose specific flaws can later be compared. Because group collaboration and classroom norms remain the responsibility of the teacher in the classroom~\cite{kapur2012}, this thesis focuses on generating and evaluating the written problem that triggers these mechanisms.
+For these four mechanisms to work, the problem must elicit several distinct attempts that each fail for a clear reason. Classroom studies show that students learn more when they generate more solutions in the first phase~\cite{kapur2023inventive} and when the teacher can point to the exact flaw in each attempt during the second phase~\cite{loibl2014}. Because group work and the classroom discussion remain the teacher's responsibility~\cite{kapur2012}, this thesis focuses on generating and evaluating the written problem itself.
 
-\section{LLMs for Generating Educational Tasks and Productive Failure}
+\section{Generating Educational Tasks with LLMs}
 \label{sec:bg-llm-math}
 
-\subsection{Generating Multiple-Choice Questions and Distractors}
+\subsection{Multiple-Choice Questions and Distractors}
 \label{subsec:bg-llm-mcq}
-An earlier use case of LLMs in educational task generation is creating multiple-choice questions (MCQs), where studies tried to find out whether language models can generate wrong options, or distractors, that reflect real student misconceptions~\cite{alhazmi2024}. In a diagnostic MCQ, each distractor is written to match the specific answer a student reaches through a common misconception rather than a random guess. Large classroom datasets such as Eedi~\cite{wang2021eedi} provide thousands of math questions in which every distractor is paired with a teacher-written explanation of the underlying misconception.
+An earlier use case of LLMs in educational task generation is creating multiple-choice questions (MCQs), where each wrong option, or distractor, is designed to match the answer a student reaches through a specific misconception rather than a random guess~\cite{alhazmi2024}. Large classroom datasets such as Eedi~\cite{wang2021eedi} support this by providing thousands of math questions in which every distractor is paired with a teacher-written explanation of the underlying misconception.
 
-Building on Eedi, Feng et al.~\cite{feng2024} tested how well LLMs can generate three distractors per question and measured the share of generated distractors that matched the three human-written Eedi options. When prompted with random example questions, the model matched only $23.6\%$ of the human distractors, and selecting from hand-written error rules or asking GPT-4 to reason step by step about likely student errors brought only modest improvements ($27\text{--}30\%$). The highest match rate, $38.5\%$, was achieved by retrieving the three most similar training questions together with their teacher-written distractors and error explanations as few-shot examples. Even on routine questions, an LLM therefore cannot reliably guess student mistakes from direct prompting alone, and instead needs real examples of student errors.
+Building on Eedi, Feng et al.~\cite{feng2024} tested how well LLMs can generate three distractors per question and measured the share of generated distractors that matched the three human-written Eedi options. When prompted with random example questions, the model matched only $23.6\%$ of the human distractors, and selecting from hand-written error rules or asking GPT-4 to reason step by step about likely student errors (CoT) brought only modest improvements ($27\text{--}30\%$). The highest match rate, $38.5\%$, was achieved by retrieving the three most similar training questions together with their teacher-written distractors and error explanations as few-shot examples (RAG). Even on routine questions, an LLM therefore cannot reliably guess student mistakes from direct prompting alone, and instead needs real examples of student errors.
 
 \subsection{Applying LLMs to Productive Failure}
 \label{subsec:bg-llm-pf}
@@ -38,15 +38,15 @@ To generate the PF problems themselves, Rahimi et al.~\cite{rahimi2025productive
 \begin{figure}[t]
     \centering
     \includegraphics[width=\textwidth]{fig2_1_rahimi_setup_rubric.pdf}
-    \caption[One-shot PF generation setup and five-dimension rubric in Rahimi et al.]{One-shot PF generation prompt structure~(a) and five-dimension 1--3 evaluation rubric~(b) from Rahimi et al.~\cite{rahimi2025productivemath,rahimi2025}.}
+    \caption[One-Shot Prompt (a) and Five-Dimension Rubric (b) from Rahimi et al.]{One-Shot Prompt~(a) and Five-Dimension Rubric~(b) from Rahimi et al.~\cite{rahimi2025productivemath,rahimi2025}}
     \label{fig:rahimi-setup-rubric}
 \end{figure}
 
-In a follow-up study, Rahimi et al.~\cite{rahimi2025} used the same six-part prompt and rubric to compare GPT-4o and Phi-3 mini (3.8B) on 60 problems (30 per model) generated for a single fixed setting targeting grade~7 ratios and proportional relationships, with unit rates and rational-number operations as prior knowledge and a Stephen Curry basketball theme. As summarized in Table~\ref{tab:bg-rahimi-results}, two blinded human raters found that GPT-4o scored significantly higher than Phi-3 mini overall ($13.38$ vs.\ $10.67$ out of $15$, $d = 1.16$), driven mainly by large gains on multiple representations and open-endedness, while both models already scored high on affective engagement and prior-knowledge activation.
+Because \emph{ProductiveMath} relied on a single large model (GPT-4o), Rahimi et al.~\cite{rahimi2025} next tested whether a small language model could match it under the same six-part prompt and rubric. They compared GPT-4o and Phi-3 mini (3.8B) on 60 problems (30 per model) generated for a single fixed setting targeting Grade~7 ratios and proportional relationships, with unit rates and rational-number operations as prior knowledge and a Stephen Curry basketball theme. As summarized in Table~\ref{tab:bg-rahimi-results}, two blinded human raters found that GPT-4o scored significantly higher than Phi-3 mini overall ($13.38$ vs.\ $10.67$ out of $15$, $d = 1.16$). While both models already scored high on affective engagement and prior-knowledge activation, GPT-4o more reliably followed the prompt's instructions to ask for diverse representations (such as tables, diagrams, and equations) and multi-path problem structures, driving large gains on multiple representations ($d = 1.65$) and open-endedness ($d = 1.58$).
 
 \begin{table}[t]
 \centering
-\caption[Human rubric scores for GPT-4o and Phi-3 mini in Rahimi et al.]{Human rubric scores (1--3 per dimension, 5--15 total) comparing GPT-4o and Phi-3 mini on 60 grade~7 basketball tasks~\cite{rahimi2025}.}
+\caption[Human Rubric Scores for GPT-4o and Phi-3 mini (Rahimi et al.)]{Human Rubric Scores for GPT-4o and Phi-3 mini (Rahimi et al.~\cite{rahimi2025})}
 \label{tab:bg-rahimi-results}
 \small
 \setlength{\tabcolsep}{6pt}
@@ -67,42 +67,50 @@ Open-Endedness (OE, 1--3) & $2.77 \pm 0.47$ & $1.88 \pm 0.64$ & $1.58$ \\
 \end{tabular}
 \end{table}
 
-\section{Evaluating Generated Educational Content with LLMs}
+\section{Evaluating Educational Tasks with LLMs}
 \label{sec:bg-evaluation}
 
-\subsection{Judging Task Text Directly with Rubrics and Checklists}
+\subsection{Direct Rubric Scoring}
 \label{subsec:bg-eval-rubrics}
-\textbf{Holistic Rubric Judges:} Once educational tasks are generated automatically, evaluating every output with human teachers becomes a bottleneck. A common alternative is to use an LLM as an automated judge by giving it a scoring rubric, as introduced in \emph{G-Eval}~\cite{liu2023geval} and applied to PF problems in \emph{ProductiveMath}~\cite{rahimi2025productivemath}. In this setup, the judge reads the generated text and assigns a Likert score along each rubric dimension. However, Zheng et al.~\cite{zheng2023judging} and Wang et al.~\cite{wang2024fairevaluators} show that holistic LLM judges suffer from strong verbosity, formatting, and position biases, consistently rewarding longer and more polished text even when the underlying content is flawed.
+Once educational tasks are generated automatically, evaluating every output with human teachers becomes a bottleneck. A common alternative is to use an LLM as an automated judge that reads the generated text and scores it on a Likert scale for each rubric dimension, a general evaluation approach popularized by \emph{G-Eval}~\cite{liu2023geval} and used for PF problems in \emph{ProductiveMath}~\cite{rahimi2025productivemath}. However, Liu et al.~\cite{liu2023geval}, Zheng et al.~\cite{zheng2023judging}, and Wang et al.~\cite{wang2024fairevaluators} show that such rubric-based LLM judges favor LLM-generated text and suffer from strong verbosity, formatting, and position biases, rewarding longer and more polished text even when the underlying content is flawed.
 
-\textbf{Decomposed Checklists:} To make automated text evaluation more reliable, recent work replaces broad Likert scales with decomposed checklists. In \emph{CheckEval}, Lee et al.~\cite{lee2025checkeval} break each evaluation dimension into specific yes-or-no questions that the judge answers individually before scores are aggregated, which improves correlation with human raters and reduces scoring variance compared with direct Likert scales. Cook et al.~\cite{cook2024tick} report a similar advantage, showing that checklist items help judges catch specific omissions that holistic scores overlook. In educational task evaluation, Moore et al.~\cite{moore2023mcqquality} evaluated MCQs against an item-writing checklist and found that while GPT-4 matched human raters on over $80\%$ of the wording criteria, checking the question text alone still could not verify how student solution methods behave on the mathematical content.
+\subsection{Decomposed Checklists}
+\label{subsec:bg-eval-checklists}
+To make automated text evaluation more reliable, recent work replaces broad Likert scales with decomposed checklists. In \emph{CheckEval}, Lee et al.~\cite{lee2025checkeval} break each evaluation dimension into specific yes-or-no questions that the judge answers individually before scores are aggregated, which improves correlation with human raters and reduces scoring variance compared with direct Likert scales. Cook et al.~\cite{cook2024tick} report a similar advantage, showing that checklist items help judges catch specific omissions that direct rubric scores overlook. In education, Moore et al.~\cite{moore2023mcqquality} used GPT-4 to evaluate multiple-choice questions against a 19-item writing checklist, matching human raters on over $80\%$ of the criteria. However, their checklist only evaluates surface writing rules, such as clear phrasing and consistent option lengths, rather than the underlying mathematical structure or pedagogical design of the problem.
 
-\subsection{Testing Tasks Behaviorally with Simulated Students}
+\subsection{Knowledge-Profile Student Simulation}
+\label{subsec:bg-eval-simstudents-profile}
+Instead of only inspecting the wording of a task, a second line of work evaluates educational items by having LLM-simulated students attempt them. In \emph{Generative Students}, Lu and Wang~\cite{lu2024} construct student profiles by specifying which knowledge components a learner has mastered, confuses, or does not know, and prompt simulated students to answer multiple-choice questions on user-interface design, matching college students' item-level performance well ($r = 0.72$). In a similar vein, Scarlatos et al.~\cite{scarlatos2025smart} in \emph{SMART} align simulated student responses with Item Response Theory to estimate the difficulty of reading and programming questions on held-out test items.
+
+\subsection{Prior-Knowledge Leakage in Mathematics}
 \label{subsec:bg-eval-simstudents}
-\textbf{Knowledge-Profile Student Simulation:} Instead of only inspecting the wording of a task, a second line of work evaluates educational items by having LLM-simulated students attempt them. In \emph{Generative Students}, Lu and Wang~\cite{lu2024} construct student profiles by specifying which knowledge components a learner has mastered, confuses, or does not know, and prompt simulated students to answer multiple-choice questions on user-interface design, matching college students' item-level performance well ($r = 0.72$). In a similar vein, Scarlatos et al.~\cite{scarlatos2025smart} in \emph{SMART} align simulated student responses with Item Response Theory to estimate the difficulty of reading and programming questions on held-out test items.
-
-\textbf{Prior-Knowledge Leakage in Mathematics:} When this persona-based approach is applied to mathematics, however, capable language models struggle to stay within a student's actual prior knowledge. Liu et al.~\cite{liu2023novice} tested GPT-4 on Eedi math questions and found that while the model solved $94.8\%$ of the problems correctly as an expert tutor, it could reproduce a specified student misconception on only $61.7\%$ of the items, often defaulting back to the correct calculation. Srivatsa et al.~\cite{srivatsa2025abilities} similarly found on national mathematics assessments (NAEP) that no model or persona prompt reliably matched real students' grade-level ability boundaries. Furthermore, Do, Sonkar, and Sachan~\cite{do2026faithfulness} showed that LLM student simulators abandon their initial errors under almost any follow-up prompt, even when the feedback is generic or unrelated to their mistake. Role-play student personas therefore cannot be trusted on their own to respect strict prior-knowledge limits on open math problems.
+When this persona-based approach is applied to mathematics, however, capable language models struggle to stay within a student's actual prior knowledge. Liu et al.~\cite{liu2023novice} tested GPT-4 on Eedi math questions and found that while the model solved $94.8\%$ of the problems correctly as an expert tutor, it could reproduce a specified student misconception on only $61.7\%$ of the items, often defaulting back to the correct calculation. Srivatsa et al.~\cite{srivatsa2025abilities} similarly found on national mathematics assessments (NAEP) that no model or persona prompt reliably matched real students' grade-level ability boundaries. Furthermore, Do, Sonkar, and Sachan~\cite{do2026faithfulness} showed that LLM student simulators abandon their initial errors under almost any follow-up prompt, even when the feedback is generic or unrelated to their mistake. Role-play student personas therefore cannot be trusted on their own to respect strict prior-knowledge limits on open math problems.
 
 \section{Summary and Research Gap}
 \label{sec:bg-gap}
 
-\begin{table}[t]
+\begin{table}[!htb]
 \centering
-\caption[Comparison of prior LLM studies on educational task generation and evaluation]{Comparison of prior LLM studies on math task generation, student simulation, and Productive Failure with \textsc{StructPF}.}
+\caption[Prior LLM Studies on Educational Task Generation and Evaluation]{Prior LLM Studies on Educational Task Generation and Evaluation}
 \label{tab:bg-llm-comparison}
-\small
-\setlength{\tabcolsep}{5pt}
-\renewcommand{\arraystretch}{1.25}
-\begin{tabular}{@{} >{\raggedright\arraybackslash}p{0.19\textwidth} >{\raggedright\arraybackslash}p{0.20\textwidth} >{\raggedright\arraybackslash}p{0.27\textwidth} >{\raggedright\arraybackslash}p{0.25\textwidth} @{}}
+\footnotesize
+\setlength{\tabcolsep}{3.5pt}
+\renewcommand{\arraystretch}{1.35}
+\begin{tabular}{@{} l l c c c @{}}
 \toprule
-\textbf{Study} & \textbf{Educational Task} & \textbf{How Student Thinking and Failure Are Handled} & \textbf{Evaluation} \\
+\textbf{Study} & \textbf{Focus} & \textbf{Open PF Tasks} & \textbf{Prior Knowledge} & \textbf{Method-Failure Check} \\
 \midrule
-Feng et al.~\cite{feng2024} & Diagnostic MCQ distractors & Retrieves similar questions and error explanations for single-step mistakes & Match rate against teacher-written Eedi distractors \\
-Lu and Wang~\cite{lu2024}; Liu et al.~\cite{liu2023novice} & Simulated-student item evaluation & Role-play student personas attempt items under a knowledge profile; often leaks untaught math skills & Correlation or match rate with student responses \\
-Puech et al.~\cite{puech2025} & PF Phase~1 tutoring (\textsc{StratL}) & Steers tutor dialogue; relies on PF problems already written by human experts & Student solution count and reasoning score in class \\
-Rahimi et al.~\cite{rahimi2025productivemath,rahimi2025} & PF problem generation & One-shot prompt with PF principles and examples; no check on prior methods or numbers & 5-dimension surface rubric (human and LLM raters) \\
-\textbf{This thesis (\textsc{StructPF})} & \textbf{PF task generation} & \textbf{Structure-aware, multi-stage generation grounded in students' prior knowledge} & \textbf{Deep structural and solver-based evaluation of the underlying PF mechanisms} \\
+Feng et al.~\cite{feng2024} & MCQ distractors & -- & $\checkmark$ (error RAG) & -- \\
+\addlinespace[3pt]
+Lu and Wang~\cite{lu2024}; Liu et al.~\cite{liu2023novice} & Student simulation & -- & $\checkmark$ (persona profile) & -- \\
+\addlinespace[3pt]
+Puech et al.~\cite{puech2025} (\textsc{StratL}) & PF Phase~1 tutoring & -- & $\checkmark$ (expert-supplied) & -- \\
+\addlinespace[3pt]
+Rahimi et al.~\cite{rahimi2025productivemath,rahimi2025} & PF task generation & $\checkmark$ (one-shot) & -- & -- (surface rubric) \\
+\midrule
+\textbf{This thesis (\textsc{StructPF})} & \textbf{PF task generation} & \textbf{$\checkmark$ (3-stage)} & \textbf{$\checkmark$ (curriculum graph)} & \textbf{$\checkmark$ (calculator + solver)} \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-Table~\ref{tab:bg-llm-comparison} summarizes how prior work relates to this thesis. On the generation side, MCQ distractor studies show that LLMs need explicit grounding in student thinking rather than direct prompting alone. However, MCQ generation only targets single-step mistakes on routine questions and does not capture the complexity of PF, where an open problem must let students try and compare several prior methods. Existing work on PF task generation targets open problems directly, but has only studied one-shot prompting, relying on the model's general ability to invent the scenario, numbers, and wording in a single pass~\cite{rahimi2025productivemath,rahimi2025}. On the evaluation side, prior PF studies score generated tasks on a surface level with a broad 1--3 rubric without testing whether familiar methods actually fail on the problem's numbers, while unconstrained role-play student simulators often solve problems using knowledge beyond the student's grade~\cite{liu2023novice,srivatsa2025abilities}. With stronger current language models, we want to push automated PF generation and evaluation to their limit by moving beyond one-shot prompting and surface-level rubric scoring to test how well LLMs can design PF tasks for future education.
+Table~\ref{tab:bg-llm-comparison} summarizes how prior work relates to this thesis. On the generation side, MCQ distractor studies such as Feng et al.~\cite{feng2024} show that LLMs cannot reliably guess student mistakes from direct prompting alone and perform much better when given external information about student errors. However, MCQ generation only targets single-step mistakes on routine questions and does not capture the complexity of PF, where an open problem must let students try and compare several prior methods. Existing work on PF task generation targets open problems directly, but has only studied one-shot prompting on a narrow set of Grade~7 algebra topics, relying on the model's general ability to invent the scenario, numbers, and wording in a single pass~\cite{rahimi2025productivemath,rahimi2025}. On the evaluation side, prior PF studies score generated tasks on a surface level with a broad 1--3 rubric without testing whether familiar methods actually fail on the problem's numbers, while unconstrained role-play student simulators often solve problems using knowledge beyond the student's grade~\cite{liu2023novice,srivatsa2025abilities}. Given these limitations of one-shot prompting, surface rubrics, and unconstrained student simulation, this thesis investigates whether decomposing task design into curriculum-grounded, calculator-checked stages and evaluating the PF requirements directly can produce working PF tasks across a much broader range of mathematics topics and grade levels.

@@ -18,6 +18,7 @@ JUDGE_MODEL_DEFAULT = "gpt-4.1-mini"
 MODEL_ENVS = {
     "gpt41mini": ("AZURE_OPENAI_GPT41_MINI_MODEL", "gpt-4.1-mini"),
     "gpt41": ("AZURE_OPENAI_GPT41_MODEL", "gpt-4.1"),
+    "gpt5mini": ("AZURE_OPENAI_GPT5_MINI_MODEL", "gpt-5-mini"),
     "gpt54": ("AZURE_OPENAI_GPT54_MODEL", "gpt-5.4"),
     "luna": ("AZURE_OPENAI_LUNA_MODEL", "gpt-5.6-luna"),
 }
@@ -71,7 +72,9 @@ def chat_json(
         timeout=180,
     )
     if is_new:
-        kwargs["max_completion_tokens"] = max_tokens
+        kwargs["max_completion_tokens"] = (
+            max(max_tokens, 16384) if model.startswith("gpt-5-mini") else max_tokens
+        )
     else:
         kwargs["temperature"] = temperature
         kwargs["max_tokens"] = max_tokens

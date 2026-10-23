@@ -127,7 +127,7 @@ def main() -> None:
         "Mean Dimension Score (1–3 Scale)", fontsize=9.8, fontweight="bold", color=c_edge
     )
     ax1.set_title(
-        "(a) Mean Score by Rubric Dimension (4 Topics Combined)",
+        "(a) Mean Score by Rubric Dimension (4 Settings Combined)",
         fontsize=10.4,
         fontweight="bold",
         pad=12,
@@ -222,7 +222,7 @@ def main() -> None:
     ax2.tick_params(axis="y", labelsize=8.8, colors=c_edge)
     ax2.set_ylabel("Mean Total Score (5–15 Scale)", fontsize=9.8, fontweight="bold", color=c_edge)
     ax2.set_title(
-        "(b) Mean Total Score by Topic Cell (5–15 Scale)",
+        "(b) Mean Total Score by Setting (5–15 Scale)",
         fontsize=10.4,
         fontweight="bold",
         pad=12,

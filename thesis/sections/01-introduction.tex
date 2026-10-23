@@ -1,10 +1,10 @@
 \chapter{Introduction}
 \label{chap:introduction}
 
-\section{Productive Failure and the Effort of Designing PF Tasks}
+\section{Productive Failure and Task Design}
 \label{sec:intro-motivation}
 
-In traditional classroom instruction, teachers first explain a new concept and its procedures, and students then practice applying them on routine exercises. Productive Failure (PF) reverses this order by dividing learning into two phases~\cite{kapur2008,kapur2012}. In the first phase, students work on a challenging, uninstructed problem using only the concepts and methods they previously have been taught. In the second phase, the teacher compares the students' attempts with the target concept to show why the new approach is needed. Even though students usually fail to find the canonical solution on their own in the first phase, trying out their existing methods helps them notice the exact gap in their current knowledge, which prepares them to understand the new concept much more deeply and transfer it to new problems across mathematics, science, and engineering domains~\cite{kapur2008,kapur2012,loibl2014,sinha2021}.
+In traditional classroom instruction, teachers first explain a new concept and its procedures, and students then practice applying them on routine exercises. Productive Failure (PF) reverses this order by dividing learning into two phases~\cite{kapur2008,kapur2012}. In the first phase, students work on a challenging, uninstructed problem using only the concepts and methods they previously have been taught. In the second phase, the teacher compares the students' attempts with the target concept to show why the new approach is needed. Even though students usually fail to find the canonical solution on their own in the first phase, trying out their existing methods helps them notice where their current knowledge falls short~\cite{loibl2014}. This prepares them to understand the new concept more deeply and transfer it to new problems across mathematics, science, and engineering~\cite{kapur2008,kapur2012,sinha2021}.
 
 Despite these benefits, Productive Failure is still difficult to use regularly in classrooms because designing a working PF problem requires significant time and effort from teachers~\cite{kapur2012}. Unlike a standard textbook exercise that simply asks students to apply a taught formula, Kapur and Bielaczyc's PF design framework~\cite{kapur2009,kapur2012} shows that an effective Phase~1 task must satisfy three requirements at the same time:
 \begin{enumerate}[leftmargin=0.7cm,itemsep=0.25em,topsep=0.3em]
@@ -15,7 +15,7 @@ Despite these benefits, Productive Failure is still difficult to use regularly i
 In practice, finding a conceptual structure, numbers, and wording that satisfy all three requirements takes multiple rounds of designing the problem, testing it on students in class, and adjusting the task~\cite{kapur2012}.
 
 
-\section{Challenges in Generating and Evaluating PF Tasks with LLMs}
+\section{Generating and Evaluating PF Tasks with LLMs}
 \label{sec:intro-limitations}
 
 Large Language Models (LLMs) offer a promising way to reduce this design effort by automatically generating PF problems for a given target concept, with mathematics as a primary testbed in recent work~\cite{rahimi2025productivemath,rahimi2025,puech2025}. While one-shot prompting could be employed for this purpose, LLMs are trained to solve problems directly and explain concepts step by step rather than to design failure traps. As a result, when asked to write a PF task in one pass, an LLM typically produces a routine story problem that students can already solve with familiar methods, or guides the student step by step toward the target formula, as we observe in Chapter~\ref{chap:oneshot}. Evaluating these generated PF problems is a second challenge. Normally, assessing whether a PF task is well designed requires teachers or educational experts to review each problem by hand~\cite{rahimi2025}, which is hard to conduct at a large enough scale to evaluate machine-generated tasks representatively. At the same time, existing PF rubrics were written for human raters using broad, subjective descriptions rather than concrete checks of the problem's underlying structure and numbers. When these rubrics are used directly for automatic evaluation, they rate the surface of a task, such as an engaging story and open-sounding wording, rather than the three PF requirements described above (Section~\ref{sec:oneshot-surface-rubric}).
@@ -24,13 +24,6 @@ Large Language Models (LLMs) offer a promising way to reduce this design effort 
 \section{Purpose of this Research}
 \label{sec:intro-goals}
 
-\begin{figure}[t]
-    \centering
-    \includegraphics[width=\textwidth]{fig1_1_intro_overview.pdf}
-    \caption[One-shot PF generation versus \textsc{StructPF} and requirement-based evaluation]{Comparison of (a)~one-shot PF generation and rubric scoring (G1) with (b)~our staged \textsc{StructPF} pipeline and requirement-based evaluation (G2--G4).}
-    \label{fig:intro-overview}
-\end{figure}
-
 Instead of asking an LLM to write a complete PF task in one pass, an alternative approach would be to let it follow the design decisions a teacher makes and to check each decision before the final task is written. In the same way, a generated task can be evaluated by testing the three PF requirements directly rather than by rating a general impression of its text. The research presented in this thesis, illustrated in Figure~\ref{fig:intro-overview}, is based on these points and aims to address the following goals:
 \begin{description}[leftmargin=1.2cm,style=nextline]
     \item[\textbf{G1:}] Reproduce one-shot LLM generation of PF tasks from prior work, and identify where both the generated tasks and their rubric-based evaluation fall short.
@@ -38,6 +31,13 @@ Instead of asking an LLM to write a complete PF task in one pass, an alternative
     \item[\textbf{G3:}] Develop \textsc{PF Eval}, an evaluation that tests the three PF requirements directly, and validate it on expert-designed and control tasks.
     \item[\textbf{G4:}] Compare \textsc{StructPF} with one-shot generation across many mathematics topics rather than a single one.
 \end{description}
+
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=\textwidth]{fig1_1_intro_overview.pdf}
+    \caption[Overview: (a) One-Shot PF Generation and Rubric Scoring (G1) versus (b) \textsc{StructPF} and \textsc{PF Eval} (G2--G4)]{Overview: (a)~One-Shot PF Generation and Rubric Scoring (G1) versus (b)~\textsc{StructPF} and \textsc{PF Eval} (G2--G4)}
+    \label{fig:intro-overview}
+\end{figure}
 
 
 \section{Thesis Structure}

@@ -29,7 +29,7 @@ ROWS = [
                 "Predicted Answer",
                 "\u201cA stays closer to 10,\nso A is more consistent\u201d",
             ),
-            (WHITE, "Task Verdict", "solved, so familiar\nmethods seem to suffice"),
+            (WHITE, "Task Outcome", "solved, so familiar\nmethods seem to suffice"),
         ],
         "note": "Problem: we cannot tell whether this is a student\u2019s invention or "
         "knowledge the model should have set aside.",
@@ -184,8 +184,8 @@ def main():
 
     out_dir = Path(__file__).resolve().parents[1] / "thesis" / "figures"
     out_dir.mkdir(parents=True, exist_ok=True)
-    pdf_path = out_dir / "fig5_1_simstudent_vs_solver.pdf"
-    png_path = out_dir / "fig5_1_simstudent_vs_solver.png"
+    pdf_path = out_dir / "fig5_2_simstudent_vs_solver.pdf"
+    png_path = out_dir / "fig5_2_simstudent_vs_solver.png"
     fig.savefig(pdf_path, bbox_inches="tight", pad_inches=0.04)
     fig.savefig(png_path, dpi=300, bbox_inches="tight", pad_inches=0.04)
     plt.close(fig)

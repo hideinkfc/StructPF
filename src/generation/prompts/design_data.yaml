@@ -66,6 +66,9 @@ PROPOSE_DATA_SYSTEM: |
   sharing requirement_indices where needed.
   reasoning explains the check, not its predicted numerical result. When
   calculation is supplied, the calculator decides; no judgment field is needed.
+  When calculation is null, you MUST include "judgment": "holds" (or "fails" /
+  "uncertain") on that condition object; omitting judgment when calculation is
+  null is a schema error.
 
   Calculate only useful, feasible conditions. Use a calculation for computable
   mathematical claims, even when the claim is written in words. Otherwise set
@@ -191,8 +194,12 @@ WRITE_DATA_TASK_SYSTEM: |
   procedure resolves X, accounts for Y..."). Also WITHHOLD any clause that tells
   students which intermediate reference value, formula, or scoring direction to use.
   Remove any such coaching, formula-naming, or procedural checklist clauses from
-  candidate wording and record them in withheld as kind "discovery". However, NEVER
-  withhold a character's conjecture when question asks students to evaluate that
+  candidate wording and record them in withheld as kind "discovery". In particular,
+  withhold parenthetical combination formulas, step-by-step intermediate-base
+  instructions that explain how successive changes apply, and multi-summary
+  checklists that tell students which statistics to pair or compare, and never
+  refer to an unseen diagram or figure (state all dimensions and positions in
+  self-contained text). However, NEVER withhold a character's conjecture when question asks students to evaluate that
   conjecture: if the question asks whether a character's conjecture holds, the full
   conjecture must be stated explicitly in body (never write a vague placeholder like
   "Mira has made a conjecture" without stating what she claims). Likewise, only

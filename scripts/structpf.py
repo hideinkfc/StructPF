@@ -63,6 +63,13 @@ FIGURE_SCRIPTS: dict[int, list[str]] = {
         "scripts/render_fig5_1_simstudent_vs_solver.py",
         "scripts/render_fig5_2_eval_overview.py",
         "scripts/render_fig5_3_three_roles.py",
+        "scripts/render_fig5_4_eval_validation.py",
+    ],
+    6: [
+        "scripts/render_fig6_1_results_setup.py",
+        "scripts/render_fig6_2_oneshot_outcomes.py",
+        "scripts/render_fig6_4_grounding_3arms.py",
+        "scripts/render_figC_student_signals.py",
     ],
 }
 
