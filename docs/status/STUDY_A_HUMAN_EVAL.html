@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Study A Blinded Human Evaluation — PF Eval (24 Tasks)</title>
+<style>
+  :root {
+    --bg: #f6f8fb;
+    --card: #ffffff;
+    --border: #dce3ec;
+    --text: #1b2430;
+    --muted: #5b6777;
+    --blue: #2f5597;
+    --blue-light: #e9f0fb;
+    --green: #2e7d32;
+    --green-light: #e8f5e9;
+    --red: #c62828;
+    --red-light: #ffebee;
+    --amber: #ef6c00;
+    --amber-light: #fff3e0;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.5;
+  }
+  header {
+    background: #1b2430;
+    color: #fff;
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+  }
+  header h1 {
+    margin: 0;
+    font-size: 17px;
+    font-weight: 600;
+  }
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .progress-pill {
+    background: rgba(255,255,255,0.14);
+    padding: 5px 12px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 500;
+  }
+  .btn {
+    border: 1px solid transparent;
+    background: var(--blue);
+    color: #fff;
+    padding: 7px 13px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .btn:hover { opacity: 0.92; }
+  .btn-outline {
+    background: transparent;
+    border-color: rgba(255,255,255,0.35);
+    color: #fff;
+  }
+  .btn-outline:hover { background: rgba(255,255,255,0.1); }
+  .btn-secondary {
+    background: #eef2f7;
+    color: var(--text);
+    border-color: var(--border);
+  }
+  .btn-secondary:hover { background: #e2e8f0; }
+  .btn-success {
+    background: var(--green);
+    color: #fff;
+  }
+  .container {
+    max-width: 1280px;
+    margin: 18px auto;
+    padding: 0 20px 40px;
+  }
+  /* Task grid strip */
+  .task-strip {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    background: var(--card);
+    padding: 12px 14px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    margin-bottom: 16px;
+    align-items: center;
+  }
+  .task-pill {
+    width: 38px;
+    height: 32px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: #f8fafc;
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.12s;
+  }
+  .task-pill:hover { border-color: var(--blue); color: var(--blue); }
+  .task-pill.done {
+    background: var(--green-light);
+    border-color: #81c784;
+    color: var(--green);
+  }
+  .task-pill.active {
+    outline: 2px solid var(--blue);
+    outline-offset: 1px;
+    font-weight: 700;
+  }
+  /* Two-column layout */
+  .workspace {
+    display: grid;
+    grid-template-columns: 1.22fr 1fr;
+    gap: 18px;
+    align-items: start;
+  }
+  @media (max-width: 960px) {
+    .workspace { grid-template-columns: 1fr; }
+  }
+  .panel {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px 22px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+  }
+  .meta-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 12px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  .badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    background: var(--blue-light);
+    color: var(--blue);
+  }
+  .badge-unblind {
+    background: var(--amber-light);
+    color: var(--amber);
+  }
+  .context-box {
+    background: #f8fafd;
+    border: 1px solid #e1e8f2;
+    border-radius: 8px;
+    padding: 12px 14px;
+    margin-bottom: 16px;
+    font-size: 13.5px;
+  }
+  .context-box h4 {
+    margin: 0 0 6px 0;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: var(--blue);
+  }
+  .context-box ul {
+    margin: 4px 0 0 18px;
+    padding: 0;
+  }
+  .context-box li { margin-bottom: 3px; }
+  .task-body {
+    font-size: 15.5px;
+    line-height: 1.65;
+    white-space: pre-wrap;
+    background: #fff;
+    padding: 16px 18px;
+    border-radius: 8px;
+    border: 1px solid #cfd8e3;
+    color: #111827;
+  }
+  .helper-toggle {
+    margin-top: 12px;
+  }
+  .helper-box {
+    margin-top: 8px;
+    padding: 12px 14px;
+    background: #fffdf5;
+    border: 1px dashed #e0b450;
+    border-radius: 8px;
+    font-size: 13px;
+    color: #443716;
+    display: none;
+  }
+  .helper-box.open { display: block; }
+  /* Rating checklist */
+  .preset-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 14px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .measure-item {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 11px 14px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    background: #fafbfd;
+    transition: border-color 0.12s, background 0.12s;
+  }
+  .measure-item.rated-yes {
+    border-color: #a5d6a7;
+    background: #f4fbf5;
+  }
+  .measure-item.rated-no {
+    border-color: #ef9a9a;
+    background: #fff8f8;
+  }
+  .measure-info { flex: 1; }
+  .measure-title {
+    font-weight: 600;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .measure-group-tag {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 1px 6px;
+    border-radius: 4px;
+    background: #e5eaf2;
+    color: #3f4d63;
+  }
+  .measure-desc {
+    font-size: 12.5px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+  .yn-group {
+    display: flex;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+  .yn-btn {
+    min-width: 56px;
+    padding: 7px 12px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.1s;
+  }
+  .yn-btn.yes.selected {
+    background: var(--green);
+    color: #fff;
+    border-color: var(--green);
+  }
+  .yn-btn.no.selected {
+    background: var(--red);
+    color: #fff;
+    border-color: var(--red);
+  }
+  .nav-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border);
+  }
+  textarea.notes {
+    width: 100%;
+    min-height: 54px;
+    margin-top: 8px;
+    padding: 8px 10px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 13px;
+    font-family: inherit;
+  }
+  /* Results modal / view */
+  .results-section {
+    display: none;
+    margin-top: 20px;
+  }
+  .results-section.open { display: block; }
+  table.res-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13.5px;
+    margin: 10px 0 20px;
+  }
+  table.res-table th, table.res-table td {
+    border-bottom: 1px solid var(--border);
+    padding: 9px 10px;
+    text-align: center;
+  }
+  table.res-table th:first-child, table.res-table td:first-child {
+    text-align: left;
+  }
+  table.res-table thead th {
+    background: #f1f5f9;
+    font-weight: 600;
+  }
+  pre.latex-box {
+    background: #1e293b;
+    color: #f8fafc;
+    padding: 14px;
+    border-radius: 8px;
+    font-size: 12.5px;
+    overflow-x: auto;
+  }
+  .kbd {
+    display: inline-block;
+    padding: 1px 5px;
+    font-size: 11px;
+    background: #e2e8f0;
+    border-radius: 4px;
+    color: #334155;
+    font-family: monospace;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>Study A Human Evaluation (24 Stratified Tasks, Blinded)</h1>
+  </div>
+  <div class="header-right">
+    <span class="progress-pill" id="progressText">0 / 24 rated</span>
+    <button class="btn btn-outline" onclick="toggleResultsView()" id="toggleResBtn">Show Results & Agreement</button>
+    <button class="btn btn-outline" onclick="exportRatingsJSON()">Export JSON</button>
+    <button class="btn btn-outline" onclick="importRatingsPrompt()">Import JSON</button>
+  </div>
+</header>
+
+<div class="container">
+  <div class="task-strip" id="taskStrip"></div>
+
+  <div class="workspace" id="ratingWorkspace">
+    <!-- Left: Student Task & Setting Context -->
+    <div class="panel">
+      <div class="meta-bar">
+        <div>
+          <strong id="taskTitle" style="font-size: 17px;">Task T01</strong>
+          <span class="badge" id="settingBadge" style="margin-left: 8px;">Setting</span>
+          <span class="badge badge-unblind" id="armBadge" style="display:none; margin-left: 6px;">Arm</span>
+        </div>
+        <div style="font-size: 12.5px; color: var(--muted);">
+          Keys: <span class="kbd">←</span> <span class="kbd">→</span> nav &middot; <span class="kbd">A</span> All Yes &middot; <span class="kbd">F</span> Only #4 No
+        </div>
+      </div>
+
+      <div class="context-box">
+        <h4>Target Concept (Untaught in Phase 1)</h4>
+        <div id="targetConceptText" style="margin-bottom: 8px; font-weight: 500;"></div>
+        <h4>Assumed Grade 7 Prior Knowledge</h4>
+        <ul id="priorKnowledgeList"></ul>
+      </div>
+
+      <div style="font-size: 12.5px; font-weight: 600; text-transform: uppercase; color: var(--muted); margin-bottom: 6px;">
+        Student-Facing Problem Text
+      </div>
+      <div class="task-body" id="studentTaskText"></div>
+
+      <div class="helper-toggle">
+        <button class="btn btn-secondary" onclick="toggleHelper()" id="helperBtn" style="font-size:12.5px;">
+          Show Automated Solver & Math Check (After / During Rating)
+        </button>
+        <div class="helper-box" id="helperBox"></div>
+      </div>
+    </div>
+
+    <!-- Right: 5 PF Eval Measures -->
+    <div class="panel">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+        <strong style="font-size: 15.5px;">Rate the 5 PF Task-Design Measures</strong>
+        <span id="taskStatusLabel" style="font-size:12.5px; color:var(--muted);">Incomplete</span>
+      </div>
+
+      <div class="preset-row">
+        <button class="btn btn-secondary" onclick="applyPreset('all_yes')" title="Shortcut: A">
+          ✓ Quick Fill: All 5 Yes
+        </button>
+        <button class="btn btn-secondary" onclick="applyPreset('only_4_no')" title="Shortcut: F">
+          ✗ Quick Fill: Only #4 (Familiar Methods) = No
+        </button>
+        <button class="btn btn-secondary" onclick="applyPreset('4_and_5_no')">
+          ✗ Quick Fill: #4 & #5 = No
+        </button>
+      </div>
+
+      <div id="measuresContainer"></div>
+
+      <label style="font-size: 12.5px; font-weight: 600; color: var(--muted); display:block; margin-top:10px;">
+        Optional Note (e.g., why it failed):
+      </label>
+      <textarea class="notes" id="taskNotes" placeholder="Optional brief note..." oninput="saveNote(this.value)"></textarea>
+
+      <div class="nav-row">
+        <button class="btn btn-secondary" onclick="prevTask()" id="prevBtn">← Previous</button>
+        <button class="btn" onclick="nextUnratedOrNext()" id="nextBtn">Next Task →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Results & Agreement Panel -->
+  <div class="panel results-section" id="resultsSection">
+    <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border); padding-bottom:12px; margin-bottom:14px;">
+      <div>
+        <h2 style="margin:0; font-size:18px;">Unblinded Summary: Human vs. PF Eval (Study A Sample, N = 24)</h2>
+        <div style="font-size:13px; color:var(--muted);">Automatically computed from your ratings below.</div>
+      </div>
+      <div style="display:flex; gap:8px;">
+        <button class="btn btn-secondary" onclick="toggleUnblindBadges()">Toggle Arm Labels on Task Cards</button>
+        <button class="btn btn-success" onclick="exportRatingsJSON()">Download Results JSON</button>
+      </div>
+    </div>
+
+    <h3>1. Pass Rates by Generator Arm (Human vs. PF Eval)</h3>
+    <div id="armTableWrap"></div>
+
+    <h3>2. Human vs. PF Eval Agreement & Cohen's κ</h3>
+    <div id="agreementTableWrap"></div>
+
+    <h3>3. Ready-to-Paste LaTeX Table for Chapter 6</h3>
+    <pre class="latex-box" id="latexOutput"></pre>
+  </div>
+</div>
+
+<script>
+const TASKS = [{"key": "shopping_percent__gpt5mini__005", "cell_id": "shopping_percent", "setting_name": "Phone Plans & Linear Equations", "theme": "Everyday Shopping / Plans", "arm": "gpt5mini", "arm_label": "One-Shot (GPT-5 mini)", "student_task": "Two-for-Three: Shopping with $60 — Which Store Gives the Best Deal?\n\nYou have $60 of pocket money and you want to buy exactly two items from this list while you’re out shopping. Below are the three items you’re choosing between and three local stores, each with a different special deal. All discounts and markdowns are applied before tax; sales tax is then added to the (discounted) subtotal at the rate shown for each store.\n\nItems (regular prices):\n- Backpack: $46\n- Headphones: $34 (electronics)\n- Phone charger: $16 (electronics)\n\nStores and their deals (how they work):\n1) Trendy Threads\n   - 20% off backpacks (applies only to the backpack price).\n   - Sales tax: 8% on the final purchase (after any discounts).\n\n2) Gadget Garage\n   - Electronics deal: Buy one electronics item at full price, get the second electronics item at 50% off. (Electronics here are: headphones and phone charger.)\n   - Sales tax: 7% on the final purchase (after the electronics deal).\n\n3) Corner Deals\n   - Clearance markdown: $5 off the price of every item in your purchase (flat $5 off each chosen item).\n   - If your pre-tax subtotal (after the $5 markdowns) is $45 or more, you get an additional 10% off that subtotal (apply the $5 markdowns first, then the 10% if eligible).\n   - Sales tax: 6% on the final purchase (after markdowns and any additional 10% off).\n\nReminders: you must buy exactly two items. You may choose any two (for example, backpack + charger, or headphones + charger, etc.). Use the store rules above to calculate final costs.\n\nWhich two items should you buy, and at which store will your $60 go the farthest (leave you with the most money left over)? Show your calculations and explain your reasoning. Be sure to:\n\n- Calculate the final total you would pay at each store for the two items you pick (showing how you handled each step: markdowns/discounts, eligibility for extra discounts, and sales tax).\n- Compare the different stores and explain why one choice is better than another for the same two items. You may use tables, ratios, fraction or decimal calculations, drawings, or number sentences — any approach you think helps.\n- If you try more than one pair of items, explain which pair gives the best value for your $60 and why.\n\nThere may be more than one reasonable approach — pick methods you are comfortable with, explain any assumptions you make, and show your work so someone else can follow your thinking.", "target_concept": "Use proportional relationships to solve multistep ratio and percent problems, such as tax, markups and markdowns (CCSS.Math.Content.7.RP.A.3). Students have not yet received direct instruction on this target.", "prior_knowledge": ["Proportional relationships (7.RP.A.2): Recognize and represent proportional relationships between quantities.", "Operations with rational numbers (7.NS.A.3): Solve real-world and mathematical problems involving the four operations with rational numbers."], "pf_eval_measures": {"target_alignment": "yes", "mathematical_validity": "yes", "prior_knowledge_accessibility": "yes", "familiar_approach_limits": "no", "room_for_invention": "no"}, "pf_eval_all5": false, "pf_eval_reasons": {"target_alignment": "The central work directly addresses the target by applying multistep percentages and rational-number operations for markdowns, discounts, eligibility thresholds, and sales tax, then comparing the resulting costs.", "mathematical_validity": "The givens are consistent and at least one feasible resolution exists. The calculated totals for backpack plus headphones, backpack plus charger, and headphones plus charger are respectively: Trendy Threads 76.464, 57.024, and 54; Gadget Garage 85.6, 66.34, and 44.94; Corner Deals 66.78, 49.608, and 42.4. At Corner Deals, the headphones-and-charger subtotal is (34-5)+(16-5) == 40, so it does not qualify for the extra 10% discount; after 6% tax, 40*1.06 == 42.4, or $42.40. This is the lowest total and leaves 60-42.4 == 17.6, or $17.60. The task is intentionally an open comparison problem, so its alternative methods and choice of presentation do not create a validity issue.", "prior_knowledge_accessibility": "The learner can make a meaningful start using subtraction and addition. For example, for headphones and a charger at Corner Deals, the marked-down prices are 34-5 == 29 and 16-5 == 11, giving a pre-tax subtotal of 40; this also permits checking that the subtotal is below the $45 threshold. The learner's listed rational-number operations support these steps.", "familiar_approach_limits": "[meets_demands] This attempt calculates all three allowed pairs at all three stores, applies each discount before tax, checks the Corner Deals threshold, and compares the totals. Under its explicit assumption that the headphones receive the 50% electronics discount, Gadget Garage costs (16 + 0.5 * 34) * 1.07 == 35.31 for Headphones plus Charger, leaving 60 - 35.31 == 24.69. It also calculates the alternative in which the charger is discounted, giving (34 + 0.5 * 16) * 1.07 == 44.94, and explains that Corner Deals would then be cheaper. The comparison is complete under the stated assumption and addresses the ambiguity. | [meets_demands] This formula-based attempt correctly represents every store rule and compares every allowed pair. For Corner Deals, it correctly calculates (80 - 10) * 0.90 * 1.06 == 66.78 for Backpack plus Headphones, (62 - 10) * 0.90 * 1.06 == 49.608 for Backpack plus Charger, and 40 * 1.06 == 42.40 for Headphones plus Charger because the last post-markdown subtotal is below $45. Its table then compares the stores and identifies 33 * 1.07 == 35.31 as the minimum under its stated Gadget Garage assumption, leaving 60 - 35.31 == 24.69. It also gives the alternative result when the charger receives the discount.", "room_for_invention": "The task supplies the important calculation route: apply each stated discount or markdown in the specified order and add tax afterward. It leaves the secondary comparison strategy, representation, and final pair-and-store choice open, but the main discount-and-tax procedure is prescribed."}, "blind_id": "T01", "display_index": 1, "human_ratings": {"target_alignment": "yes", "mathematical_validity": "yes", "prior_knowledge_accessibility": "yes", "familiar_approach_limits": "no", "room_for_invention": "no", "note": "Prescribes discount-then-tax order and bullet steps; direct arithmetic solves."}, "human_all5": false}, {"key": "sports_basketball_ratio__gpt5mini__024", "cell_id": "sports_basketball_ratio", "setting_name": "Basketball Ratios", "theme": "Sports (Basketball)", "arm": "gpt5mini", "arm_label": "One-Shot (GPT-5 mini)", "student_task": "Curry's Camp Challenge: Which relationships are proportional?\n\nStephen Curry is running drills at a fictional summer shooting camp. The coach recorded some results from three different activities. The numbers below are made up for this exercise.\n\nActivity A — Shot-Clock Drill (time spent practicing vs points scored)\nTime (hours): 0.5, 1.0, 1.5, 2.0\nPoints scored: 9, 18, 27, 36\n\nActivity B — 3-Point Practice (attempts vs 3-pointers made)\nAttempts: 10, 15, 20, 25, 30\nMade 3-pointers: 4, 6, 8, 10, 12\n\nActivity C — Scrimmage Mini-Games (minutes played vs total baskets made)\nMinutes played: 6, 12, 18, 24\nBaskets made: 8, 17, 23, 32\n\nYou may use calculators or paper. Remember: you have recently worked with unit rates (including fractional quantities) and adding/subtracting rational numbers.\n\nExplore these three relationships. For each activity (A, B, and C):\n\n1) Decide whether the two quantities shown appear to be in a proportional relationship. Explain your reasoning and show at least two different representations or approaches you choose (for example: compute unit rates, make a table of equivalent pairs, sketch or describe a graph, compare differences between pairs, or write a rule you think fits).\n\n2) For any activity you decide is proportional, use that assumption to answer a planning question of your choice (examples you might choose or change): How many points would Stephen score in 3 hours of the Shot-Clock Drill? If he wants to make 30 three-pointers in practice, how many attempts should he plan? Show your thinking. For any activity you decide is not clearly proportional, explain what additional data or tests you would collect or perform to check whether proportionality might still be reasonable.\n\n3) Pick one activity and propose a short practice plan using the data and your proportional-or-not conclusion. Explain why your plan makes sense based on the representations you produced, and also explain at least one reason your plan might fail in real life (what would make the relationship break down?).\n\nBe ready to explain and compare different approaches (unit rates, tables, differences, sketches) you used and why they support or challenge the idea of proportionality.", "target_concept": "Recognize and represent proportional relationships between quantities (CCSS.Math.Content.7.RP.A.2). Students have not yet received direct instruction on this target.", "prior_knowledge": ["Unit rates (7.RP.A.1): Compute unit rates involving ratios of fractional quantities, including lengths and areas in like or different units.", "Rational-number addition and subtraction (7.NS.A.1): Add and subtract rational numbers and interpret these operations numerically and on a number line."], "pf_eval_measures": {"target_alignment": "yes", "mathematical_validity": "yes", "prior_knowledge_accessibility": "yes", "familiar_approach_limits": "no", "room_for_invention": "yes"}, "pf_eval_all5": false, "pf_eval_reasons": {"target_alignment": "The central work is to test and represent whether each pair of quantities has a constant proportional relationship, which directly addresses recognizing and representing proportional relationships. The task also asks learners to use unit rates, tables, graphs, differences, or rules as representations.", "mathematical_validity": "The data are internally consistent and the requested work is feasible. Activity A has points-per-hour rates 9/0.5 == 18, 18/1 == 18, 27/1.5 == 18, and 36/2 == 18. Activity B has made-per-attempt rates 4/10 == 6/15 == 8/20 == 10/25 == 12/30 == 0.4. Activity C is not proportional across all pairs because 8/6 == 4/3 and 32/24 == 4/3, but 17/12 and 23/18 are different from 4/3. Thus at least A and B support feasible planning extensions, while C appropriately invites additional data or tests. The open choice of representations and practice plan is intentional, so it does not make the task invalid.", "prior_knowledge_accessibility": "The learner has been taught unit rates, including fractional quantities, so they can immediately divide points by hours, made shots by attempts, or baskets by minutes and compare the resulting rates. This is a meaningful mathematical start toward testing proportionality, even without direct instruction on the target.", "familiar_approach_limits": "[meets_demands] The unit-rate calculations are correct: Activity A has 9/0.5 == 18, 18/1 == 18, 27/1.5 == 18, and 36/2 == 18; Activity B has a constant rate of 0.4; and Activity C has differing rates, including 8/6 == 4/3 but 17/12 and 23/18. The difference checks also support the conclusions: A changes by 9 points per 0.5 hour, B by 2 makes per 5 attempts, and C changes by 9, then 6, then 9. The planning calculations 18*3 == 54 and 30/0.4 == 75 are correct, and the response gives a valid further-data suggestion and a practice plan with a realistic limitation. | [meets_demands] The equal-increment and zero-start method is mathematically valid for these data. Activity A increases by 9 points for each 0.5 hour and Activity B increases by 2 makes for each 5 attempts; extending those patterns reaches 0 input and 0 output. Activity C has changes of 9, 6, and 9 baskets for equal 6-minute increases, so its increment pattern is not proportional. The planning arithmetic is correct: 36+9+9 == 54 and 10+13*5 == 75. The response also proposes additional controlled observations and gives a practice plan with a stated reason it could fail.", "room_for_invention": "The task does not supply the proportionality test, a required representation, or a fixed rule. Learners must construct a criterion and choose representations such as unit rates, equivalent-pair tables, graphs, differences, or a rule; the planning and practice-plan decisions are also left open."}, "blind_id": "T02", "display_index": 2, "human_ratings": {"target_alignment": "yes", "mathematical_validity": "yes", "prior_knowledge_accessibility": "yes", "familiar_approach_limits": "no", "room_for_invention": "no", "note": "Numbered 1-2-3 worksheet names target proportionality and methods; unit rates solve directly."}, "human_all5": false}, {"key": "shopping_percent__gpt41__022", "cell_id": "shopping_percent", "setting_name": "Phone Plans & Linear Equations", "theme": "Everyday Shopping / Plans", "arm": "gpt41", "arm_label": "One-Shot (GPT-4.1)", "student_task": "Pocket Money Shopping Dilemma\n\nYou and two friends are shopping at the 'Fresh Findz' store. Each of you has $25 of pocket money to spend. The store is holding a 'Mega Sale':\n\n- All items are marked 20% off the original price.\n- Sales tax of 7% applies after the discount is taken.\n\nHere are three items you’re eyeing:\n\n| Item               | Original Price |\n|--------------------|---------------|\n| Wireless Earbuds   | $18.00        |\n| Reusable Water Bottle | $12.00     |\n| Graphic T-shirt    | $8.00         |\n\nYou’d like to buy as many different items as possible, but you can only spend your $25. If you buy two or all three items, you must pay for each according to the sale rules above.\n\nRemember, discounts come before tax!\n\nWhich items can you buy together without exceeding your $25, and how would you figure this out? Show and explain your thinking about the effects of the sale discount and tax when combining items.", "target_concept": "Use proportional relationships to solve multistep ratio and percent problems, such as tax, markups and markdowns (CCSS.Math.Content.7.RP.A.3). Students have not yet received direct instruction on this target.", "prior_knowledge": ["Proportional relationships (7.RP.A.2): Recognize and represent proportional relationships between quantities.", "Operations with rational numbers (7.NS.A.3): Solve real-world and mathematical problems involving the four operations with rational numbers."], "pf_eval_measures": {"target_alignment": "yes", "mathematical_validity": "yes", "prior_knowledge_accessibility": "yes", "familiar_approach_limits": "no", "room_for_invention": "no"}, "pf_eval_all5": false, "pf_eval_reasons": {"target_alignment": "The central work is a multistep markdown-and-tax calculation followed by a budget comparison. This directly addresses the target of using proportional relationships for percent problems involving markdowns and tax.", "mathematical_validity": "The rules are mathematically consistent. Each final price is original price * 0.80 * 1.07: earbuds cost 15.408, the bottle costs 10.272, and the shirt costs 6.848. The earbuds-and-bottle total is 25.68, which exceeds 25; earbuds-and-shirt totals 22.256, and bottle-and-shirt totals 17.12, both within the budget. All three total 32.528, so the maximum is two items, with either bundle containing the shirt. Rounding to cents gives 22.26 and 17.12, so the conclusion is unchanged.", "prior_knowledge_accessibility": "The learner can begin with taught rational-number operations by adding candidate item prices, such as 18 + 8, and can use their knowledge of proportional relationships to represent the discount and tax as multiplicative changes. Thus at least one meaningful mathematical step is available even though the target has not been directly taught.", "familiar_approach_limits": "[meets_demands] The method is supported by rational-number operations and proportional reasoning. It correctly applies the sequential multiplier 0.80 * 1.07 == 0.856, obtains the item prices, and checks every combination: earbuds plus bottle is $25.68 and exceeds $25, earbuds plus shirt is $22.26, and bottle plus shirt is $17.12; all three cost $32.53. Thus it correctly identifies the two-item choices within budget. | [meets_demands] The common-factor method is mathematically valid because the same discount and tax apply to every item. The budget converts to an original-price limit of 25 / 0.856 approximately $29.21. The relevant original totals are $30, $26, $20, and $38, giving the correct allowed and disallowed combinations. The explanation also correctly distinguishes multiplying the discount and tax factors from adding their percentages.", "room_for_invention": "The task supplies the discount rate, tax rate, and their order, which gives an important part of the mathematical route. However, it leaves the learner to construct the calculation model, compute combined prices, and decide which bundles satisfy the budget."}, "blind_id": "T03", "display_index": 3, "human_ratings": {"target_alignment": "yes", "mathematical_validity": "yes", "prior_knowledge_accessibility": "yes", "familiar_approach_limits": "no", "room_for_invention": "no", "note": "Explicitly reminds discounts come before tax; naive and exact percent give same affordable pairs."}, "human_all5": false}, {"key": "music_compare_distributions__gpt5mini__020", "cell_id": "music_compare_distributions", "setting_name": "Music Sample Distributions", "theme": "Music (Song Durations)", "arm": "gpt5mini", "arm_label": "One-Shot (GPT-5 mini)", "student_task": "Playlist Pick: Which Band’s Songs are Longer and More Variable?\n\nYou are helping your school radio club pick music for two different blocks of the weekly show. One block is a “Relaxed Hour” where hosts want songs that are reliably medium-to-long and don’t jump around in length. The other block is a “Surprise Mix” where hosts like variety — a mix of short and long tracks.\n\nTwo student DJs collected random samples of song lengths (in minutes) from the two bands they’re considering. The samples below are random draws from each band’s entire library (not every song), and the numbers are the song lengths in minutes to two decimal places.\n\nGroove Harbor (sample of 12 song lengths, minutes):\n2.50, 2.75, 3.10, 3.20, 2.80, 3.00, 2.90, 6.30, 3.05, 2.95, 3.15, 2.85\n\nNeon Echo (sample of 12 song lengths, minutes):\n3.50, 3.45, 3.60, 3.70, 3.55, 3.65, 3.40, 3.80, 3.35, 2.90, 4.20, 3.25\n\nYou may use your familiar tools (finding a mean or median, calculating measures of variability such as interquartile range or mean absolute deviation, and creating plots or lists) and your decimal arithmetic skills. You do not have to stick to one method — try different summaries and pictures if you like.\n\nRemember: the club wants to decide which band is a better fit for each radio block and how confident they can be in that choice based on these samples.\n\nUsing the two samples above, compare the song-length populations of Groove Harbor and Neon Echo. Be ready to explain and justify your answer. Your response should include: \n\n- Which measures of center and which measures of variability you choose to use (you may choose mean and/or median; IQR and/or mean absolute deviation, or other summaries you know). Explain why you picked those measures. \n\n- Calculations or displays that show those measures for each band (show your work or a sketch of any plots). \n\n- An informal comparative inference: which band’s songs are typically longer? Which band has more variety in song lengths? For each question, explain how your chosen summaries and displays support your conclusion. \n\n- How confident are you in these conclusions based on these samples? What could make your conclusions stronger (for example, different summaries, more data, or other checks)?\n\nYou may use more than one approach. Make sure to explain any disagreements between the results of different summaries or pictures and what those disagreements tell you about the two bands.", "target_concept": "Use measures of center and measures of variability for numerical data from random samples to draw informal comparative inferences about two populations (CCSS.Math.Content.7.SP.B.4). Students have not yet received direct instruction on this target.", "prior_knowledge": ["Summarizing numerical data sets (6.SP.B.5c): Summarize numerical data sets with quantitative measures of center (median and/or mean) and variability (interquartile range and/or mean absolute deviation).", "Multi-digit decimal operations (6.NS.B.3): Fluently add, subtract, multiply and divide multi-digit decimals using the standard algorithm for each operation."], "pf_eval_measures": {"target_alignment": "yes", "mathematical_validity": "yes", "prior_knowledge_accessibility": "yes", "familiar_approach_limits": "yes", "room_for_invention": "yes"}, "pf_eval_all5": true, "pf_eval_reasons": {"target_alignment": "The central work directly matches the target: learners summarize center and variability for two explicitly random samples, then use those summaries to make informal comparative inferences about the two populations. The task asks which songs are typically longer, which sample shows more variety, and how confident the learner should be.", "mathematical_validity": "The numerical givens are consistent: Groove Harbor has sum 38.55, mean 3.2125, and median 2.975; Neon Echo has sum 42.35, mean approximately 3.52917, and median 3.525. Using the conventional median-of-halves quartiles, both IQRs are 0.30. Other valid summaries show a meaningful contrast: the ranges are 3.80 minutes for Groove Harbor and 1.30 minutes for Neon Echo, largely because Groove Harbor includes the 6.30-minute song. Thus the data may produce different conclusions for central spread versus overall spread, but the task explicitly asks learners to explain such disagreements. All lengths are feasible positive values, each sample has 12 entries, and the open-ended request for justified comparisons and confidence has at least one coherent resolution.", "prior_knowledge_accessibility": "The learner has been taught mean or median, IQR or mean absolute deviation, and multi-digit decimal operations. A meaningful start is possible by ordering each set to find medians and quartiles, or by adding the 12 decimal lengths and dividing by 12 to find each mean. These operations directly address the requested comparisons.", "familiar_approach_limits": "[target_limit] The mean and MAD calculations are correct: Groove Harbor has mean 38.55/12 == 3.2125 and MAD 6.175/12 == 0.514583..., while Neon Echo has mean 42.35/12 == 3.529166... and MAD 2.65/12 == 0.220833.... However, the 6.30-minute song is 3.0875 minutes above Groove Harbor’s mean and strongly drives its MAD, so this valid baseline method is limited in judging typical spread without a robust comparison such as median and IQR. | [target_limit] The sorted-data calculations are correct: the medians are 2.975 and 3.525, and both IQRs are 3.125 - 2.825 == 0.300 and 3.675 - 3.375 == 0.300. Thus the method correctly establishes that Neon Echo is typically longer, but the tied IQR cannot distinguish overall variety; the 6.30-minute outlier requires another summary or display to resolve that limitation.", "room_for_invention": "The task does not prescribe one central mathematical construction. Learners must choose measures of center and variability, decide which displays or summaries to use, and construct a justified comparison and confidence judgment. Although examples such as mean, median, IQR, and mean absolute deviation are supplied, the route and comparison criterion remain open."}, "blind_id": "T04", "display_index": 4, "human_ratings": {"target_alignment": "yes", "mathematical_validity": "yes", "prior_knowledge_accessibility": "yes", "familiar_approach_limits": "yes", "room_for_invention": "no", "note": "Outlier 6.30 distorts mean vs median/IQR, but 4-bullet worksheet prescribes exact steps and target."}, "human_all5": false}, {"key": "music_compare_distributions__gpt41__014", "cell_id": "music_compare_distributions", "setting_name": "Music Sample Distributions", "theme": "Music (Song Durations)", "arm": "gpt41", "arm_label": "One-Shot (GPT-4.1)", "student_task": "Battle of the Bands: Comparing Song Lengths\n\nThe school is hosting a 'Battle of the Bands' concert, and two student bands—The Electric Owls and The Pixel Pandas—will each perform a set of their original songs. The concert organizer wants to make sure both bands get a fair amount of stage time, but is also curious about the differences between their songs' lengths.\n\nHere are the lengths (in minutes) of the songs each band plans to perform:\n\nThe Electric Owls: 3.5, 4.1, 3.9, 5.0, 4.2, 3.7\nThe Pixel Pandas: 2.8, 3.2, 2.5, 3.1, 2.9, 2.6\n\nYou're asked to help the organizer compare the two bands' song lengths based on this information.\n\nYou can use what you know about summarizing data sets using numerical measures like mean, median, and ways to describe the spread of data, as well as your skills with decimal operations.\n\nUsing the song lengths for both bands, develop different ways to compare their sets. How could the concert organizer use your summaries to describe the differences between the bands' performances? Be sure to explain your reasoning with the data.", "target_concept": "Use measures of center and measures of variability for numerical data from random samples to draw informal comparative inferences about two populations (CCSS.Math.Content.7.SP.B.4). Students have not yet received direct instruction on this target.", "prior_knowledge": ["Summarizing numerical data sets (6.SP.B.5c): Summarize numerical data sets with quantitative measures of center (median and/or mean) and variability (interquartile range and/or mean absolute deviation).", "Multi-digit decimal operations (6.NS.B.3): Fluently add, subtract, multiply and divide multi-digit decimals using the standard algorithm for each operation."], "pf_eval_measures": {"target_alignment": "no", "mathematical_validity": "no", "prior_knowledge_accessibility": "yes", "familiar_approach_limits": "no", "room_for_invention": "yes"}, "pf_eval_all5": false, "pf_eval_reasons": {"target_alignment": "The task substantively asks learners to use measures of center and variability to compare two numerical data sets. However, the learning target requires both random-sample data and informal comparative inferences about two populations; the task presents complete song lists for two bands and asks only for descriptions of those sets, without sampling or population inference.", "mathematical_validity": "", "prior_knowledge_accessibility": "The learner has been taught mean, median, interquartile range, and mean absolute deviation, along with decimal operations. They can therefore make a meaningful start by adding each band's song lengths and dividing by 6 to find means, or by ordering the lists and finding medians; they can also calculate spread measures.", "familiar_approach_limits": "[meets_demands] The mean calculations are correct: 24.4 / 6 = 4.0667 minutes for the Electric Owls and 17.1 / 6 = 2.85 minutes for the Pixel Pandas. The stated absolute-deviation totals give MADs of 2.2 / 6 = 0.3667 and 1.3 / 6 = 0.2167, so the Owls have both longer typical songs and greater variability. The total-time comparison, 24.4 - 17.1 = 7.3 minutes, is also correct. | [meets_demands] The sorted data and medians are correct: the Owls' median is (3.9 + 4.1) / 2 = 4.0, and the Pandas' median is (2.8 + 2.9) / 2 = 2.85. Using the stated median-of-three halves convention, the Owls have Q1 = 3.7 and Q3 = 4.2, while the Pandas have Q1 = 2.6 and Q3 = 3.1; both IQRs are 0.5 minutes. Thus the conclusion of longer typical Owls songs but equal middle-half spread is mathematically supported.", "room_for_invention": "The task names possible families of summaries—mean, median, and spread—but does not prescribe which measures to calculate, how to combine them into comparisons, or which conclusions the organizer should draw. The learner must construct a comparison strategy and justify it from the data."}, "blind_id": "T05", "display_index": 5, "human_ratings": {"target_alignment": "yes", "mathematical_validity": "yes", "prior_knowledge_accessibility": "yes", "familiar_approach_limits": "no", "room_for_invention": "yes", "note": "Compares center and spread of two sets, though Owls > Pandas on every measure with no tie."}, "human_all5": false}, {"key": "garden_composite_area__pipeline_lc__003", "cell_id": "garden_composite_area", "setting_name": "Garden Composite Area", "theme": "Home & Garden Geometry", "arm": "pipeline_lc", "arm_label": "StructPF (GPT-5 mini)", "student_task": "Which planting-bed design gives more planting area?\n\nA homeowner is choosing between two planting-bed designs that both fit inside the same rectangular patio. Work in square meters. The outer patio (bounding rectangle) is 12 m wide and 8 m deep.\n\nDesign A is L-shaped and is made from two rectangles: a top strip that runs the full 12 m width and is 4 m deep, and a lower-left rectangle that is 5 m wide and 4 m deep.\n\nDesign B is a four-sided planting bed whose corners (measured from the lower-left corner of the patio) are at (0,0), (12,0), (7,8), and (0,8). That means its bottom edge runs from x = 0 to x = 12, its top edge runs from x = 0 to x = 7, and the vertical distance between those edges is 8 m.\n\nA household member says, “Both designs sit inside the same 12 m by 8 m rectangle, so they must have the same planting area.” To test that claim, partition each planting bed into rectangles and/or triangles as needed and compute exact areas using the standard rectangle and triangle area formulas (for example, base × height for rectangles; 1/2 × base × height for triangles). Assume the shapes are exactly as described, use meters for lengths and square meters for areas, and that the pieces you make do not overlap and cover each planting bed exactly.\n\nWhich planting design gives more planting area? Show all calculations and explain the geometric decomposition you used so someone else can check your work.", "target_concept": "Solve real-world and mathematical problems involving the area of two-dimensional objects composed of triangles, quadrilaterals and polygons (the area part of CCSS.Math.Content.7.G.B.6; volume and surface area are excluded). Students have not yet received direct instruction on this target.", "prior_knowledge": ["Area of polygons by composing and decomposing (6.G.A.1): Find the area of right triangles, other triangles, special quadrilaterals and polygons by composing them into rectangles or decomposing them into triangles and other shapes.", "Rational-number operations (7.NS.A.3): Solve real-world and mathematical problems involving the four operations with rational numbers."], "pf_eval_measures": {"target_alignment": "yes", "mathematical_validity": "yes", "prior_knowledge_accessibility": "yes", "familiar_approach_limits": "yes", "room_for_invention": "yes"}, "pf_eval_all5": true, "pf_eval_reasons": {"target_alignment": "The central work is finding and comparing the areas of an L-shaped polygon and a trapezoid by decomposing them into rectangles and triangles. This directly addresses the target of solving real-world area problems involving composed polygons.", "mathematical_validity": "The givens are geometrically consistent. Design A has area 12*4 + 5*4 = 48 + 20 = 68 square meters. Design B can be decomposed into a 7-by-8 rectangle and a right triangle with base 12-7 = 5 and height 8, giving 7*8 + (1/2)*5*8 = 56 + 20 = 76 square meters. Thus Design B has 8 square meters more area, so the claim that fitting inside the same bounding rectangle forces equal planting areas is false. The coordinate description also confirms a valid trapezoid with parallel horizontal bases of lengths 12 and 7 and height 8.", "prior_knowledge_accessibility": "The learner has been taught polygon area by composing and decomposing shapes and has the four arithmetic operations with rational numbers. They can immediately calculate the two rectangle areas for Design A, 12*4 = 48 square meters and 5*4 = 20 square meters, which is a meaningful start toward the comparison.", "familiar_approach_limits": "[target_limit] The attempt uses the supported rectangle-area calculation 12 * 8 == 96, but assigning the common outer rectangle to each bed is an unadjusted bounding-rectangle shortcut. The beds do not both fill that rectangle, so this method cannot distinguish their actual areas; the area-decomposition target directly resolves this limitation. | [meets_demands] The decomposition is valid and complete. Design A has nonoverlapping rectangles with areas 12 * 4 == 48 and 5 * 4 == 20, giving 68 m². Design B has a 7 m by 8 m rectangle of area 56 m² and a triangle with base 12 - 7 == 5 m and height 8 m, giving 1/2 * 5 * 8 == 20 m², for 76 m². Therefore Design B exceeds Design A by 76 - 68 == 8 m².", "room_for_invention": "The task supplies the shapes and dimensions but leaves the mathematical construction—the particular non-overlapping decomposition and calculation path—for the learner to choose. It does not provide a formula for the whole L-shaped or four-sided bed."}, "blind_id": "T06", "display_index": 6, "human_ratings": {"target_alignment": "yes", "mathematical_validity": "yes", "prior_knowledge_accessibility": "yes", "familiar_approach_limits": "yes", "room_for_invention": "yes", "note": "Bounding 12x8 rectangle ties for both beds; requires decomposing L-shape (68) vs trapezoid (76)."}, "human_all5": true}, {"key": "sports_basketball_ratio__pipeline_lc__004", "cell_id": "sports_basketball_ratio", "setting_name": "Basketball Ratios", "theme": "Sports (Basketball)", "arm": "pipeline_lc", "arm_label": "StructPF (GPT-5 mini)", "student_task": "Are shots proportional to practice time?\n\nStephen Curry ran two short shooting drills with each of two teammates, Alex and Jordan. For each teammate the coach recorded how many minutes they practiced in each session and how many successful three-point shots they made in that session.\n\nHere are the session reports:\n- Alex: Session 1 — 3 minutes, 1 successful shot; Session 2 — 6 minutes, 2 successful shots.\n- Jordan: Session 1 — 2 minutes, 1 successful shot; Session 2 — 7 minutes, 2 successful shots.\n\nMinutes and successful shots add normally: you can add session minutes to get a total number of minutes and add session shots to get a total number of shots for a teammate.\n\nThe coach says: \"If a player's total successful shots divided by total minutes is the same number, that means the player's shots are proportional to minutes.\" Use the session records above to make your decisions and show your work.\n\nUsing the session reports, decide for each teammate whether the number of successful shots is proportional to minutes practiced. For every relationship you judge proportional, produce a clear representation (a table of minutes and shots and an equation of the form shots = k × minutes, or a graph) and explain your reasoning. Based on the data, is the coach’s conjecture (compare total shots ÷ total minutes) always a correct test for proportionality? Explain and show your work.", "target_concept": "Recognize and represent proportional relationships between quantities (CCSS.Math.Content.7.RP.A.2). Students have not yet received direct instruction on this target.", "prior_knowledge": ["Unit rates (7.RP.A.1): Compute unit rates involving ratios of fractional quantities, including lengths and areas in like or different units.", "Rational-number addition and subtraction (7.NS.A.1): Add and subtract rational numbers and interpret these operations numerically and on a number line."], "pf_eval_measures": {"target_alignment": "yes", "mathematical_validity": "yes", "prior_knowledge_accessibility": "yes", "familiar_approach_limits": "yes", "room_for_invention": "no"}, "pf_eval_all5": false, "pf_eval_reasons": {"target_alignment": "The central work is testing whether each teammate's paired minutes and successful shots fit a constant multiplier, then representing any proportional relationship. That directly addresses recognizing and representing proportional relationships.", "mathematical_validity": "The givens are consistent. Alex has 1/3 == 2/6, so Alex fits shots = (1/3) × minutes. Jordan has 1/2 != 2/7, so Jordan does not fit one constant multiplier. Yet both teammates have total shots 3 and total minutes 9, giving 3/9 == 1/3. Thus the total ratio agrees for both players while Jordan's session ratios differ, providing a valid counterexample to the coach's claim. The task intentionally permits the requested table, equation, or graph representation, so this does not create a validity problem.", "prior_knowledge_accessibility": "The learner can add the session quantities and compute unit rates using the stated prior knowledge. For example, Alex's rates are 1/3 and 2/6, while Jordan's are 1/2 and 2/7; comparing these fractions is a meaningful start toward the requested decisions.", "familiar_approach_limits": "[target_limit] The pooled-total unit-rate method is a supported baseline: for both teammates it correctly computes 3 total shots / 9 total minutes == 1/3. However, this rate aggregates sessions and cannot test whether one constant k holds in each session; the equal pooled rates are the built-in tie that defeats the shortcut. Checking session-by-session proportionality is exactly the learning target. | [meets_demands] The attempt checks each session separately. Alex has rates 1/3 and 2/6 == 1/3, so the equation shots == (1/3) * minutes represents both records. Jordan has rates 1/2 and 2/7, which are unequal, so no single constant k fits. It also correctly shows that the pooled test gives 3/9 == 1/3 for both and therefore falsely labels Jordan proportional.", "room_for_invention": "The task supplies an important route by proposing the total-shots-to-total-minutes test and prescribing the equation form shots = k × minutes. However, the learner must still determine the correct constant-rate criterion from the session pairs, choose the value of k, classify each teammate, and construct the counterexample showing whether the coach's test is sufficient."}, "blind_id": "T07", "display_index": 7, "human_ratings": {"target_alignment": "yes", "mathematical_validity": "yes", "prior_knowledge_accessibility": "yes", "familiar_approach_limits": "yes", "room_for_invention": "no", "note": "Pooled rate ties at 3/9 = 1/3 while session rates differ for Jordan; but prompt prescribes shots = k * minutes."}, "human_all5": false}, {"key": "shopping_percent__gpt41__024", "cell_id": "shopping_percent", "setting_name": "Phone Plans & Linear Equations", "theme": "Everyday Shopping / Plans", "arm": "gpt41", "arm_label": "One-Shot (GPT-4.1)", "student_task": "Savvy Shopping at Discount Depot\n\nKim and Jordan are shopping at Discount Depot with their combined pocket money. They spot a backpack priced at $48. The store advertises a special: all items are marked down by 25%. But, when you pay at the register, a sales tax of 7% is added on the discounted price.\n\nThe two friends want to figure out if they have enough money, so they check their wallets: Kim has $32 and Jordan has $15.\n\nHere's what they've gathered:\n- Backpack original price: $48\n- Storewide markdown rate: 25%\n- Sales tax rate: 7%\n- Kim's cash: $32\n- Jordan's cash: $15\n\nTry to represent what happens to the backpack's price as it goes through the markdown and then the sales tax. Kim and Jordan want to know: is their total money enough to buy the backpack and pay any tax? Show your reasoning using numbers, representations, and strategies you think work best.\n\nCan Kim and Jordan afford the backpack after the discount and sales tax? Explain your solution, showing how you combined the information and how you calculated the final price.", "target_concept": "Use proportional relationships to solve multistep ratio and percent problems, such as tax, markups and markdowns (CCSS.Math.Content.7.RP.A.3). Students have not yet received direct instruction on this target.", "prior_knowledge": ["Proportional relationships (7.RP.A.2): Recognize and represent proportional relationships between quantities.", "Operations with rational numbers (7.NS.A.3): Solve real-world and mathematical problems involving the four operations with rational numbers."], "pf_eval_measures": {"target_alignment": "yes", "mathematical_validity": "yes", "prior_knowledge_accessibility": "yes", "familiar_approach_limits": "no", "room_for_invention": "yes"}, "pf_eval_all5": false, "pf_eval_reasons": {"target_alignment": "The central work directly addresses multistep percent applications: first reduce the $48 price by 25%, then calculate 7% tax on the discounted price, and compare the result with the combined cash. This uses proportional relationships in the context of a markdown and tax.", "mathematical_validity": "The numerical claims are consistent: the discounted price is $48 * (1 - 0.25) = $36; the tax is $36 * 0.07 = $2.52; and the final price is $36 + $2.52 = $38.52. Their combined cash is $32 + $15 = $47, leaving $47 - $38.52 = $8.48, so they can afford the backpack. The task explicitly allows different representations and strategies, but each consistent strategy leads to the same affordability conclusion.", "prior_knowledge_accessibility": "Using the stated prior knowledge and basic arithmetic, the learner can immediately combine the cash: $32 + $15 = $47. They can also represent the markdown as multiplying by 1 - 0.25 and then use the stated proportional-relationship knowledge to apply the tax, so at least one meaningful mathematical start is available.", "familiar_approach_limits": "[meets_demands] It correctly models the markdown and then the tax, matching the task's statement that “sales tax of 7% is added on the discounted price.” The multipliers are 1 - 0.25 == 0.75 and 1 + 0.07 == 1.07, so 48 * 0.75 * 1.07 == 38.52. Their combined cash is 32 + 15 == 47, and 47 > 38.52 with 47 - 38.52 == 8.48 remaining. This is a complete and mathematically correct solution. | [meets_demands] It correctly calculates each sequential percentage change: 0.25 * 48 == 12, 48 - 12 == 36, 0.07 * 36 == 2.52, and 36 + 2.52 == 38.52. It also correctly combines the amounts described in “Kim has $32 and Jordan has $15.” Since 32 + 15 == 47 and 47 > 38.52, they can afford the backpack, with 8.48 left. The method completes all required steps.", "room_for_invention": "The task specifies the situation, rates, and order of the markdown and tax, but it does not provide a formula, multiplier, table, diagram, or step-by-step procedure. Learners must construct a representation and strategy for the successive percent changes and affordability comparison."}, "blind_id": "T08", "display_index": 8, "human_ratings": {"target_alignment": "yes", "mathematical_validity": "yes", "prior_knowledge_accessibility": "yes", "familiar_approach_limits": "no", "room_for_invention": "yes", "note": "Routine single-item calculation ($38.52 vs $47 cash); any reasonable calculation easily settles affordability."}, "human_all5": false}, {"key": "sports_basketball_ratio__gpt41__009", "cell_id": "sports_basketball_ratio", "setting_name": "Basketball Ratios", "theme": "Sports (Basketball)", "arm": "gpt41", "arm_label": "One-Shot (GPT-4.1)", "student_task": "Stephen Curry's Basketball Training: Building Fair Teams\n\nStephen Curry is running a basketball camp for aspiring middle-school players. Each day, he leads intense shooting practice, then organizes games to help participants learn teamwork and skill. The camp uses two courts for daily games. Today, 24 campers are split into two groups. Each group played games where every player took turns shooting from three-point range. Group A made 36 shots out of 120 attempts in total. Group B made 55 shots out of 175 attempts in total.\n\nAfter practice, Stephen wants to form two new game teams for a scrimmage. He wants the teams to be as evenly matched as possible based on shooting performance during practice. He's looking for a fair way to split the campers, using the information he has from today's data:\n\n| Group    | Number of players | Total made shots | Total shots taken |\n|----------|------------------|------------------|------------------|\n| A        |        12        |        36        |        120       |\n| B        |        12        |        55        |        175       |\n\nStephen encourages campers to use their math skills to help him decide how to create two balanced teams, aiming for teams with similar shooting abilities.\n\nHow could Stephen Curry use the shooting results from practice to create two new teams that are as fair as possible? Describe one or more ways to split the campers into two teams for the scrimmage and explain your reasoning using calculations, representations, or comparisons. Be sure to use the provided data about shots made and shots attempted by each group.", "target_concept": "Recognize and represent proportional relationships between quantities (CCSS.Math.Content.7.RP.A.2). Students have not yet received direct instruction on this target.", "prior_knowledge": ["Unit rates (7.RP.A.1): Compute unit rates involving ratios of fractional quantities, including lengths and areas in like or different units.", "Rational-number addition and subtraction (7.NS.A.1): Add and subtract rational numbers and interpret these operations numerically and on a number line."], "pf_eval_measures": {"target_alignment": "no", "mathematical_validity": "no", "prior_knowledge_accessibility": "yes", "familiar_approach_limits": "no", "room_for_invention": "yes"}, "pf_eval_all5": false, "pf_eval_reasons": {"target_alignment": "The central work is designing a fair team split from two aggregate shooting records, not recognizing or representing a proportional relationship. Computing 36/120 = 3/10 and 55/175 = 11/35 compares two unit rates, but the task does not ask students to test a constant multiplier across corresponding quantities or represent a proportional relationship.", "mathematical_validity": "", "prior_knowledge_accessibility": "The learner can make a meaningful start by computing the two shooting rates: 36/120 = 3/10 and 55/175 = 11/35, then comparing them. Computing unit rates from ratios is included in the learner context, so this supports an initial response even though individual player data are unavailable.", "familiar_approach_limits": "[meets_demands] The method correctly computes Group A's rate as 36/120 == 3/10 and Group B's rate as 55/175 == 11/35, with difference 11/35 - 3/10 == 1/70. Giving each team 6 campers from each group gives each team half of the aggregate totals: 45.5 made shots and 147.5 attempts, so both have rate 45.5/147.5 == 91/295, about 30.85%. The explicit assumption that group rates represent individual planning rates is appropriate because individual records are unavailable, and the limitation is clearly acknowledged. | [meets_demands] This is a complete complementary-balance procedure. The combined totals are 36 + 55 == 91 made shots and 120 + 175 == 295 attempts, so the target per team is about 45.5 made shots and 147.5 attempts. The proposed complementary totals, 45/147 and 46/148, sum to the given totals and have rates of about 30.61% and 31.08%, a difference of about 0.47 percentage points. Selecting the 6-from-A, 6-from-B assignment with the smallest actual rate difference is a valid way to use individual data if it is collected; the response correctly notes that the aggregate table alone cannot identify that assignment.", "room_for_invention": "The task leaves the central fairness criterion and team-allocation strategy open. It does not prescribe whether fairness means equalizing shooting rates, mixing members from Groups A and B, or using another defensible comparison, so learners must construct a method and justify it."}, "blind_id": "T09", "display_index": 9, "human_ratings": {"target_alignment": "no", "mathematical_validity": "no", "prior_knowledge_accessibility": "no", "familiar_approach_limits": "no", "room_for_invention": "yes", "note": "Asks to split 24 individual campers fairly using only group totals (individual stats missing, blocking a valid start)."}, "human_all5": false}, {"key": "sports_basketball_ratio__gpt41__008", "cell_id": "sports_basketball_ratio", "setting_name": "Basketball Ratios", "theme": "Sports (Basketball)", "arm": "gpt41", "arm_label": "One-Shot (GPT-4.1)", "student_task": "Stephen Curry’s Basketball Practice Challenge\n\nAt the Golden State Warriors basketball camp, Stephen Curry sets up a special shooting contest for the participants. He gives each group a different challenge: each must take a certain number of three-point shots in a fixed amount of time, but not everyone takes the same number of shots.\n\nBelow is the record of three groups:\n\n| Group           | Number of Shots Taken | Time in Minutes |\n|-----------------|----------------------|-----------------|\n| Group A         | 45                   | 15              |\n| Group B         | 32                   | 8               |\n| Group C         | 63                   | 21              |\n\nStephen Curry wants to know which group performed most like him — meaning, which group kept their shooting pace most similar to his own style. He says he usually keeps a consistent pace, but doesn't tell you what that is. All you know: Curry values consistency and wants teams to compare their shooting paces and discuss how to decide which group is most like him.\n\nYou have worked before with unit rates, so you know you can compute things like shots per minute or minutes per shot. Addition and subtraction with rational numbers may also be useful if you want to compare differences.\n\nUsing what you know about unit rates and working with rational numbers, create at least two ways to compare the three groups’ shooting paces. Decide which group’s shooting pace is most consistent with Stephen Curry’s style, and explain your reasoning using your comparisons.", "target_concept": "Recognize and represent proportional relationships between quantities (CCSS.Math.Content.7.RP.A.2). Students have not yet received direct instruction on this target.", "prior_knowledge": ["Rational-number addition and subtraction (7.NS.A.1): Add and subtract rational numbers and interpret these operations numerically and on a number line.", "Unit rates (7.RP.A.1): Compute unit rates involving ratios of fractional quantities, including lengths and areas in like or different units."], "pf_eval_measures": {"target_alignment": "no", "mathematical_validity": "no", "prior_knowledge_accessibility": "yes", "familiar_approach_limits": "yes", "room_for_invention": "yes"}, "pf_eval_all5": false, "pf_eval_reasons": {"target_alignment": "The central work is to invent and compare pace-consistency measures for three fixed groups, while Curry’s reference pace is unspecified. That is not recognizing or representing a proportional relationship between two quantities across corresponding pairs, as required by the learning target. Computing shots per minute or minutes per shot uses unit rates, but those prerequisite computations do not make the task a proportional-relationship task.", "mathematical_validity": "", "prior_knowledge_accessibility": "The learner can make a meaningful start using the stated unit-rate knowledge. For example, the three shots-per-minute rates are 45/15 == 3, 32/8 == 4, and 63/21 == 3. The learner can also compute minutes per shot or subtract these rates to compare differences, so at least one valid mathematical step toward the requested comparison is accessible.", "familiar_approach_limits": "[target_limit] The unit-rate method is supported and correctly computes 45/15 == 3, 32/8 == 4, and 63/21 == 3 shots per minute. It exposes a built-in tie: Groups A and C have the same rate, so this comparison cannot select one unique group. The attempt appropriately explains that an unknown Curry pace p would make the answer depend on p: A and C are equally close when p < 3.5, all three tie when p == 3.5, and B is closer when p > 3.5. Recognizing and representing the proportional-rate relationship is the relevant limitation addressed by the learning target, although the supplied data still do not determine Curry's personal rate. | [target_limit] The pairwise subtraction method is a legitimate supported method: with rates 3, 4, and 3, the pairwise differences are |3 - 4| == 1, |3 - 3| == 0, and |4 - 3| == 1. The resulting totals are A: 1, B: 2, and C: 1, so A and C tie. This is a meaningful second comparison, but the tie and the absence of Curry's actual pace prevent a unique Curry match. The attempt correctly states that its comparison establishes relative consistency among the groups, not Curry's unknown individual rate; proportional-rate reasoning is the target that frames this limitation.", "room_for_invention": "The task leaves the central comparison construction open: the learner must choose at least two pace-comparison methods and establish a defensible criterion for deciding which group is most consistent. It supplies the data and permits unit rates, but it does not prescribe a consistency formula, reference pace, or comparison procedure."}, "blind_id": "T10", "display_index": 10, "human_ratings": {"target_alignment": "no", "mathematical_validity": "no", "prior_knowledge_accessibility": "yes", "familiar_approach_limits": "yes", "room_for_invention": "yes", "note": "Asks which group matches Curry's style without giving Curry's pace; Groups A and C tie at 3 shots/min."}, "human_all5": false}, {"key": "garden_composite_area__gpt5mini__008", "cell_id": "garden_composite_area", "setting_name": "Garden Composite Area", "theme": "Home & Garden Geometry", "arm": "gpt5mini", "arm_label": "One-Shot (GPT-5 mini)", "student_task": "Maya's Backyard Patio and Gardens\n\nMaya wants to redesign part of her backyard to make a new patio with two planting areas for family get-togethers. Her rectangular backyard is 30 ft long (east–west) and 20 ft wide (north–south). She plans three main features that together sit inside the yard: a stone patio, a triangular flower bed, and an herb garden shaped like a five-sided polygon. You may assume all corners that are described as right angles are right angles.\n\nHere are the planned shapes and sizes (all measurements in feet):\n\n- Patio (L-shaped): Start with a rectangle 18 ft (east–west) by 14 ft (north–south) placed in the northwest corner of the yard. Then remove a smaller rectangle from the patio’s southeast corner that measures 6 ft (east–west) by 5 ft (north–south). The remaining shape is the patio (an L-shape).\n\n- Flower bed (right triangle): Along the patio’s eastern edge there will be a triangular flower bed whose base runs 8 ft along that edge of the patio and whose height extends 6 ft away from the patio. The triangle’s base is straight along the patio edge and the height meets the base at a right angle.\n\n- Herb garden (5-sided polygon): Along the patio’s southern edge Maya will build an herb garden that can be decomposed into a rectangle plus a right triangle. The rectangle part is 6 ft (east–west) by 4 ft (north–south). Attached to the rectangle’s eastern side is a right triangle with base 3 ft (east–west) and height 4 ft (north–south). Together these make the herb garden polygon.\n\nMaterials and costs (per square foot):\n- Paving stones for the patio: $6.25 per ft^2\n- Mulch for the flower bed: $1.50 per ft^2\n- Soil mix for the herb garden: $3.40 per ft^2\n\nMaya has a total budget of $2,000 for these three features combined (materials only). She also wants you to think about design choices: she might change shapes, shrink or expand areas, or move boundaries to meet budget while keeping the design attractive.\n\nUse the area knowledge you already have (decomposing shapes into rectangles and triangles, and doing rational-number calculations) to explore the plan. Show your work, note any assumptions you make, and be ready to explain your methods.\n\nTasks:\n1) Find the area (in square feet) of each feature separately: the L-shaped patio, the triangular flower bed, and the herb garden polygon. Explain how you found each area and show your calculations.\n\n2) Using the material costs given, compute the cost for each feature and the total material cost. Is Maya’s plan within the $2,000 budget? Show all cost calculations.\n\n3) Maya may change the design to meet the budget or to add a new small 30 ft^2 flagstone seating area somewhere on the patio. Propose at least two different redesign options that would keep the project at or under $2,000 (or allow the extra 30 ft^2 seating area while staying within $2,000). For each option, describe exactly what you would change to the shapes or sizes, compute the new areas and costs, and explain why you chose that option. \n\n4) Compare the options and recommend one design for Maya. Explain your choice and include any diagrams, decompositions, or alternate methods you used to solve the area and cost problems.\n\nYou may use any reasonable method to find areas (for example, cutting shapes into rectangles and triangles, subtracting a removed rectangle from a larger one, or using other decompositions). Be clear about assumptions and steps so someone else can follow your reasoning.", "target_concept": "Solve real-world and mathematical problems involving the area of two-dimensional objects composed of triangles, quadrilaterals and polygons (the area part of CCSS.Math.Content.7.G.B.6; volume and surface area are excluded). Students have not yet received direct instruction on this target.", "prior_knowledge": ["Area of polygons by composing and decomposing (6.G.A.1): Find the area of right triangles, other triangles, special quadrilaterals and polygons by composing them into rectangles or decomposing them into triangles and other shapes.", "Rational-number operations (7.NS.A.3): Solve real-world and mathematical problems involving the four operations with rational numbers."], "pf_eval_measures": {"target_alignment": "yes", "mathematical_validity": "yes", "prior_knowledge_accessibility": "yes", "familiar_approach_limits": "no", "room_for_invention": "no"}, "pf_eval_all5": false, "pf_eval_reasons": {"target_alignment": "The central work is finding areas of an L-shaped polygon, a right triangle, and a five-sided polygon by decomposition, then applying those areas to redesign decisions. This directly addresses the target of solving real-world area problems involving triangles, quadrilaterals, and polygons.", "mathematical_validity": "The numerical plan is consistent: the patio area is 18*14 - 6*5 == 222 ft^2, the flower-bed area is 0.5*8*6 == 24 ft^2, and the herb-garden area is 6*4 + 0.5*3*4 == 30 ft^2. The corresponding costs are 222*6.25 == 1387.50, 24*1.50 == 36, and 30*3.40 == 102, for a total of 1525.50. Since 1525.50 <= 2000, the stated plan is feasible and leaves 474.50 dollars. The open-ended redesign and recommendation tasks intentionally permit multiple feasible choices, so they do not require one uniquely determined numerical answer.", "prior_knowledge_accessibility": "The learner has been taught composing and decomposing polygonal areas and rational-number operations, which are sufficient to begin concretely: for example, compute the patio area as 18*14 - 6*5, the triangle area as one-half of 8*6, and the herb-garden area as 6*4 plus one-half of 3*4. These skills also support the required cost multiplications and budget comparison.", "familiar_approach_limits": "[meets_demands] The areas are correctly decomposed: the patio is 18*14 - 6*5 == 222 ft^2, the flower bed is (8*6)/2 == 24 ft^2, and the herb garden is 6*4 + (3*4)/2 == 30 ft^2. The costs and original total are also correct: $1,387.50 + $36 + $102 == $1,525.50. Option A correctly adds 30 ft^2 at $6.25 per ft^2, giving $187.50 and a total of $1,713. Option B's recalculated areas (172, 44, 30, and 30 ft^2) and total of $1,430.50 are arithmetically correct. The assumptions address placement and overlap, and two redesigns are compared with a recommendation. | [meets_demands] This is a valid alternate decomposition: 18*9 + 12*5 == 222 ft^2, matching the subtraction method. The original costs and budget margin are correct. The net-change calculations for Option A and Option B are also correct: $1,525.50 + $187.50 == $1,713, and $1,525.50 - $312.50 + $30 + $187.50 == $1,430.50. Although the second option gives the changes mainly through cost adjustments rather than repeating every new area in a separate list, its area changes are mathematically determined by the stated 50 ft^2 patio reduction and the flower-bed change from 24 to 44 ft^2.", "room_for_invention": "The task supplies much of the initial mathematical route: the patio is formed by subtracting one rectangle from another, and the herb garden is explicitly decomposed into a rectangle and a right triangle. However, it leaves the redesign constructions, changed dimensions, comparison criteria, and recommendation open for the learner to create. Thus an important route is supplied while a secondary design decision remains open."}, "blind_id": "T11", "display_index": 11, "human_ratings": {"target_alignment": "yes", "mathematical_validity": "yes", "prior_knowledge_accessibility": "yes", "familiar_approach_limits": "no", "room_for_invention": "no", "note": "Text explicitly gives the decomposition of the L-patio and 5-sided herb garden; direct area formulas solve."}, "human_all5": false}, {"key": "sports_basketball_ratio__gpt5mini__001", "cell_id": "sports_basketball_ratio", "setting_name": "Basketball Ratios", "theme": "Sports (Basketball)", "arm": "gpt5mini", "arm_label": "One-Shot (GPT-5 mini)", "student_task": "Stephen Curry's Camp: Whose shooting holds up when attempts change?\n\nStephen Curry is running a weekend shooting challenge at his summer basketball camp. For three different short drills he and two campers (Jordan and Maya) recorded how many shots each player attempted and how many they made. All data below are from a fictional camp practice.\n\nDrill 1 — Spot‑up 3s\n- Stephen Curry: 30 attempts, 18 made\n- Jordan: 15 attempts, 9 made\n- Maya: 24 attempts, 16 made\n\nDrill 2 — Pull‑up mid‑range\n- Stephen Curry: 45 attempts, 27 made\n- Jordan: 40 attempts, 25 made\n- Maya: 18 attempts, 10 made\n\nDrill 3 — Rapid shots (timed)\n- Stephen Curry: 0.5 hour (30 minutes) — 28 attempts, 17 made\n- Jordan: 0.25 hour (15 minutes) — 12 attempts, 7 made\n- Maya: 45 minutes — 36 attempts, 22 made\n\nYou may use what you remember about computing unit rates (including with fractional quantities) and adding or subtracting rational numbers. No other methods have been taught yet.\n\nYour coach will pick one player to take a long 120‑shot practice challenge next week. Your job is to explore the records above and decide whom the coach should choose if the goal is to expect the most made shots out of 120 attempts and to have a predictable outcome.\n\nTasks (choose your own approach and show your thinking):\n1) For each player, make at least one prediction of how many shots they would make out of 120 attempts. Show your work and be explicit about any calculations, representations, or assumptions you use (examples: compute unit rates, make a table, use fraction multiplication, draw a number line, or another representation).\n2) Which player’s past data most strongly supports making a reliable prediction for a different number of attempts? Explain your reasoning and point to specific numbers from the table to support your claim.\n3) For one player of your choice, produce two different ways to represent and justify the same prediction (for example, a unit‑rate calculation and a table or a written fraction reasoning and a diagram). If the two methods give different answers, explain why and decide which you trust more.\n4) Design a short test (one or two additional simple drills or checks) you could run in 10 minutes at the camp that would help you decide whether a player’s number of made shots scales up in the same way when attempts increase. Explain how the results of your test would change your prediction for the 120‑shot challenge.\n\nBe ready to explain your choices, show calculations, and state any limitations in assuming a player’s past performance will carry over to many more attempts.", "target_concept": "Recognize and represent proportional relationships between quantities (CCSS.Math.Content.7.RP.A.2). Students have not yet received direct instruction on this target.", "prior_knowledge": ["Unit rates (7.RP.A.1): Compute unit rates involving ratios of fractional quantities, including lengths and areas in like or different units.", "Rational-number addition and subtraction (7.NS.A.1): Add and subtract rational numbers and interpret these operations numerically and on a number line."], "pf_eval_measures": {"target_alignment": "yes", "mathematical_validity": "yes", "prior_knowledge_accessibility": "yes", "familiar_approach_limits": "no", "room_for_invention": "yes"}, "pf_eval_all5": false, "pf_eval_reasons": {"target_alignment": "The central work is to use attempts and made shots to represent a relationship, predict makes for 120 attempts, compare how consistently the relationship holds across drills, and design a test of whether the scaling continues. These directly engage recognizing and representing proportional relationships, even though the target term is not stated.", "mathematical_validity": "The numerical data are internally consistent and every drill gives nonnegative attempts and made shots no greater than attempts. For example, Stephen's rates are 18/30 == 0.6, 27/45 == 0.6, and 17/28 approximately 0.607; Jordan's are 9/15 == 0.6, 25/40 == 0.625, and 7/12 approximately 0.583; Maya's are 16/24 approximately 0.667, 10/18 approximately 0.556, and 22/36 approximately 0.611. The prompt intentionally permits different representations, predictions, and reliability criteria, so a unique player or unique prediction is not required for validity. At least one feasible resolution exists, and no contradictory dimension or impossible demand is stated.", "prior_knowledge_accessibility": "The learner can begin by computing a made-shots-per-attempt unit rate, such as 18/30 for Stephen in Drill 1, using the stated unit-rate knowledge. That rate can be represented as 0.6 made per attempt, and multiplying by 120 is a concrete next step using the shared baseline for arithmetic with decimals. The learner can also compare rates across the drills.", "familiar_approach_limits": "[meets_demands] The session-by-session unit rates and 120-attempt predictions are mathematically correct: Stephen gives 72, 72, and 510/7; Jordan gives 72, 75, and 70; Maya gives 80, 200/3, and 220/3. The ranges are correctly 1/140, 1/24, and 1/9, so Stephen is the most consistent by this stated criterion. The reference-rate calculation and scaling table both give 72, and the proposed extra checks use new unit rates to revise predictions. | [meets_demands] This is a supported drill-by-drill proportionality analysis. The reference predictions are correctly 72 for Stephen and Jordan and 80 for Maya, and the rate changes are correctly computed: Stephen's range is 1/140, Jordan's is 1/24, and Maya's is 1/9. The conclusion that Stephen is most consistent follows from the smallest range, and the additional test and two representations address the requested reasoning.", "room_for_invention": "The task does not prescribe the central mathematical model or a single calculation procedure. Learners must decide how to represent the attempts-to-makes relationship, how to predict 120 makes, what evidence counts as reliable, and how to test whether scaling remains appropriate. Unit rates are suggested as an example, but no target formula or step-by-step route is supplied."}, "blind_id": "T12", "display_index": 12, "human_ratings": {"target_alignment": "yes", "mathematical_validity": "yes", "prior_knowledge_accessibility": "yes", "familiar_approach_limits": "no", "room_for_invention": "no", "note": "Multi-part numbered worksheet; unit rates per drill directly scale to 120 attempts."}, "human_all5": false}, {"key": "garden_composite_area__gpt41__020", "cell_id": "garden_composite_area", "setting_name": "Garden Composite Area", "theme": "Home & Garden Geometry", "arm": "gpt41", "arm_label": "One-Shot (GPT-4.1)", "student_task": "Designing a Dream Garden Patio\n\nImagine you are helping your family design a new garden patio in your backyard. You want a fun and unique patio shape that will stand out. Here is the plan:\n\n- The patio consists of three sections: \n  1. A rectangular area where you can place a table and chairs (8 ft by 6 ft).\n  2. Attached to the rectangle is a triangular flowerbed lying along one side. The triangle has a base of 6 ft (matching the rectangle's width) and a height of 4 ft.\n  3. Next to the rectangle, there is a small L-shaped walkway, made from two joined rectangles. One rectangle is 2 ft by 4 ft, and the other is 3 ft by 2 ft.\n\nHere's a sketch of the layout:\n\n| Section           | Dimensions           |\n|-------------------|---------------------|\n| Main rectangle    | 8 ft x 6 ft         |\n| Triangle          | Base 6 ft, Height 4 ft|\n| Walkway rectangle | 2 ft x 4 ft         |\n| Walkway rectangle | 3 ft x 2 ft         |\n\nYou have recently learned how to find the area of polygons by composing and decomposing shapes. You also know how to use rational numbers (including decimals and fractions) in calculations.\n\nHow could you find the total area of the new patio by using your knowledge of composing and decomposing polygons? Think about how you might break up the shapes or combine their areas. Explain your method(s) and any calculations you choose to do. If more than one method could work, describe your different ideas and why you might pick one approach over another.", "target_concept": "Solve real-world and mathematical problems involving the area of two-dimensional objects composed of triangles, quadrilaterals and polygons (the area part of CCSS.Math.Content.7.G.B.6; volume and surface area are excluded). Students have not yet received direct instruction on this target.", "prior_knowledge": ["Area of polygons by composing and decomposing (6.G.A.1): Find the area of right triangles, other triangles, special quadrilaterals and polygons by composing them into rectangles or decomposing them into triangles and other shapes.", "Rational-number operations (7.NS.A.3): Solve real-world and mathematical problems involving the four operations with rational numbers."], "pf_eval_measures": {"target_alignment": "yes", "mathematical_validity": "yes", "prior_knowledge_accessibility": "yes", "familiar_approach_limits": "yes", "room_for_invention": "yes"}, "pf_eval_all5": true, "pf_eval_reasons": {"target_alignment": "The central work is finding the area of a patio composed of a rectangle, triangle, and L-shaped polygon, which directly addresses area problems involving composed two-dimensional figures.", "mathematical_validity": "A consistent resolution exists: rectangle area 8 * 6 == 48, triangle area (6 * 4) / 2 == 12, and walkway area 2 * 4 + 3 * 2 == 14, giving total area 48 + 12 + 14 == 74 square feet. The prompt intentionally permits different decompositions and layouts; under the stated non-overlapping composition interpretation, the calculation is feasible. If the walkway rectangles were intended to overlap, the total would differ, so the assumptions make the chosen layout explicit rather than revealing a mathematical contradiction.", "prior_knowledge_accessibility": "The learner has been taught the relevant polygon-area composition and decomposition methods and rational-number operations. They can begin by calculating the rectangle area as 8 * 6, the triangle area as (6 * 4) / 2, and the two walkway-rectangle areas as 2 * 4 and 3 * 2.", "familiar_approach_limits": "[target_limit] The attempt correctly calculates the component areas as 48, 12, 8, and 6 square feet, but direct addition gives 74 and double-counts the 2-by-2 shared corner under its stated standard L-shaped interpretation. It explicitly explains that the corrected total is 70 square feet when the overlap is removed, while also identifying the alternative 74-square-foot result if the rectangles only share a boundary. Thus, the direct-addition baseline reaches the overlap limitation addressed by the learning target. | [meets_demands] The overlap-adjusted method is mathematically complete under the stated standard L-shaped assumption: 8*4 == 32 is not used; rather, the walkway areas are 2*4 == 8 and 3*2 == 6, the shared corner is 2*2 == 4, and the walkway union is 8+6-4 == 10. Adding the main rectangle and triangle gives 48+12+10 == 70 square feet, with the subtraction correctly preventing double-counting.", "room_for_invention": "The task gives the component dimensions and the design situation but does not prescribe the area model, decomposition, arrangement explanation, or calculation sequence. The learner must construct a valid way to combine the component areas."}, "blind_id": "T13", "display_index": 13, "human_ratings": {"target_alignment": "yes", "mathematical_validity": "no", "prior_knowledge_accessibility": "yes", "familiar_approach_limits": "no", "room_for_invention": "yes", "note": "Attachment placement of the L-walkway is underspecified/ambiguous; simple component sum solves."}, "human_all5": false}, {"key": "garden_composite_area__pipeline_lc__001", "cell_id": "garden_composite_area", "setting_name": "Garden Composite Area", "theme": "Home & Garden Geometry", "arm": "pipeline_lc", "arm_label": "StructPF (GPT-5 mini)", "student_task": "How much weed-block fabric for a composite garden?\n\nA homeowner will cover a small backyard garden with weed-block fabric. The garden outline is made from straight edges and consists of a main rectangular bed with a triangular planter attached along one short side. All given edges are straight and meet at right angles where drawn as such. The triangle shares the full height of the rectangle. Assume areas add without overlap or gaps and use meters for length and square meters for area.\n\nHere are the measurements the homeowner recorded:\n- Rectangular bed: length 10 m and width 6 m.\n- Right triangular planter attached along one short side: base along the rectangle's length is 4 m and the triangle's perpendicular height equals the rectangle's width (6 m).\n\nA friend suggests: \"Just multiply the garden's overall outside length and width and that's the area.\" Decide whether you accept, reject, or want to test that suggestion. Give the garden's total area in square meters and explain your reasoning clearly so the homeowner can check the work.\n\nHow much weed-block fabric (square meters) should the homeowner buy for the garden? Show your calculations and explain your method.", "target_concept": "Solve real-world and mathematical problems involving the area of two-dimensional objects composed of triangles, quadrilaterals and polygons (the area part of CCSS.Math.Content.7.G.B.6; volume and surface area are excluded). Students have not yet received direct instruction on this target.", "prior_knowledge": ["Area of polygons by composing and decomposing (6.G.A.1): Find the area of right triangles, other triangles, special quadrilaterals and polygons by composing them into rectangles or decomposing them into triangles and other shapes.", "Rational-number operations (7.NS.A.3): Solve real-world and mathematical problems involving the four operations with rational numbers."], "pf_eval_measures": {"target_alignment": "yes", "mathematical_validity": "yes", "prior_knowledge_accessibility": "yes", "familiar_approach_limits": "yes", "room_for_invention": "yes"}, "pf_eval_all5": true, "pf_eval_reasons": {"target_alignment": "The central work is finding the area of a composite figure made from a rectangle and a triangle, which directly addresses the stated target. The rectangle area is 10*6 == 60 square meters, the right-triangle area is (4*6)/2 == 12 square meters, and the composite area is 60+12 == 72 square meters.", "mathematical_validity": "The givens are consistent under the stated interpretation: the rectangle has area 10*6 == 60 square meters, the right triangle has area (4*6)/2 == 12 square meters, and the non-overlap condition gives a total of 60+12 == 72 square meters. The outside outline is not a rectangle, so multiplying an unspecified overall length and width is not a justified area method; decomposing and adding the component areas is feasible.", "prior_knowledge_accessibility": "The learner context explicitly provides polygon composition and decomposition, right-triangle area knowledge, and rational-number operations. A meaningful start is to compute the rectangle as 10*6 == 60 and the triangle as (4*6)/2 == 12, then add the non-overlapping areas.", "familiar_approach_limits": "[target_limit] The attempt correctly tests the quoted suggestion, \"Just multiply the garden's overall outside length and width and that's the area.\" It computes 14 * 6 == 84 m², but that bounding rectangle includes an unfilled triangular corner of area (1/2) * 4 * 6 == 12 m², so the shortcut cannot give the composite garden's exact area. The learning target directly addresses this limitation through decomposition. | [meets_demands] The method correctly decomposes the garden into the rectangle and attached right triangle. The rectangle has area 10 * 6 == 60 m², the triangle has area (1/2) * 4 * 6 == 12 m², and the stated no-overlap condition permits addition: 60 + 12 == 72 m². This fully determines the required fabric area.", "room_for_invention": "The task supplies the component dimensions and the non-overlap condition, but it does not supply the area formulas, decomposition procedure, or conclusion about the friend's shortcut. The learner must construct the method of finding each component area and adding them, then decide whether multiplying an overall length and width is justified."}, "blind_id": "T14", "display_index": 14, "human_ratings": {"target_alignment": "yes", "mathematical_validity": "yes", "prior_knowledge_accessibility": "yes", "familiar_approach_limits": "yes", "room_for_invention": "yes", "note": "Tests friend's outer bounding-box shortcut (14*6=84) vs composite decomposition (60+12=72)."}, "human_all5": true}, {"key": "music_compare_distributions__pipeline_lc__029", "cell_id": "music_compare_distributions", "setting_name": "Music Sample Distributions", "theme": "Music (Song Durations)", "arm": "pipeline_lc", "arm_label": "StructPF (GPT-5 mini)", "student_task": "Comparing two bands' song lengths from random samples\n\nA researcher took a random sample of seven song lengths (in minutes) from each of two fictional bands' playlists. Treat each list as a random sample from that band's population of song lengths. Lengths are measured accurately.\n\nBand A sample (minutes): 2.0, 2.5, 2.5, 3.0, 3.5, 3.5, 4.0\n\nBand B sample (minutes): 1.0, 1.5, 2.0, 2.5, 4.0, 4.0, 6.0\n\nOne classmate conjectures: \"We only need to compare the two averages; if the averages are the same the bands are about the same.\" Use the two samples above to evaluate that conjecture and to reach a recommendation about which band (if either) generally has longer songs. Support your recommendation with numerical summaries and an explanation that discusses how the two samples overlap or differ. Show the calculations and any drawings or lists you use, and explain your reasoning.\n\nUsing the two random samples of song lengths, which band would you say generally has longer songs, if either? Support your choice (or say the evidence is inconclusive) with numerical summaries and an explanation that discusses overlap or variability. Also explain what the classmate's conjecture gets right or wrong in this example.", "target_concept": "Use measures of center and measures of variability for numerical data from random samples to draw informal comparative inferences about two populations (CCSS.Math.Content.7.SP.B.4). Students have not yet received direct instruction on this target.", "prior_knowledge": ["Summarizing numerical data sets (6.SP.B.5c): Summarize numerical data sets with quantitative measures of center (median and/or mean) and variability (interquartile range and/or mean absolute deviation).", "Multi-digit decimal operations (6.NS.B.3): Fluently add, subtract, multiply and divide multi-digit decimals using the standard algorithm for each operation."], "pf_eval_measures": {"target_alignment": "yes", "mathematical_validity": "yes", "prior_knowledge_accessibility": "yes", "familiar_approach_limits": "yes", "room_for_invention": "yes"}, "pf_eval_all5": true, "pf_eval_reasons": {"target_alignment": "The central work is to compare two random samples using measures of center and variability, then make an informal inference about the two populations. That directly addresses the target: the learner can compare means or medians, compare variability, consider overlap, and use those summaries to recommend which population generally has longer songs.", "mathematical_validity": "The data are internally consistent and the task is intentionally an open comparative-inference problem, so different defensible summaries can support a recommendation. Both samples have mean 3.0 minutes, but Band A has median 3.0 and IQR 1.0, whereas Band B has median 2.5 and IQR 2.5. The samples overlap substantially, so a reasonable conclusion is that the evidence does not clearly establish that either band generally has longer songs; the equal means alone do not show that the distributions are alike. No contradiction or impossible demand is present.", "prior_knowledge_accessibility": "The learner has been taught mean and median, variability measures including IQR and mean absolute deviation, and multi-digit decimal operations. A meaningful start is therefore to order each list, add each sample's seven values to calculate its mean, and identify its median and quartiles before comparing the samples.", "familiar_approach_limits": "[target_limit] The attempt correctly computes both means as 21/7 == 3.0 and correctly computes the mean absolute deviations as 4/7 ≈ 0.57 for A and 10/7 ≈ 1.43 for B. However, its mean-based comparison has a tied center and therefore cannot determine which band generally has longer songs. This directly tests the conjecture, \"We only need to compare the two averages; if the averages are the same the bands are about the same.\", but does not resolve the tie with another center measure, so it reaches the stated baseline limitation. | [meets_demands] The median and IQR calculations are correct: A has median 3.0, Q1 2.5, Q3 3.5, and IQR 1.0; B has median 2.5, Q1 1.5, Q3 4.0, and IQR 2.5. The attempt also correctly identifies overlapping ranges, [2.0, 4.0] and [1.0, 6.0], and explains that B's 1.0- and 6.0-minute songs increase its variability. Its recommendation of A is appropriately qualified because the samples overlap and are random.", "room_for_invention": "The task requires numerical summaries and an evidence-based comparison but does not prescribe which center and variability measures to use, how to combine them, or what exact decision rule defines 'generally has longer songs.' The learner must construct a comparison strategy, such as comparing means and medians alongside IQR or mean absolute deviation and interpreting the overlap."}, "blind_id": "T15", "display_index": 15, "human_ratings": {"target_alignment": "yes", "mathematical_validity": "yes", "prior_knowledge_accessibility": "yes", "familiar_approach_limits": "yes", "room_for_invention": "yes", "note": "Both bands have exact same mean (3.0 min) and median (3.0 vs 2.5), forcing variability/spread analysis."}, "human_all5": true}, {"key": "shopping_percent__gpt5mini__025", "cell_id": "shopping_percent", "setting_name": "Phone Plans & Linear Equations", "theme": "Everyday Shopping / Plans", "arm": "gpt5mini", "arm_label": "One-Shot (GPT-5 mini)", "student_task": "Back-to-School Shopping: Which Sale Is the Best?\n\nYou have saved $75 of pocket money to buy parts of a new back-to-school outfit. You want to buy up to three items: a jacket, a pair of jeans, and a backpack. You can visit one of two stores. Use the prices and sale rules below to explore what you could buy and which store gives you the best deal. Show your thinking so others can follow your methods.\n\nItems and original prices:\n- Jacket: $48\n- Jeans: $36\n- Backpack: $22\n\nStore A — Flash Fashion:\n- All clothing items (jacket and jeans) are marked down 30% off their original prices.\n- If you buy at least two items (any two of jacket, jeans, backpack), Flash Fashion takes an extra 5% off the subtotal after the 30% clothing markdowns (the 5% applies to the subtotal of all items you buy, including the backpack if you buy it).\n- Sales tax of 8% is added at checkout after all discounts.\n- Flash Fashion also has a single-use $5-off coupon you may choose to apply to your final total (after tax). You can decide whether to use the coupon.\n\nStore B — Budget Boutique:\n- The store runs a mixed discount: the lowest-priced item you buy is 40% off; the other items have 15% off each.\n- Sales tax of 7% is added at checkout after all discounts.\n- Budget Boutique does not accept coupons.\n\nNotes:\n- Sales tax is always added after discounts unless the problem tells you otherwise.\n- You do not have to buy all three items. You can pick any one, two, or all three items to try to maximize what you get with your $75.\n- All prices are fictional for this problem.\n\nDecide what to buy and which store to go to. Explore different purchase options and explain your reasoning.\n\nBe sure to address these points in your answer (you can organize your work however you like):\n1) For each of these purchase plans, calculate the final amount you would pay at each store (show your work):\n   a) Jacket only\n   b) Jeans only\n   c) Backpack only\n   d) Jacket + Jeans\n   e) Jacket + Backpack\n   f) Jeans + Backpack\n   g) Jacket + Jeans + Backpack\n2) Which of these purchase plans can you afford with your $75 at each store? For the plans you can afford, how much pocket money will you have left?\n3) If you want to get as many items as possible without exceeding $75, which items should you buy and at which store? Explain how you decided.\n4) Compare the $5-off coupon at Flash Fashion to the discounts at Budget Boutique. Give at least two different ways to think about when a fixed $5-off is better than choosing Budget Boutique’s structure (use examples from the item prices above).\n5) Reflect on your methods: describe at least two different mathematical approaches someone could use to compare final prices (for example, using fractions, decimals, or proportional reasoning). Which approach did you prefer and why?\n\nYou do not need to find only one answer — show different possibilities if you find them. Make sure your calculations are clear so someone else can follow your comparisons.", "target_concept": "Use proportional relationships to solve multistep ratio and percent problems, such as tax, markups and markdowns (CCSS.Math.Content.7.RP.A.3). Students have not yet received direct instruction on this target.", "prior_knowledge": ["Proportional relationships (7.RP.A.2): Recognize and represent proportional relationships between quantities.", "Operations with rational numbers (7.NS.A.3): Solve real-world and mathematical problems involving the four operations with rational numbers."], "pf_eval_measures": {"target_alignment": "yes", "mathematical_validity": "yes", "prior_knowledge_accessibility": "yes", "familiar_approach_limits": "no", "room_for_invention": "no"}, "pf_eval_all5": false, "pf_eval_reasons": {"target_alignment": "The central work is applying proportional percentage changes through markdowns, an additional discount, tax, and a fixed coupon, then comparing totals. For example, a Flash Fashion two-item total can be modeled with factors such as 0.70, 0.95, and 1.08, which directly addresses multistep ratio and percent problems.", "mathematical_validity": "The pricing rules are mathematically consistent. Interpreting the discounts multiplicatively gives Flash Fashion factors of 0.70 for clothing, 0.95 for the extra two-or-more-item discount, and 1.08 for tax; Budget Boutique gives the lowest-priced item a factor of 0.60, other items a factor of 0.85, and then applies 1.07 tax. The checked totals are consistent: Flash Fashion's all-item total is 82.9008 before the coupon and 77.9008 after it, while Budget Boutique's all-item total is 90.522, so neither all-item plan fits within 75. Each two-item plan is affordable at both stores; for example, Flash Fashion with the coupon gives 55.3288, 52.0456, or 43.4272, and Budget Boutique gives 66.768, 57.78, or 46.866. Thus feasible resolutions exist, and the task intentionally permits comparisons, method choices, and more than one equally valid two-item recommendation.", "prior_knowledge_accessibility": "The learner can make a meaningful start using taught rational-number operations by forming an original subtotal such as 48+36==84 for the jacket-and-jeans plan. The taught proportional-relationship background also supports representing a markdown as a retained-price factor, although completing every percent calculation may require the target instruction.", "familiar_approach_limits": "[meets_demands] The approach correctly applies the sequential percentage multipliers, tax, and the optional coupon. For example, the task says \"All clothing items (jacket and jeans) are marked down 30% off their original prices\" and \"Sales tax of 8% is added at checkout after all discounts\"; the attempt correctly calculates the jacket as 48*0.70*1.08-5 == 31.29 and similarly handles the extra 5% discount for two or more items. It also correctly applies Budget Boutique's 40% discount to the lowest-priced purchased item, including one-item plans, and its totals agree with the rules. All seven plans are calculated at both stores, affordability and leftovers are addressed, the maximum affordable number of items is correctly identified as two, and two valid coupon-comparison methods plus two computational approaches are supplied. | [meets_demands] The fractional-factor method is mathematically valid: 30% off is represented by 7/10, the extra 5% discount by 19/20, 8% tax by 27/25, 40% off by 3/5, 15% off by 17/20, and 7% tax by 107/100. The attempt correctly applies the 40% factor to the lowest-priced item in each Budget Boutique plan, including single-item purchases. Its seven totals for each store, affordability conclusions, leftovers, two-item recommendation, coupon comparisons, and discussion of fractions versus decimals all satisfy the requested work.", "room_for_invention": "The task supplies important parts of the mathematical route: the discount rates, which items receive each rate, and the required order of markdowns, tax, and coupon. However, it leaves the learner to construct the arithmetic representations, decide whether the coupon helps, choose comparisons, and present at least two methods, so a secondary decision remains open."}, "blind_id": "T16", "display_index": 16, "human_ratings": {"target_alignment": "yes", "mathematical_validity": "yes", "prior_knowledge_accessibility": "yes", "familiar_approach_limits": "no", "room_for_invention": "no", "note": "Step-by-step store rules and multi-bullet instructions; direct arithmetic compares the stores."}, "human_all5": false}, {"key": "music_compare_distributions__gpt5mini__003", "cell_id": "music_compare_distributions", "setting_name": "Music Sample Distributions", "theme": "Music (Song Durations)", "arm": "gpt5mini", "arm_label": "One-Shot (GPT-5 mini)", "student_task": "Which Band Belongs on the Playlist? Comparing Two Bands' Streams\n\nYou are an editor for a popular streaming playlist. This month your playlist team is choosing between two local bands for a featured slot. The team randomly sampled 12 recent songs by each band and recorded the average number of streams per week (in millions) during each song's first four weeks. The data below are those random samples. Use the summary skills you already know (mean or median for center, and IQR and/or mean absolute deviation for variability) to compare the two bands.\n\nBand Neon Ember (average weekly streams, in millions):\n0.28, 0.30, 0.32, 0.34, 0.36, 0.40, 0.42, 0.45, 0.48, 0.50, 0.55, 4.20\n\nBand Blue Circuit (average weekly streams, in millions):\n0.55, 0.58, 0.60, 0.62, 0.63, 0.64, 0.66, 0.67, 0.68, 0.69, 0.70, 0.71\n\nRemember: you may use mean or median for a measure of center, and you may use interquartile range (IQR) or mean absolute deviation (MAD) for variability — or both. You know how to calculate these measures and how to work accurately with decimals.\n\nWith these samples: (a) Choose at least one measure of center and at least one measure of variability to summarize each band's sample. Show your calculations (or explain how you found them). (b) Based on your summaries, what informal conclusions can you draw about which band has the higher \"typical\" weekly streams and which band has more consistent weekly streams? Explain your reasoning and be explicit about which measures led you to each conclusion. (c) The playlist team has two different goals: (1) a \"Steady Vibe\" playlist that wants consistently similar listening for every song, and (2) a \"Viral Hits\" playlist that wants songs that might become very big. For each playlist, recommend which band to feature and explain why, using your summary measures. (d) How confident are you in each recommendation? Describe at least two limitations of these samples and say what additional information you would want before making the final decision.", "target_concept": "Use measures of center and measures of variability for numerical data from random samples to draw informal comparative inferences about two populations (CCSS.Math.Content.7.SP.B.4). Students have not yet received direct instruction on this target.", "prior_knowledge": ["Summarizing numerical data sets (6.SP.B.5c): Summarize numerical data sets with quantitative measures of center (median and/or mean) and variability (interquartile range and/or mean absolute deviation).", "Multi-digit decimal operations (6.NS.B.3): Fluently add, subtract, multiply and divide multi-digit decimals using the standard algorithm for each operation."], "pf_eval_measures": {"target_alignment": "yes", "mathematical_validity": "yes", "prior_knowledge_accessibility": "yes", "familiar_approach_limits": "yes", "room_for_invention": "no"}, "pf_eval_all5": false, "pf_eval_reasons": {"target_alignment": "The central work is to summarize two random samples with measures of center and variability, then draw informal comparative conclusions and recommendations. That directly addresses using center and variability to compare two populations.", "mathematical_validity": "The numerical data are consistent and the task is feasible. For example, Neon Ember has mean 8.60/12 = 0.716666... million, median (0.40+0.42)/2 = 0.41 million, and IQR 0.49-0.33 = 0.16 million. Blue Circuit has mean 7.73/12 = 0.644166... million, median (0.64+0.66)/2 = 0.65 million, and IQR 0.685-0.61 = 0.075 million. These results support the intended contrast: Neon Ember's outlier raises its mean, while Blue Circuit has the higher median and lower IQR. The task explicitly allows alternative valid summary choices and asks for informal, limitation-aware conclusions, so that methodological openness is a stated choice rather than a defect.", "prior_knowledge_accessibility": "The learner context explicitly teaches mean or median, IQR or MAD, and multi-digit decimal operations. The learner can begin by calculating a sample mean, such as adding the 12 Neon Ember values and dividing by 12, or by finding each sample median from the ordered data.", "familiar_approach_limits": "[target_limit] The approach uses taught mean and MAD calculations, but its own conclusion acknowledges that the 4.20 value strongly pulls Neon Ember's mean and MAD upward. Thus the mean-based typical-value comparison is an outlier-distorted baseline, and the learning target is needed to resolve that limitation with a more informative comparison such as the median. The reported arithmetic and the Blue Circuit consistency calculation are otherwise supported. | [meets_demands] The median and IQR calculations are correct: Neon Ember has median (0.40 + 0.42)/2 == 0.41 and IQR 0.49 - 0.33 == 0.16; Blue Circuit has median (0.64 + 0.66)/2 == 0.65 and IQR 0.685 - 0.61 == 0.075. The approach correctly concludes that Blue Circuit has the higher typical value and is more consistent, and it gives recommendations, confidence, and sample limitations.", "room_for_invention": "The task supplies the overall mathematical route and the permitted measure types: compare center and variability using mean or median and IQR or MAD. However, learners still choose which measures to calculate, carry out the calculations, interpret the comparison, and apply it to two playlist goals. Thus an important route is supplied while meaningful secondary choices remain open."}, "blind_id": "T17", "display_index": 17, "human_ratings": {"target_alignment": "yes", "mathematical_validity": "yes", "prior_knowledge_accessibility": "yes", "familiar_approach_limits": "yes", "room_for_invention": "no", "note": "Good outlier/skew contrast between bands, but (a)-(d) worksheet prescribes every step."}, "human_all5": false}, {"key": "shopping_percent__pipeline_lc__005", "cell_id": "shopping_percent", "setting_name": "Phone Plans & Linear Equations", "theme": "Everyday Shopping / Plans", "arm": "pipeline_lc", "arm_label": "StructPF (GPT-5 mini)", "student_task": "Which jacket deal is cheapest? Test Alex’s shortcut\n\nYou plan to buy one jacket. All three stores show the same sticker price: $100. Each store applies a percent discount first, then applies sales tax to the discounted price. The three offers are: Store A — 20% discount, 10% sales tax. Store B — 15% discount, 5% sales tax. Store C — 30% discount, 5% sales tax. Alex suggests a shortcut: subtract the discount percent from the sales-tax percent to get a single net percent and use that to compare offers; if two stores give the same net percent that way, Alex says they tie. Decide which store will give you the lowest final price for the jacket. Show your calculations and explain your reasoning. Test Alex’s shortcut on these offers and state whether it gives the correct ranking here.\n\nWhich store will give you the lowest final price for the jacket? Show your calculations and explain your reasoning. Also test Alex’s shortcut and say whether it gives the correct answer for these offers.", "target_concept": "Use proportional relationships to solve multistep ratio and percent problems, such as tax, markups and markdowns (CCSS.Math.Content.7.RP.A.3). Students have not yet received direct instruction on this target.", "prior_knowledge": ["Proportional relationships (7.RP.A.2): Recognize and represent proportional relationships between quantities.", "Operations with rational numbers (7.NS.A.3): Solve real-world and mathematical problems involving the four operations with rational numbers."], "pf_eval_measures": {"target_alignment": "yes", "mathematical_validity": "yes", "prior_knowledge_accessibility": "yes", "familiar_approach_limits": "yes", "room_for_invention": "yes"}, "pf_eval_all5": true, "pf_eval_reasons": {"target_alignment": "The central work directly addresses multistep percent applications: each price requires applying a discount and then tax to the reduced price. This uses proportional reasoning and rational-number operations, matching the stated target.", "mathematical_validity": "The wording \"discount first, then applies sales tax\" settles the calculation order. The final prices are A: 100*0.80*1.10 == 88, B: 100*0.85*1.05 == 89.25, and C: 100*0.70*1.05 == 73.50, so the actual ranking is C, then A, then B. Alex’s shortcut gives A: -10%, B: -10%, and C: -25%, predicting C as cheapest but incorrectly tying A and B. Thus the task is mathematically consistent, and the shortcut does not give the correct full ranking even though it identifies the cheapest store.", "prior_knowledge_accessibility": "The learner can make a meaningful start using taught proportional relationships and rational arithmetic: for example, represent the 20% discount as 20/100, calculate (20/100)*100 == 20, and subtract that discount from $100 before applying the tax.", "familiar_approach_limits": "[target_limit] The attempt correctly tests the explicitly stated additive-percent conjecture by calculating A: 10% - 20% == -10%, B: 5% - 15% == -10%, and C: 5% - 30% == -25%, giving shortcut prices of $90, $90, and $75. However, sequential discount and tax rates multiply rather than combine by subtraction, so this baseline cannot distinguish A from B correctly; the learning target directly addresses this multistep-percent limitation. | [meets_demands] The attempt applies the stated order correctly: A is $100 * 0.80 * 1.10 == $88, B is $100 * 0.85 * 1.05 == $89.25, and C is $100 * 0.70 * 1.05 == $73.50. It therefore correctly ranks the offers C, A, B, identifies C as cheapest, and explains that Alex's shortcut incorrectly makes A and B tie.", "room_for_invention": "The task states the order of operations but does not provide the calculation model or result. The learner must construct the sequential factors, such as 100*(1-discount/100)*(1+tax/100), calculate all three prices, and determine whether Alex’s net-percent comparison preserves the ranking."}, "blind_id": "T18", "display_index": 18, "human_ratings": {"target_alignment": "yes", "mathematical_validity": "yes", "prior_knowledge_accessibility": "yes", "familiar_approach_limits": "yes", "room_for_invention": "yes", "note": "Store A (-20%, +10%) and Store B (-15%, +5%) tie under additive -10% shortcut, requiring compound multiplier."}, "human_all5": true}, {"key": "music_compare_distributions__pipeline_lc__018", "cell_id": "music_compare_distributions", "setting_name": "Music Sample Distributions", "theme": "Music (Song Durations)", "arm": "pipeline_lc", "arm_label": "StructPF (GPT-5 mini)", "student_task": "Which band generally has longer songs? Compare two samples of song lengths.\n\nTwo students each took a random sample of songs from a different band and recorded the song lengths in seconds. Treat each list as a random sample from that band's catalog. Here are the samples.\n\nBand A (seconds): 150, 160, 170, 180, 190, 200, 210, 1000\nBand B (seconds): 170, 175, 180, 185, 190, 195, 200, 205\n\nA classmate, Maria, looks only at the sample means and says, \"Band A's average is higher, so Band A's songs are generally longer.\" Use the two samples and your knowledge of summarizing numerical data (for example, mean or median for center and IQR or MAD for spread) to evaluate Maria's claim and make your own decision. Do not assume anything about the bands beyond the samples shown.\n\nWhich band would you say generally has longer songs based on these two samples? Give a clear answer (choose Band A, Band B, or say \"not enough evidence\"). Show the calculations and summaries you used, explain your reasoning, and describe any uncertainty that remains about your conclusion.", "target_concept": "Use measures of center and measures of variability for numerical data from random samples to draw informal comparative inferences about two populations (CCSS.Math.Content.7.SP.B.4). Students have not yet received direct instruction on this target.", "prior_knowledge": ["Summarizing numerical data sets (6.SP.B.5c): Summarize numerical data sets with quantitative measures of center (median and/or mean) and variability (interquartile range and/or mean absolute deviation).", "Multi-digit decimal operations (6.NS.B.3): Fluently add, subtract, multiply and divide multi-digit decimals using the standard algorithm for each operation."], "pf_eval_measures": {"target_alignment": "yes", "mathematical_validity": "yes", "prior_knowledge_accessibility": "yes", "familiar_approach_limits": "yes", "room_for_invention": "yes"}, "pf_eval_all5": true, "pf_eval_reasons": {"target_alignment": "The central work directly matches the target: the task compares two random samples, asks for measures of center such as means or medians, asks for variability such as IQR or MAD, and uses those summaries to make an informal inference about the two bands' populations.", "mathematical_validity": "The samples are internally consistent and both contain eight song lengths. The checked means are 282.5 for Band A and 187.5 for Band B. The checked medians are 185 for Band A and 187.5 for Band B. Using the median-of-halves convention, Band A's IQR is 205 - 165 = 40 seconds and Band B's IQR is 197.5 - 177.5 = 20 seconds. Thus the 1000-second Band A observation raises its mean substantially, while the medians are nearly equal and Band A is more variable. The task explicitly allows a reasoned comparison and acknowledges uncertainty, so a conclusion based on these summaries is feasible without a mathematical contradiction.", "prior_knowledge_accessibility": "The learner knows how to summarize numerical data with mean, median, and variability measures and can perform the needed arithmetic. A meaningful start is to calculate the means: Band A has (150+160+170+180+190+200+210+1000)/8 = 282.5, while Band B has (170+175+180+185+190+195+200+205)/8 = 187.5. The learner can also calculate medians and IQRs using the taught knowledge.", "familiar_approach_limits": "[target_limit] The attempt correctly calculates both means (Band A 282.5 seconds and Band B 187.5 seconds) and the MAD values, but mean-based comparison is distorted by Band A's 1000-second outlier. This is a legitimate taught baseline that reaches the built-in outlier limitation, and the learning target directly addresses resolving such comparisons with additional measures of center and variability. | [meets_demands] The attempt correctly calculates the medians (Band A 185 seconds and Band B 187.5 seconds) and IQRs (40 and 20 seconds), then uses the resistant median comparison to choose Band B. It also explains the small sample-size uncertainty, so this method meets the task's mathematical demands.", "room_for_invention": "The task supplies the data, the random-sample setting, and examples of possible summaries, but it does not prescribe a single measure, comparison rule, or conclusion. The learner must construct a defensible strategy for handling Band A's extreme value, compare center and spread, and decide whether to choose a band or report not enough evidence."}, "blind_id": "T19", "display_index": 19, "human_ratings": {"target_alignment": "yes", "mathematical_validity": "yes", "prior_knowledge_accessibility": "yes", "familiar_approach_limits": "yes", "room_for_invention": "yes", "note": "Extreme outlier (1000s) makes Band A mean higher (282.5 vs 187.5) while median is tied/lower (185 vs 187.5)."}, "human_all5": true}, {"key": "garden_composite_area__gpt41__017", "cell_id": "garden_composite_area", "setting_name": "Garden Composite Area", "theme": "Home & Garden Geometry", "arm": "gpt41", "arm_label": "One-Shot (GPT-4.1)", "student_task": "Designing a Garden Patio with Unique Shapes\n\nYou have been asked to help design a new patio area for a home garden. The owner wants the patio to be in the shape of a large rectangle, but with a triangular flower bed cut out of one corner and a smaller rectangular section added for a barbecue grill. Here's the layout:\n\n- The main patio is a rectangle measuring 12 feet by 8 feet.\n- The flower bed cut-out is a right triangle with legs measuring 3 feet and 4 feet, cut from one corner of the patio.\n- The barbecue area is a rectangle measuring 5 feet by 3 feet and will be attached so that one of its longer sides is aligned with one of the shorter sides of the main patio.\n\nYou have a sketch of the layout where all the shapes are clearly marked. The homeowner wants to know how much space she will have for seating and walking (not counting the flower bed cut-out), and she may want to rearrange the barbecue area to other positions as long as it's attached to the patio. She also wants creative ideas for the final shape, as long as the barbecue area is included.\n\nRemember, you can use your knowledge about finding the area of rectangles and triangles, and rational number calculations.\n\nDescribe different strategies for calculating the total usable area of the patio (not including the flower bed). How would you account for the barbecue area if it is attached to different spots? Consider possible rearrangements and explain your reasoning using area calculations and diagrams.", "target_concept": "Solve real-world and mathematical problems involving the area of two-dimensional objects composed of triangles, quadrilaterals and polygons (the area part of CCSS.Math.Content.7.G.B.6; volume and surface area are excluded). Students have not yet received direct instruction on this target.", "prior_knowledge": ["Area of polygons by composing and decomposing (6.G.A.1): Find the area of right triangles, other triangles, special quadrilaterals and polygons by composing them into rectangles or decomposing them into triangles and other shapes.", "Rational-number operations (7.NS.A.3): Solve real-world and mathematical problems involving the four operations with rational numbers."], "pf_eval_measures": {"target_alignment": "yes", "mathematical_validity": "yes", "prior_knowledge_accessibility": "yes", "familiar_approach_limits": "no", "room_for_invention": "yes"}, "pf_eval_all5": false, "pf_eval_reasons": {"target_alignment": "The central work is finding the area of a rectangle, subtracting the area of a right-triangle cut-out, and adding the area of a rectangular extension. This directly addresses area problems involving composed triangles, quadrilaterals, and polygons.", "mathematical_validity": "The givens are geometrically feasible: the main rectangle has area 12 * 8 == 96 square feet, the right-triangle cut-out has area (3 * 4) / 2 == 6 square feet, and the remaining patio has area 96 - 6 == 90 square feet. The barbecue rectangle has area 5 * 3 == 15 square feet; attaching it externally without overlap gives 90 + 15 == 105 square feet. Its 5-foot longer side can fit along an 8-foot shorter side of the main patio. Because the prompt intentionally permits alternative attached positions and creative layouts, those choices do not invalidate the task.", "prior_knowledge_accessibility": "The learner has been taught rectangle and triangle area through composition and decomposition, along with rational-number operations. A meaningful start is to calculate 12 * 8 for the main rectangle, (3 * 4) / 2 for the triangular cut-out, and 5 * 3 for the barbecue area.", "familiar_approach_limits": "[meets_demands] This is a valid decomposition using the stated dimensions: \"The main patio is a rectangle measuring 12 feet by 8 feet.\" gives 12 * 8 == 96, the right-triangle area is 3 * 4 / 2 == 6, and the remaining patio area is 96 - 6 == 90. The barbecue area is 5 * 3 == 15, so a nonoverlapping external attachment gives 90 + 15 == 105 square feet. The attempt also correctly explains that moving a disjoint attached rectangle changes the outline but not the total area, while an actual overlap must be corrected. | [meets_demands] The attempt correctly computes 96 - 6 == 90 and 5 * 3 == 15, giving 105 square feet for every nonoverlapping external placement. Its expression 105 - O correctly accounts for an overlap O with already-counted patio area, and it appropriately avoids inventing a numerical overlap when the supplied measurements do not specify one. Rotation or relocation of the rectangle does not change its area.", "room_for_invention": "The task supplies the component shapes and dimensions but does not prescribe one decomposition, diagram, or complete procedure for combining them. The learner must construct area strategies and decide how to represent and justify alternative barbecue-area layouts."}, "blind_id": "T20", "display_index": 20, "human_ratings": {"target_alignment": "yes", "mathematical_validity": "yes", "prior_knowledge_accessibility": "yes", "familiar_approach_limits": "no", "room_for_invention": "yes", "note": "Direct rectangle minus triangle plus barbecue rectangle (96 - 6 + 15 = 105 sq ft) solves immediately."}, "human_all5": false}, {"key": "garden_composite_area__gpt5mini__007", "cell_id": "garden_composite_area", "setting_name": "Garden Composite Area", "theme": "Home & Garden Geometry", "arm": "gpt5mini", "arm_label": "One-Shot (GPT-5 mini)", "student_task": "Maple Street Backyard: Plan the Garden and Stay on Budget\n\nYou are helping the Johnson family design their backyard garden on Maple Street. The overall property area available for the garden is a single polygon described as follows: start at the northeast corner, go 30 feet west, go 22 feet south, go 8 feet east along the south edge, then cut diagonally back up to a point 6 feet up from the southwest corner on the west edge, and then return north to the starting point. (In other words, the lot is like a 30 ft by 22 ft rectangle with a right triangle cut out of the southwest corner; the legs of that cut-out triangle measure 8 ft along the south edge and 6 ft along the west edge.)\n\nInside that garden area the Johnsons want three main features:\n- A rectangular patio in the northeast corner that measures 10 ft (east–west) by 8 ft (north–south).\n- A triangular flower bed tucked into the southeast corner whose base runs 6 ft along the south edge of the garden and whose height extends 4 ft north from that base (assume a right triangle with the base and height perpendicular).\n- A straight garden path (crushed stone) of uniform width 2 ft that runs along the north edge of the garden from the northwest corner until it meets the patio (it does not go behind the patio).\n\nMaterial costs (fictional) the Johnsons will use:\n- Patio pavers: $5.25 per square foot\n- Mulch for flower bed: $0.85 per square foot\n- Sod (grass) for lawn areas: $0.50 per square foot\n- Crushed stone for the path: $3.10 per square foot\n\nThe Johnsons have a budget of $600 for pavers, mulch, sod and crushed stone combined. They would like you to figure out how much of each material they will need and whether the plan fits their budget.\n\nUseful reminders about what you already know: you have experience finding areas by composing and decomposing shapes (for example, breaking a polygon into rectangles and triangles) and you can compute with rational numbers. You have not yet been taught any new area formulas beyond composing and decomposing polygons.\n\nYour tasks (show all your reasoning and calculations; leave room for different methods):\n\n1. Find the area of the entire garden plot (the polygon described). Show at least two different ways to break the plot into familiar shapes (rectangles and triangles) and give the area found by each method. Explain which decomposition you prefer and why.\n\n2. Find the area of each feature: the patio, the triangular flower bed, and the 2-ft-wide north path. Then find the total area of these features combined.\n\n3. Find the area that would need sod (grass) after the patio, flower bed, and path are installed.\n\n4. Using the material costs above, estimate the cost for each material (pavers, mulch, crushed stone, and sod) and the total cost. Show your calculations (with rational-number arithmetic). Does the total cost fit within the $600 budget? If not, propose at least two different, concrete design changes the Johnsons could make to meet the budget (for example, change a dimension, move or shrink a feature, or select a different mix of materials). For each proposed change, estimate the new total cost.\n\n5. Reflect: describe one alternate way someone might compute the garden area or the area of the lawn (different from your methods), and say what advantages or disadvantages that alternate method might have for this garden design.\n\nYou may draw labeled sketches, use arithmetic with fractions or decimals, and choose any reasonable order for your work. Be ready to explain and defend your chosen methods and how you handled any fractional measurements.", "target_concept": "Solve real-world and mathematical problems involving the area of two-dimensional objects composed of triangles, quadrilaterals and polygons (the area part of CCSS.Math.Content.7.G.B.6; volume and surface area are excluded). Students have not yet received direct instruction on this target.", "prior_knowledge": ["Area of polygons by composing and decomposing (6.G.A.1): Find the area of right triangles, other triangles, special quadrilaterals and polygons by composing them into rectangles or decomposing them into triangles and other shapes.", "Rational-number operations (7.NS.A.3): Solve real-world and mathematical problems involving the four operations with rational numbers."], "pf_eval_measures": {"target_alignment": "yes", "mathematical_validity": "no", "prior_knowledge_accessibility": "yes", "familiar_approach_limits": "no", "room_for_invention": "no"}, "pf_eval_all5": false, "pf_eval_reasons": {"target_alignment": "The central work is finding areas of a polygon, rectangles, a triangle, and the remaining lawn by composing and decomposing shapes. This directly addresses solving real-world area problems involving triangles, quadrilaterals, and polygons.", "mathematical_validity": "The boundary traversal is geometrically contradictory. After going from the southwest corner to (8,22), the diagonal reaches (0,16); moving north from there reaches the northwest corner (0,0), not the northeast starting point (30,0). Thus the prescribed path does not close into the claimed polygon. The parenthetical description gives a coherent intended shape, for which 30*22 - (8*6)/2 == 636 square feet, but it does not repair the contradictory traversal in the stated polygon description.", "prior_knowledge_accessibility": "The learner can begin by decomposing the stated plot into a 30-by-22 rectangle and a right-triangle cutout, computing 30*22 and 8*6/2, then subtracting. The learner can similarly model the patio and path as rectangles, the flower bed as a triangle formed from a rectangle, and use the listed rational-number operations for costs.", "familiar_approach_limits": "[meets_demands] The rectangle-complement method is valid: 30*22 == 660 square feet, the cutout is (8*6)/2 == 24 square feet, and 660-24 == 636 square feet. The feature areas, sod area, original cost of $806.20, and both concrete budget changes are also arithmetically correct; the extra southeast-triangle discussion is redundant but does not invalidate the successful method. | [meets_demands] The vertical-band and horizontal-strip decompositions both correctly give 636 square feet: 22*22 + 8*16 + (8*6)/2 == 636 and 30*16 + 22*6 + (8*6)/2 == 636. The feature, sod, cost, and two budget-meeting redesign calculations are correct, with totals of $594.70 and $555.60.", "room_for_invention": "The task supplies an important mathematical model for the garden: a 30-by-22 rectangle with an 8-by-6 triangular cutout. However, it leaves the second decomposition, the treatment of the features and lawn, and concrete budget-reduction designs open for the learner to construct."}, "blind_id": "T21", "display_index": 21, "human_ratings": {"target_alignment": "yes", "mathematical_validity": "no", "prior_knowledge_accessibility": "no", "familiar_approach_limits": "no", "room_for_invention": "no", "note": "Self-contradictory boundary walk vs parenthetical cutout description blocks a clear start; multi-step worksheet giveaway."}, "human_all5": false}, {"key": "shopping_percent__pipeline_lc__008", "cell_id": "shopping_percent", "setting_name": "Phone Plans & Linear Equations", "theme": "Everyday Shopping / Plans", "arm": "pipeline_lc", "arm_label": "StructPF (GPT-5 mini)", "student_task": "Comparing final prices after a markup and a discount\n\nYou are comparing the final price a customer pays for the same item at two different stores. Both stores start from the same original (manufacturer/wholesale) price of $100. Each store first marks the item up by a given percent and then applies a discount percent to the marked-up price. The customer pays the final price after these two steps.\n\nHere are the stores' steps:\n\n- Store A: markup 30%, then discount 20%.\n- Store B: markup 20%, then discount 10%.\n\nSam thinks you can find the final effect by subtracting the discount percent from the markup percent for each store and then comparing those net percents (for example, Sam would compare 30% − 20% with 20% − 10%).\n\nWhich store will charge the lower final price for the same item? Show your calculations and explain why your method gives the correct comparison.", "target_concept": "Use proportional relationships to solve multistep ratio and percent problems, such as tax, markups and markdowns (CCSS.Math.Content.7.RP.A.3). Students have not yet received direct instruction on this target.", "prior_knowledge": ["Proportional relationships (7.RP.A.2): Recognize and represent proportional relationships between quantities.", "Operations with rational numbers (7.NS.A.3): Solve real-world and mathematical problems involving the four operations with rational numbers."], "pf_eval_measures": {"target_alignment": "yes", "mathematical_validity": "yes", "prior_knowledge_accessibility": "yes", "familiar_approach_limits": "yes", "room_for_invention": "yes"}, "pf_eval_all5": true, "pf_eval_reasons": {"target_alignment": "The task's central work is a multistep markup-and-discount comparison, which directly addresses solving percent problems using proportional relationships. It requires applying each percentage successively to the changing price and comparing the resulting final prices.", "mathematical_validity": "The sequential operations are explicitly ordered and use the same $100 starting price, so the comparison has a definite interpretation. Store A's final price is 100 * 1.30 * 0.80 = 104, while Store B's is 100 * 1.20 * 0.90 = 108; therefore Store A is lower by $4. Sam's net-percent comparison gives 30% - 20% = 10% and 20% - 10% = 10%, which cannot distinguish the stores, because the discount is applied to the marked-up price rather than directly to the original price.", "prior_knowledge_accessibility": "The learner can make a concrete start using the stated prior knowledge of rational-number operations and proportional relationships: for example, calculate Store A's markup as 100 * 1.30 = 130, then apply the 20% discount to that marked-up price. This uses only the shared baseline and listed prerequisite skills.", "familiar_approach_limits": "[target_limit] The attempt correctly applies Sam's explicitly stated additive shortcut: both stores give 30% - 20% == 10% and 20% - 10% == 10%, so it predicts a tie. That tie is a built-in limitation because the discount is applied after the markup, on a different base; the learning target directly addresses this multistep-percent issue. The method therefore does not complete the comparison, but it reaches the target-specific limitation rather than merely stopping early. | [meets_demands] The attempt correctly models the sequential percentage changes with multipliers. Store A's final price is 100 * 1.30 * 0.80 == 104, while Store B's is 100 * 1.20 * 0.90 == 108. Since 104 < 108, it correctly concludes that Store A is cheaper and explains that each percentage applies to the amount at its own step.", "room_for_invention": "The task does not supply the central calculation method or formula. The learner must construct the sequential-percent model, such as multiplying the original price by 1.30 and then by 0.80, and must decide why subtracting the percentages is not a valid comparison method."}, "blind_id": "T22", "display_index": 22, "human_ratings": {"target_alignment": "yes", "mathematical_validity": "yes", "prior_knowledge_accessibility": "yes", "familiar_approach_limits": "yes", "room_for_invention": "yes", "note": "Store A (+30%, -20%) and Store B (+20%, -10%) tie at +10% under additive shortcut (104 vs 108 actual)."}, "human_all5": true}, {"key": "music_compare_distributions__gpt41__002", "cell_id": "music_compare_distributions", "setting_name": "Music Sample Distributions", "theme": "Music (Song Durations)", "arm": "gpt41", "arm_label": "One-Shot (GPT-4.1)", "student_task": "Are Loud Bands More Popular? Comparing Two Song Playlists\n\nAt BandFest Middle School, two bands—The Rockin' Robots and The Electric Eagles—each created a playlist of their favorite songs for the school's annual music day. Students rated how much they liked each song on a scale from 0 to 10 (with 10 being \"loved it!\" and 0 being \"didn't like it\"). The Rockin' Robots picked 8 upbeat songs, while The Electric Eagles chose 8 mellow songs. Here are the ratings from 16 students for each playlist:\n\nThe Rockin' Robots's Playlist Ratings: \n8.5, 7.0, 9.3, 6.5, 8.0, 7.7, 8.2, 6.8\n\nThe Electric Eagles's Playlist Ratings:\n6.2, 7.5, 6.7, 7.8, 7.0, 6.1, 7.9, 7.3\n\nStudents have been talking about which band’s playlist was more popular, and whether the ratings were close together or spread out.\n\nYou can use what you know about summarizing numerical data sets (mean, median, and measures of variability like interquartile range or mean absolute deviation) and your decimal calculation skills to help.\n\nHow can you compare the two bands' playlist ratings to decide which playlist was more popular with students, and which had more consistent opinions? Explain your reasoning and use mathematical summaries or methods you think will help.", "target_concept": "Use measures of center and measures of variability for numerical data from random samples to draw informal comparative inferences about two populations (CCSS.Math.Content.7.SP.B.4). Students have not yet received direct instruction on this target.", "prior_knowledge": ["Summarizing numerical data sets (6.SP.B.5c): Summarize numerical data sets with quantitative measures of center (median and/or mean) and variability (interquartile range and/or mean absolute deviation).", "Multi-digit decimal operations (6.NS.B.3): Fluently add, subtract, multiply and divide multi-digit decimals using the standard algorithm for each operation."], "pf_eval_measures": {"target_alignment": "no", "mathematical_validity": "no", "prior_knowledge_accessibility": "yes", "familiar_approach_limits": "no", "room_for_invention": "yes"}, "pf_eval_all5": false, "pf_eval_reasons": {"target_alignment": "The task substantively addresses measures of center and variability by asking learners to compare the two rating data sets using summaries such as mean, median, interquartile range, or mean absolute deviation. However, the learning target requires both data from random samples and informal inferences about two populations; the task presents ratings for two fixed groups of students and asks about these playlists, without framing the students as random samples or requiring a population inference.", "mathematical_validity": "", "prior_knowledge_accessibility": "The learner has been taught mean and median, variability measures including interquartile range and mean absolute deviation, and multi-digit decimal operations. Therefore, the learner can begin meaningfully by adding the eight ratings for either playlist and dividing by 8, or by ordering the ratings to find a median.", "familiar_approach_limits": "[meets_demands] The attempt uses supported decimal arithmetic to calculate both means and mean absolute deviations. The stated totals and results are correct: 62/8 == 7.75 and 56.5/8 == 7.0625; the MADs are 6.00/8 == 0.75 and 4.50/8 == 0.5625. Comparing the larger mean identifies the Robots as more popular on average, and comparing the smaller MAD identifies the Eagles as more consistent. This directly addresses both requested comparisons. | [meets_demands] The attempt correctly sorts both lists and uses supported median and IQR calculations. For the Robots, the median is (7.7+8.0)/2 == 7.85 and the IQR is 8.35-6.9 == 1.45. For the Eagles, the median is (7.0+7.3)/2 == 7.15 and the IQR is 7.65-6.45 == 1.20. The higher median supports the Robots as more popular, while the smaller IQR supports the Eagles as more consistent.", "room_for_invention": "The task supplies the situation, data, and possible summary measures, but leaves the central comparison strategy open. Learners must choose which measures to calculate, decide how to use center to compare popularity and variability to compare consistency, and justify their conclusions."}, "blind_id": "T23", "display_index": 23, "human_ratings": {"target_alignment": "yes", "mathematical_validity": "yes", "prior_knowledge_accessibility": "yes", "familiar_approach_limits": "no", "room_for_invention": "yes", "note": "Compares center and variability of two playlists, though one band has clearly higher mean (7.75 vs 7.06)."}, "human_all5": false}, {"key": "sports_basketball_ratio__pipeline_lc__021", "cell_id": "sports_basketball_ratio", "setting_name": "Basketball Ratios", "theme": "Sports (Basketball)", "arm": "pipeline_lc", "arm_label": "StructPF (GPT-5 mini)", "student_task": "Which drill is proportional: made shots vs attempts?\n\nStephen Curry practices two different three-point shooting drills at a camp. For each drill, the coach recorded the number of three-point attempts and the number of those shots made in two separate sessions. All counts are whole numbers, attempts are greater than 0, and there are no partial made shots. Use the recorded counts below to decide whether the number of shots made is proportional to the number of attempts for each drill across its two sessions.\n\nRecorded counts:\n- Drill A — Session 1: 15 attempts, 6 made. Session 2: 30 attempts, 12 made.\n- Drill B — Session 1: 10 attempts, 5 made. Session 2: 40 attempts, 12 made.\n\nUse the recorded counts to support your conclusion. Show your work and explain how your representation supports your decision.\n\nWhich drill, if either, shows that shots made are proportional to attempts across its two sessions? Show your work and explain how your representation supports your decision.", "target_concept": "Recognize and represent proportional relationships between quantities (CCSS.Math.Content.7.RP.A.2). Students have not yet received direct instruction on this target.", "prior_knowledge": ["Unit rates (7.RP.A.1): Compute unit rates involving ratios of fractional quantities, including lengths and areas in like or different units.", "Rational-number addition and subtraction (7.NS.A.1): Add and subtract rational numbers and interpret these operations numerically and on a number line."], "pf_eval_measures": {"target_alignment": "yes", "mathematical_validity": "yes", "prior_knowledge_accessibility": "yes", "familiar_approach_limits": "no", "room_for_invention": "yes"}, "pf_eval_all5": false, "pf_eval_reasons": {"target_alignment": "The central mathematical work is testing whether made shots and attempts have a constant proportional relationship across two sessions. This directly addresses recognizing and representing proportional relationships, even though the target concept is not named as a required method.", "mathematical_validity": "Drill A is consistent because 6/15 == 12/30 == 0.4. Drill B is not consistent because 5/10 == 0.5 while 12/40 == 0.3. Thus at least one feasible, mathematically justified resolution exists: Drill A is proportional and Drill B is not. The request to choose and explain a representation intentionally permits standard equivalent methods.", "prior_knowledge_accessibility": "The learner can begin by computing a unit rate or ratio for each session, such as 6 divided by 15 and 12 divided by 30 for Drill A, using taught unit-rate work and the shared arithmetic baseline. Comparing these rates is a meaningful step toward the requested conclusion.", "familiar_approach_limits": "[meets_demands] The attempt correctly treats each session as (attempts, made) and compares made/attempts within each drill. For Drill A, 6/15 == 0.4 and 12/30 == 0.4, so one constant k == 0.4 works for both sessions. For Drill B, 5/10 == 0.5 while 12/40 == 0.3, so the rates differ. This directly answers \"Which drill, if either, shows that shots made are proportional to attempts across its two sessions?\" and explains how the unit-rate representation supports the conclusion. | [meets_demands] The cross-product method is a valid ratio-equivalence test. For Drill A, 6*30 == 12*15 == 180, so the two made-to-attempt ratios are equal and the common rate is 2/5. For Drill B, 5*40 == 200 but 12*10 == 120, so the ratios are unequal. The attempt therefore correctly concludes that only Drill A is proportional and explains why the representation supports the decision.", "room_for_invention": "The task supplies the data and comparison context but does not prescribe the mathematical construction. The learner must choose and construct a representation or strategy, such as equivalent ratios, unit rates, a table, or a graph, and use it to justify the decision."}, "blind_id": "T24", "display_index": 24, "human_ratings": {"target_alignment": "yes", "mathematical_validity": "yes", "prior_knowledge_accessibility": "yes", "familiar_approach_limits": "no", "room_for_invention": "yes", "note": "Direct session unit rates (6/15 = 12/30 = 0.4 vs 5/10 != 12/40) settle proportionality immediately."}, "human_all5": false}];
+const DEFAULT_RATINGS = {"T01": {"target_alignment": "yes", "mathematical_validity": "yes", "prior_knowledge_accessibility": "yes", "familiar_approach_limits": "no", "room_for_invention": "no", "note": "Prescribes discount-then-tax order and bullet steps; direct arithmetic solves."}, "T02": {"target_alignment": "yes", "mathematical_validity": "yes", "prior_knowledge_accessibility": "yes", "familiar_approach_limits": "no", "room_for_invention": "no", "note": "Numbered 1-2-3 worksheet names target proportionality and methods; unit rates solve directly."}, "T03": {"target_alignment": "yes", "mathematical_validity": "yes", "prior_knowledge_accessibility": "yes", "familiar_approach_limits": "no", "room_for_invention": "no", "note": "Explicitly reminds discounts come before tax; naive and exact percent give same affordable pairs."}, "T04": {"target_alignment": "yes", "mathematical_validity": "yes", "prior_knowledge_accessibility": "yes", "familiar_approach_limits": "yes", "room_for_invention": "no", "note": "Outlier 6.30 distorts mean vs median/IQR, but 4-bullet worksheet prescribes exact steps and target."}, "T05": {"target_alignment": "yes", "mathematical_validity": "yes", "prior_knowledge_accessibility": "yes", "familiar_approach_limits": "no", "room_for_invention": "yes", "note": "Compares center and spread of two sets, though Owls > Pandas on every measure with no tie."}, "T06": {"target_alignment": "yes", "mathematical_validity": "yes", "prior_knowledge_accessibility": "yes", "familiar_approach_limits": "yes", "room_for_invention": "yes", "note": "Bounding 12x8 rectangle ties for both beds; requires decomposing L-shape (68) vs trapezoid (76)."}, "T07": {"target_alignment": "yes", "mathematical_validity": "yes", "prior_knowledge_accessibility": "yes", "familiar_approach_limits": "yes", "room_for_invention": "no", "note": "Pooled rate ties at 3/9 = 1/3 while session rates differ for Jordan; but prompt prescribes shots = k * minutes."}, "T08": {"target_alignment": "yes", "mathematical_validity": "yes", "prior_knowledge_accessibility": "yes", "familiar_approach_limits": "no", "room_for_invention": "yes", "note": "Routine single-item calculation ($38.52 vs $47 cash); any reasonable calculation easily settles affordability."}, "T09": {"target_alignment": "no", "mathematical_validity": "no", "prior_knowledge_accessibility": "no", "familiar_approach_limits": "no", "room_for_invention": "yes", "note": "Asks to split 24 individual campers fairly using only group totals (individual stats missing, blocking a valid start)."}, "T10": {"target_alignment": "no", "mathematical_validity": "no", "prior_knowledge_accessibility": "yes", "familiar_approach_limits": "yes", "room_for_invention": "yes", "note": "Asks which group matches Curry's style without giving Curry's pace; Groups A and C tie at 3 shots/min."}, "T11": {"target_alignment": "yes", "mathematical_validity": "yes", "prior_knowledge_accessibility": "yes", "familiar_approach_limits": "no", "room_for_invention": "no", "note": "Text explicitly gives the decomposition of the L-patio and 5-sided herb garden; direct area formulas solve."}, "T12": {"target_alignment": "yes", "mathematical_validity": "yes", "prior_knowledge_accessibility": "yes", "familiar_approach_limits": "no", "room_for_invention": "no", "note": "Multi-part numbered worksheet; unit rates per drill directly scale to 120 attempts."}, "T13": {"target_alignment": "yes", "mathematical_validity": "no", "prior_knowledge_accessibility": "yes", "familiar_approach_limits": "no", "room_for_invention": "yes", "note": "Attachment placement of the L-walkway is underspecified/ambiguous; simple component sum solves."}, "T14": {"target_alignment": "yes", "mathematical_validity": "yes", "prior_knowledge_accessibility": "yes", "familiar_approach_limits": "yes", "room_for_invention": "yes", "note": "Tests friend's outer bounding-box shortcut (14*6=84) vs composite decomposition (60+12=72)."}, "T15": {"target_alignment": "yes", "mathematical_validity": "yes", "prior_knowledge_accessibility": "yes", "familiar_approach_limits": "yes", "room_for_invention": "yes", "note": "Both bands have exact same mean (3.0 min) and median (3.0 vs 2.5), forcing variability/spread analysis."}, "T16": {"target_alignment": "yes", "mathematical_validity": "yes", "prior_knowledge_accessibility": "yes", "familiar_approach_limits": "no", "room_for_invention": "no", "note": "Step-by-step store rules and multi-bullet instructions; direct arithmetic compares the stores."}, "T17": {"target_alignment": "yes", "mathematical_validity": "yes", "prior_knowledge_accessibility": "yes", "familiar_approach_limits": "yes", "room_for_invention": "no", "note": "Good outlier/skew contrast between bands, but (a)-(d) worksheet prescribes every step."}, "T18": {"target_alignment": "yes", "mathematical_validity": "yes", "prior_knowledge_accessibility": "yes", "familiar_approach_limits": "yes", "room_for_invention": "yes", "note": "Store A (-20%, +10%) and Store B (-15%, +5%) tie under additive -10% shortcut, requiring compound multiplier."}, "T19": {"target_alignment": "yes", "mathematical_validity": "yes", "prior_knowledge_accessibility": "yes", "familiar_approach_limits": "yes", "room_for_invention": "yes", "note": "Extreme outlier (1000s) makes Band A mean higher (282.5 vs 187.5) while median is tied/lower (185 vs 187.5)."}, "T20": {"target_alignment": "yes", "mathematical_validity": "yes", "prior_knowledge_accessibility": "yes", "familiar_approach_limits": "no", "room_for_invention": "yes", "note": "Direct rectangle minus triangle plus barbecue rectangle (96 - 6 + 15 = 105 sq ft) solves immediately."}, "T21": {"target_alignment": "yes", "mathematical_validity": "no", "prior_knowledge_accessibility": "no", "familiar_approach_limits": "no", "room_for_invention": "no", "note": "Self-contradictory boundary walk vs parenthetical cutout description blocks a clear start; multi-step worksheet giveaway."}, "T22": {"target_alignment": "yes", "mathematical_validity": "yes", "prior_knowledge_accessibility": "yes", "familiar_approach_limits": "yes", "room_for_invention": "yes", "note": "Store A (+30%, -20%) and Store B (+20%, -10%) tie at +10% under additive shortcut (104 vs 108 actual)."}, "T23": {"target_alignment": "yes", "mathematical_validity": "yes", "prior_knowledge_accessibility": "yes", "familiar_approach_limits": "no", "room_for_invention": "yes", "note": "Compares center and variability of two playlists, though one band has clearly higher mean (7.75 vs 7.06)."}, "T24": {"target_alignment": "yes", "mathematical_validity": "yes", "prior_knowledge_accessibility": "yes", "familiar_approach_limits": "no", "room_for_invention": "yes", "note": "Direct session unit rates (6/15 = 12/30 = 0.4 vs 5/10 != 12/40) settle proportionality immediately."}};
+
+const MEASURES = [
+  {
+    key: "target_alignment",
+    num: 1,
+    group: "Task Soundness",
+    title: "1. Target Alignment",
+    desc: "Does the problem genuinely target the intended concept (rather than an unrelated topic)?"
+  },
+  {
+    key: "mathematical_validity",
+    num: 2,
+    group: "Task Soundness",
+    title: "2. Mathematical Validity",
+    desc: "Are the given numbers, units, and conditions mathematically consistent and solvable?"
+  },
+  {
+    key: "prior_knowledge_accessibility",
+    num: 3,
+    group: "PF Req 1",
+    title: "3. Accessible Start",
+    desc: "Can Grade 7 students make a meaningful start using the listed prior skills?"
+  },
+  {
+    key: "familiar_approach_limits",
+    num: 4,
+    group: "PF Req 2",
+    title: "4. Familiar Methods Fall Short",
+    desc: "Do simple prior shortcuts (e.g., comparing averages/rates alone) hit a tie or fail so the target concept is needed?"
+  },
+  {
+    key: "room_for_invention",
+    num: 5,
+    group: "PF Req 3",
+    title: "5. Room for Invention",
+    desc: "Does the prompt stay open-ended without giving away the target formula or a step-by-step recipe?"
+  }
+];
+
+const STORAGE_KEY = "structpf_study_a_human_eval_v1";
+let state = {
+  currentIndex: 0,
+  unblindCards: false,
+  helperOpen: false,
+  ratings: {} // blind_id -> { target_alignment: 'yes'|'no', ..., note: '' }
+};
+
+function loadState() {
+  state.ratings = JSON.parse(JSON.stringify(DEFAULT_RATINGS));
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      if (parsed && parsed.ratings && Object.keys(parsed.ratings).length > 0) {
+        state.ratings = Object.assign({}, state.ratings, parsed.ratings);
+      }
+    }
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+function saveState() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify({ ratings: state.ratings }));
+}
+
+function isTaskComplete(blindId) {
+  const r = state.ratings[blindId];
+  if (!r) return false;
+  return MEASURES.every(m => r[m.key] === "yes" || r[m.key] === "no");
+}
+
+function getCompletedCount() {
+  return TASKS.filter(t => isTaskComplete(t.blind_id)).length;
+}
+
+function renderStrip() {
+  const strip = document.getElementById("taskStrip");
+  strip.innerHTML = "";
+  TASKS.forEach((t, idx) => {
+    const btn = document.createElement("button");
+    const done = isTaskComplete(t.blind_id);
+    btn.className = "task-pill" + (done ? " done" : "") + (idx === state.currentIndex ? " active" : "");
+    btn.textContent = t.blind_id;
+    btn.onclick = () => { state.currentIndex = idx; renderAll(); };
+    strip.appendChild(btn);
+  });
+  const doneCount = getCompletedCount();
+  document.getElementById("progressText").textContent = `${doneCount} / ${TASKS.length} rated`;
+}
+
+function renderTask() {
+  const t = TASKS[state.currentIndex];
+  const r = state.ratings[t.blind_id] || {};
+
+  document.getElementById("taskTitle").textContent = `Task ${t.blind_id} (${state.currentIndex + 1} of ${TASKS.length})`;
+  document.getElementById("settingBadge").textContent = `${t.setting_name}`;
+
+  const armBadge = document.getElementById("armBadge");
+  if (state.unblindCards) {
+    armBadge.style.display = "inline-block";
+    armBadge.textContent = t.arm_label;
+  } else {
+    armBadge.style.display = "none";
+  }
+
+  document.getElementById("targetConceptText").textContent = t.target_concept;
+  const ul = document.getElementById("priorKnowledgeList");
+  ul.innerHTML = "";
+  t.prior_knowledge.forEach(pk => {
+    const li = document.createElement("li");
+    li.textContent = pk;
+    ul.appendChild(li);
+  });
+
+  document.getElementById("studentTaskText").textContent = t.student_task;
+
+  // Helper box with number & solver check notes (without showing generator arm!)
+  const helperBox = document.getElementById("helperBox");
+  helperBox.className = "helper-box" + (state.helperOpen ? " open" : "");
+  document.getElementById("helperBtn").textContent = state.helperOpen
+    ? "Hide Automated Math & Solver Notes"
+    : "Show Automated Math & Solver Notes (Quick Calculation Aid)";
+  helperBox.innerHTML = `
+    <div style="margin-bottom:6px;"><strong>Math Check:</strong> ${escapeHtml(t.pf_eval_reasons.mathematical_validity || "")}</div>
+    <div style="margin-bottom:6px;"><strong>Prior-Knowledge Solver Check:</strong> ${escapeHtml(t.pf_eval_reasons.familiar_approach_limits || "")}</div>
+    <div><strong>Giveaway Check:</strong> ${escapeHtml(t.pf_eval_reasons.room_for_invention || "")}</div>
+  `;
+
+  // Measures
+  const container = document.getElementById("measuresContainer");
+  container.innerHTML = "";
+  MEASURES.forEach(m => {
+    const val = r[m.key];
+    const row = document.createElement("div");
+    row.className = "measure-item" + (val === "yes" ? " rated-yes" : val === "no" ? " rated-no" : "");
+    row.innerHTML = `
+      <div class="measure-info">
+        <div class="measure-title">
+          <span>${m.title}</span>
+          <span class="measure-group-tag">${m.group}</span>
+        </div>
+        <div class="measure-desc">${m.desc}</div>
+      </div>
+      <div class="yn-group">
+        <button class="yn-btn yes ${val === 'yes' ? 'selected' : ''}" onclick="setRating('${m.key}', 'yes')">Yes</button>
+        <button class="yn-btn no ${val === 'no' ? 'selected' : ''}" onclick="setRating('${m.key}', 'no')">No</button>
+      </div>
+    `;
+    container.appendChild(row);
+  });
+
+  const done = isTaskComplete(t.blind_id);
+  const statusEl = document.getElementById("taskStatusLabel");
+  if (done) {
+    const all5 = MEASURES.every(m => r[m.key] === "yes");
+    statusEl.textContent = all5 ? "✓ Rated (Passes All 5)" : "✓ Rated (Fails ≥1 measure)";
+    statusEl.style.color = "var(--green)";
+    statusEl.style.fontWeight = "600";
+  } else {
+    statusEl.textContent = "Select Yes/No for all 5";
+    statusEl.style.color = "var(--muted)";
+    statusEl.style.fontWeight = "400";
+  }
+
+  document.getElementById("taskNotes").value = r.note || "";
+  document.getElementById("prevBtn").disabled = state.currentIndex === 0;
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
+function setRating(measureKey, value) {
+  const t = TASKS[state.currentIndex];
+  if (!state.ratings[t.blind_id]) state.ratings[t.blind_id] = {};
+  state.ratings[t.blind_id][measureKey] = value;
+  saveState();
+  renderAll();
+}
+
+function applyPreset(presetName) {
+  const t = TASKS[state.currentIndex];
+  if (!state.ratings[t.blind_id]) state.ratings[t.blind_id] = {};
+  const r = state.ratings[t.blind_id];
+  if (presetName === "all_yes") {
+    MEASURES.forEach(m => { r[m.key] = "yes"; });
+  } else if (presetName === "only_4_no") {
+    MEASURES.forEach(m => {
+      r[m.key] = (m.key === "familiar_approach_limits") ? "no" : "yes";
+    });
+  } else if (presetName === "4_and_5_no") {
+    MEASURES.forEach(m => {
+      r[m.key] = (m.key === "familiar_approach_limits" || m.key === "room_for_invention") ? "no" : "yes";
+    });
+  }
+  saveState();
+  renderAll();
+}
+
+function saveNote(val) {
+  const t = TASKS[state.currentIndex];
+  if (!state.ratings[t.blind_id]) state.ratings[t.blind_id] = {};
+  state.ratings[t.blind_id].note = val;
+  saveState();
+}
+
+function prevTask() {
+  if (state.currentIndex > 0) {
+    state.currentIndex--;
+    renderAll();
+  }
+}
+
+function nextUnratedOrNext() {
+  if (state.currentIndex < TASKS.length - 1) {
+    state.currentIndex++;
+    renderAll();
+  } else {
+    const firstUnrated = TASKS.findIndex(t => !isTaskComplete(t.blind_id));
+    if (firstUnrated !== -1) {
+      state.currentIndex = firstUnrated;
+      renderAll();
+    } else {
+      const sec = document.getElementById("resultsSection");
+      sec.classList.add("open");
+      renderResultsTables();
+      sec.scrollIntoView({ behavior: "smooth" });
+    }
+  }
+}
+
+function toggleHelper() {
+  state.helperOpen = !state.helperOpen;
+  renderTask();
+}
+
+function toggleResultsView() {
+  const sec = document.getElementById("resultsSection");
+  sec.classList.toggle("open");
+  if (sec.classList.contains("open")) {
+    renderResultsTables();
+    sec.scrollIntoView({ behavior: "smooth" });
+  }
+}
+
+function toggleUnblindBadges() {
+  state.unblindCards = !state.unblindCards;
+  renderTask();
+}
+
+function computeKappa(pairs) {
+  // pairs: array of [humanBool, autoBool]
+  const n = pairs.length;
+  if (n === 0) return { acc: 0, kappa: 0 };
+  let yy = 0, yn = 0, ny = 0, nn = 0;
+  pairs.forEach(([h, a]) => {
+    if (h && a) yy++;
+    else if (h && !a) yn++;
+    else if (!h && a) ny++;
+    else nn++;
+  });
+  const po = (yy + nn) / n;
+  const pYesH = (yy + yn) / n;
+  const pYesA = (yy + ny) / n;
+  const pe = pYesH * pYesA + (1 - pYesH) * (1 - pYesA);
+  const kappa = Math.abs(1 - pe) < 1e-9 ? 1.0 : (po - pe) / (1 - pe);
+  return { acc: po * 100, kappa, n, yy, yn, ny, nn };
+}
+
+function renderResultsTables() {
+  const arms = [
+    { id: "gpt41", label: "One-Shot (GPT-4.1)" },
+    { id: "gpt5mini", label: "One-Shot (GPT-5 mini)" },
+    { id: "pipeline_lc", label: "StructPF (GPT-5 mini)" }
+  ];
+
+  // Table 1: Pass rates by arm
+  let html1 = `<table class="res-table"><thead><tr>
+    <th>Measure</th>
+    ${arms.map(a => `<th>${a.label}<br><small>Human / PF Eval</small></th>`).join("")}
+  </tr></thead><tbody>`;
+
+  const armRowsLatex = [];
+
+  MEASURES.forEach(m => {
+    html1 += `<tr><td><strong>${m.title}</strong></td>`;
+    arms.forEach(a => {
+      const sub = TASKS.filter(t => t.arm === a.id && isTaskComplete(t.blind_id));
+      const hYes = sub.filter(t => state.ratings[t.blind_id][m.key] === "yes").length;
+      const eYes = sub.filter(t => t.pf_eval_measures[m.key] === "yes").length;
+      const denom = sub.length;
+      html1 += `<td>${denom ? `${hYes}/${denom} (${Math.round(100*hYes/denom)}%) &middot; <span style="color:var(--muted)">${eYes}/${denom}</span>` : "—"}</td>`;
+    });
+    html1 += `</tr>`;
+  });
+
+  // Passes all 5
+  html1 += `<tr style="background:#f8fafc; font-weight:700;"><td>Passes All 5 Measures</td>`;
+  arms.forEach(a => {
+    const sub = TASKS.filter(t => t.arm === a.id && isTaskComplete(t.blind_id));
+    const hAll = sub.filter(t => MEASURES.every(m => state.ratings[t.blind_id][m.key] === "yes")).length;
+    const eAll = sub.filter(t => t.pf_eval_all5).length;
+    const denom = sub.length;
+    html1 += `<td>${denom ? `${hAll}/${denom} (${Math.round(100*hAll/denom)}%) &middot; <span style="color:var(--muted)">${eAll}/${denom}</span>` : "—"}</td>`;
+  });
+  html1 += `</tr></tbody></table>`;
+  document.getElementById("armTableWrap").innerHTML = html1;
+
+  // Table 2: Agreement per measure
+  let html2 = `<table class="res-table"><thead><tr>
+    <th>Measure</th><th>Rated N</th><th>Exact Agreement</th><th>Cohen's κ</th><th>Both Yes / Both No / Disagreements</th>
+  </tr></thead><tbody>`;
+
+  let allPairs = [];
+  MEASURES.forEach(m => {
+    const completed = TASKS.filter(t => isTaskComplete(t.blind_id));
+    const pairs = completed.map(t => [
+      state.ratings[t.blind_id][m.key] === "yes",
+      t.pf_eval_measures[m.key] === "yes"
+    ]);
+    allPairs = allPairs.concat(pairs);
+    const st = computeKappa(pairs);
+    html2 += `<tr>
+      <td><strong>${m.title}</strong></td>
+      <td>${st.n}</td>
+      <td><strong>${st.acc.toFixed(1)}%</strong></td>
+      <td>${st.kappa.toFixed(2)}</td>
+      <td>${st.yy} Yes / ${st.nn} No / ${st.yn + st.ny} diff</td>
+    </tr>`;
+  });
+
+  // All 5 pass agreement
+  const completedAll = TASKS.filter(t => isTaskComplete(t.blind_id));
+  const all5Pairs = completedAll.map(t => [
+    MEASURES.every(m => state.ratings[t.blind_id][m.key] === "yes"),
+    t.pf_eval_all5
+  ]);
+  const stAll5 = computeKappa(all5Pairs);
+  const stPooled = computeKappa(allPairs);
+
+  html2 += `<tr style="background:#f8fafc; font-weight:700;">
+    <td>Passes All 5 Measures (Task-Level)</td>
+    <td>${stAll5.n}</td>
+    <td>${stAll5.acc.toFixed(1)}%</td>
+    <td>${stAll5.kappa.toFixed(2)}</td>
+    <td>${stAll5.yy} Yes / ${stAll5.nn} No / ${stAll5.yn + stAll5.ny} diff</td>
+  </tr>`;
+  html2 += `<tr style="background:#eef2f7; font-weight:700;">
+    <td>Pooled Across All 5 Measures</td>
+    <td>${stPooled.n}</td>
+    <td>${stPooled.acc.toFixed(1)}%</td>
+    <td>${stPooled.kappa.toFixed(2)}</td>
+    <td>${stPooled.yy} Yes / ${stPooled.nn} No / ${stPooled.yn + stPooled.ny} diff</td>
+  </tr></tbody></table>`;
+  document.getElementById("agreementTableWrap").innerHTML = html2;
+
+  // Generate LaTeX snippet
+  function fmtCell(armId, mKey) {
+    const sub = TASKS.filter(t => t.arm === armId && isTaskComplete(t.blind_id));
+    if (!sub.length) return "--";
+    const hYes = sub.filter(t => mKey === "ALL5"
+      ? MEASURES.every(m => state.ratings[t.blind_id][m.key] === "yes")
+      : state.ratings[t.blind_id][mKey] === "yes"
+    ).length;
+    return `${hYes}/${sub.length} (${Math.round(100*hYes/sub.length)}\%)`;
+  }
+
+  const latex = `% Human evaluation on stratified Study A sample (N = ${completedAll.length})
+\begin{table}[!htb]
+\centering
+\caption[Study A: Blinded Human Evaluation and Agreement with \textsc{PF Eval}]{Study A: Blinded Human Evaluation and Agreement with \textsc{PF Eval}}
+\label{tab:res-human-eval}
+\footnotesize
+\setlength{\tabcolsep}{6pt}
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{@{} l c c c c @{}}
+\toprule
+\textbf{Measure} & \textbf{One-Shot (GPT-4.1)} & \textbf{One-Shot (GPT-5 mini)} & \textbf{\textsc{StructPF} (GPT-5 mini)} & \textbf{Human--\textsc{PF Eval} Agr.} \\
+\midrule
+Target Alignment & ${fmtCell('gpt41','target_alignment')} & ${fmtCell('gpt5mini','target_alignment')} & ${fmtCell('pipeline_lc','target_alignment')} & ${computeKappa(completedAll.map(t=>[state.ratings[t.blind_id].target_alignment==='yes', t.pf_eval_measures.target_alignment==='yes'])).acc.toFixed(0)}\% \\
+Mathematical Validity & ${fmtCell('gpt41','mathematical_validity')} & ${fmtCell('gpt5mini','mathematical_validity')} & ${fmtCell('pipeline_lc','mathematical_validity')} & ${computeKappa(completedAll.map(t=>[state.ratings[t.blind_id].mathematical_validity==='yes', t.pf_eval_measures.mathematical_validity==='yes'])).acc.toFixed(0)}\% \\
+Accessible Start & ${fmtCell('gpt41','prior_knowledge_accessibility')} & ${fmtCell('gpt5mini','prior_knowledge_accessibility')} & ${fmtCell('pipeline_lc','prior_knowledge_accessibility')} & ${computeKappa(completedAll.map(t=>[state.ratings[t.blind_id].prior_knowledge_accessibility==='yes', t.pf_eval_measures.prior_knowledge_accessibility==='yes'])).acc.toFixed(0)}\% \\
+Familiar Methods Fall Short & ${fmtCell('gpt41','familiar_approach_limits')} & ${fmtCell('gpt5mini','familiar_approach_limits')} & ${fmtCell('pipeline_lc','familiar_approach_limits')} & ${computeKappa(completedAll.map(t=>[state.ratings[t.blind_id].familiar_approach_limits==='yes', t.pf_eval_measures.familiar_approach_limits==='yes'])).acc.toFixed(0)}\% \\
+Room for Invention & ${fmtCell('gpt41','room_for_invention')} & ${fmtCell('gpt5mini','room_for_invention')} & ${fmtCell('pipeline_lc','room_for_invention')} & ${computeKappa(completedAll.map(t=>[state.ratings[t.blind_id].room_for_invention==='yes', t.pf_eval_measures.room_for_invention==='yes'])).acc.toFixed(0)}\% \\
+\midrule
+\textbf{Passes All Five Measures} & \textbf{${fmtCell('gpt41','ALL5')}} & \textbf{${fmtCell('gpt5mini','ALL5')}} & \textbf{${fmtCell('pipeline_lc','ALL5')}} & \textbf{${stAll5.acc.toFixed(0)}\% ($\kappa = ${stAll5.kappa.toFixed(2)}$)} \\
+\bottomrule
+\end{tabular}
+\end{table}`;
+  document.getElementById("latexOutput").textContent = latex;
+}
+
+function exportRatingsJSON() {
+  const payload = {
+    exported_at: new Date().toISOString(),
+    sample_size: TASKS.length,
+    completed_count: getCompletedCount(),
+    items: TASKS.map(t => ({
+      blind_id: t.blind_id,
+      key: t.key,
+      cell_id: t.cell_id,
+      arm: t.arm,
+      human_ratings: state.ratings[t.blind_id] || null,
+      pf_eval_measures: t.pf_eval_measures,
+      pf_eval_all5: t.pf_eval_all5
+    }))
+  };
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "study_a_human_eval_results.json";
+  a.click();
+}
+
+function importRatingsPrompt() {
+  const inp = document.createElement("input");
+  inp.type = "file";
+  inp.accept = ".json";
+  inp.onchange = e => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = ev => {
+      try {
+        const data = JSON.parse(ev.target.result);
+        if (data.items) {
+          data.items.forEach(it => {
+            if (it.human_ratings) state.ratings[it.blind_id] = it.human_ratings;
+          });
+          saveState();
+          renderAll();
+        }
+      } catch (err) {
+        alert("Invalid JSON file");
+      }
+    };
+    reader.readAsText(file);
+  };
+  inp.click();
+}
+
+document.addEventListener("keydown", e => {
+  if (e.target.tagName === "TEXTAREA" || e.target.tagName === "INPUT") return;
+  if (e.key === "ArrowRight") nextUnratedOrNext();
+  else if (e.key === "ArrowLeft") prevTask();
+  else if (e.key === "a" || e.key === "A") applyPreset("all_yes");
+  else if (e.key === "f" || e.key === "F") applyPreset("only_4_no");
+});
+
+function renderAll() {
+  renderStrip();
+  renderTask();
+  if (document.getElementById("resultsSection").classList.contains("open")) {
+    renderResultsTables();
+  }
+}
+
+loadState();
+renderAll();
+</script>
+</body>
+</html>

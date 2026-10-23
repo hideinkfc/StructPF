@@ -6,12 +6,12 @@ This chapter evaluates \textsc{StructPF} against one-shot generation across two 
 \section{Experiment Setup}
 \label{sec:res-setup}
 
-We organize our main evaluation in two studies. First, Study~A evaluates how well \textsc{StructPF} as a whole builds the underlying PF structure compared with one-shot prompting under \textsc{PF Eval}. Second, because knowing what students can and cannot yet do is a core bottleneck in PF design, Study~B tests our Stage~1 design across 30 curriculum topics to see how well an LLM identifies the boundary of students' prior knowledge on its own and whether external curriculum grounding actually improves this bottleneck.
+We organize our main evaluation in two studies. First, Study~A evaluates how well \textsc{StructPF} as a whole builds the underlying PF structure compared with one-shot prompting under \textsc{PF Eval}, and validates the automated verdicts against blinded human ratings on a stratified sample of tasks. Second, because knowing what students can and cannot yet do is a core bottleneck in PF design, Study~B tests our Stage~1 design across 30 curriculum topics to see how well an LLM identifies the boundary of students' prior knowledge on its own and whether external curriculum grounding actually improves this bottleneck.
 
 \subsection{Study A: \textsc{PF Eval} Setup}
 \label{subsec:res-setup-a}
 
-Study~A reuses the four Grade~7 settings from Chapter~\ref{chap:oneshot}, where each setting fixes the target concept and two earlier-grade prerequisite standards in advance, as shown in Figure~\ref{fig:res-setup-a}. We compare the 118 GPT-5 mini and 120 GPT-4.1 one-shot tasks from Chapter~\ref{chap:oneshot} against 120 tasks from \textsc{StructPF} with GPT-5 mini and Stage~1 fixed to the same prerequisites, and evaluate all 358 tasks with \textsc{PF Eval} in Sections~\ref{sec:res-oneshot} and~\ref{sec:res-progression}.
+Study~A reuses the four Grade~7 settings from Chapter~\ref{chap:oneshot}, where each setting fixes the target concept and two earlier-grade prerequisite standards in advance, as shown in Figure~\ref{fig:res-setup-a}. We compare the 118 GPT-5 mini and 120 GPT-4.1 one-shot tasks from Chapter~\ref{chap:oneshot} against 120 tasks from \textsc{StructPF} with GPT-5 mini and Stage~1 fixed to the same prerequisites, and evaluate all 358 tasks with \textsc{PF Eval} in Sections~\ref{sec:res-oneshot} and~\ref{sec:res-progression}. To verify that \textsc{PF Eval} correlates with human judgment on generated tasks and to validate our framework as a whole, we also conduct a blinded human evaluation on a stratified sample of 24 tasks in Section~\ref{sec:res-human-eval}.
 
 \begin{figure}[!htb]
     \centering
@@ -100,6 +100,37 @@ Although \textsc{StructPF} improves the PF requirements, it still misses a measu
 \end{enumerate}
 
 Neither cause comes from a missing rule in the prompts or the pipeline design. The Step~2a prompts already tell the model not to state the method in the student-facing text and to reject a design where the simplest familiar calculation already settles the question. The model simply does not always follow these instructions.
+
+\subsection{Blinded Human Verification}
+\label{sec:res-human-eval}
+
+Because the Study~A results above rely on automated LLM judges and our prior-knowledge solver, one might ask whether \textsc{PF Eval} merely rewards artifacts of our own pipeline rather than genuine PF task quality. While Chapter~\ref{chap:eval-framework} validated \textsc{PF Eval} on 29 fixed reference tasks, we also need to verify that its verdicts correlate with human judgment on newly generated tasks and that the advantage of \textsc{StructPF} over one-shot prompting holds under human review. To validate the framework as a whole, we drew a stratified random sample of 24 tasks from Study~A, with two tasks per setting from each of the three generators, shuffled them without generator labels, and rated each task by hand on the same five measures as \textsc{PF Eval}.
+
+\begin{table}[!htb]
+    \centering
+    \caption[Study A: Blinded Human Verification and Agreement with \textsc{PF Eval}]{Study~A: Blinded Human Verification and Agreement with \textsc{PF Eval}}
+    \label{tab:res-human-eval}
+    \footnotesize
+    \setlength{\tabcolsep}{2.8pt}
+    \renewcommand{\arraystretch}{1.2}
+    \begin{tabular}{@{} l c c c c @{}}
+        \toprule
+        & \multicolumn{3}{c}{\textbf{Blinded Human Pass Count ($n = 8$ per Generator)}} & \\
+        \cmidrule(lr){2-4}
+        \textbf{Measure} & \textbf{One-Shot (GPT-4.1)} & \textbf{One-Shot (GPT-5 mini)} & \textbf{\textsc{StructPF} (GPT-5 mini)} & \textbf{\textsc{PF Eval} Agreement} \\
+        \midrule
+        Target Alignment & 6 / 8 & 8 / 8 & 8 / 8 & 22 / 24 ($92\%$) \\
+        Mathematical Validity & 5 / 8 & 7 / 8 & 8 / 8 & 21 / 24 ($88\%$) \\
+        Accessible Start & 7 / 8 & 7 / 8 & 8 / 8 & 22 / 24 ($92\%$) \\
+        Familiar Methods Fall Short & 1 / 8 & 2 / 8 & \textbf{7 / 8} & 23 / 24 ($96\%$) \\
+        Room for Invention & 7 / 8 & 0 / 8 & \textbf{7 / 8} & 21 / 24 ($88\%$) \\
+        \midrule
+        \textbf{Passes All Five Measures} & \textbf{0 / 8} & \textbf{0 / 8} & \textbf{6 / 8} & \textbf{22 / 24 ($92\%$)} \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+Table~\ref{tab:res-human-eval} shows that our blinded human ratings closely match \textsc{PF Eval}, agreeing on 22 of the 24 tasks overall and on 23 of 24 tasks for whether familiar methods fall short. The main difference appears on room for invention for one-shot GPT-5 mini, where human review rejected three tasks with numbered sub-questions that \textsc{PF Eval} still accepted. Overall, six of the eight \textsc{StructPF} tasks pass all five measures under blinded human review while none of the 16 one-shot tasks pass, showing that \textsc{PF Eval} closely follows human judgment and provides a reasonably reliable evaluation across the full study.
 
 \section{Study B: Curriculum Grounding Experiment Results}
 \label{sec:res-grounding}
